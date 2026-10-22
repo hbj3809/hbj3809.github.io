@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>의약품 유통 매출 데이터 파이프라인 · 황병준</title>
+<meta name="description" content="Airflow·PostgreSQL 기반 매출 데이터 파이프라인: 연동 명세, 수천만 건 백필, 멱등 원장, 데이터 품질 가드">
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../index.html">황병준<span>Byeongjun Hwang</span></a>
+    <nav class="nav" aria-label="주 메뉴">
+      <a href="../index.html">홈</a>
+      <a href="../about.html">소개</a>
+      <a href="../experience.html">경력</a>
+      <a href="../projects.html">프로젝트</a>
+      <a href="../ai.html">AI로 일하는 방식</a>
+      <a href="../skills.html">기술</a>
+    </nav>
+    <div>
+      <button class="theme-btn" type="button" aria-label="밝게/어둡게 전환">◐</button>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-label="메뉴 열기">메뉴</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="eyebrow"><a href="../projects.html">프로젝트</a> · 데이터</p>
+  <h1>의약품 유통 매출 데이터 파이프라인</h1>
+  <p class="lead">국내 대형 의약품 유통사의 매출 데이터를 받아, 제약사 고객이 보는 분석 서비스에 공급하는 파이프라인(수집 → 전처리 → 공개 → 서빙)을 설계·구현했습니다.</p>
+
+  <div class="case">
+    <div>
+      <section>
+        <h2>문제</h2>
+        <ul class="points">
+          <li>원천에는 연동 API 가 없었고, 생긴 뒤에도 새벽 몇 시간만 호출할 수 있었습니다.</li>
+          <li>과거 2년 반 치는 월별 수 GB 짜리 JSON 파일로 따로 받았습니다.</li>
+          <li>유통사는 월마감 뒤에도 전월을 보정하고, 매입처마다 마감 시점이 다릅니다. 명세는 진행 중에도 계속 바뀌었습니다.</li>
+        </ul>
+      </section>
+      <section>
+        <h2>설계</h2>
+        <ul class="points">
+          <li><b>연동 명세를 먼저</b>: 매출·재고·수신 설정 API 의 연동 컬럼 82개를 영문 정의서로 직접 작성해 유통사의 API 개발 기준으로 제공했고, 실호출로 명세와 다른 점을 찾아 보정했습니다.</li>
+          <li><b>하나의 원장</b>: 원본 원장 → 전처리 결과·리젝트 → 일 집계 → 공개 경계 → 서빙 API 계층. 월 상태 원장과 정본 순서(월마감 &gt; 백필 &gt; 전일분), 잠금, 원장 대사로 <b>몇 번을 다시 돌려도 결과가 같게</b> 했습니다.</li>
+          <li><b>조용히 버리지 않기</b>: 매월 "원본 = 성공 + 리젝트" 항등식과 "한 행에 사유 하나" 규칙을 강제했습니다.</li>
+          <li><b>중단 없는 마감 교체</b>: 마감 보정분은 별도 테이블에 적재한 뒤 짧은 트랜잭션으로 파티션을 바꿔 끼우고, 행 해시 대사로 무엇이 바뀌었는지 남깁니다.</li>
+        </ul>
+        <div class="diagram" role="img" aria-label="파이프라인 흐름: 원천, 원본 원장, 전처리, 일 집계, 공개 경계, 서빙 API">
+          <svg viewBox="0 0 720 140" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="label-soft"/></marker></defs>
+            <rect class="box" x="6" y="45" width="100" height="50" rx="10"/><text x="56" y="67" font-size="12" text-anchor="middle">원천 API</text><text x="56" y="84" font-size="11" text-anchor="middle" class="label-soft">+ 과거 파일</text>
+            <path class="arrow" d="M108 70 L126 70" stroke-width="1.5" marker-end="url(#a2)"/>
+            <rect class="box" x="130" y="45" width="100" height="50" rx="10"/><text x="180" y="67" font-size="12" text-anchor="middle">원본 원장</text><text x="180" y="84" font-size="11" text-anchor="middle" class="label-soft">대사·멱등</text>
+            <path class="arrow" d="M232 70 L250 70" stroke-width="1.5" marker-end="url(#a2)"/>
+            <rect class="box-accent" x="254" y="45" width="110" height="50" rx="10"/><text x="309" y="67" font-size="12" font-weight="700" text-anchor="middle">전처리</text><text x="309" y="84" font-size="11" text-anchor="middle" class="label-soft">성공 + 리젝트</text>
+            <path class="arrow" d="M366 70 L384 70" stroke-width="1.5" marker-end="url(#a2)"/>
+            <rect class="box" x="388" y="45" width="96" height="50" rx="10"/><text x="436" y="75" font-size="12" text-anchor="middle">일 집계</text>
+            <path class="arrow" d="M486 70 L504 70" stroke-width="1.5" marker-end="url(#a2)"/>
+            <rect class="box-accent" x="508" y="45" width="96" height="50" rx="10"/><text x="556" y="75" font-size="12" font-weight="700" text-anchor="middle">공개 경계</text>
+            <path class="arrow" d="M606 70 L624 70" stroke-width="1.5" marker-end="url(#a2)"/>
+            <rect class="box" x="628" y="45" width="86" height="50" rx="10"/><text x="671" y="75" font-size="12" text-anchor="middle">서빙 API</text>
+          </svg>
+        </div>
+      </section>
+      <section>
+        <h2>멈추던 백필을 끝까지</h2>
+        <p>과거분 전체 백필은 처음 두 번 모두 18분쯤 멈춘 뒤 실패했습니다. SQL 이 아니라 작업과 스케줄러 API 서버 사이의 통신 계층으로 범위를 좁혀, 메타DB 커넥션 풀 고갈과 제 DB 도구에 열어 둔 미커밋 트랜잭션이 파티션 생성을 막은 것을 찾았습니다. 파티션 선생성·풀 확장·유휴 트랜잭션 제한과 운영 규칙을 적용한 세 번째 실행에서 수천만 건(약 100GB 규모)을 <b>75분</b>에 원천 총건수와 정확히 맞게 적재했습니다.</p>
+      </section>
+      <section>
+        <h2>건수 검증의 함정</h2>
+        <p>공공 약국 마스터 동기화가 하룻밤에 평소보다 수백 배 많은 행을 삭제 처리했는데, 건수 검증은 통과했습니다. 원천 API 가 일부 페이지에 다른 페이지 내용을 중복으로 보내 고유키가 모자랐던 것입니다. 키 커버리지·페이지 중복·대량 삭제 가드를 세 겹으로 넣었고, 두 달 뒤 같은 결함이 재발했을 때 가드가 쓰기 전에 막았습니다. 교훈: <b>건수 검증은 커버리지 결손을 잡지 못한다.</b></p>
+      </section>
+      <section>
+        <h2>결과</h2>
+        <table class="before-after">
+          <thead><tr><th>지표</th><th>전</th><th>후</th></tr></thead>
+          <tbody>
+            <tr><td>과거분 백필</td><td>18분 정지 후 실패(2회)</td><td class="after">75분 완주, 원천 건수 일치</td></tr>
+            <tr><td>주소 파싱 실패</td><td>7,806행</td><td class="after">35행</td></tr>
+            <tr><td>전 기간 재처리</td><td>—</td><td class="after">1시간 4분, 통과율 97.42%</td></tr>
+            <tr><td>정기 운행</td><td>수동 실행</td><td class="after">정기 작업 7종 매일 새벽 무개입</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+    <aside class="case-aside card">
+      <dl>
+        <dt>기간</dt><dd>2026.06 ~ 현재</dd>
+        <dt>회사</dt><dd>알스솔루션</dd>
+        <dt>역할</dt><dd>설계·구현 주도 (전처리 기준은 현업, API 는 유통사)</dd>
+        <dt>기술</dt><dd>Python · Apache Airflow 3 · PostgreSQL 17(파티션·advisory lock) · Kubernetes · Argo CD · S3</dd>
+        <dt>AI 활용</dt><dd>주요 변경마다 다중 에이전트 적대 리뷰</dd>
+      </dl>
+    </aside>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 황병준</span>
+    <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a>
+  </div>
+</footer>
+<script src="../assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>황병준 · 백엔드·데이터 엔지니어</title>
+<meta name="description" content="AI 에이전트 하네스로 백엔드·데이터·인프라를 운영하는 7년 차 백엔드·데이터 엔지니어 황병준의 포트폴리오">
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">황병준<span>Byeongjun Hwang</span></a>
+    <nav class="nav" aria-label="주 메뉴">
+      <a href="index.html">홈</a>
+      <a href="about.html">소개</a>
+      <a href="experience.html">경력</a>
+      <a href="projects.html">프로젝트</a>
+      <a href="ai.html">AI로 일하는 방식</a>
+      <a href="skills.html">기술</a>
+    </nav>
+    <div>
+      <button class="theme-btn" type="button" aria-label="밝게/어둡게 전환">◐</button>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-label="메뉴 열기">메뉴</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section>
+    <p class="eyebrow">Backend · Data · Platform Engineer</p>
+    <h1>AI 에이전트 하네스로<br>백엔드·데이터·인프라를 혼자 운영합니다</h1>
+    <p class="lead">물류·제조·이커머스·제약 유통 도메인에서 7년 차인 백엔드·데이터 엔지니어입니다. 지금은 스타트업에서 제약사 대상 데이터 분석 SaaS의 백엔드, 매출 데이터 파이프라인, AWS 플랫폼을 맡고 있습니다. Claude Code·Codex 같은 AI 코딩 에이전트에 작업 규칙과 검증 관문을 씌워, 한 사람이 여러 포지션을 맡아도 운영까지 책임질 수 있게 일합니다.</p>
+    <div class="actions">
+      <a class="btn" href="projects.html">프로젝트 보기</a>
+      <a class="btn ghost" href="ai.html">AI로 일하는 방식</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="grid cols-4">
+      <div class="card kpi"><div class="num">324회</div><div class="label">다중 에이전트 워크플로</div><div class="note">2026.06~10, 약 70%에 독립 반박 검증 단계</div></div>
+      <div class="card kpi"><div class="num">11.9→1.5초</div><div class="label">분석 조회 콜드 응답</div><div class="note">IO 대기 계측으로 원인 규명, 앱 코드 변경 없이</div></div>
+      <div class="card kpi"><div class="num">23.2초</div><div class="label">게이트웨이 교체 중단</div><div class="note">호스트 33개, 1·2차 실패를 고친 3차</div></div>
+      <div class="card kpi"><div class="num">2.28억원</div><div class="label">외주 → 자체 구축 절감</div><div class="note">이전 직장 누적(견적·유지보수·구축비)</div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>대표 프로젝트</h2>
+    <div class="grid cols-3">
+      <article class="card">
+        <p class="small muted">2026 · 백엔드</p>
+        <h3><a href="projects/pharmscope-backend.html">멀티테넌트 데이터 분석 SaaS 백엔드</a></h3>
+        <p>여러 제약사가 한 서비스를 함께 쓰는 SaaS의 인증·테넌트 격리·도메인 모듈을 Kotlin·WebFlux로 설계했습니다. 공개 전 멀티에이전트 보안 감사로 고위험 결함을 먼저 막았습니다.</p>
+        <div class="tags"><span class="chip">Kotlin</span><span class="chip">WebFlux</span><span class="chip">R2DBC</span><span class="chip">JWT</span></div>
+      </article>
+      <article class="card">
+        <p class="small muted">2026 · 데이터</p>
+        <h3><a href="projects/sales-data-pipeline.html">의약품 유통 매출 데이터 파이프라인</a></h3>
+        <p>새벽에만 열리는 원천 API와 2년 반 치 파일 원본을 하나의 원장으로 모았습니다. 몇 번을 다시 돌려도 결과가 같고, 매일 새벽 사람 손 없이 돕니다.</p>
+        <div class="tags"><span class="chip">Airflow 3</span><span class="chip">PostgreSQL</span><span class="chip">멱등 설계</span></div>
+      </article>
+      <article class="card">
+        <p class="small muted">2026 · 플랫폼</p>
+        <h3><a href="projects/eks-migration.html">온프렘 쿠버네티스 → AWS EKS 이관</a></h3>
+        <p>실사용량으로 사이징하고 Terraform·GitOps로 새 플랫폼을 만들었습니다. DB는 시점 복구 리허설과 노드 강제 종료 훈련으로 복구 경로를 실증했습니다.</p>
+        <div class="tags"><span class="chip">Terraform</span><span class="chip">EKS</span><span class="chip">Argo CD</span><span class="chip">PITR</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>일하는 방식</h2>
+    <div class="grid cols-3">
+      <div class="card"><h3>도메인을 먼저 구조로</h3><p class="muted">입고·출고·정산·인터페이스처럼 얽힌 업무를 경계(Bounded Context)와 데이터 흐름으로 먼저 나눈 뒤 코드를 씁니다.</p></div>
+      <div class="card"><h3>속도보다 재발 방지</h3><p class="muted">장애는 원인을 측정으로 확정하고, 같은 일이 다시 일어나지 않게 가드·시험·규칙으로 남깁니다. 제 실수도 회고로 남깁니다.</p></div>
+      <div class="card"><h3>AI에게 맡기고, 사람이 검증</h3><p class="muted">코드와 PR은 에이전트가, 설계 판단·반박 검증 판정·병합·운영 반영은 제가 합니다. <a href="ai.html">자세히 →</a></p></div>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <h2>연락</h2>
+    <p class="lead">채용·협업 제안은 이메일로 부탁드립니다. 이력서와 경력기술서는 요청하시면 보내 드립니다.</p>
+    <p><a class="btn" href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 황병준</span>
+    <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a>
+  </div>
+</footer>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

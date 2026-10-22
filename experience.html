@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>경력 · 황병준</title>
+<meta name="description" content="황병준의 경력: 알스솔루션, 로지스올시스템즈, 아이디에스앤트러스트, 선진, 휴먼텍소프트, 인포뱅크">
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">황병준<span>Byeongjun Hwang</span></a>
+    <nav class="nav" aria-label="주 메뉴">
+      <a href="index.html">홈</a>
+      <a href="about.html">소개</a>
+      <a href="experience.html">경력</a>
+      <a href="projects.html">프로젝트</a>
+      <a href="ai.html">AI로 일하는 방식</a>
+      <a href="skills.html">기술</a>
+    </nav>
+    <div>
+      <button class="theme-btn" type="button" aria-label="밝게/어둡게 전환">◐</button>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-label="메뉴 열기">메뉴</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="eyebrow">Experience</p>
+  <h1>경력 7년 차</h1>
+  <p class="lead">물류·제조·이커머스·제약 유통 도메인을 거치며 백엔드에서 출발해 데이터·플랫폼·AI 까지 맡는 범위를 넓혀 왔습니다.</p>
+
+  <div class="timeline section">
+    <div class="tl-item now" id="als">
+      <div class="tl-head"><h3>알스솔루션</h3><span class="tl-period">2026.04 ~ 현재</span></div>
+      <p class="tl-role">Engineering팀 · 선임연구원 — 스타트업 4명 개발팀에서 백엔드·데이터·인프라 실무 담당</p>
+      <ul class="points">
+        <li><b>데이터 분석 SaaS 백엔드</b> — 제약사 고객이 함께 쓰는 pharmscope 의 인증·테넌트 격리·도메인 모듈을 Kotlin·WebFlux로 설계·구현, 상용 운영 중 (<a href="projects/pharmscope-backend.html">사례</a>)</li>
+        <li><b>매출 데이터 파이프라인</b> — 국내 대형 의약품 유통사 매출을 수집·전처리·공개하는 Airflow 파이프라인, 수천만 건 백필 75분, 정기 작업 7종 매일 새벽 무개입 (<a href="projects/sales-data-pipeline.html">사례</a>)</li>
+        <li><b>분석 조회 성능</b> — 30초 타임아웃의 원인을 IO 대기 계측으로 찾아 콜드 조회 11.9초 → 1.5초 (<a href="projects/pg-performance.html">사례</a>)</li>
+        <li><b>데이터 보정 백오피스</b> — 익일 반영이던 매출 보정을 접수 당일 반영으로, 금액 항등식을 자동 롤백 가드로 (<a href="projects/correction-backoffice.html">사례</a>)</li>
+        <li><b>AWS EKS 이관</b> — Terraform·GitOps 로 새 플랫폼 구축, 게이트웨이 교체 중단 23.2초, DB 시점 복구 RPO 130초 실증 (<a href="projects/eks-migration.html">사례</a>)</li>
+        <li><b>AI 에이전트 하네스</b> — 다중 에이전트 워크플로 324회, 커밋의 57.6% AI 공동 작성, 병합·운영 반영은 사람 (<a href="ai.html">자세히</a>)</li>
+        <li><b>약국 AI Agent 서비스</b> — LLM 에이전트 기술 구성과 모델 비교 PoC 설계(진행 중)</li>
+      </ul>
+    </div>
+
+    <div class="tl-item" id="logisall">
+      <div class="tl-head"><h3>로지스올시스템즈</h3><span class="tl-period">2024.08 ~ 2026.04</span></div>
+      <p class="tl-role">PoolingInnovation팀 · 과장 — 물류 무인 키오스크 솔루션 총괄 PM, 기간계 고도화</p>
+      <ul class="points">
+        <li><b>LOGION 무인 수불 자동화</b> — DDD 5개 Bounded Context·MSA 설계, 6개월 만에 1차 납품, 국내 물류·식품 기업 10여 곳 도입·납품, 운영 클레임 0건 (<a href="projects/logion.html">사례</a>)</li>
+        <li><b>대용량 이벤트</b> — Kafka Streams 일 평균 10만 건, 자정 집계 스파이크를 실시간 집계로 분산</li>
+        <li><b>AI 통합</b> — Vision AI 이동전표 인식률 100%(3초 내외), 방언 STT 40% → 80~85%(특정 ARS 업무), 사내 ChatBot 만족도 87 → 92점</li>
+        <li><b>DevOps</b> — Jenkins·Docker·K8s 무중단 CI/CD, EAI 로 솔루션별 인터페이스 통합</li>
+      </ul>
+    </div>
+
+    <div class="tl-item" id="ids">
+      <div class="tl-head"><h3>아이디에스앤트러스트</h3><span class="tl-period">2024.04 ~ 2024.08</span></div>
+      <p class="tl-role">고도화파트 · 파트장 — 제약사 이커머스 몰 결제 시스템 MSA 전환</p>
+      <ul class="points">
+        <li><b>결제 MSA</b> — 설치형 SDK 결제 모듈을 결제·통합 인터페이스 서비스로 분리, 오픈 후 결제 성공률 99.9%·에러·민원 0건</li>
+        <li><b>검색 내재화</b> — 상용 검색엔진을 ELK·벡터 DB 자체 구축으로 대체, 연간 약 3,000만원 라이선스 비용 제거</li>
+      </ul>
+    </div>
+
+    <div class="tl-item" id="sunjin">
+      <div class="tl-head"><h3>선진</h3><span class="tl-period">2022.01 ~ 2024.04</span></div>
+      <p class="tl-role">기술연구소 디지털혁신센터 · 대리 — SFA/CRM·TMS/WMS·MES·DevOps·AI 예측</p>
+      <ul class="points">
+        <li><b>4개국 SFA/CRM 공통 플랫폼</b> — ERP 모듈(MM·PP·SD·FI) 연계까지 단독 구축, 그룹 계열사 공통 ERP 표준 모델 채택, 저작권 등록 (<a href="projects.html#p-sfa">요약</a>)</li>
+        <li><b>비용 내재화</b> — 외주 견적 9,000만원 디자인 템플릿 자체 구축 등 외주 → 자체 전환으로 누적 2억 2,800만원 절감</li>
+        <li><b>DevOps</b> — 무중단 배포로 배포 리드타임 60분 → 10분, 전사 SSO·통합 로그 관제</li>
+        <li><b>AI 예측</b> — Stacking Ensemble 축우 등급 예측, 현업 수기 60~70% → 89~91%</li>
+      </ul>
+    </div>
+
+    <div class="tl-item" id="humantec">
+      <div class="tl-head"><h3>휴먼텍소프트</h3><span class="tl-period">2020.06 ~ 2021.12</span></div>
+      <p class="tl-role">솔루션사업부 · 대리 — 온라인 부정시험방지 솔루션 PM</p>
+      <ul class="points">
+        <li><b>부정시험방지 솔루션</b> — WebRTC 실시간 영상 감독·시야/자리 이탈 탐지 모델, 기획부터 납품까지 전 주기, 교육기관 납품</li>
+        <li><b>해외 선거관리 시스템</b> — 유권자 수백만 명 규모 데이터 일괄 처리·리포트·접근 감사</li>
+      </ul>
+    </div>
+
+    <div class="tl-item" id="infobank">
+      <div class="tl-head"><h3>인포뱅크</h3><span class="tl-period">2018.11 ~ 2019.06</span></div>
+      <p class="tl-role">iMotors Media팀 · 연구원 — 차량 인포테인먼트 애플리케이션</p>
+      <ul class="points">
+        <li><b>개발자 모드</b> — C++·QT 기반, 국내 완성차 브랜드 이후 전 차종 탑재·현 플랫폼까지 유지, 북미 현지 3개월 양산 대응</li>
+      </ul>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 황병준</span>
+    <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a>
+  </div>
+</footer>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

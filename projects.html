@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>프로젝트 · 황병준</title>
+<meta name="description" content="백엔드·데이터·AI·플랫폼 프로젝트 사례">
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">황병준<span>Byeongjun Hwang</span></a>
+    <nav class="nav" aria-label="주 메뉴">
+      <a href="index.html">홈</a>
+      <a href="about.html">소개</a>
+      <a href="experience.html">경력</a>
+      <a href="projects.html">프로젝트</a>
+      <a href="ai.html">AI로 일하는 방식</a>
+      <a href="skills.html">기술</a>
+    </nav>
+    <div>
+      <button class="theme-btn" type="button" aria-label="밝게/어둡게 전환">◐</button>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-label="메뉴 열기">메뉴</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="eyebrow">Projects</p>
+  <h1>프로젝트</h1>
+  <p class="lead">직무별로 걸러 볼 수 있습니다. 제목에 링크가 있는 프로젝트는 문제 → 원인 → 설계 → 결과 → 회고 순서의 상세 사례가 있습니다.</p>
+
+  <div class="filters" role="group" aria-label="직무 필터">
+    <button type="button" data-axis="all" aria-pressed="true">전체</button>
+    <button type="button" data-axis="backend" aria-pressed="false">백엔드</button>
+    <button type="button" data-axis="data" aria-pressed="false">데이터</button>
+    <button type="button" data-axis="ai" aria-pressed="false">AI·ML</button>
+    <button type="button" data-axis="devops" aria-pressed="false">DevOps·플랫폼</button>
+  </div>
+
+  <div class="grid cols-2">
+    <article class="card project-card" data-axes="backend">
+      <div class="meta">2026 · 알스솔루션 · 설계·구현 전담</div>
+      <h3><a href="projects/pharmscope-backend.html">멀티테넌트 데이터 분석 SaaS 백엔드 (pharmscope)</a></h3>
+      <p class="result">인증·세션·테넌트 격리·도메인 모듈을 처음부터 설계. 공개 전 멀티에이전트 보안 감사로 고위험 2건 포함 10건 수정, 상용 운영 중.</p>
+      <div class="tags"><span class="chip">Kotlin</span><span class="chip">WebFlux</span><span class="chip">R2DBC</span><span class="chip">Redis</span><span class="chip">Kafka</span></div>
+    </article>
+
+    <article class="card project-card" data-axes="data backend">
+      <div class="meta">2026 · 알스솔루션 · 설계·구현 주도</div>
+      <h3><a href="projects/sales-data-pipeline.html">의약품 유통 매출 데이터 파이프라인</a></h3>
+      <p class="result">연동 명세 82개 컬럼을 직접 정의하고 수천만 건 원본을 75분에 백필. 재실행해도 같은 결과가 나오는 원장 구조로 매일 새벽 무개입 운행.</p>
+      <div class="tags"><span class="chip">Airflow 3</span><span class="chip">PostgreSQL</span><span class="chip">Python</span></div>
+    </article>
+
+    <article class="card project-card" data-axes="backend data">
+      <div class="meta">2026 · 알스솔루션 · 진단·조치 전담</div>
+      <h3><a href="projects/pg-performance.html">분석 조회 30초 타임아웃 해결 (PostgreSQL)</a></h3>
+      <p class="result">IO 대기 84%를 분리 계측해 인덱스 오배치에 따른 버퍼 캐시 축출을 규명. 콜드 11.9초 → 1.5초, 검토되던 컬럼형 DB 도입 없이 해결.</p>
+      <div class="tags"><span class="chip">PostgreSQL 17</span><span class="chip">EXPLAIN</span><span class="chip">파티셔닝</span></div>
+    </article>
+
+    <article class="card project-card" data-axes="data backend">
+      <div class="meta">2026 · 알스솔루션 · 설계·구현 주도</div>
+      <h3><a href="projects/correction-backoffice.html">데이터 보정·검수 백오피스</a></h3>
+      <p class="result">엑셀 회신·익일 반영이던 보정 루프를 접수 당일 반영으로. 33개월 금액 항등식(차이 0)을 자동 롤백 가드로 사용.</p>
+      <div class="tags"><span class="chip">FastAPI</span><span class="chip">Keycloak</span><span class="chip">Airflow</span></div>
+    </article>
+
+    <article class="card project-card" data-axes="devops">
+      <div class="meta">2026 · 알스솔루션 · 검토·설계·구축 주도</div>
+      <h3><a href="projects/eks-migration.html">온프렘 쿠버네티스 → AWS EKS 이관</a></h3>
+      <p class="result">Terraform root 8개·GitOps 로 재구축, 구축 당일 플랫폼 앱 14개 가동. 시점 복구 RPO 130초, 노드 강제 종료 시 DB 159초 복귀 실증.</p>
+      <div class="tags"><span class="chip">Terraform</span><span class="chip">EKS</span><span class="chip">Argo CD</span><span class="chip">Velero</span></div>
+    </article>
+
+    <article class="card project-card" data-axes="devops">
+      <div class="meta">2026 · 알스솔루션 · 단독 수행</div>
+      <h3>게이트웨이 교체와 클러스터 보안 하드닝</h3>
+      <p class="result">ingress-nginx → Envoy Gateway 컷오버(1·2차 실패 원인을 고쳐 3차 중단 23.2초), 저장소 30여 개 평문 시크릿 전수 점검·봉인, SSO 앱별 분리, 인증서 자동 갱신.</p>
+      <div class="tags"><span class="chip">Envoy Gateway</span><span class="chip">Keycloak</span><span class="chip">SealedSecrets</span><span class="chip">cert-manager</span></div>
+    </article>
+
+    <article class="card project-card" data-axes="ai devops backend">
+      <div class="meta">2026 · 알스솔루션 · 설계·운영</div>
+      <h3><a href="ai.html">AI 코딩 에이전트 하네스 엔지니어링</a></h3>
+      <p class="result">작업 규칙 3단·찾기/반박 다중 에이전트 워크플로 324회·전체 시험 관문·병합 권한 분리. 커밋 1,806건 중 57.6% AI 공동 작성.</p>
+      <div class="tags"><span class="chip">Claude Code</span><span class="chip">Codex</span><span class="chip">Multi-agent</span></div>
+    </article>
+
+    <article class="card project-card" data-axes="ai backend">
+      <div class="meta">2026 · 알스솔루션 · 진행 중</div>
+      <h3>약국 AI Agent 서비스 — LLM 에이전트 설계</h3>
+      <p class="result">기획 아키텍처를 기존 쿠버네티스 운영 기반에 대응시키고, 두 LLM 을 같은 업무 프로그램에서 비교하는 PoC(도구 계약·실행 루프·평가 420회)를 설계. 아직 실행 전입니다.</p>
+      <div class="tags"><span class="chip">LLM</span><span class="chip">RAG</span><span class="chip">AWS Bedrock</span></div>
+    </article>
+
+    <article class="card project-card" data-axes="backend ai">
+      <div class="meta">2024~2025 · 로지스올시스템즈 · 총괄 PM</div>
+      <h3><a href="projects/logion.html">LOGION 무인 수불 자동화 키오스크</a></h3>
+      <p class="result">24시간 무인 운영을 위해 다섯 경계의 MSA 로 설계, Kafka Streams 일 평균 10만 건, Vision AI 이동전표 인식률 100%, 10여 개 기업 도입·납품.</p>
+      <div class="tags"><span class="chip">Java</span><span class="chip">Spring Boot</span><span class="chip">Kafka Streams</span><span class="chip">Vision AI</span></div>
+    </article>
+
+    <article class="card project-card" data-axes="backend">
+      <div class="meta">2024 · 아이디에스앤트러스트 · 단독 수행</div>
+      <h3>이커머스 결제 시스템 MSA 전환</h3>
+      <p class="result">정산 정합성 문제를 결제·인터페이스 서비스 분리와 Kafka Streams 윈도우 집계로 해결, 오픈 후 결제 성공률 99.9%, 상용 검색엔진 자체 대체.</p>
+      <div class="tags"><span class="chip">Spring Boot</span><span class="chip">Kafka Streams</span><span class="chip">ELK</span></div>
+    </article>
+
+    <article class="card project-card" data-axes="backend" id="p-sfa">
+      <div class="meta">2022~2023 · 선진 · 단독 구축</div>
+      <h3>4개국 SFA/CRM 공통 플랫폼</h3>
+      <p class="result">ERP 모듈 연계까지 넓힌 영업 지원 플랫폼을 혼자 구축, 그룹 계열사 공통 ERP 표준 모델로 채택. 외주 → 자체 구축으로 누적 2억 2,800만원 절감.</p>
+      <div class="tags"><span class="chip">Java</span><span class="chip">Spring Boot</span><span class="chip">SAP RFC</span><span class="chip">i18n</span></div>
+    </article>
+
+    <article class="card project-card" data-axes="ai data">
+      <div class="meta">2023 · 선진 · 모델 설계·개발 주도</div>
+      <h3>축우 등급 예측 모델 현업 적용</h3>
+      <p class="result">석사 논문 모델(Stacking Ensemble)을 현업에 적용, 적용 직후 85% 로 떨어진 정확도를 2개월 튜닝으로 89~91% 까지. 현업 수기 예측은 60~70%.</p>
+      <div class="tags"><span class="chip">XGBoost</span><span class="chip">LightGBM</span><span class="chip">SHAP</span><span class="chip">Airflow</span></div>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 황병준</span>
+    <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a>
+  </div>
+</footer>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

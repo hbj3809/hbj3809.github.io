@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOGION 무인 수불 자동화 키오스크 · 황병준</title>
+<meta name="description" content="24시간 무인 물류 키오스크 LOGION: DDD·MSA 설계, Kafka Streams, Vision AI 전표 검증">
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../index.html">황병준<span>Byeongjun Hwang</span></a>
+    <nav class="nav" aria-label="주 메뉴">
+      <a href="../index.html">홈</a>
+      <a href="../about.html">소개</a>
+      <a href="../experience.html">경력</a>
+      <a href="../projects.html">프로젝트</a>
+      <a href="../ai.html">AI로 일하는 방식</a>
+      <a href="../skills.html">기술</a>
+    </nav>
+    <div>
+      <button class="theme-btn" type="button" aria-label="밝게/어둡게 전환">◐</button>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-label="메뉴 열기">메뉴</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="eyebrow"><a href="../projects.html">프로젝트</a> · 백엔드 · AI</p>
+  <h1>LOGION 무인 수불 자동화 키오스크</h1>
+  <p class="lead">운송기사가 센터 사무실에서 대면으로 확인하던 입고·출고 업무를 24시간 무인 키오스크로 옮긴 솔루션의 총괄 PM 이자 핵심 개발자였습니다.</p>
+
+  <div class="case">
+    <div>
+      <section>
+        <h2>왜 MSA 였나</h2>
+        <p>키오스크는 24시간 무인으로 돌아야 하고, 한 업무에 문제가 생겨도 같은 기기에서 다른 업무는 계속되어야 했습니다. 입고·출고·관리·자산관리마다 규칙이 다르고, 출력물(상차지시서·거래명세서·이동전표) 양식도 자주 바뀌었습니다. 그래서 하나의 서비스로 묶지 않고, 인증·출고·입고·관리·자산 다섯 개 경계(Bounded Context)로 나눠 서비스를 분리했습니다.</p>
+        <div class="diagram" role="img" aria-label="LOGION 다섯 경계와 이벤트 버스">
+          <svg viewBox="0 0 720 190" xmlns="http://www.w3.org/2000/svg">
+            <rect class="box" x="10" y="20" width="128" height="56" rx="10"/><text x="74" y="44" font-size="13" font-weight="700" text-anchor="middle">Auth</text><text x="74" y="62" font-size="11" text-anchor="middle" class="label-soft">테넌트·권한</text>
+            <rect class="box-accent" x="152" y="20" width="128" height="56" rx="10"/><text x="216" y="44" font-size="13" font-weight="700" text-anchor="middle">Delivery</text><text x="216" y="62" font-size="11" text-anchor="middle" class="label-soft">출고 애그리거트</text>
+            <rect class="box" x="294" y="20" width="128" height="56" rx="10"/><text x="358" y="44" font-size="13" font-weight="700" text-anchor="middle">Receipt</text><text x="358" y="62" font-size="11" text-anchor="middle" class="label-soft">입고·전표 검증</text>
+            <rect class="box" x="436" y="20" width="128" height="56" rx="10"/><text x="500" y="44" font-size="13" font-weight="700" text-anchor="middle">Admin</text><text x="500" y="62" font-size="11" text-anchor="middle" class="label-soft">기준정보·출력물</text>
+            <rect class="box" x="578" y="20" width="128" height="56" rx="10"/><text x="642" y="44" font-size="13" font-weight="700" text-anchor="middle">WPMS</text><text x="642" y="62" font-size="11" text-anchor="middle" class="label-soft">자산·집계</text>
+            <rect class="box-accent" x="10" y="110" width="696" height="50" rx="10"/><text x="358" y="140" font-size="14" font-weight="700" text-anchor="middle">Kafka · Kafka Streams (인터페이스 · 실시간 집계)</text>
+            <path class="arrow" d="M74 78 L74 108 M216 78 L216 108 M358 78 L358 108 M500 78 L500 108 M642 78 L642 108" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </section>
+      <section>
+        <h2>설계 포인트</h2>
+        <ul class="points">
+          <li><b>출고 애그리거트</b>: 출고(Delivery)를 루트로 품목·이력·출력물·인터페이스·상태를 한 단위로 묶어, 품목만 따로 생기거나 상태만 따로 바뀌지 않게 했습니다.</li>
+          <li><b>Kafka Streams 집계</b>: 매일 자정·월마감에 몰리던 집계 스파이크를 실시간 집계로 나눠, 현장 관리자가 바로 현황을 보고 문제가 있으면 다시 집계할 수 있게 했습니다. 메시지 키 정책으로 같은 출고의 순서와 멱등성을 지켰습니다.</li>
+          <li><b>Vision AI 전표 검증</b>: 기사가 카메라 앞에 이동전표를 두면 지정 구역의 정보와 도착지 인감을 읽어, 고객사 설정에 따라 바로 입고 확정하거나 검토로 넘깁니다. 찢기거나 구겨진 전표도 읽어야 했습니다.</li>
+        </ul>
+      </section>
+      <section>
+        <h2>장애 대응</h2>
+        <p>첫 도입 고객사에서 키오스크 처리는 끝났는데 고객사 시스템에 반영되지 않는 장애가 났습니다. 출고 처리·인터페이스·고객사 반영 단계를 나눠 확인하고 이력·로그 테이블을 대조해, 처리 시간이 40초를 넘기며 분류되지 않은 예외로 끝난 것을 찾았고 원인은 고객사 방화벽 정책 변경에 따른 타임아웃이었습니다. 재전송 기능으로 먼저 동기화하고, 예외 분류에 네트워크 영역을 추가해 배포했습니다.</p>
+      </section>
+      <section>
+        <h2>결과</h2>
+        <table class="before-after">
+          <thead><tr><th>지표</th><th>값</th></tr></thead>
+          <tbody>
+            <tr><td>도입</td><td>국내 물류·식품 기업 10여 곳 도입·납품(시범 포함)</td></tr>
+            <tr><td>처리량</td><td>Kafka Streams 일 평균 10만 건(초기 5만 건에서 증가)</td></tr>
+            <tr><td>응답</td><td>비즈니스 API 1~1.5초 이내(APM 측정)</td></tr>
+            <tr><td>전표 인식</td><td class="after">이동전표 인식률 100%, 3초 내외</td></tr>
+            <tr><td>첫 도입 고객사 리포트</td><td class="after">현장 대응 8시간 → 1시간, 현장 오류 90% 감소</td></tr>
+            <tr><td>운영</td><td>서비스 운영 클레임 0건, 특허·저작권 등록</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+    <aside class="case-aside card">
+      <dl>
+        <dt>기간</dt><dd>2024.11 ~ 2025.05 1차 납품, 이후 운영</dd>
+        <dt>회사</dt><dd>로지스올시스템즈</dd>
+        <dt>역할</dt><dd>총괄 PM · 아키텍처 설계 · 핵심 개발</dd>
+        <dt>기술</dt><dd>Java 22 · Spring Boot 3.4 · Spring Security · JPA · MyBatis · Kafka Streams · Vision AI · Python · FastAPI · Redis · Jenkins · Docker · WhaTap</dd>
+      </dl>
+    </aside>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 황병준</span>
+    <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a>
+  </div>
+</footer>
+<script src="../assets/js/site.js"></script>
+</body>
+</html>

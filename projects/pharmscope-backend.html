@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>멀티테넌트 데이터 분석 SaaS 백엔드 · 황병준</title>
+<meta name="description" content="pharmscope 백엔드: 인증·테넌트 격리·도메인 모듈 설계와 공개 전 보안 감사">
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../index.html">황병준<span>Byeongjun Hwang</span></a>
+    <nav class="nav" aria-label="주 메뉴">
+      <a href="../index.html">홈</a>
+      <a href="../about.html">소개</a>
+      <a href="../experience.html">경력</a>
+      <a href="../projects.html">프로젝트</a>
+      <a href="../ai.html">AI로 일하는 방식</a>
+      <a href="../skills.html">기술</a>
+    </nav>
+    <div>
+      <button class="theme-btn" type="button" aria-label="밝게/어둡게 전환">◐</button>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-label="메뉴 열기">메뉴</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="eyebrow"><a href="../projects.html">프로젝트</a> · 백엔드</p>
+  <h1>멀티테넌트 데이터 분석 SaaS 백엔드</h1>
+  <p class="lead">여러 제약사가 한 서비스와 DB 를 함께 쓰는 의약품 유통 데이터 분석 서비스 pharmscope 의 백엔드를 처음부터 설계·구현했습니다.</p>
+
+  <div class="case">
+    <div>
+      <section>
+        <h2>문제</h2>
+        <p>인증만 있던 상태에서 공개 전까지 계약사 관리·운영관리(공지·FAQ·문의)·보안 로그·계정 관리·실시간 알림을 갖춰야 했습니다. 고객사들이 한 인스턴스를 공유하므로 다른 회사의 데이터가 보이는 순간 서비스가 끝납니다(OWASP API 1위, 객체 수준 권한 우회).</p>
+      </section>
+      <section>
+        <h2>설계</h2>
+        <ul class="points">
+          <li><b>인증</b>: access 토큰은 메모리, refresh 는 HTTP-only 쿠키로 나눈 자체 JWT. 7단계 로그인 체인(역할·계약 상태·IP 허용 목록·실패 잠금), refresh 회전·재사용 탐지·블랙리스트·계정당 1세션.</li>
+          <li><b>테넌트 격리</b>: 회사 식별자는 요청 값이 아니라 토큰 클레임에서만 받는다. 리소스 API 마다 "다른 회사로 접근하면 403" 통합 시험을 넣도록 규칙화했다.</li>
+          <li><b>모듈러 모놀리스</b>: 배포 단위는 하나로 두고 도메인 모듈(어드민·고객·운영·실시간 알림)을 추가하는 구조. 이후 매출 분석 모듈도 같은 방식으로 붙었다.</li>
+          <li><b>실시간 알림</b>: 여러 파드에 흩어진 SSE 연결로 전하기 위해 DB inbox 에 먼저 저장하고 Kafka 로 발행, 파드마다 다른 consumer group 이 자기 연결에 push.</li>
+        </ul>
+        <div class="diagram" role="img" aria-label="요청이 게이트웨이와 인증 필터를 거쳐 도메인 모듈로 가고, 회사 식별자는 토큰에서만 읽는 구조">
+          <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="label-soft"/></marker></defs>
+            <rect class="box" x="10" y="70" width="110" height="50" rx="10"/><text x="65" y="100" font-size="13" text-anchor="middle">고객사 SPA</text>
+            <path class="arrow" d="M122 95 L172 95" stroke-width="1.5" marker-end="url(#a1)"/>
+            <rect class="box" x="176" y="70" width="120" height="50" rx="10"/><text x="236" y="92" font-size="13" text-anchor="middle">게이트웨이</text><text x="236" y="110" font-size="11" text-anchor="middle" class="label-soft">same-origin /api</text>
+            <path class="arrow" d="M298 95 L348 95" stroke-width="1.5" marker-end="url(#a1)"/>
+            <rect class="box-accent" x="352" y="60" width="150" height="70" rx="10"/><text x="427" y="88" font-size="13" font-weight="700" text-anchor="middle">인증 필터</text><text x="427" y="108" font-size="11" text-anchor="middle" class="label-soft">회사 = 토큰 클레임</text>
+            <path class="arrow" d="M504 80 L554 40" stroke-width="1.5" marker-end="url(#a1)"/>
+            <path class="arrow" d="M504 95 L554 95" stroke-width="1.5" marker-end="url(#a1)"/>
+            <path class="arrow" d="M504 110 L554 150" stroke-width="1.5" marker-end="url(#a1)"/>
+            <rect class="box" x="558" y="18" width="150" height="40" rx="8"/><text x="633" y="43" font-size="12" text-anchor="middle">운영·계정 모듈</text>
+            <rect class="box" x="558" y="75" width="150" height="40" rx="8"/><text x="633" y="100" font-size="12" text-anchor="middle">매출 분석 모듈</text>
+            <rect class="box" x="558" y="132" width="150" height="40" rx="8"/><text x="633" y="157" font-size="12" text-anchor="middle">실시간 알림(SSE)</text>
+          </svg>
+        </div>
+      </section>
+      <section>
+        <h2>결함을 먼저 찾기</h2>
+        <p>공개 직전, AI 에이전트로 10개 축(테넌트 격리·인젝션·파일 업로드·토큰·세션 등)을 병렬로 찾고 발견마다 다른 에이전트가 반박하는 감사를 돌려, 살아남은 고위험 2건·중위험 8건만 시험과 함께 고쳤습니다. 서명키가 주입되지 않으면 기본값으로 조용히 뜨던 문제는 기동 실패로 바꿨고, 일반 관리자가 상위 관리자 계정을 건드릴 수 있던 경로를 막았습니다.</p>
+        <div class="callout">QA 재검증에서는 "삭제한 계정의 이메일 재사용"을 넣는 과정에서, 재발송 경로가 계정 번호로 찾은 뒤 이메일로 다시 해석하는 바람에 다른 회사 신규 계정의 비밀번호를 리셋할 수 있는 교차 오조작을 공개 전에 찾았습니다. 신원의 기준을 계정 번호로 고정하고 같은 유형을 전수 점검했습니다.</div>
+      </section>
+      <section>
+        <h2>장애 원인 규명</h2>
+        <p>자리를 비웠다 돌아오면 모든 탭이 로그아웃되던 문제는, 만료 직후 여러 요청이 같은 1회용 refresh 토큰으로 동시에 회전하다 재사용 공격으로 오판된 레이스였습니다. 사용자별 분산 락과 직전 토큰의 짧은 유예 재응답으로 풀고, 동시 갱신 4건이 같은 토큰으로 모이는 회귀 시험으로 고정했습니다. 새로고침 복원 기능을 넣을 때는 AI 적대 리뷰가 "이 기능이 토큰 발급 통로가 된다"는 치명 결함을 찾아 병합 전에 막았습니다.</p>
+      </section>
+      <section>
+        <h2>결과</h2>
+        <table class="before-after">
+          <thead><tr><th>지표</th><th>값</th></tr></thead>
+          <tbody>
+            <tr><td>서비스</td><td class="after">제약사 고객 대상 상용 운영</td></tr>
+            <tr><td>신규 도메인 모듈 · HTTP 엔드포인트</td><td>4개 · 109개</td></tr>
+            <tr><td>자동 테스트</td><td>52개(2026.06) → 1,039개(2026.09)</td></tr>
+            <tr><td>공개 전 확정 결함 수정</td><td>고위험 2 · 중위험 8</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+    <aside class="case-aside card">
+      <dl>
+        <dt>기간</dt><dd>2026.05 ~ 현재</dd>
+        <dt>회사</dt><dd>알스솔루션</dd>
+        <dt>역할</dt><dd>백엔드 설계·구현 전담 (기획·화면은 기획팀·FE)</dd>
+        <dt>기술</dt><dd>Kotlin · Coroutines · Spring WebFlux · R2DBC · PostgreSQL · Redis · Kafka · SSE · Testcontainers</dd>
+        <dt>AI 활용</dt><dd>Claude Code 로 구현, 멀티에이전트 감사·적대 리뷰</dd>
+      </dl>
+    </aside>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 황병준</span>
+    <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a>
+  </div>
+</footer>
+<script src="../assets/js/site.js"></script>
+</body>
+</html>

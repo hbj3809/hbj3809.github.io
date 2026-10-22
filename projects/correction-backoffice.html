@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>데이터 보정·검수 백오피스 · 황병준</title>
+<meta name="description" content="익일 반영이던 매출 데이터 보정을 접수 당일 반영으로 바꾼 사내 백오피스 재설계와 1차 실패 회고">
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../index.html">황병준<span>Byeongjun Hwang</span></a>
+    <nav class="nav" aria-label="주 메뉴">
+      <a href="../index.html">홈</a>
+      <a href="../about.html">소개</a>
+      <a href="../experience.html">경력</a>
+      <a href="../projects.html">프로젝트</a>
+      <a href="../ai.html">AI로 일하는 방식</a>
+      <a href="../skills.html">기술</a>
+    </nav>
+    <div>
+      <button class="theme-btn" type="button" aria-label="밝게/어둡게 전환">◐</button>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-label="메뉴 열기">메뉴</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="eyebrow"><a href="../projects.html">프로젝트</a> · 데이터 · 백엔드</p>
+  <h1>데이터 보정·검수 백오피스</h1>
+  <p class="lead">현업 데이터 운영팀이 매출 데이터를 검수하고 보정하는 루프를 엑셀 왕복에서 화면·API 로 옮기고, 보정이 접수 당일 고객 화면에 반영되게 했습니다. 한 번 실패한 뒤 다시 설계했습니다.</p>
+
+  <div class="case">
+    <div>
+      <section>
+        <h2>문제</h2>
+        <p>보정은 엑셀 회신 → 수기 DB 입력 → 다음 날 새벽 재처리에 기대고 있었습니다. 게다가 지난 달 데이터에 대한 보정은 새벽 재처리에 다시 반영되지 않는 결함도 있었습니다.</p>
+      </section>
+      <section>
+        <h2>1차 시도와 되돌림</h2>
+        <p>처음에는 새 계산 엔진과 공개본을 따로 만드는 큰 구조로 갔고, 고객 조회를 새 공개본으로 전환한 날 보정 계산이 실패했습니다. 약 4시간 만에 기존 경로로 되돌리고 같은 밤 정상 운행을 확인했습니다. 원인은 "좁은 시험 성공을 운영 성능 완료로 일반화한 것"이었습니다. 전환 전 개발 환경 시험에서 이미 일부 조회가 30초 가까이 걸렸는데 그 신호를 가볍게 봤습니다.</p>
+      </section>
+      <section>
+        <h2>다시 설계</h2>
+        <ul class="points">
+          <li><b>정본은 하나</b>: 기존 보정 표 4종을 유일한 정본으로 두고, "보정 쓰기 + 영향받은 달만 재전처리 + 공개 표시"를 한 트랜잭션으로 묶는 경량 구조. 새 표 5개, 함수·트리거 0, 고객 조회 SQL·인덱스·캐시 키는 그대로.</li>
+          <li><b>금액 항등식 가드</b>: "원천 = 정상 + 반려" 금액 항등식을 33개월 전 기간 실측(차이 0)해, 낮 재처리가 이 식을 깨면 자동으로 되돌리게 했습니다.</li>
+          <li><b>8단계 전환</b>: 4개 저장소에 걸친 변경을 단계마다 통과 조건·되돌리기·보관본을 둔 8단계로 나눴고, 실제 DB 를 띄운 시험으로 마이그레이션 순서와 옛 이미지 기동까지 확인해 되돌리기를 "이미지 태그 교체"로 단순화했습니다.</li>
+          <li><b>역할 분리</b>: 코드·PR·읽기 확인은 AI 에이전트가, 병합·운영 SQL·되돌릴 수 없는 단계 실행·결정은 제가 했습니다.</li>
+        </ul>
+      </section>
+      <section>
+        <h2>운영에 연 뒤</h2>
+        <p>현업에 연 첫날 들어온 불편·누락 18항목을 당일 판정해 17항목을 그날 저녁 배포했습니다. 수집이 실패한 날 매출을 그날 다시 받는 기능은 설계 착수 4일 만에 켰습니다. 서비스가 멈춰도 알림이 없던 공백은 경보 규칙 14종(가상 시계 시험 41개)으로 메웠고, 보정할 때마다 울리던 "측정 실패" 오경보는 지표가 첫 요청 때에야 생긴다는 원인을 찾아 없앴습니다.</p>
+      </section>
+      <section>
+        <h2>결과</h2>
+        <table class="before-after">
+          <thead><tr><th>지표</th><th>전</th><th>후</th></tr></thead>
+          <tbody>
+            <tr><td>보정 반영</td><td>다음 날 새벽</td><td class="after">접수 당일</td></tr>
+            <tr><td>재계산 범위</td><td>전 기간 약 3.5시간(1차 엔진안)</td><td class="after">영향받은 달만, 1개월분 91초</td></tr>
+            <tr><td>금액 항등식(33개월)</td><td>—</td><td class="after">차이 0, 자동 롤백 가드</td></tr>
+            <tr><td>측정 오경보(과거 18개 구간 재생)</td><td>8건</td><td class="after">0건</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+    <aside class="case-aside card">
+      <dl>
+        <dt>기간</dt><dd>2026.09 ~ 현재</dd>
+        <dt>회사</dt><dd>알스솔루션</dd>
+        <dt>역할</dt><dd>설계·구현 주도 (검수 기준은 현업, 화면은 FE)</dd>
+        <dt>기술</dt><dd>Python · FastAPI · Keycloak(OIDC PKCE·BFF) · PostgreSQL · Airflow · Kotlin · Prometheus · Alertmanager · Testcontainers</dd>
+        <dt>AI 활용</dt><dd>멀티 에이전트 조사·설계 심사·반증 검토, 3개 저장소 병행 구현</dd>
+      </dl>
+    </aside>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 황병준</span>
+    <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a>
+  </div>
+</footer>
+<script src="../assets/js/site.js"></script>
+</body>
+</html>
