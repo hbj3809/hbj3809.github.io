@@ -125,7 +125,7 @@
 </section>
 <section class="sec sec--glow sec--flip">
 <div class="sec__head"><h2 class="sec__title">제품 출시 단계 제안<span class="dim">0~3단계, 외부 실행은 완료 조건을 통과한 만큼만</span></h2><div class="sec__lead"><p>개발 추진안에서 제안한 출시 순서입니다. 확정 일정표가 아니라 순서 제안이며, 각 단계의 완료 조건을 통과해야 다음 단계의 외부 실행 범위를 엽니다. 외부 자료 확보 대기와 기존 제품 운영 시간은 개발 공수와 따로 반영합니다. AI 쪽 '승인 업무 연결'은 2단계의 주문 안전장치가 먼저 갖춰져야 붙입니다.</p></div></div>
-<div class="sec__body"><ol class="tl"><li><div class="tl__when">0단계</div><div class="tl__what"><b>연동과 정책 검증</b><span>협력 약국 솔루션의 API·데이터 구조·테스트 계정·비식별 샘플 확보, 중앙 API 와 약국 PC 설치형 커넥터 중 연동 방식 판정, 품목·포장 단위 매핑, 약국·사용자 식별, 데이터 이용 조건, 운영 용량·비용 산정. 완료 조건: 기능별 제공·미제공 판정과 제공 일정 기록, 자료가 부족한 기능은 개발 가능으로 간주하지 않음</span></div></li><li><div class="tl__when">1단계</div><div class="tl__what"><b>조회 중심 보고</b><span>동기화·검증·계산 결과 저장, 부족 품목 주문안, 일일 리포트, 운영 상태 화면. 외부 시스템 쓰기는 하지 않음. 완료 조건: 고정 입력·기대 결과로 만든 Golden Set 통과, 원천 건수·합계·단위와 계산 결과 대조, 지연·누락·매핑 실패를 '0건' 결과와 구분하고 기준 시각 표시</span></div></li><li><div class="tl__when">2단계</div><div class="tl__what"><b>약사 수동 승인 주문과 결과 확인</b><span>품목·수량 수정, 약사 재인증, 승인 계획 버전 검사, 실행 전 재조회, 주문 전송, 결과 대사, 부분 실패, 미확정 건 운영자 처리. 완료 조건: 동시 승인·응답 유실·Worker 재기동·단가 변경·부분 성공 시험, 미확정 상태에서 재전송되지 않음 확인, 제한된 품목부터 개방</span></div></li><li><div class="tl__when">3단계</div><div class="tl__what"><b>제한된 Chat 과 근거 검색</b><span>지원 질문 목록, 정해진 지표 조회, 업무별 도구 선택, 공개 고시·매뉴얼 검색, 출처·기준 시각 표시, 지원 밖 질문 거절과 되묻기. 주문 요청은 2단계 승인 흐름으로 연결. 완료 조건: 같은 기준 시각에서 보고와 Chat 수치 일치, 약국 간 접근 차단·권한·개인정보 제한·수치 대조 통과</span></div></li></ol></div>
+<div class="sec__body"><ol class="tl"><li><div class="tl__when">0단계</div><div class="tl__what"><b>연동과 정책 검증</b><span>협력 약국 솔루션의 API·데이터 구조·테스트 계정·비식별 샘플 확보, 중앙 API 와 약국 PC 설치형 커넥터 중 연동 방식 판정, 품목·포장 단위 매핑, 약국·사용자 식별, 데이터 이용 조건, 운영 용량·비용 산정. 완료 조건: 기능별 제공·미제공 판정과 제공 일정 기록, 자료가 부족한 기능은 개발 가능으로 간주하지 않음</span></div></li><li><div class="tl__when">1단계</div><div class="tl__what"><b>조회 중심 보고</b><span>동기화·검증·계산 결과 저장, 부족 품목 주문안, 일일 리포트, 운영 상태 화면. 외부 시스템 쓰기는 하지 않음. 완료 조건: 고정 입력·기대 결과로 만든 Golden Set 통과, 원천 건수·합계·단위와 계산 결과 대조, 지연·누락·매핑 실패를 '0건' 결과와 구분하고 기준 시각 표시</span></div></li><li><div class="tl__when">2단계</div><div class="tl__what"><b>약사 수동 승인 주문과 결과 확인</b><span>품목·수량 수정, 약사 재인증, 승인 계획 버전 검사, 실행 전 재조회, 주문 전송, 결과 대사, 부분 실패, 취소 가능 구간, 미확정 건 운영자 처리. 완료 조건: 동시 승인·응답 유실·Worker 재기동·단가 변경·부분 성공 시험, 미확정 상태에서 재전송되지 않음 확인, 제한된 품목부터 개방</span></div></li><li><div class="tl__when">3단계</div><div class="tl__what"><b>제한된 Chat 과 근거 검색</b><span>지원 질문 목록, 정해진 지표 조회, 업무별 도구 선택, 공개 고시·매뉴얼 검색, 출처·기준 시각 표시, 지원 밖 질문 거절과 되묻기. 주문 요청은 2단계 승인 흐름으로 연결. 완료 조건: 같은 기준 시각에서 보고와 Chat 수치 일치, 약국 간 접근 차단·권한·개인정보 제한·수치 대조 통과</span></div></li></ol></div>
 
 </section>
 <section class="sec">
@@ -174,11 +174,12 @@
 
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">주문 초안의 상태 전이<span class="dim">승인과 실행을 분리</span> <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>AI 는 주문안을 만들거나 수정 요청을 전달할 수 있지만, 승인 기록·약사 재인증·계획 버전·실행 전 재조회·외부 전송·결과 대사는 업무 백엔드가 맡도록 역할을 나눴습니다. 대화 속 '승인했다'는 문장은 서버의 승인 이벤트가 아닙니다. PoC 에서는 '승인 대기 초안'까지만 만들고 외부 주문 API 에 연결하지 않습니다. 아래 상태도는 개발 추진안 2단계의 항목을 이어 그린 초안입니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">주문 초안의 상태 전이<span class="dim">승인과 실행을 분리</span></h2><div class="sec__lead"><p>AI 는 주문안을 만들거나 수정 요청을 전달할 수 있지만, 승인 기록·약사 재인증·계획 버전·실행 전 재조회·외부 전송·결과 대사는 업무 백엔드가 맡도록 역할을 나눴습니다. 대화 속 '승인했다'는 문장은 서버의 승인 이벤트가 아닙니다. PoC 에서는 '승인 대기 초안'까지만 만들고 외부 주문 API 에 연결하지 않습니다. 아래 상태도는 개발 추진안 2단계 항목을 이어 그린 설계안입니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="stateDiagram-v2
   state &quot;주문 초안 · 승인 대기&quot; as Draft
   state &quot;약사 승인&quot; as Approved
   state &quot;실행 전 재조회&quot; as Rechecked
+  state &quot;전송 예약 · 취소 가능&quot; as Scheduled
   state &quot;외부 주문 전송&quot; as Sent
   state &quot;결과 대사 완료&quot; as Reconciled
   state &quot;부분 성공&quot; as Partial
@@ -191,11 +192,13 @@
   Approved --&gt; Draft : 계획 변경 시 승인 무효
   Approved --&gt; Rechecked : 승인 계획 버전 확인
   Rechecked --&gt; Draft : 단가·재고 변동
-  Rechecked --&gt; Sent : 중복 방지 키와 함께 전송
+  Rechecked --&gt; Scheduled : 전송 예약
+  Scheduled --&gt; Sent : 중복 방지 키와 함께 전송
+  Scheduled --&gt; Discarded : 예약 취소
   Sent --&gt; Reconciled : 결과 조회·대사 일치
   Sent --&gt; Partial : 일부 품목 실패
   Sent --&gt; Unknown : 응답 유실
-  Unknown --&gt; Reconciled : 결과 조회로 확정
+  Unknown --&gt; Reconciled : 결과 조회·운영자 판정으로 확정
   Partial --&gt; Reconciled : 운영자 판정 후 정리
   Reconciled --&gt; [*]
   Discarded --&gt; [*]
@@ -203,6 +206,7 @@
   state &quot;주문 초안 · 승인 대기&quot; as Draft
   state &quot;약사 승인&quot; as Approved
   state &quot;실행 전 재조회&quot; as Rechecked
+  state &quot;전송 예약 · 취소 가능&quot; as Scheduled
   state &quot;외부 주문 전송&quot; as Sent
   state &quot;결과 대사 완료&quot; as Reconciled
   state &quot;부분 성공&quot; as Partial
@@ -215,16 +219,18 @@
   Approved --&gt; Draft : 계획 변경 시 승인 무효
   Approved --&gt; Rechecked : 승인 계획 버전 확인
   Rechecked --&gt; Draft : 단가·재고 변동
-  Rechecked --&gt; Sent : 중복 방지 키와 함께 전송
+  Rechecked --&gt; Scheduled : 전송 예약
+  Scheduled --&gt; Sent : 중복 방지 키와 함께 전송
+  Scheduled --&gt; Discarded : 예약 취소
   Sent --&gt; Reconciled : 결과 조회·대사 일치
   Sent --&gt; Partial : 일부 품목 실패
   Sent --&gt; Unknown : 응답 유실
-  Unknown --&gt; Reconciled : 결과 조회로 확정
+  Unknown --&gt; Reconciled : 결과 조회·운영자 판정으로 확정
   Partial --&gt; Reconciled : 운영자 판정 후 정리
   Reconciled --&gt; [*]
   Discarded --&gt; [*]
-  note right of Draft : PoC 범위는 여기까지</pre></div><figcaption>설계 초안. 승인 이후 상태는 후속 '수동 승인 주문' 단계의 설계이며 외부 주문 연동은 아직 없음</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>계획이 바뀌면 기존 승인 무효, 오래된 승인 재사용 금지</li><li>결과가 불명확한 주문은 '미확정'으로 두고 재전송을 잠근 뒤 결과 조회·운영자 판정으로 확정</li><li>동시 승인·응답 유실·Worker 재기동·단가 변경·부분 성공을 완료 조건 시험 항목으로 지정</li></ul></div></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  note right of Draft : PoC 범위는 여기까지</pre></div><figcaption>직접 그린 설계 개념도. 승인 이후 상태는 후속 '수동 승인 주문' 단계의 설계이며 외부 주문 연동은 아직 없음</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>계획이 바뀌면 기존 승인 무효, 오래된 승인 재사용 금지</li><li>결과가 불명확한 주문은 '미확정'으로 두고 재전송을 잠근 뒤 결과 조회·운영자 판정으로 확정</li><li>동시 승인·응답 유실·Worker 재기동·단가 변경·부분 성공을 완료 조건 시험 항목으로 지정</li><li>전송 전 예약 취소와 전송 뒤 실제 주문 취소를 서로 다른 동작으로 구분</li></ul></div></div>
+
 </section>
 <section class="sec sec--glow">
 <div class="sec__head"><h2 class="sec__title">RAG 흐름<span class="dim">수치는 도구에서, 근거는 검색에서</span></h2><div class="sec__lead"><p>RAG 는 모델을 학습시키는 것이 아니라 필요한 문서 조각을 그 요청의 근거로 넘기는 것입니다. 주문 수량·매출 같은 정답 수치는 조회·계산 도구에서, 고시·매뉴얼 같은 업무 근거는 문서 검색에서 얻도록 나눴습니다. 두 모델은 같은 검색기와 같은 문서 조각을 받습니다.</p></div></div>
@@ -262,7 +268,7 @@
 
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">개념 데이터 모델<span class="dim">평가를 재현할 수 있게</span> <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>실제 저장소 스키마가 아니라, 설계 문서의 실행 문맥·실행 기록·문서 메타데이터·도구 계약 항목을 개념 단위로 묶은 그림입니다. 평가 결과를 재현하려면 '어떤 사례를, 어떤 모델·프롬프트·데이터 스냅샷·검색 색인으로, 몇 번째 반복에서' 실행했는지가 함께 남아야 합니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">개념 데이터 모델<span class="dim">평가를 재현할 수 있게</span></h2><div class="sec__lead"><p>실제 저장소 스키마가 아니라, 설계 문서의 실행 문맥·실행 기록·문서 메타데이터·도구 계약 항목을 개념 단위로 묶은 그림입니다. 평가 결과를 재현하려면 '어떤 사례를, 어떤 모델·프롬프트·데이터 스냅샷·검색 색인으로, 몇 번째 반복에서' 실행했는지가 함께 남아야 합니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="erDiagram
   PHARMACY ||--o{ ORDER_DRAFT : &quot;소유&quot;
   PHARMACY }o--o{ DOC_CHUNK : &quot;열람 허용&quot;
@@ -393,8 +399,8 @@
     string run_id FK
     string criterion
     float score
-  }</pre></div><figcaption>직접 그린 개념 ERD(초안). 실제 테이블·컬럼 이름이 아님</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>실행 기록 항목: 모델 ID·엔드포인트·리전·프롬프트 해시·스냅샷 해시·색인 해시·임베딩 ID·도구 호출 요약·최종 상태·토큰·지연·추정 비용·기준별 점수·실패 분류</li><li>API 가 주지 않는 토큰 수는 0 이 아니라 '미제공'으로 기록</li><li>인증 헤더·개인정보·비밀 값은 기록하지 않음</li><li>최종 평가셋을 보고 수정한 결과는 '개발 결과'로 표시하고, 다음 판정은 새 보류셋으로</li></ul></div></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  }</pre></div><figcaption>직접 그린 개념 ERD(설계안). 실제 테이블·컬럼 이름이 아님</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>실행 기록 항목: 모델 ID·엔드포인트·리전·프롬프트 해시·스냅샷 해시·색인 해시·임베딩 ID·도구 호출 요약·최종 상태·토큰·지연·추정 비용·기준별 점수·실패 분류</li><li>API 가 주지 않는 토큰 수는 0 이 아니라 '미제공'으로 기록</li><li>인증 헤더·개인정보·비밀 값은 기록하지 않음</li><li>최종 평가셋을 보고 수정한 결과는 '개발 결과'로 표시하고, 다음 판정은 새 보류셋으로</li></ul></div></div>
+
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">구현 순서 P0~P7<span class="dim">각 단계가 다음 비교 조건을 고정</span></h2><div class="sec__lead"><p>AI PoC 개발 가이드의 구현 순서입니다. 문제를 발견하면 모델을 키우기 전에 해당 단계의 원인을 고칩니다. P0~P2 의 최소 비교를 먼저 끝낸 뒤 도구·문서 품질을 보고 이후 일정을 추정하고, 외부 승인·업무 정답 확보·접근 권한 대기는 개발 공수와 분리해 관리합니다.</p></div></div>

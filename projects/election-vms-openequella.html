@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>해외 선거관리 시스템·디지털 콘텐츠 저장소 구축 — 황병준 포트폴리오</title>
-<meta name="description" content="해외 선거관리 시스템(VMS)에서 유권자 수백만 명 규모의 데이터를 일괄 처리하고, 접근 로그 감사·데이터 암호화와 선거별 맞춤 리포트를 구현했습니다(기여도 60%). 같은 해 오픈소스 디지털 저장소 OpenEQUELLA 를 Java·Scala 로 확장해 콘텐츠 스키마·계층 구조와 Wowza 연계 스트리밍 API 를 개발하고, 지방자치단체·국내 대기업에 납품했습니다(기여도 70%).">
+<meta name="description" content="해외 선거관리 시스템(VMS)에서 유권자 수백만 명 규모의 데이터를 일괄 처리하고, 접근 로그 감사·데이터 암호화와 선거별 맞춤 리포트를 구현했습니다(기여도 60%). 같은 해 오픈소스 디지털 저장소 OpenEQUELLA 의 원본 코드를 Java·Scala 로 고객 요구에 맞게 고쳐 콘텐츠 스키마·계층 구조와 Wowza 연계 스트리밍 API 를 구현하고, 지방자치단체·국내 대기업에 납품했습니다(기여도 70%).">
 <meta name="theme-color" content="#15161a">
 <meta property="og:title" content="해외 선거관리 시스템·디지털 콘텐츠 저장소 구축 — 황병준 포트폴리오">
-<meta property="og:description" content="해외 선거관리 시스템(VMS)에서 유권자 수백만 명 규모의 데이터를 일괄 처리하고, 접근 로그 감사·데이터 암호화와 선거별 맞춤 리포트를 구현했습니다(기여도 60%). 같은 해 오픈소스 디지털 저장소 OpenEQUELLA 를 Java·Scala 로 확장해 콘텐츠 스키마·계층 구조와 Wowza 연계 스트리밍 API 를 개발하고, 지방자치단체·국내 대기업에 납품했습니다(기여도 70%).">
+<meta property="og:description" content="해외 선거관리 시스템(VMS)에서 유권자 수백만 명 규모의 데이터를 일괄 처리하고, 접근 로그 감사·데이터 암호화와 선거별 맞춤 리포트를 구현했습니다(기여도 60%). 같은 해 오픈소스 디지털 저장소 OpenEQUELLA 의 원본 코드를 Java·Scala 로 고객 요구에 맞게 고쳐 콘텐츠 스키마·계층 구조와 Wowza 연계 스트리밍 API 를 구현하고, 지방자치단체·국내 대기업에 납품했습니다(기여도 70%).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
@@ -18,46 +18,47 @@
 <a class="skip" href="#main">본문 바로가기</a>
 <nav class="nav" aria-label="주 메뉴"><a class="nav__item" href="../index.html" aria-label="홈"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.99778 19.3275V14.3275H13.9978V19.3275C13.9978 19.8775 14.4478 20.3275 14.9978 20.3275H17.9978C18.5478 20.3275 18.9978 19.8775 18.9978 19.3275V12.3275H20.6978C21.1578 12.3275 21.3778 11.7575 21.0278 11.4575L12.6678 3.9275C12.2878 3.5875 11.7078 3.5875 11.3278 3.9275L2.96778 11.4575C2.62778 11.7575 2.83778 12.3275 3.29778 12.3275H4.99778V19.3275C4.99778 19.8775 5.44778 20.3275 5.99778 20.3275H8.99778C9.54778 20.3275 9.99778 19.8775 9.99778 19.3275Z"/></svg><span class="nav__tip">홈</span></a><a class="nav__item" href="../about.html" aria-label="소개"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1c0 .55.45 1 1 1h14c.55 0 1-.45 1-1v-1c0-2.66-5.33-4-8-4z"/></svg><span class="nav__tip">소개</span></a><a class="nav__item" href="../experience.html" aria-label="경력"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg><span class="nav__tip">경력</span></a><a class="nav__item" href="../projects.html" aria-current="page" aria-label="프로젝트"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.0142 17.3073L17.3042 18.0173C17.1042 18.2173 16.7942 18.2173 16.5942 18.0173C16.3942 17.8173 16.3942 17.5073 16.5942 17.3073L17.3042 16.5973L15.3642 14.6573L14.6542 15.3673C14.4542 15.5673 14.1442 15.5673 13.9442 15.3673C13.7442 15.1673 13.7442 14.8573 13.9442 14.6573L14.6542 13.9473L12.7142 12.0073L12.0042 12.7173C11.8042 12.9173 11.4942 12.9173 11.2942 12.7173C11.0942 12.5173 11.0942 12.2073 11.2942 12.0073L12.0042 11.2973L10.0542 9.34731L9.34423 10.0573C9.14423 10.2573 8.83423 10.2573 8.63423 10.0573C8.43423 9.85731 8.43423 9.54731 8.63423 9.34731L9.34423 8.63731L7.40423 6.69731L6.69423 7.40731C6.49423 7.60731 6.18423 7.60731 5.98423 7.40731C5.78423 7.20731 5.78423 6.89731 5.98423 6.69731L6.69423 5.98731L5.20423 4.49731C4.89423 4.18731 4.35423 4.40731 4.35423 4.85731V17.6473C4.35423 18.7473 5.25423 19.6473 6.35423 19.6473H19.1442C19.5942 19.6473 19.8142 19.1073 19.4942 18.7973L18.0142 17.3073ZM7.35423 15.6473V10.8873L13.1142 16.6473H8.35423C7.80423 16.6473 7.35423 16.1973 7.35423 15.6473Z"/></svg><span class="nav__tip">프로젝트</span></a><a class="nav__item" href="../ai.html" aria-label="AI로 일하는 방식"><svg class="" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M14.2206 28C13.7539 28 13.3939 27.5867 13.4606 27.12L14.6606 18.6667H9.99395C8.82062 18.6667 9.55395 17.6667 9.58062 17.6267C11.2606 14.6533 13.7806 10.2533 17.114 4.38667C17.2473 4.14667 17.514 4 17.7806 4C18.2473 4 18.6073 4.41333 18.5406 4.88L17.3406 13.3333H22.0206C22.554 13.3333 22.8473 13.5867 22.554 14.2133C18.1673 21.8667 15.6206 26.3333 14.8873 27.6133C14.754 27.8533 14.5006 28 14.2206 28Z"/></svg><span class="nav__tip">AI로 일하는 방식</span></a><a class="nav__item" href="../skills.html" aria-label="기술"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.61 18.99l-9.08-9.08c.93-2.34.45-5.1-1.44-7C9.79.61 6.21.4 3.66 2.26L7.5 6.11 6.08 7.52 2.25 3.69C.39 6.23.6 9.82 2.9 12.11c1.86 1.86 4.57 2.35 6.89 1.48l9.11 9.11c.39.39 1.02.39 1.41 0l2.3-2.3c.4-.38.4-1.01 0-1.41z"/></svg><span class="nav__tip">기술</span></a><div class="nav__div" aria-hidden="true"><span></span></div><a class="nav__item" href="mailto:hbj3809@naver.com" aria-label="이메일 보내기"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg><span class="nav__tip">hbj3809@naver.com</span></a></nav>
 <main id="main" class="page">
-<header class="intro"><p class="intro__eyebrow">휴먼텍소프트 프로젝트</p><h1>해외 선거관리 시스템·디지털 콘텐츠 저장소 구축</h1><div class="intro__text"><p>유권자 수백만 명 규모 데이터의 일괄 처리·접근 감사·선거별 리포트와 오픈소스 저장소(OpenEQUELLA) 확장</p></div><div class="intro__meta"><span><b>휴먼텍소프트</b></span><span>2021.01 ~ 2021.12</span><span>선거관리 시스템 실제 선거 적용 · 콘텐츠 저장소 납품 완료</span><span>백엔드</span></div></header>
+<header class="intro"><p class="intro__eyebrow">휴먼텍소프트 프로젝트</p><h1>해외 선거관리 시스템·디지털 콘텐츠 저장소 구축</h1><div class="intro__text"><p>유권자 수백만 명 규모 데이터의 일괄 처리·접근 감사·선거별 리포트와 오픈소스 저장소(OpenEQUELLA) 커스터마이징</p></div><div class="intro__meta"><span><b>휴먼텍소프트</b></span><span>2021.01 ~ 2021.12</span><span>선거관리 시스템 실제 선거 적용 · 콘텐츠 저장소 납품 완료</span><span>백엔드</span></div></header>
 <div class="controls" role="tablist" aria-label="프로젝트 보기">
 <button class="ctl" type="button" role="tab" id="tab-detail" data-panel="detail" aria-controls="panel-detail" aria-selected="true"><span>상세</span></button>
 <button class="ctl" type="button" role="tab" id="tab-problems" data-panel="problems" aria-controls="panel-problems" aria-selected="false"><span>문제해결 <span class="count">3</span></span></button>
 <div class="controls__end"><a class="ctl" href="../projects.html?axis=backend"><span>백엔드 프로젝트 목록 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div>
 </div>
-<div class="card hero-card"><div class="card__media"><div class="cover cover--backend"><p class="cover__title">선거관리 · 디지털 저장소</p><p class="cover__sub">유권자 수백만 명 규모 데이터의 일괄 처리·접근 감사·선거별 리포트와 오픈소스 저장소(OpenEQUELLA) 확장</p></div></div></div>
+<div class="card hero-card"><div class="card__media"><div class="cover cover--backend"><p class="cover__title">선거관리 · 디지털 저장소</p><p class="cover__sub">유권자 수백만 명 규모 데이터의 일괄 처리·접근 감사·선거별 리포트와 오픈소스 저장소(OpenEQUELLA) 커스터마이징</p></div></div></div>
 <div class="panel" id="panel-detail" role="tabpanel" aria-labelledby="tab-detail"><div class="overview">
-<div class="overview__side"><div class="stat"><p class="stat__value">수백만 명</p><p class="stat__label">유권자 데이터 규모</p><p class="stat__note">해외 선거관리 시스템, 장소당 수십만 건</p></div><div class="stat"><p class="stat__value">불일치 0건</p><p class="stat__label">투표 데이터 집계 대사</p><p class="stat__note">무결성 100% 의 기준 — 집계와 원천 대사</p></div><div class="stat"><p class="stat__value">60%</p><p class="stat__label">선거관리 시스템 기여도</p><p class="stat__note">일괄 처리·리포트·감사·암호화</p></div><div class="stat"><p class="stat__value">70%</p><p class="stat__label">콘텐츠 저장소 기여도</p><p class="stat__note">지방자치단체·국내 대기업 납품</p></div>
+<div class="overview__side"><div class="stat"><p class="stat__value">수백만 명</p><p class="stat__label">유권자 데이터 규모</p><p class="stat__note">해외 선거관리 시스템, 장소당 수십만 건</p></div><div class="stat"><p class="stat__value">불일치 0건</p><p class="stat__label">투표 데이터 집계 대사</p><p class="stat__note">무결성 100% 의 기준</p></div><div class="stat"><p class="stat__value">60%</p><p class="stat__label">선거관리 시스템 기여도</p><p class="stat__note">일괄 처리·리포트·감사·암호화</p></div><div class="stat"><p class="stat__value">70%</p><p class="stat__label">콘텐츠 저장소 기여도</p><p class="stat__note">지방자치단체·국내 대기업 납품</p></div>
 <dl class="facts"><div><dt>회사</dt><dd>휴먼텍소프트 · 솔루션사업부 · 대리</dd></div><div><dt>기간</dt><dd>2021.01 ~ 2021.12</dd></div><div><dt>역할</dt><dd>백엔드 구현 위주 참여 (선거관리 시스템 기여도 60% · 콘텐츠 저장소 기여도 70%)</dd></div><div><dt>팀</dt><dd>휴먼텍소프트 솔루션사업부</dd></div><div><dt>상태</dt><dd>선거관리 시스템 실제 선거 적용 · 콘텐츠 저장소 납품 완료</dd></div></dl></div>
-<div class="overview__body"><h2>프로젝트 개요<br><span class="dim">무엇을, 왜 만들었나</span></h2><p class="overview__lead">해외 선거관리 시스템(VMS)에서 유권자 수백만 명 규모의 데이터를 일괄 처리하고, 접근 로그 감사·데이터 암호화와 선거별 맞춤 리포트를 구현했습니다(기여도 60%). 같은 해 오픈소스 디지털 저장소 OpenEQUELLA 를 Java·Scala 로 확장해 콘텐츠 스키마·계층 구조와 Wowza 연계 스트리밍 API 를 개발하고, 지방자치단체·국내 대기업에 납품했습니다(기여도 70%).</p><p class="overview__more">백엔드 구현 위주 참여 (선거관리 시스템 기여도 60% · 콘텐츠 저장소 기여도 70%) · 휴먼텍소프트 솔루션사업부</p>
+<div class="overview__body"><h2>프로젝트 개요<br><span class="dim">무엇을, 왜 만들었나</span></h2><p class="overview__lead">해외 선거관리 시스템(VMS)에서 유권자 수백만 명 규모의 데이터를 일괄 처리하고, 접근 로그 감사·데이터 암호화와 선거별 맞춤 리포트를 구현했습니다(기여도 60%). 같은 해 오픈소스 디지털 저장소 OpenEQUELLA 의 원본 코드를 Java·Scala 로 고객 요구에 맞게 고쳐 콘텐츠 스키마·계층 구조와 Wowza 연계 스트리밍 API 를 구현하고, 지방자치단체·국내 대기업에 납품했습니다(기여도 70%).</p><p class="overview__more">백엔드 구현 위주 참여 (선거관리 시스템 기여도 60% · 콘텐츠 저장소 기여도 70%) · 휴먼텍소프트 솔루션사업부</p>
 <div><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 사례 3개 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div></div>
 </div><section class="sec sec--glow">
-<div class="sec__head"><h2 class="sec__title">프로젝트 개요</h2><div class="sec__lead"><p>한 해 동안 성격이 다른 두 과제를 맡았습니다. 하나는 해외 선거에 쓰인 선거관리 시스템(VMS)으로, 여러 선거 장소에서 모인 유권자·투표 데이터를 중앙에서 일괄 처리하고 집계·보고하는 시스템입니다. 다른 하나는 오픈소스 디지털 저장소 OpenEQUELLA 를 고객 요구에 맞게 확장한 콘텐츠 저장소로, 지방자치단체와 국내 대기업에 납품했습니다.</p><p>선거 데이터는 무결성과 접근 통제가, 콘텐츠 저장소는 분류 체계와 영상 전달이 중심이었습니다.</p></div></div>
-<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>기간: 2021.01 ~ 2021.12 (휴먼텍소프트 솔루션사업부 · 대리)</li><li>과제 ①: 해외 선거관리 시스템 — 유권자 수백만 명 규모, 여러 선거 장소에서 장소당 수십만 건의 데이터·트랜잭션</li><li>과제 ②: OpenEQUELLA 기반 디지털 콘텐츠 저장소 — 지방자치단체(공공 부문)·국내 대기업 납품</li><li>내 역할: 백엔드 개발 참여 — 선거관리 시스템 기여도 60%, 콘텐츠 저장소 기여도 70%</li><li>맡은 부분: 유권자 데이터 일괄 처리, 선거별 맞춤 리포트, 접근 로그 감사·데이터 암호화, 저장소 콘텐츠 스키마·계층 구조 정의, Wowza 연계 스트리밍 API</li><li>같은 시기 2021.09 까지 온라인 부정시험방지 솔루션(별도 프로젝트) PM 을 병행</li></ul></div></div>
+<div class="sec__head"><h2 class="sec__title">프로젝트 개요</h2><div class="sec__lead"><p>한 해 동안 성격이 다른 두 과제를 맡았습니다. 하나는 해외 선거에 쓰인 선거관리 시스템(VMS)으로, 여러 선거 장소에서 모인 유권자·투표 데이터를 중앙에서 일괄 처리하고 집계·보고하는 시스템입니다. 다른 하나는 오픈소스 디지털 저장소 OpenEQUELLA 를 고객 요구에 맞게 고친(커스터마이징한) 콘텐츠 저장소로, 지방자치단체와 국내 대기업에 납품했습니다.</p><p>선거 데이터는 무결성과 접근 통제가, 콘텐츠 저장소는 분류 체계와 영상 전달이 중심이었습니다.</p></div></div>
+<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>기간: 2021.01 ~ 2021.12 (휴먼텍소프트 솔루션사업부 · 대리)</li><li>과제 ①: 해외 선거관리 시스템 — 유권자 수백만 명 규모, 여러 선거 장소에서 장소당 수십만 건의 데이터·트랜잭션</li><li>과제 ②: OpenEQUELLA 기반 디지털 콘텐츠 저장소 — 지방자치단체(공공 부문)·국내 대기업 납품</li><li>내 역할: 백엔드 구현 위주 참여 — 선거관리 시스템 기여도 60%, 콘텐츠 저장소 기여도 70%</li><li>맡은 부분: 유권자 데이터 일괄 처리, 선거별 맞춤 리포트, 접근 로그 감사·데이터 암호화, OpenEQUELLA 커스터마이징(콘텐츠 스키마·계층 구조), Wowza 연계 스트리밍 API</li><li>같은 시기 2021.09 까지 온라인 부정시험방지 솔루션(별도 프로젝트) PM 을 병행</li></ul></div></div>
 
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">선거관리 시스템 아키텍처 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>선거 장소별로 모인 데이터를 중앙 시스템이 묶음 단위로 받아 검증·암호화한 뒤 저장하고, 저장된 데이터에서 장소별·선거별 집계와 보고서를 만드는 구조입니다. 적재 작업과 관리자 조회는 감사 로그로 남깁니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">선거관리 시스템 아키텍처</h2><div class="sec__lead"><p>선거 장소별로 모인 데이터를 중앙 시스템이 묶음 단위로 받아 검증한 뒤 저장하고, 저장된 데이터에서 장소별·선거별 집계와 집계 대사를 거쳐 선거별 보고서와 관리자 화면의 현황 차트를 만드는 구조입니다. 데이터는 암호화하고, 적재 작업과 관리자 조회는 감사 로그로 남깁니다. 이 구조에서 백엔드 구현을 맡았습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
   subgraph SG1[&quot;선거 장소 (여러 개소)&quot;]
     SRC[&quot;장소별 유권자·투표&lt;br/&gt;원천 데이터&quot;]
   end
   subgraph SG2[&quot;중앙 선거관리 시스템&quot;]
     BT[&quot;일괄 적재 배치&lt;br/&gt;(Spring Boot)&quot;]
-    VD[&quot;검증 단계&lt;br/&gt;형식·중복·누락&quot;]
-    EN[&quot;개인정보 필드 암호화&quot;]
+    VD[&quot;검증 단계&quot;]
+    EN[&quot;데이터 암호화&quot;]
     DB1[(&quot;선거 DB&quot;)]
     AG[&quot;장소별·선거별 집계&quot;]
+    RC[&quot;집계 대사&quot;]
     AU[&quot;접근·작업 감사 로그&quot;]
   end
   subgraph SG3[&quot;리포트&quot;]
     RP[&quot;선거별 맞춤 보고서&lt;br/&gt;(Crystal Reports)&quot;]
-    CH[&quot;현황 차트&lt;br/&gt;(Chart.js)&quot;]
+    CH[&quot;관리자 화면 현황 차트&lt;br/&gt;(Chart.js)&quot;]
   end
   MG[&quot;선거 관리자&quot;]
   SRC --&gt; BT --&gt; VD --&gt; EN --&gt; DB1
-  DB1 --&gt; AG
-  AG --&gt; RP
-  AG --&gt; CH
+  DB1 --&gt; AG --&gt; RC
+  RC --&gt; RP
+  RC --&gt; CH
   MG --&gt; RP
   MG --&gt; CH
   BT -.-&gt; AU
@@ -67,54 +68,57 @@
   end
   subgraph SG2[&quot;중앙 선거관리 시스템&quot;]
     BT[&quot;일괄 적재 배치&lt;br/&gt;(Spring Boot)&quot;]
-    VD[&quot;검증 단계&lt;br/&gt;형식·중복·누락&quot;]
-    EN[&quot;개인정보 필드 암호화&quot;]
+    VD[&quot;검증 단계&quot;]
+    EN[&quot;데이터 암호화&quot;]
     DB1[(&quot;선거 DB&quot;)]
     AG[&quot;장소별·선거별 집계&quot;]
+    RC[&quot;집계 대사&quot;]
     AU[&quot;접근·작업 감사 로그&quot;]
   end
   subgraph SG3[&quot;리포트&quot;]
     RP[&quot;선거별 맞춤 보고서&lt;br/&gt;(Crystal Reports)&quot;]
-    CH[&quot;현황 차트&lt;br/&gt;(Chart.js)&quot;]
+    CH[&quot;관리자 화면 현황 차트&lt;br/&gt;(Chart.js)&quot;]
   end
   MG[&quot;선거 관리자&quot;]
   SRC --&gt; BT --&gt; VD --&gt; EN --&gt; DB1
-  DB1 --&gt; AG
-  AG --&gt; RP
-  AG --&gt; CH
+  DB1 --&gt; AG --&gt; RC
+  RC --&gt; RP
+  RC --&gt; CH
   MG --&gt; RP
   MG --&gt; CH
   BT -.-&gt; AU
   MG -.-&gt; AU</pre></div><figcaption>직접 그린 개념도. 구성요소 이름은 일반화했습니다.</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">유권자 데이터 처리 흐름 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>장소당 수십만 건이 한 번에 들어오는 구조라, 한 건씩 실시간으로 넣기보다 묶음 단위로 읽고 검증한 뒤 통과한 건만 저장하는 흐름으로 정리했습니다. 오류 건은 따로 모아 원천을 고친 뒤 다시 넣습니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">유권자 데이터 처리 흐름</h2><div class="sec__lead"><p>장소당 수십만 건이 한 번에 들어오는 구조라, 묶음 단위로 읽고 검증한 뒤 저장하는 흐름입니다. 검증에서 오류가 나오면 원천을 고친 뒤 해당 장소 묶음 전체를 다시 넣습니다. 저장한 데이터는 집계와 집계 대사를 거쳐 보고서·차트로 이어집니다. 이 흐름을 구현했습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TD
   A1[&quot;장소별 원천 데이터 수신&quot;] --&gt; A2[&quot;묶음 단위로 읽기&quot;]
   A2 --&gt; A3{&quot;검증 통과?&quot;}
-  A3 --&gt;|&quot;예&quot;| A4[&quot;개인정보 필드 암호화&quot;]
-  A3 --&gt;|&quot;아니오&quot;| A5[&quot;오류 건 분리·보고&quot;]
-  A5 --&gt; A6[&quot;원천 수정 후 재적재&quot;]
+  A3 --&gt;|&quot;예&quot;| A4[&quot;데이터 암호화&quot;]
+  A3 --&gt;|&quot;아니오&quot;| A5[&quot;오류 내용 기록·보고&quot;]
+  A5 --&gt; A6[&quot;원천 수정 후&lt;br/&gt;해당 장소 묶음 전체 재적재&quot;]
   A6 --&gt; A2
   A4 --&gt; A7[&quot;DB 저장&quot;]
   A7 --&gt; A8[&quot;작업 이력 감사 로그&quot;]
   A7 --&gt; A9[&quot;장소별·선거별 집계&quot;]
-  A9 --&gt; A10[&quot;맞춤 보고서·차트 생성&quot;]">flowchart TD
+  A9 --&gt; A11[&quot;집계 대사&quot;]
+  A11 --&gt; A10[&quot;맞춤 보고서·차트 생성&quot;]">flowchart TD
   A1[&quot;장소별 원천 데이터 수신&quot;] --&gt; A2[&quot;묶음 단위로 읽기&quot;]
   A2 --&gt; A3{&quot;검증 통과?&quot;}
-  A3 --&gt;|&quot;예&quot;| A4[&quot;개인정보 필드 암호화&quot;]
-  A3 --&gt;|&quot;아니오&quot;| A5[&quot;오류 건 분리·보고&quot;]
-  A5 --&gt; A6[&quot;원천 수정 후 재적재&quot;]
+  A3 --&gt;|&quot;예&quot;| A4[&quot;데이터 암호화&quot;]
+  A3 --&gt;|&quot;아니오&quot;| A5[&quot;오류 내용 기록·보고&quot;]
+  A5 --&gt; A6[&quot;원천 수정 후&lt;br/&gt;해당 장소 묶음 전체 재적재&quot;]
   A6 --&gt; A2
   A4 --&gt; A7[&quot;DB 저장&quot;]
   A7 --&gt; A8[&quot;작업 이력 감사 로그&quot;]
   A7 --&gt; A9[&quot;장소별·선거별 집계&quot;]
-  A9 --&gt; A10[&quot;맞춤 보고서·차트 생성&quot;]</pre></div><figcaption>직접 그린 개념 흐름도</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  A9 --&gt; A11[&quot;집계 대사&quot;]
+  A11 --&gt; A10[&quot;맞춤 보고서·차트 생성&quot;]</pre></div><figcaption>직접 그린 개념 흐름도</figcaption></figure></div>
+
 </section>
 <section class="sec sec--glow sec--flip">
-<div class="sec__head"><h2 class="sec__title">선거관리 시스템 개념 데이터 모델 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>선거 → 선거 장소 → 유권자의 계층을 축으로, 적재 묶음과 검증 오류, 장소별 집계, 보고서, 접근 감사 로그를 둘러 배치한 개념 모델입니다. 실제 테이블 이름이 아니라 개념 이름입니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">선거관리 시스템 개념 데이터 모델</h2><div class="sec__lead"><p>선거 → 선거 장소 → 유권자의 계층을 축으로, 적재 묶음과 검증 오류, 장소별 집계, 보고서, 접근 감사 로그를 둘러 배치한 개념 모델입니다. 실제 테이블 이름이 아니라 개념 이름입니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="erDiagram
   ELECTION ||--o{ POLLING_SITE : &quot;운영&quot;
   POLLING_SITE ||--o{ VOTER : &quot;배정&quot;
@@ -136,7 +140,7 @@
   VOTER {
     string voter_id PK
     string site_id FK
-    string identity_encrypted
+    string identity
     string status
   }
   IMPORT_BATCH {
@@ -191,7 +195,7 @@
   VOTER {
     string voter_id PK
     string site_id FK
-    string identity_encrypted
+    string identity
     string status
   }
   IMPORT_BATCH {
@@ -226,13 +230,13 @@
     string action
     datetime accessed_at
   }</pre></div><figcaption>개념 ERD (엔티티 9개, 핵심 속성만)</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">디지털 콘텐츠 저장소 구조 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>OpenEQUELLA 의 항목·첨부·검색 기능 위에 고객별 콘텐츠 스키마와 계층 구조 분류를 정의하고, 영상 첨부는 Wowza 스트리밍 서버로 전달하는 연계 API 를 덧붙였습니다. 저장소를 처음부터 만들지 않고 오픈소스 위에 고객 요구분을 더하는 방식입니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">디지털 콘텐츠 저장소 구조</h2><div class="sec__lead"><p>OpenEQUELLA 의 항목·첨부·검색 기능을 바탕으로, 원본 코드를 고객 요구에 맞게 고쳐 고객별 콘텐츠 스키마와 계층 구조 분류를 구현했습니다. 영상은 Wowza 스트리밍 서버에서 받아 저장소의 스트리밍 연계 API 를 거쳐 사용자에게 전달합니다. 저장소를 처음부터 만들지 않고 오픈소스 원본 코드를 고객 요구에 맞게 고치는 방식입니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
   U1[&quot;사용자&lt;br/&gt;웹 브라우저&quot;]
-  subgraph REPO[&quot;콘텐츠 저장소 (OpenEQUELLA 확장)&quot;]
+  subgraph REPO[&quot;콘텐츠 저장소 (OpenEQUELLA 커스터마이징)&quot;]
     W1[&quot;웹 화면·API&lt;br/&gt;(Java·Scala)&quot;]
     SC[&quot;콘텐츠 스키마&lt;br/&gt;메타데이터 정의&quot;]
     HI[&quot;계층 구조&lt;br/&gt;분류 탐색&quot;]
@@ -249,10 +253,11 @@
   W1 --&gt; ST
   SC --&gt; DB2
   W1 --&gt; FS
-  ST --&gt; WZ
-  WZ --&gt; U1">flowchart LR
+  ST --&gt;|&quot;스트림 요청&quot;| WZ
+  WZ --&gt;|&quot;영상&quot;| ST
+  ST --&gt;|&quot;영상 전송&quot;| U1">flowchart LR
   U1[&quot;사용자&lt;br/&gt;웹 브라우저&quot;]
-  subgraph REPO[&quot;콘텐츠 저장소 (OpenEQUELLA 확장)&quot;]
+  subgraph REPO[&quot;콘텐츠 저장소 (OpenEQUELLA 커스터마이징)&quot;]
     W1[&quot;웹 화면·API&lt;br/&gt;(Java·Scala)&quot;]
     SC[&quot;콘텐츠 스키마&lt;br/&gt;메타데이터 정의&quot;]
     HI[&quot;계층 구조&lt;br/&gt;분류 탐색&quot;]
@@ -269,12 +274,13 @@
   W1 --&gt; ST
   SC --&gt; DB2
   W1 --&gt; FS
-  ST --&gt; WZ
-  WZ --&gt; U1</pre></div><figcaption>직접 그린 개념도. OpenEQUELLA 기본 구성은 제품 공개 문서 기준으로 단순화했습니다.</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  ST --&gt;|&quot;스트림 요청&quot;| WZ
+  WZ --&gt;|&quot;영상&quot;| ST
+  ST --&gt;|&quot;영상 전송&quot;| U1</pre></div><figcaption>직접 그린 개념도. OpenEQUELLA 기본 구성은 제품 공개 문서 기준으로 단순화했습니다.</figcaption></figure></div>
+
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">콘텐츠 저장소 개념 데이터 모델 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>스키마가 컬렉션의 메타데이터 형식을 정하고, 항목은 계층 구조의 여러 분류에 걸릴 수 있으며, 영상 첨부는 스트리밍 자산으로 이어지는 개념 모델입니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">콘텐츠 저장소 개념 데이터 모델</h2><div class="sec__lead"><p>스키마가 컬렉션의 메타데이터 형식을 정하고, 항목은 계층 구조의 여러 분류에 걸릴 수 있으며, 영상 첨부는 스트리밍 자산으로 이어지는 개념 모델입니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="erDiagram
   SCHEMA ||--o{ COLLECTION : &quot;적용&quot;
   COLLECTION ||--o{ ITEM : &quot;포함&quot;
@@ -350,10 +356,10 @@
     string attachment_id FK
     string stream_name
   }</pre></div><figcaption>개념 ERD (엔티티 6개, 핵심 속성만)</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+
 </section>
 <section class="sec sec--glow">
-<div class="sec__head"><h2 class="sec__title">영상 콘텐츠 재생 흐름 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>사용자는 계층 구조로 콘텐츠를 찾고, 영상은 저장소가 직접 내려보내지 않습니다. 스트리밍 연계 API 가 Wowza 재생 주소를 돌려주면 사용자는 스트리밍 서버에서 영상을 받아 봅니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">영상 콘텐츠 재생 흐름</h2><div class="sec__lead"><p>사용자는 계층 구조로 콘텐츠를 찾고, 영상을 재생하면 스트리밍 연계 API 가 항목·첨부 정보로 Wowza 에 스트림을 요청합니다. Wowza 가 보낸 영상은 연계 API 를 거쳐 사용자에게 전달됩니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="sequenceDiagram
   participant U as 사용자 화면
   participant R as 콘텐츠 저장소
@@ -364,9 +370,9 @@
   U-&gt;&gt;S: 영상 재생 요청
   S-&gt;&gt;R: 항목과 첨부 정보 조회
   R--&gt;&gt;S: 스트림 이름
-  S--&gt;&gt;U: 스트림 재생 주소
-  U-&gt;&gt;W: 스트림 재생
-  W--&gt;&gt;U: 영상 전송">sequenceDiagram
+  S-&gt;&gt;W: 스트림 요청
+  W--&gt;&gt;S: 영상
+  S--&gt;&gt;U: 영상 전송">sequenceDiagram
   participant U as 사용자 화면
   participant R as 콘텐츠 저장소
   participant S as 스트리밍 연계 API
@@ -376,61 +382,65 @@
   U-&gt;&gt;S: 영상 재생 요청
   S-&gt;&gt;R: 항목과 첨부 정보 조회
   R--&gt;&gt;S: 스트림 이름
-  S--&gt;&gt;U: 스트림 재생 주소
-  U-&gt;&gt;W: 스트림 재생
-  W--&gt;&gt;U: 영상 전송</pre></div><figcaption>직접 그린 개념 시퀀스</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  S-&gt;&gt;W: 스트림 요청
+  W--&gt;&gt;S: 영상
+  S--&gt;&gt;U: 영상 전송</pre></div><figcaption>직접 그린 개념 시퀀스</figcaption></figure></div>
+
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">설계 결정<span class="dim">왜 이렇게 했나</span> <span class="badge-draft">초안</span></h2></div>
-<div class="sec__body"><div class="tiles"><div class="tile"><h3>적재는 실시간이 아닌 묶음(배치)으로</h3><p>데이터가 선거 장소 단위로 모여 들어오는 구조라, 묶음 단위로 읽고 검증·재처리하기 쉬운 일괄 처리를 택했습니다.</p></div><div class="tile"><h3>검증과 저장을 분리</h3><p>오류 건을 따로 모아 원천을 고친 뒤 다시 넣을 수 있게 해, 일부 오류 때문에 전체 적재를 다시 하지 않도록 했습니다.</p></div><div class="tile"><h3>개인정보는 저장 시 암호화, 접근은 모두 기록</h3><p>누가 언제 어떤 데이터를 보거나 바꿨는지 남아 있어야 집계 결과를 믿을 수 있습니다. 접근 로그 감사와 데이터 암호화를 무결성 목표의 두 축으로 두었습니다.</p></div><div class="tile"><h3>보고서 양식은 코드 밖 템플릿으로</h3><p>선거마다 다른 보고서 요구를 템플릿(Crystal Reports)으로 분리하고, 진행 현황은 Chart.js 차트로 따로 보여 줬습니다.</p></div><div class="tile"><h3>저장소는 새로 만들지 않고 오픈소스를 확장</h3><p>메타데이터 스키마·분류 계층·검색을 이미 갖춘 OpenEQUELLA 위에, 같은 언어(Java·Scala)로 고객 요구분만 더했습니다.</p></div><div class="tile"><h3>영상은 전용 스트리밍 서버로</h3><p>영상 전달을 저장소와 분리해 Wowza 가 맡게 하고, 저장소에는 둘을 잇는 연계 API 만 두었습니다.</p></div></div></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+<div class="sec__head"><h2 class="sec__title">설계 원칙<span class="dim">구현하며 따른 것</span></h2></div>
+<div class="sec__body"><div class="tiles"><div class="tile"><h3>적재는 실시간이 아닌 묶음(배치)으로</h3><p>데이터가 선거 장소 단위로 모여 들어오는 구조였고, 장소 묶음 단위로 읽어 검증하고 다시 넣을 수 있는 일괄 처리(배치)로 구현했습니다.</p></div><div class="tile"><h3>검증을 저장 앞에 두고 묶음 단위로 재적재</h3><p>저장하기 전에 검증하는 구조였고, 검증에서 오류가 나온 장소 묶음은 원천을 고친 뒤 묶음 전체를 다시 넣도록 구현했습니다.</p></div><div class="tile"><h3>데이터는 암호화, 적재·조회는 감사 로그로</h3><p>적재 작업과 관리자 조회가 기록으로 남아 있어야 집계 결과를 믿을 수 있습니다. 접근 로그 감사와 데이터 암호화를 무결성의 두 축으로 두는 구조였고, 이를 구현했습니다. 무결성 기준은 집계 대사에서 불일치 0건이었습니다.</p></div><div class="tile"><h3>보고서 양식은 코드 밖 템플릿으로</h3><p>선거마다 다른 보고서는 Crystal Reports 템플릿으로, 진행 현황은 관리자 화면의 Chart.js 차트로 나눠 보여 주는 구조였고, 이를 구현했습니다.</p></div><div class="tile"><h3>저장소는 새로 만들지 않고 오픈소스를 고쳐 씀</h3><p>메타데이터 스키마·분류 계층·검색을 갖춘 OpenEQUELLA 를 쓰는 방향이었고, 저장소와 같은 언어(Java·Scala)로 원본 코드를 고객 요구에 맞게 고쳤습니다.</p></div><div class="tile"><h3>영상은 전용 스트리밍 서버에서, 연계 API 를 거쳐 전달</h3><p>영상 스트리밍은 Wowza 가 맡는 방향이었고, 저장소의 연계 API 가 Wowza 의 영상을 받아 사용자에게 전달하도록 구현했습니다.</p></div></div></div>
+
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">성과</h2><div class="sec__lead"><p>선거관리 시스템은 실제 선거에 적용되어 유권자 수백만 명 규모, 장소당 수십만 건의 데이터·트랜잭션을 처리했고, 접근 로그 감사·데이터 암호화로 투표 데이터를 지켰고, 집계 대사에서 불일치 0건(무결성 100%)이었습니다. 콘텐츠 저장소는 지방자치단체와 국내 대기업에 납품했습니다.</p></div></div>
-<div class="sec__body"><figure class="figure figure--soft"><div class="chart"><svg viewBox="0 0 720 320" role="img" aria-label="막대 차트"><line x1="16" x2="704" y1="256" y2="256" stroke="#3f424d" stroke-width="1"/><path class="mark" tabindex="0" data-tip="선거관리 시스템: 60%" d="M176,256V128Q176,124 180,124H196Q200,124 200,128V256Z" fill="#3d6bf4"/><text x="188" y="114" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">60%</text><text x="188" y="278" text-anchor="middle" font-size="13" fill="#9196a5">선거관리 시스템</text><path class="mark" tabindex="0" data-tip="콘텐츠 저장소: 70%" d="M520,256V106Q520,102 524,102H540Q544,102 544,106V256Z" fill="#3d6bf4"/><text x="532" y="92" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">70%</text><text x="532" y="278" text-anchor="middle" font-size="13" fill="#9196a5">콘텐츠 저장소</text></svg><details><summary>표로 보기</summary><div class="table-wrap"><table class="t"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>선거관리 시스템</td><td>60%</td></tr><tr><td>콘텐츠 저장소</td><td>70%</td></tr></tbody></table></div></details></div><figcaption style="padding:12px 0 0">본인 기여도 — 경력기술서 기재값(본인 산정)</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>선거관리 시스템: 유권자 수백만 명 규모 일괄 처리, 접근 로그 감사·데이터 암호화, 집계 대사 불일치 0건(무결성 100%)</li><li>선거별 맞춤 보고서(Crystal Reports·Chart.js) 제공</li><li>콘텐츠 저장소: 콘텐츠 스키마·계층 구조 정의, Wowza 연계 스트리밍 API, 지방자치단체·국내 대기업 납품</li></ul></div></div>
+<div class="sec__body"><figure class="figure figure--soft"><div class="chart"><svg viewBox="0 0 720 320" role="img" aria-label="막대 차트"><line x1="16" x2="704" y1="256" y2="256" stroke="#3f424d" stroke-width="1"/><path class="mark" tabindex="0" data-tip="선거관리 시스템: 60%" d="M176,256V128Q176,124 180,124H196Q200,124 200,128V256Z" fill="#3d6bf4"/><text x="188" y="114" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">60%</text><text x="188" y="278" text-anchor="middle" font-size="13" fill="#9196a5">선거관리 시스템</text><path class="mark" tabindex="0" data-tip="콘텐츠 저장소: 70%" d="M520,256V106Q520,102 524,102H540Q544,102 544,106V256Z" fill="#3d6bf4"/><text x="532" y="92" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">70%</text><text x="532" y="278" text-anchor="middle" font-size="13" fill="#9196a5">콘텐츠 저장소</text></svg><details><summary>표로 보기</summary><div class="table-wrap"><table class="t"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>선거관리 시스템</td><td>60%</td></tr><tr><td>콘텐츠 저장소</td><td>70%</td></tr></tbody></table></div></details></div><figcaption style="padding:12px 0 0">본인 기여도 — 경력기술서 기재값(본인 산정)</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>선거관리 시스템: 유권자 수백만 명 규모 일괄 처리, 접근 로그 감사·데이터 암호화, 집계 대사 불일치 0건(무결성 100%)</li><li>선거별 맞춤 보고서(Crystal Reports)와 관리자 화면 현황 차트(Chart.js) 제공</li><li>콘텐츠 저장소: OpenEQUELLA 커스터마이징(콘텐츠 스키마·계층 구조), Wowza 연계 스트리밍 API 구현, 지방자치단체·국내 대기업 납품</li></ul></div></div>
 
 </section>
 <section class="sec sec--glow sec--flip">
-<div class="sec__head"><h2 class="sec__title">기술 스택 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>이 프로젝트에서 실제로 쓴 기술과 쓰인 곳입니다.</p></div></div>
-<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>기술</th><th>쓰인 곳</th><th>고른 이유</th></tr></thead><tbody><tr><td>Java · Spring Boot</td><td>선거관리 시스템 백엔드·일괄 적재</td><td>—</td></tr><tr><td>Java · Scala</td><td>OpenEQUELLA 확장 개발</td><td>저장소와 같은 언어로 확장</td></tr><tr><td>OpenEQUELLA</td><td>디지털 콘텐츠 저장소 기반</td><td>메타데이터 스키마·분류 계층·검색을 갖춘 오픈소스</td></tr><tr><td>Wowza</td><td>영상 스트리밍</td><td>영상 전달을 저장소와 분리</td></tr><tr><td>Crystal Reports</td><td>선거별 맞춤 보고서</td><td>양식을 템플릿으로 분리</td></tr><tr><td>Chart.js</td><td>선거 현황 차트</td><td>집계 결과를 화면에서 바로 확인</td></tr><tr><td>Oracle · MariaDB · Redis</td><td>두 시스템의 데이터 저장</td><td>—</td></tr></tbody></table></div></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+<div class="sec__head"><h2 class="sec__title">기술 스택</h2><div class="sec__lead"><p>이 프로젝트에서 실제로 쓴 기술과 쓰인 곳입니다.</p></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>기술</th><th>쓰인 곳</th><th>특징</th></tr></thead><tbody><tr><td>Java · Spring Boot</td><td>선거관리 시스템 백엔드·일괄 적재</td><td>—</td></tr><tr><td>Java · Scala</td><td>OpenEQUELLA 커스터마이징</td><td>저장소와 같은 언어</td></tr><tr><td>OpenEQUELLA</td><td>디지털 콘텐츠 저장소 기반</td><td>메타데이터 스키마·분류 계층·검색을 갖춘 오픈소스</td></tr><tr><td>Wowza</td><td>영상 스트리밍</td><td>영상 스트리밍 전용 서버</td></tr><tr><td>Crystal Reports</td><td>선거별 맞춤 보고서</td><td>보고서 양식을 템플릿으로 관리</td></tr><tr><td>Chart.js</td><td>관리자 화면 진행 현황 차트</td><td>집계 결과를 화면 차트로 표시</td></tr><tr><td>Oracle · MariaDB · Redis</td><td>데이터 저장</td><td>—</td></tr></tbody></table></div></div>
+
 </section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>백엔드</h3><div class="card__tags"><span class="tag">Java</span><span class="tag">Spring Boot</span><span class="tag">Scala</span></div></div><div class="stack__group"><h3>저장소·스트리밍</h3><div class="card__tags"><span class="tag">OpenEQUELLA</span><span class="tag">Wowza</span></div></div><div class="stack__group"><h3>리포트</h3><div class="card__tags"><span class="tag">Crystal Reports</span><span class="tag">Chart.js</span></div></div><div class="stack__group"><h3>데이터</h3><div class="card__tags"><span class="tag">Oracle</span><span class="tag">MariaDB</span><span class="tag">Redis</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">장소당 수십만 건 일괄 적재와 투표 데이터 무결성 · 선거마다 다른 보고서 요구 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
 <div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 3개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 장소당 수십만 건 일괄 적재와 투표 데이터 무결성</span></a><a class="ctl" href="#case-2"><span>02 선거마다 다른 보고서 요구</span></a><a class="ctl" href="#case-3"><span>03 오픈소스 저장소를 고객 요구에 맞추기</span></a></div></section><article class="case sec--glow" id="case-1">
-<div class="case__head"><span class="case__no">CASE 01 · 대용량처리</span><h3 class="case__title">장소당 수십만 건 일괄 적재와 투표 데이터 무결성 <span class="badge-draft">초안</span></h3></div>
+<div class="case__head"><span class="case__no">CASE 01 · 대용량처리</span><h3 class="case__title">장소당 수십만 건 일괄 적재와 투표 데이터 무결성</h3></div>
 <div class="steps">
-<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>여러 선거 장소에서 장소당 수십만 건의 유권자·투표 데이터와 트랜잭션이 중앙으로 모였습니다. 유권자 수백만 명 규모의 데이터를 적재하고 집계해야 했고, 집계 결과가 선거 결과와 직결되어 한 건의 오류나 무단 변경도 신뢰를 흔들 수 있었습니다.</p></div>
-<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>대량 데이터를 한꺼번에 넣으면 형식 오류·중복·누락 건이 섞여 들어가도 바로 드러나지 않고, 적재 이후에는 누가 언제 무엇을 바꿨는지 추적하기 어렵습니다. 유권자 개인정보가 평문으로 남는 것도 위험 요소였습니다.</p></div>
-<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>장소 단위 묶음으로 읽어 처리하는 일괄 적재(배치) 구성</li><li>검증 단계를 저장과 분리해 오류 건을 따로 모으고 원천 수정 후 재적재</li><li>유권자 개인정보 필드를 저장 시점에 암호화</li><li>적재 작업과 관리자 조회를 접근 감사 로그로 기록</li><li>저장된 데이터에서 장소별·선거별 집계를 만들어 보고서로 연결</li></ol></div>
-<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>유권자 수백만 명 규모, 장소당 수십만 건의 데이터를 처리하고, 접근 로그 감사·데이터 암호화로 투표 데이터를 지켰고, 집계 대사에서 불일치 0건(무결성 100%)이었습니다(기여도 60%).</p></div>
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>여러 선거 장소에서 장소당 수십만 건의 유권자·투표 데이터와 트랜잭션이 중앙으로 모였습니다. 유권자 수백만 명 규모의 데이터를 적재하고 집계해야 했고, 집계 결과가 선거 결과와 직결되어 한 건의 오류나 무단 변경도 신뢰를 흔들 수 있었습니다. 선거 일정에 맞춰 해외 현지 환경에도 대응해야 했습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>대량 일괄 적재에서 오류와 무단 변경을 막아야 했습니다. 적재하는 경로에서 데이터를 검증해야 했고, 적재한 뒤에도 누가 언제 무엇을 했는지 추적할 수 있어야 했습니다. 무결성은 집계 대사에서 불일치가 한 건도 없어야 한다는 기준으로 봤습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>장소 단위 묶음으로 읽어 처리하는 일괄 적재(배치) 구현</li><li>검증에 걸린 장소 묶음은 원천 수정 후 묶음 단위로 재적재 구현</li><li>데이터 암호화 구현</li><li>적재 작업과 관리자 조회를 남기는 접근 감사 로그 구현</li><li>저장된 데이터에서 장소별·선거별 집계를 만들어 보고서로 연결</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>실제 선거에 적용되어 유권자 수백만 명 규모, 장소당 수십만 건의 데이터를 처리했고, 접근 로그 감사·데이터 암호화로 투표 데이터를 지켰으며, 집계 대사에서 불일치 0건(무결성 100%)이었습니다(기여도 60%).</p></div>
 </div>
-<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">처리 규모</div><div class="delta__val"><span class="to">장소당 수십만 건</span></div><div class="delta__note">유권자 수백만 명 규모</div></div></div><p class="sub-h">적재 경로의 세 가지 안전장치: 검증 분리 · 암호화 · 감사 로그</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">처리 규모</div><div class="delta__val"><span class="to">장소당 수십만 건</span></div><div class="delta__note">유권자 수백만 명 규모</div></div><div class="delta"><div class="delta__label">집계 대사</div><div class="delta__val"><span class="to">불일치 0건</span></div><div class="delta__note">무결성 100% 의 기준</div></div></div><p class="sub-h">적재 경로의 세 가지 안전장치(검증·암호화·감사 로그)와 집계 대사</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
   SRC[&quot;장소별 원천 데이터&quot;] --&gt; BT[&quot;일괄 적재 배치&quot;]
   BT --&gt; CK{&quot;검증&quot;}
-  CK --&gt;|&quot;통과&quot;| EN[&quot;암호화 저장&quot;]
-  CK --&gt;|&quot;오류&quot;| RJ[&quot;오류 건 분리·재적재&quot;]
+  CK --&gt;|&quot;통과&quot;| EN[&quot;데이터 암호화&quot;]
+  CK --&gt;|&quot;오류&quot;| RJ[&quot;원천 수정 후&lt;br/&gt;묶음 재적재&quot;]
   RJ --&gt; BT
   EN --&gt; DB1[(&quot;선거 DB&quot;)]
+  DB1 --&gt; AG[&quot;장소별·선거별 집계&quot;]
+  AG --&gt; RC[&quot;집계 대사&quot;]
   OP[&quot;관리자 조회&quot;] --&gt; DB1
   BT -.-&gt; AU[&quot;접근·작업 감사 로그&quot;]
   OP -.-&gt; AU">flowchart LR
   SRC[&quot;장소별 원천 데이터&quot;] --&gt; BT[&quot;일괄 적재 배치&quot;]
   BT --&gt; CK{&quot;검증&quot;}
-  CK --&gt;|&quot;통과&quot;| EN[&quot;암호화 저장&quot;]
-  CK --&gt;|&quot;오류&quot;| RJ[&quot;오류 건 분리·재적재&quot;]
+  CK --&gt;|&quot;통과&quot;| EN[&quot;데이터 암호화&quot;]
+  CK --&gt;|&quot;오류&quot;| RJ[&quot;원천 수정 후&lt;br/&gt;묶음 재적재&quot;]
   RJ --&gt; BT
   EN --&gt; DB1[(&quot;선거 DB&quot;)]
+  DB1 --&gt; AG[&quot;장소별·선거별 집계&quot;]
+  AG --&gt; RC[&quot;집계 대사&quot;]
   OP[&quot;관리자 조회&quot;] --&gt; DB1
   BT -.-&gt; AU[&quot;접근·작업 감사 로그&quot;]
-  OP -.-&gt; AU</pre></div></figure><div class="lesson"><b>배운 점</b><p>데이터 품질은 쌓은 뒤에 고치는 것이 아니라, 쌓는 경로에서 검증·암호화·기록으로 지킨다는 기준을 얻었습니다.</p></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  OP -.-&gt; AU</pre></div></figure><div class="lesson"><b>배운 점</b><p>데이터 품질은 쌓은 뒤에 고치는 것이 아니라 쌓는 경로에서 검증·암호화·기록으로 지켜야 한다는 점을, 이 구조를 구현하며 배웠습니다.</p></div>
+
 </article>
 <article class="case" id="case-2">
-<div class="case__head"><span class="case__no">CASE 02 · 리포트설계</span><h3 class="case__title">선거마다 다른 보고서 요구 <span class="badge-draft">초안</span></h3></div>
+<div class="case__head"><span class="case__no">CASE 02 · 리포트구현</span><h3 class="case__title">선거마다 다른 보고서 요구</h3></div>
 <div class="steps">
-<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>선거마다 집계 단위와 보고서 양식에 대한 요구가 달랐습니다. 관리자는 정식 보고서와 함께 진행 현황을 화면에서 바로 보고 싶어 했습니다.</p></div>
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>선거마다 집계 단위와 보고서 양식에 대한 요구가 달랐습니다. 정식 보고서와 함께 관리자 화면에서 진행 현황도 보여 줘야 했습니다.</p></div>
 <div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>보고서마다 조회·출력 코드를 따로 만들면 선거 수만큼 코드가 늘고, 양식 하나를 바꿀 때마다 개발과 배포가 필요해집니다.</p></div>
-<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>장소별·선거별 집계를 공통 단계로 두고 보고서는 그 결과만 읽도록 분리</li><li>Crystal Reports 템플릿으로 선거별 맞춤 보고서 양식 작성</li><li>Chart.js 로 화면 현황 차트 구성</li></ol></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>공통 집계 결과를 읽는 선거별 보고서 구현</li><li>Crystal Reports 템플릿으로 선거별 맞춤 보고서 양식 작성</li><li>Chart.js 로 관리자 화면의 진행 현황 차트 구현</li></ol></div>
 <div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>같은 집계 결과에서 선거별 맞춤 보고서와 현황 차트를 함께 제공했습니다.</p></div>
 </div>
 <p class="sub-h">집계는 하나, 보고서 양식은 템플릿으로 여러 개</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
@@ -445,23 +455,23 @@
   AG --&gt; CH[&quot;현황 차트&lt;br/&gt;(Chart.js)&quot;]
   T1 --&gt; MG[&quot;선거 관리자&quot;]
   T2 --&gt; MG
-  CH --&gt; MG</pre></div></figure><div class="lesson"><b>배운 점</b><p>자주 바뀌는 것(양식)과 잘 바뀌지 않는 것(집계)을 나누면 요구 변경이 코드 변경으로 번지지 않습니다.</p></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  CH --&gt; MG</pre></div></figure><div class="lesson"><b>배운 점</b><p>자주 바뀌는 양식과 잘 바뀌지 않는 집계가 나뉜 구조에서 구현하며, 이렇게 나눠 두면 요구 변경이 코드 변경으로 번지지 않는다는 점을 배웠습니다.</p></div>
+
 </article>
 <article class="case sec--glow sec--flip" id="case-3">
-<div class="case__head"><span class="case__no">CASE 03 · 콘텐츠플랫폼</span><h3 class="case__title">오픈소스 저장소를 고객 요구에 맞추기 <span class="badge-draft">초안</span></h3></div>
+<div class="case__head"><span class="case__no">CASE 03 · 콘텐츠플랫폼</span><h3 class="case__title">오픈소스 저장소를 고객 요구에 맞추기</h3></div>
 <div class="steps">
 <div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>지방자치단체와 국내 대기업 고객에게 디지털 콘텐츠 저장소를 납품해야 했습니다. 고객은 자기 업무에 맞는 콘텐츠 분류 체계와 영상 콘텐츠 재생을 원했습니다.</p></div>
-<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>OpenEQUELLA 는 항목·첨부·검색 같은 기본 기능을 갖췄지만, 고객별 메타데이터 형식과 분류 계층은 직접 정의해야 했고 영상 스트리밍은 별도 서버와 이어 줄 연결 고리가 필요했습니다.</p></div>
-<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>저장소와 같은 Java·Scala 로 OpenEQUELLA 커스터마이징</li><li>고객 업무에 맞춘 콘텐츠 스키마(메타데이터 형식) 정의</li><li>콘텐츠를 탐색할 계층 구조 분류 정의</li><li>영상 첨부를 Wowza 스트리밍 서버로 잇는 스트리밍 연계 API 개발</li></ol></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>OpenEQUELLA 는 항목·첨부·검색 같은 기본 기능을 갖췄지만, 고객별 메타데이터 형식과 분류 계층은 고객 업무에 맞게 만들어야 했고, 영상 스트리밍은 별도 서버(Wowza)와 이어 줄 연결 고리가 필요했습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>저장소와 같은 Java·Scala 로 OpenEQUELLA 커스터마이징</li><li>고객 업무에 맞춘 콘텐츠 스키마(메타데이터 형식) 구현</li><li>콘텐츠를 탐색할 계층 구조 분류 구현</li><li>Wowza 스트리밍 서버의 영상을 받아 사용자에게 전달하는 스트리밍 연계 API 구현</li></ol></div>
 <div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>지방자치단체·국내 대기업에 콘텐츠 저장소를 납품했습니다(기여도 70%).</p></div>
 </div>
-<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">본인 기여도</div><div class="delta__val"><span class="to">70%</span></div></div></div><p class="sub-h">기본 기능 위에 고객 요구분만 덧붙인 구조</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">본인 기여도</div><div class="delta__val"><span class="to">70%</span></div></div></div><p class="sub-h">기본 기능을 고객 요구에 맞게 고친 구조</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
   subgraph CORE[&quot;OpenEQUELLA 기본 기능&quot;]
     C1[&quot;항목·첨부 관리&quot;]
     C2[&quot;검색&quot;]
   end
-  subgraph EXT[&quot;고객 요구 확장 (Java·Scala)&quot;]
+  subgraph EXT[&quot;고객 요구 수정 (Java·Scala)&quot;]
     X1[&quot;고객별 콘텐츠 스키마&quot;]
     X2[&quot;계층 구조 분류&quot;]
     X3[&quot;스트리밍 연계 API&quot;]
@@ -469,12 +479,14 @@
   X1 --&gt; C1
   X2 --&gt; C2
   C1 --&gt; X3
-  X3 --&gt; WZ[&quot;Wowza 스트리밍 서버&quot;]">flowchart LR
+  X3 --&gt;|&quot;스트림 요청&quot;| WZ[&quot;Wowza 스트리밍 서버&quot;]
+  WZ --&gt;|&quot;영상&quot;| X3
+  X3 --&gt;|&quot;영상 전송&quot;| US[&quot;사용자&quot;]">flowchart LR
   subgraph CORE[&quot;OpenEQUELLA 기본 기능&quot;]
     C1[&quot;항목·첨부 관리&quot;]
     C2[&quot;검색&quot;]
   end
-  subgraph EXT[&quot;고객 요구 확장 (Java·Scala)&quot;]
+  subgraph EXT[&quot;고객 요구 수정 (Java·Scala)&quot;]
     X1[&quot;고객별 콘텐츠 스키마&quot;]
     X2[&quot;계층 구조 분류&quot;]
     X3[&quot;스트리밍 연계 API&quot;]
@@ -482,9 +494,11 @@
   X1 --&gt; C1
   X2 --&gt; C2
   C1 --&gt; X3
-  X3 --&gt; WZ[&quot;Wowza 스트리밍 서버&quot;]</pre></div></figure><div class="lesson"><b>배운 점</b><p>오픈소스를 고객 요구에 맞출 때는 기본 기능과 고객별 확장분을 나눠 두어야 이후 버전 관리와 유지보수 부담이 줄어든다는 점을 배웠습니다.</p></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
-</article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>데이터 품질은 쌓은 뒤에 고치는 것이 아니라, 쌓는 경로에서 검증·암호화·기록으로 지킨다는 기준을 얻었습니다.</p><p>자주 바뀌는 것(양식)과 잘 바뀌지 않는 것(집계)을 나누면 요구 변경이 코드 변경으로 번지지 않습니다.</p><p>오픈소스를 고객 요구에 맞출 때는 기본 기능과 고객별 확장분을 나눠 두어야 이후 버전 관리와 유지보수 부담이 줄어든다는 점을 배웠습니다.</p></section></div>
+  X3 --&gt;|&quot;스트림 요청&quot;| WZ[&quot;Wowza 스트리밍 서버&quot;]
+  WZ --&gt;|&quot;영상&quot;| X3
+  X3 --&gt;|&quot;영상 전송&quot;| US[&quot;사용자&quot;]</pre></div></figure><div class="lesson"><b>배운 점</b><p>원본을 직접 고치면 버전을 올릴 때 수정분을 다시 맞춰야 해서, 고친 곳을 따로 관리해야 한다는 점을 배웠습니다.</p></div>
+
+</article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>데이터 품질은 쌓은 뒤에 고치는 것이 아니라 쌓는 경로에서 검증·암호화·기록으로 지켜야 한다는 점을, 이 구조를 구현하며 배웠습니다.</p><p>자주 바뀌는 양식과 잘 바뀌지 않는 집계가 나뉜 구조에서 구현하며, 이렇게 나눠 두면 요구 변경이 코드 변경으로 번지지 않는다는 점을 배웠습니다.</p><p>원본을 직접 고치면 버전을 올릴 때 수정분을 다시 맞춰야 해서, 고친 곳을 따로 관리해야 한다는 점을 배웠습니다.</p></section></div>
 <nav class="pager" aria-label="다른 프로젝트"><a href="ht-opp.html"><small>← 이전 프로젝트</small><b>HT-OPP 온라인 부정시험방지 솔루션</b></a><a class="next" href="vehicle-infotainment.html"><small>다음 프로젝트 →</small><b>국내 완성차 브랜드 차량 인포테인먼트 애플리케이션 개발</b></a></nav>
 <footer class="footer"><p>황병준 · 백엔드·데이터 엔지니어 · <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p><small>디자인 바탕: <a href="https://once-ui.com" target="_blank" rel="noopener">Once UI</a> Magic Portfolio · 도표는 직접 그린 개념도입니다</small></footer>
 </main>

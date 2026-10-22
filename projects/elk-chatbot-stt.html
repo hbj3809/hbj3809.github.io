@@ -41,20 +41,20 @@
 
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">아키텍처 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>세 창구(그룹웨어 ChatBot, 기간계 ChatBot, ARS 전화)가 하나의 Python API 계층과 언어 처리 계층을 함께 씁니다. 검색과 학습 데이터 수집에는 새 인프라를 들이지 않고, 이미 운영하던 ELK 스택을 그대로 썼습니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">아키텍처</h2><div class="sec__lead"><p>세 창구(그룹웨어 ChatBot, 기간계 ChatBot, ARS 전화)가 하나의 Python API 계층과 언어 처리 계층을 함께 씁니다. 검색은 ELK 스택으로 새로 구축했고, 통화 전사 수집·색인에도 같은 ELK 를 그대로 썼습니다. ARS 음성 인식은 OpenAI Whisper API 를 불러 썼습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
   subgraph CH[&quot;사용 창구&quot;]
     GW[&quot;그룹웨어 ChatBot&lt;br/&gt;그룹 임직원&quot;]
-    ERP[&quot;기간계 시스템 ChatBot&lt;br/&gt;임직원·외부 고객사&quot;]
+    ERP[&quot;기간계 시스템 ChatBot&lt;br/&gt;임직원·외부 사용자&quot;]
     ARS[&quot;ARS 전화&lt;br/&gt;음성 업무 요청&quot;]
   end
+  STT[&quot;Whisper STT&lt;br/&gt;OpenAI API 호출&quot;]
   subgraph SRV[&quot;Python API 계층&quot;]
     FAPI[&quot;FastAPI&lt;br/&gt;그룹웨어·기간계 전용 API&quot;]
     LC[&quot;LangChain&lt;br/&gt;질의 처리 구성&quot;]
     FLK[&quot;Flask 모델 서버&lt;br/&gt;추론·재학습&quot;]
   end
   subgraph LANG[&quot;언어 처리&quot;]
-    STT[&quot;Whisper STT&lt;br/&gt;음성 → 텍스트&quot;]
     TOK[&quot;물류 Tokenizer·Analyzer&lt;br/&gt;KorpatELECTRA 기반&quot;]
     DIC[&quot;물류 전용어 사전&lt;br/&gt;변형어 → 표준어&quot;]
   end
@@ -82,16 +82,16 @@
   AF --&gt; FLK">flowchart LR
   subgraph CH[&quot;사용 창구&quot;]
     GW[&quot;그룹웨어 ChatBot&lt;br/&gt;그룹 임직원&quot;]
-    ERP[&quot;기간계 시스템 ChatBot&lt;br/&gt;임직원·외부 고객사&quot;]
+    ERP[&quot;기간계 시스템 ChatBot&lt;br/&gt;임직원·외부 사용자&quot;]
     ARS[&quot;ARS 전화&lt;br/&gt;음성 업무 요청&quot;]
   end
+  STT[&quot;Whisper STT&lt;br/&gt;OpenAI API 호출&quot;]
   subgraph SRV[&quot;Python API 계층&quot;]
     FAPI[&quot;FastAPI&lt;br/&gt;그룹웨어·기간계 전용 API&quot;]
     LC[&quot;LangChain&lt;br/&gt;질의 처리 구성&quot;]
     FLK[&quot;Flask 모델 서버&lt;br/&gt;추론·재학습&quot;]
   end
   subgraph LANG[&quot;언어 처리&quot;]
-    STT[&quot;Whisper STT&lt;br/&gt;음성 → 텍스트&quot;]
     TOK[&quot;물류 Tokenizer·Analyzer&lt;br/&gt;KorpatELECTRA 기반&quot;]
     DIC[&quot;물류 전용어 사전&lt;br/&gt;변형어 → 표준어&quot;]
   end
@@ -117,12 +117,12 @@
   AF --&gt; IDX
   AF --&gt; DIC
   AF --&gt; FLK</pre></div><figcaption>직접 그린 개념도입니다. 실제 서버 구성이나 이름과는 다릅니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>ChatBot: 배차 요청·자동배차·회수·담당자 조회 (그룹웨어·기간계)</li><li>ARS: 전화 음성으로 배차·회수·반납 요청과 담당자 조회 처리</li><li>ELK 검색: nori 분석기 기반 그룹웨어 검색, 응답 200ms</li><li>재학습: Airflow DAG로 STT·물류 전용어 사전·자연어 처리 데이터를 갱신</li></ul></div></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+
 </section>
 <section class="sec sec--glow sec--flip">
-<div class="sec__head"><h2 class="sec__title">핵심 흐름 ① ChatBot 질의 처리 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>질문은 먼저 형태소 분석과 용어 정규화를 거쳐 표준어 질의로 바뀝니다. 그다음 업무 요청이면 기간계 기능으로, 정보 조회면 nori 색인 검색으로 갈라집니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">핵심 흐름 ① ChatBot 질의 처리</h2><div class="sec__lead"><p>질문은 먼저 형태소 분석과 용어 정규화를 거쳐 표준어 질의로 바뀝니다. 업무 유형은 정해 둔 규칙과 파인튜닝한 KorpatELECTRA 분류를 함께 써서 가립니다. 그다음 업무 요청이면 기간계 기능으로, 정보 조회면 nori 색인 검색으로 갈라집니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="sequenceDiagram
-  participant U as 임직원·고객사 사용자
+  participant U as 임직원·외부 사용자
   participant B as ChatBot 창
   participant A as Python API
   participant N as 언어 처리
@@ -131,6 +131,7 @@
   U-&gt;&gt;B: 질문 입력
   B-&gt;&gt;A: 질의 전달
   A-&gt;&gt;N: 형태소 분석·용어 정규화
+  N-&gt;&gt;N: 업무 유형 판별(규칙 + KorpatELECTRA 분류)
   N--&gt;&gt;A: 표준어 질의와 업무 유형
   alt 업무 요청(배차 요청·자동배차·회수)
     A-&gt;&gt;C: 업무 기능 호출
@@ -141,7 +142,7 @@
   end
   A--&gt;&gt;B: 응답 구성
   B--&gt;&gt;U: 결과 표시">sequenceDiagram
-  participant U as 임직원·고객사 사용자
+  participant U as 임직원·외부 사용자
   participant B as ChatBot 창
   participant A as Python API
   participant N as 언어 처리
@@ -150,6 +151,7 @@
   U-&gt;&gt;B: 질문 입력
   B-&gt;&gt;A: 질의 전달
   A-&gt;&gt;N: 형태소 분석·용어 정규화
+  N-&gt;&gt;N: 업무 유형 판별(규칙 + KorpatELECTRA 분류)
   N--&gt;&gt;A: 표준어 질의와 업무 유형
   alt 업무 요청(배차 요청·자동배차·회수)
     A-&gt;&gt;C: 업무 기능 호출
@@ -159,17 +161,17 @@
     E--&gt;&gt;A: 검색 결과
   end
   A--&gt;&gt;B: 응답 구성
-  B--&gt;&gt;U: 결과 표시</pre></div><figcaption>개념 흐름입니다. 업무 유형을 판별하는 방식은 단순화해 그렸습니다.</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  B--&gt;&gt;U: 결과 표시</pre></div><figcaption>직접 그린 개념 흐름입니다. 업무 유형은 규칙과 KorpatELECTRA 분류를 함께 써서 가립니다.</figcaption></figure></div>
+
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">핵심 흐름 ② STT 지능형 ARS <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>통화 음성을 텍스트로 바꾼 뒤, 현장 변형어를 표준어로 되돌리는 보정 단계를 거쳐 업무로 연결합니다. 같은 '파렛트'도 현장에서는 여러 가지로 발음하기 때문에, 이 보정 단계가 인식 정확도를 좌우합니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">핵심 흐름 ② STT 지능형 ARS</h2><div class="sec__lead"><p>통화 음성을 텍스트로 바꾼 뒤, 현장 변형어를 표준어로 되돌리는 보정 단계를 거쳐 업무로 연결합니다. 같은 '파렛트'도 현장에서는 여러 가지로 발음하기 때문에, 이 보정 단계가 인식 정확도를 좌우합니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
   C1[&quot;ARS 전화 발신&lt;br/&gt;배차·회수·반납 요청, 담당자 조회&quot;] --&gt; C2[&quot;ARS 음성 수신&quot;]
-  C2 --&gt; C3[&quot;Whisper STT&lt;br/&gt;음성 → 텍스트&quot;]
+  C2 --&gt; C3[&quot;Whisper API 전사&lt;br/&gt;음성 → 텍스트&quot;]
   C3 --&gt; C4[&quot;노이즈·방언 보정&lt;br/&gt;변형어 → 표준어&quot;]
   C4 --&gt; C5[&quot;물류 Tokenizer·Analyzer&lt;br/&gt;KorpatELECTRA 기반&quot;]
-  C5 --&gt; C6{&quot;업무 유형 판별&quot;}
+  C5 --&gt; C6{&quot;업무 유형 판별&lt;br/&gt;규칙 + KorpatELECTRA 분류&quot;}
   C6 --&gt;|&quot;배차 요청&quot;| C7[&quot;기간계 배차 요청 등록&quot;]
   C6 --&gt;|&quot;담당자 조회&quot;| C8[&quot;담당자 검색&lt;br/&gt;Elasticsearch&quot;]
   C6 --&gt;|&quot;반납 요청&quot;| C9[&quot;기간계 반납 요청 등록&quot;]
@@ -178,18 +180,18 @@
   C9 --&gt; C10
   C3 -.-&gt;|&quot;동의 범위 안에서&quot;| C11[&quot;통화·전사 데이터&lt;br/&gt;재학습 루프로&quot;]">flowchart LR
   C1[&quot;ARS 전화 발신&lt;br/&gt;배차·회수·반납 요청, 담당자 조회&quot;] --&gt; C2[&quot;ARS 음성 수신&quot;]
-  C2 --&gt; C3[&quot;Whisper STT&lt;br/&gt;음성 → 텍스트&quot;]
+  C2 --&gt; C3[&quot;Whisper API 전사&lt;br/&gt;음성 → 텍스트&quot;]
   C3 --&gt; C4[&quot;노이즈·방언 보정&lt;br/&gt;변형어 → 표준어&quot;]
   C4 --&gt; C5[&quot;물류 Tokenizer·Analyzer&lt;br/&gt;KorpatELECTRA 기반&quot;]
-  C5 --&gt; C6{&quot;업무 유형 판별&quot;}
+  C5 --&gt; C6{&quot;업무 유형 판별&lt;br/&gt;규칙 + KorpatELECTRA 분류&quot;}
   C6 --&gt;|&quot;배차 요청&quot;| C7[&quot;기간계 배차 요청 등록&quot;]
   C6 --&gt;|&quot;담당자 조회&quot;| C8[&quot;담당자 검색&lt;br/&gt;Elasticsearch&quot;]
   C6 --&gt;|&quot;반납 요청&quot;| C9[&quot;기간계 반납 요청 등록&quot;]
   C7 --&gt; C10[&quot;처리 결과 안내&quot;]
   C8 --&gt; C10
   C9 --&gt; C10
-  C3 -.-&gt;|&quot;동의 범위 안에서&quot;| C11[&quot;통화·전사 데이터&lt;br/&gt;재학습 루프로&quot;]</pre></div><figcaption>직접 그린 개념 흐름입니다. 업무 분기와 결과 안내 방식은 단순화했습니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>ARS로 받는 업무: 배차·자동배차·회수·반납 요청, 담당자 조회</li><li>인식 정확도를 잰 범위: 배차 요청·담당자 조회·반납 요청</li><li>보정: 현장 소음과 방언(경상도·전라도) 변형어를 물류 전용어 사전으로 표준어에 매핑</li><li>통화·전사 데이터는 직원 동의를 받은 범위 안에서만 재학습에 사용</li></ul></div></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  C3 -.-&gt;|&quot;동의 범위 안에서&quot;| C11[&quot;통화·전사 데이터&lt;br/&gt;재학습 루프로&quot;]</pre></div><figcaption>직접 그린 개념 흐름입니다. 업무 유형은 규칙과 KorpatELECTRA 분류를 함께 써서 가리고, 결과 안내 방식은 단순화했습니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>ARS로 받는 업무: 배차·자동배차·회수·반납 요청, 담당자 조회</li><li>인식 정확도를 잰 범위: 배차 요청·담당자 조회·반납 요청</li><li>보정: 현장 소음과 방언(경상도·전라도) 변형어를 물류 전용어 사전으로 표준어에 매핑</li><li>통화·전사 데이터는 직원 동의를 받은 범위 안에서만 재학습에 사용</li></ul></div></div>
+
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">재학습 데이터 루프</h2><div class="sec__lead"><p>정확도 개선의 중심은 현장 데이터가 학습까지 들어오는 길을 만든 일이었습니다. 처음에는 오인식 단어를 하나씩 손으로 표준어와 묶어 다시 학습했습니다. 이후 수집·전사·색인·사전 갱신을 Airflow 파이프라인으로 이었습니다.</p></div></div>
@@ -211,7 +213,7 @@
 
 </section>
 <section class="sec sec--glow">
-<div class="sec__head"><h2 class="sec__title">개념 데이터 모델 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>창구는 셋이지만, 데이터는 질의·통화 전사·업무 유형·용어 사전·학습 데이터로 모입니다. 이 개념도에서는 통화 기록이 반드시 동의 기록을 근거로 수집된다는 원칙을 관계로 표현했습니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">개념 데이터 모델</h2><div class="sec__lead"><p>창구는 셋이지만, 데이터는 질의·통화 전사·업무 유형·용어 사전·학습 데이터로 모입니다. 이 개념도에서는 통화 기록이 반드시 동의 기록을 근거로 수집된다는 원칙을 관계로 표현했습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="erDiagram
   USER ||--o{ CHAT_QUERY : &quot;질의&quot;
   USER ||--o{ CONSENT : &quot;동의&quot;
@@ -343,12 +345,12 @@
     string model_version
     date built_on
   }</pre></div><figcaption>개념 ERD입니다. 실제 테이블 이름이나 구조와는 다릅니다.</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">설계 결정<span class="dim">왜 이렇게 골랐나</span> <span class="badge-draft">초안</span></h2></div>
-<div class="sec__body"><div class="tiles"><div class="tile"><h3>도메인 언어모델 + 표준어 사전</h3><p>표준어를 기준으로 물류 도메인 어휘를 사전에 넣고 학습시키려고 KorpatELECTRA를 골랐습니다. ELECTRA 계열 한국어 언어모델이며, 생성형 LLM이 아니라 물류 Tokenizer·Analyzer의 기반으로 썼습니다.</p></div><div class="tile"><h3>새 인프라 대신 운영 중인 ELK</h3><p>이미 쓰고 있던 ELK 스택을 그대로 활용했습니다. 통화 전사를 nori 기반 파이프라인으로 색인하고, 이 데이터를 전용어 사전 보정과 KorpatELECTRA 파인튜닝으로 이어 붙였습니다.</p></div><div class="tile"><h3>실제 통화를, 동의를 받고 범위를 정해</h3><p>표준어 테스트로는 현장 방언을 잡을 수 없었습니다. 그래서 직원 동의를 받아 시범 기간 동안 영남·호남 영업 조직의 업무 통화만 모았습니다.</p></div><div class="tile"><h3>정형 업무부터 대상으로</h3><p>배차 요청·담당자 조회·반납 요청처럼 말할 내용이 정해진 ARS 업무를 먼저 대상으로 잡았고, 결과도 이 업무 범위와 함께 밝힙니다.</p></div><div class="tile"><h3>AI 서버는 Python으로 분리</h3><p>모델과 언어 처리 라이브러리는 Python 생태계에 있습니다. 그래서 기간계와 별도로 FastAPI·Flask 서버를 두고, 그룹웨어·기간계와는 API로만 연결했습니다.</p></div><div class="tile"><h3>음성 인식은 Whisper를 직접 운영</h3><p>통화 음성을 외부 서비스로 보내지 않아도 되는 오픈 모델이라 Whisper 를 골랐습니다. Whisper 자체는 파인튜닝하지 않고, 인식 결과를 물류 전용어 사전으로 보정하고 의미 이해는 파인튜닝한 KorpatELECTRA 가 맡게 나눴습니다.</p></div></div></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+<div class="sec__head"><h2 class="sec__title">설계 결정<span class="dim">왜 이렇게 골랐나</span></h2></div>
+<div class="sec__body"><div class="tiles"><div class="tile"><h3>도메인 언어모델 + 표준어 사전</h3><p>표준어를 기준으로 물류 도메인 어휘를 사전에 넣고 학습시키려고 KorpatELECTRA를 골랐습니다. ELECTRA 계열 한국어 언어모델이며, 생성형 LLM이 아니라 물류 Tokenizer·Analyzer의 기반으로 썼습니다.</p></div><div class="tile"><h3>전사 색인도 새 인프라 없이 같은 ELK 로</h3><p>그룹웨어 검색용으로 세워 이미 쓰고 있던 ELK 스택을 통화 전사 수집·색인에도 그대로 활용했습니다. 통화 전사를 nori 기반 파이프라인으로 색인하고, 이 데이터를 전용어 사전 보정과 KorpatELECTRA 파인튜닝으로 이어 붙였습니다.</p></div><div class="tile"><h3>실제 통화를, 동의를 받고 범위를 정해</h3><p>표준어 테스트로는 현장 방언을 잡을 수 없었습니다. 그래서 직원 동의를 받아 시범 기간 동안 영남·호남 영업 조직의 업무 통화만 모았습니다.</p></div><div class="tile"><h3>시범 범위는 현업과 함께</h3><p>시범 대상 업무(배차 요청·담당자 조회·반납 요청)를 현업과 함께 정했고, 결과도 이 범위와 함께 밝힙니다.</p></div><div class="tile"><h3>AI 서버는 Python으로 분리</h3><p>모델과 언어 처리 라이브러리는 Python 생태계에 있습니다. 그래서 기간계와 별도로 FastAPI·Flask 서버를 두고, 그룹웨어·기간계와는 API로만 연결했습니다.</p></div><div class="tile"><h3>음성 인식은 Whisper, 보정은 전용어 사전으로</h3><p>음성 인식은 OpenAI Whisper API 를 불러 썼습니다. Whisper 자체는 파인튜닝하지 않고 인식 결과를 물류 전용어 사전으로 보정했고, 의미 이해는 파인튜닝한 KorpatELECTRA 가 맡게 나눴습니다.</p></div></div></div>
+
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">성과 ① STT 인식 정확도</h2><div class="sec__lead"><p>특정 지역권의 배차 요청·담당자 조회·반납 요청 ARS 업무를 기준으로 40%에서 80~85%까지 올렸습니다. 전체 통화의 평균이 아니며, 일부 작업 공간의 통화 소음과 현장 어휘 때문에 업무·지역에 따라 지금도 편차가 있습니다.</p></div></div>
@@ -361,9 +363,9 @@
 
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">기술 스택 <span class="badge-draft">초안</span></h2></div>
-<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>기술</th><th>쓴 곳</th><th>고른 이유·역할</th></tr></thead><tbody><tr><td>Whisper STT</td><td>ARS 통화 음성 → 텍스트</td><td>통화 음성을 외부로 보내지 않는 오픈 모델. 모델은 그대로 쓰고, 결과를 물류 전용어 사전으로 보정</td></tr><tr><td>KorpatELECTRA</td><td>물류 Tokenizer·Analyzer, 표준어 기준 사전</td><td>표준어 + 물류 도메인 어휘 학습용 ELECTRA 계열 한국어 언어모델 (생성형 LLM 아님)</td></tr><tr><td>Elasticsearch(nori) · Logstash · Kibana</td><td>그룹웨어 검색, 통화 전사 색인</td><td>이미 운영하던 스택이라 새 인프라 없이 수집·색인·검색을 한곳에서</td></tr><tr><td>Apache Airflow</td><td>STT·물류 전용어 사전·자연어 처리 DAG</td><td>수작업이던 재학습 준비를 반복 가능한 작업으로</td></tr><tr><td>Python · FastAPI · Flask</td><td>그룹웨어·기간계 전용 API, 모델 서버</td><td>모델·언어 처리 라이브러리와 같은 생태계, 기간계와 API로만 연결</td></tr><tr><td>LangChain</td><td>ChatBot 질의 처리 구성</td><td>질의 정규화·검색·업무 호출 단계를 하나의 처리 흐름으로</td></tr><tr><td>Redis</td><td>캐시·상태 관리</td><td>자주 묻는 조회와 대화 상태를 가볍게 보관</td></tr></tbody></table></div></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+<div class="sec__head"><h2 class="sec__title">기술 스택</h2></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>기술</th><th>쓴 곳</th><th>고른 이유·역할</th></tr></thead><tbody><tr><td>Whisper STT</td><td>ARS 통화 음성 → 텍스트</td><td>OpenAI Whisper API 로 전사. 모델은 그대로 쓰고, 결과를 물류 전용어 사전으로 보정</td></tr><tr><td>KorpatELECTRA</td><td>물류 Tokenizer·Analyzer, 표준어 기준 사전, 업무 유형 분류(규칙과 함께)</td><td>표준어 + 물류 도메인 어휘 학습용 ELECTRA 계열 한국어 언어모델 (생성형 LLM 아님)</td></tr><tr><td>Elasticsearch(nori) · Logstash · Kibana</td><td>그룹웨어 검색, 통화 전사 색인</td><td>검색용으로 구축한 스택을 통화 전사 수집·색인에도 그대로 써서 한곳에서 관리</td></tr><tr><td>Apache Airflow</td><td>STT·물류 전용어 사전·자연어 처리 DAG</td><td>수작업이던 재학습 준비를 반복 가능한 작업으로</td></tr><tr><td>Python · FastAPI · Flask</td><td>그룹웨어·기간계 전용 API, 모델 서버</td><td>모델·언어 처리 라이브러리와 같은 생태계, 기간계와 API로만 연결</td></tr><tr><td>LangChain</td><td>ChatBot 질의 처리 구성</td><td>질의 정규화·검색·업무 호출 단계를 하나의 처리 흐름으로</td></tr><tr><td>Redis</td><td>캐시·상태 관리</td><td>자주 묻는 조회와 대화 상태를 가볍게 보관</td></tr></tbody></table></div></div>
+
 </section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>AI·언어 처리</h3><div class="card__tags"><span class="tag">Whisper STT</span><span class="tag">KorpatELECTRA</span><span class="tag">LangChain</span></div></div><div class="stack__group"><h3>검색·데이터</h3><div class="card__tags"><span class="tag">Elasticsearch(nori)</span><span class="tag">Logstash</span><span class="tag">Kibana</span><span class="tag">Apache Airflow</span><span class="tag">Redis</span></div></div><div class="stack__group"><h3>서버</h3><div class="card__tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Flask</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">현장 방언·변형어 때문에 40%에 머문 ARS 음성 인식 · 사람 손에 묶여 있던 재학습을 데이터 루프로 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
 <div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 3개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 현장 방언·변형어 때문에 40%에 머문 ARS 음성 인식</span></a><a class="ctl" href="#case-2"><span>02 사람 손에 묶여 있던 재학습을 데이터 루프로</span></a><a class="ctl" href="#case-3"><span>03 오픈 87점에서 92점으로, 이듬해에도 92점</span></a></div></section><article class="case sec--glow" id="case-1">
 <div class="case__head"><span class="case__no">CASE 01 · 자연어처리</span><h3 class="case__title">현장 방언·변형어 때문에 40%에 머문 ARS 음성 인식</h3></div>
@@ -416,15 +418,15 @@
 
 </article>
 <article class="case sec--glow sec--flip" id="case-3">
-<div class="case__head"><span class="case__no">CASE 03 · 서비스운영</span><h3 class="case__title">오픈 87점에서 92점으로, 이듬해에도 92점 <span class="badge-draft">초안</span></h3></div>
+<div class="case__head"><span class="case__no">CASE 03 · 서비스운영</span><h3 class="case__title">오픈 87점에서 92점으로, 이듬해에도 92점</h3></div>
 <div class="steps">
-<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>그룹웨어 ChatBot은 2024.12에 먼저 열렸고, 오픈 시점(2024 Q4) 내부 직원 분기 설문 점수는 87점이었습니다. 사용자는 그룹 지주사·계열사 3곳 임직원 1천여 명과 외부 사용자 약 200명입니다.</p></div>
-<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>오픈 시점에는 대화 창구만 있었고, 검색(ELK)과 전화(STT ARS) 창구는 2025.02 ~ 05 확장 범위로 남아 있었습니다.</p></div>
-<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>물류 전용어 사전·nori 기반 ELK 검색 추가 (그룹웨어 검색 응답 200ms)</li><li>같은 업무(배차 요청·담당자 조회·반납 요청)를 Whisper STT ARS 전화 창구로 확장</li><li>그룹웨어·기간계 전용 Python API로 그룹 임직원과 외부 고객사 사용자에게 같은 기능 제공</li><li>재학습·사전 갱신을 상시 운영하고, 분기 설문 결과로 만족도·운영 효율 확인</li></ol></div>
-<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>만족도는 87점(2024 Q4)에서 92점(2025 Q1)으로 올랐고 2026 Q1에도 92점을 유지했습니다. 분기 공식 설문 기준 운영 효율은 15% 개선됐습니다. 2025 Q1은 확장 작업이 시작된 분기라, 점수 상승을 특정 기능 하나의 효과로 단정하지 않습니다.</p></div>
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>직접 구축한 그룹웨어 ChatBot 을 2024.12 에 먼저 열었고, 오픈 시점(2024 Q4) 내부 직원 분기 설문 점수는 87점이었습니다. 사용자는 그룹 지주사·계열사 3곳 임직원 1천여 명과 외부 사용자 약 200명입니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>오픈 뒤 실제 질문 가운데 ChatBot 이 잘못 알아듣거나 엉뚱하게 답하는 경우가 있었습니다. 검색(ELK)과 전화(STT ARS) 창구는 아직 2025.02 ~ 05 확장 범위로 남아 있었습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>오픈 뒤 잘못 알아들은 질문과 엉뚱한 답을 모아 물류 전용어 사전·학습 데이터로 계속 보정</li><li>같은 시기 진행한 확장: ELK 검색(그룹웨어 검색 응답 200ms)과 Whisper STT ARS 전화 창구 추가</li><li>재학습·사전 갱신을 상시 운영하고, 분기 설문 결과로 만족도·운영 효율 확인</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>만족도는 87점(2024 Q4)에서 92점(2025 Q1)으로 올랐고 2026 Q1에도 92점을 유지했습니다. 분기 공식 설문 기준 운영 효율은 15% 개선됐습니다. 그사이 가장 크게 손본 것은 오인식·답변 보정이었지만, 2025 Q1 은 확장 작업이 시작된 분기이기도 해서 점수 상승을 한 가지 작업의 효과로만 단정하지 않습니다.</p></div>
 </div>
 <p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">ChatBot 만족도 (내부 직원 분기 설문)</div><div class="delta__val"><span class="from">87점 (2024 Q4)</span><span class="arrow">→</span><span class="to">92점 (2025 Q1·2026 Q1)</span></div></div><div class="delta"><div class="delta__label">운영 효율 (분기 공식 설문)</div><div class="delta__val"><span class="to">15% 개선</span></div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">2024.12</div><div class="tl__what"><b>그룹웨어 ChatBot 오픈</b><span>배차 요청·자동배차·회수·담당자 조회 제공, 오픈 기준 만족도 87점</span></div></li><li><div class="tl__when">2025.02</div><div class="tl__what"><b>ELK 검색·STT ARS 확장 착수</b><span>물류 전용어 사전·nori 검색, Whisper STT 기반 ARS</span></div></li><li><div class="tl__when">2025 Q1</div><div class="tl__what"><b>분기 설문 92점</b><span>내부 직원 분기 설문</span></div></li><li><div class="tl__when">2025.05</div><div class="tl__what"><b>확장 구축 마무리</b><span>이후 운영·재학습 상시</span></div></li><li><div class="tl__when">2026 Q1</div><div class="tl__what"><b>분기 설문 92점 유지</b><span>2025 Q1 설문 1년 뒤에도 같은 점수</span></div></li></ol><div class="lesson"><b>배운 점</b><p>만족도는 오픈 점수보다 다음 분기, 다음 해에도 유지되는지로 봐야 합니다. 그러려면 재학습과 사전 갱신이 일회성 프로젝트가 아니라 운영 업무여야 합니다.</p></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+
 </article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>표준어 테스트를 통과해도 현장 통화에서는 통하지 않을 수 있었습니다. 현장 데이터를 동의 범위 안에서 모으는 길을 먼저 만들어야 개선이 이어졌습니다. 결과 수치는 적용 범위(업무·지역)와 함께 밝혀야 정확합니다.</p><p>모델 정확도보다 먼저 '현장 데이터가 학습까지 들어오는 길'을 만들어야 개선이 계속됩니다. 손으로 반복하는 단계가 보이면 그것이 파이프라인으로 옮길 대상입니다.</p><p>만족도는 오픈 점수보다 다음 분기, 다음 해에도 유지되는지로 봐야 합니다. 그러려면 재학습과 사전 갱신이 일회성 프로젝트가 아니라 운영 업무여야 합니다.</p></section></div>
 <nav class="pager" aria-label="다른 프로젝트"><a href="logion-vision-ai.html"><small>← 이전 프로젝트</small><b>LOGION Vision AI 입고 검증</b></a><a class="next" href="core-system-devops.html"><small>다음 프로젝트 →</small><b>기간계 시스템 MSA 전환 및 DevOps 구축</b></a></nav>
 <footer class="footer"><p>황병준 · 백엔드·데이터 엔지니어 · <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p><small>디자인 바탕: <a href="https://once-ui.com" target="_blank" rel="noopener">Once UI</a> Magic Portfolio · 도표는 직접 그린 개념도입니다</small></footer>

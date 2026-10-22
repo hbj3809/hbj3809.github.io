@@ -36,7 +36,7 @@
 
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">아키텍처 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>키오스크는 바코드와 전표 이미지를 입고(Receipt) 서비스로 보내고, 입고 서비스는 판독을 인식 처리 단계에 맡깁니다. 출고가 끝나면 출고(Delivery) 서비스가 Kafka 로 이벤트를 보내고, 입고 서비스는 이 이벤트를 받아 도착지의 입고 검증 데이터를 미리 준비합니다. 검토가 필요한 건은 관리자 페이지로 가고, 확정된 입고는 EAI 를 거쳐 기간계와 고객사 시스템으로 이어집니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">아키텍처</h2><div class="sec__lead"><p>키오스크는 바코드로 입고 건을 입고(Receipt) 서비스에서 불러오고, 촬영한 전표 이미지를 입고 서비스로 보냅니다. 입고 서비스는 전표 촬영을 Kafka 이벤트로 넘기고, Python·FastAPI 로 만든 Vision AI 연동 서버가 판독 결과를 다시 이벤트로 돌려줍니다. 연동 서버는 OpenCV 로 노이즈를 지우고 각도를 바로잡은 뒤, Google Cloud Vision 으로 양식의 구역을 잡고 PaddleOCR 로 그 구역의 글자를 읽습니다. AI 관련 데이터는 Amazon Aurora 에 둡니다.</p><p>출고가 끝나면 출고(Delivery) 서비스가 Kafka 로 이벤트를 보내고, 입고 서비스는 이 이벤트를 받아 도착지의 입고 검증 데이터를 미리 준비합니다. 검토가 필요한 건은 관리자 페이지 알림으로 현장 관리자·센터 직원에게 가고, 확정된 입고는 Kafka 이벤트로 EAI 를 거쳐 고객사 ERP·내부 기간계 ERP 로 이어집니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
   subgraph KIOSK[&quot;무인 키오스크&quot;]
     SCAN[&quot;바코드 스캔&quot;]
@@ -45,31 +45,34 @@
   subgraph BACK[&quot;LOGION 백엔드 · MSA&quot;]
     DLV[&quot;Delivery 서비스&lt;br/&gt;출고·출력물&quot;]
     RCP[&quot;Receipt 서비스&lt;br/&gt;입고 검증·상태 변경&quot;]
-    ADM[&quot;Admin 서비스&lt;br/&gt;관리자 페이지·기준 정보&quot;]
     RDS[(&quot;Redis&lt;br/&gt;키오스크 작업 상태&quot;)]
   end
-  subgraph VISION[&quot;전표 인식 처리&quot;]
-    PRE[&quot;이미지 전처리&quot;]
-    GCV[&quot;Google Cloud Vision&quot;]
-    POCR[&quot;PaddleOCR&quot;]
+  KFK[&quot;Kafka&lt;br/&gt;출고·전표 인식·입고 이벤트&quot;]
+  subgraph VISION[&quot;Vision AI 연동 서버 · Python·FastAPI&quot;]
+    PRE[&quot;이미지 전처리&lt;br/&gt;OpenCV 노이즈 제거·각도 보정&quot;]
+    GCV[&quot;Google Cloud Vision&lt;br/&gt;양식 구역 검출&quot;]
+    POCR[&quot;PaddleOCR&lt;br/&gt;구역 글자 판독&quot;]
     ZONE[&quot;구역 기준&lt;br/&gt;필드·인감 판정&quot;]
   end
-  KFK[&quot;Kafka&lt;br/&gt;출고·입고 이벤트&quot;]
-  EAI[&quot;EAI 연계&lt;br/&gt;기간계·고객사 시스템&quot;]
-  MGR[&quot;현장 관리자&quot;]
+  ADB[(&quot;Amazon Aurora&lt;br/&gt;AI 관련 데이터&quot;)]
+  ADMWEB[&quot;관리자 페이지(웹)&quot;]
+  MGR[&quot;현장 관리자·센터 직원&quot;]
+  EAI[&quot;EAI 연계&lt;br/&gt;고객사 ERP·내부 기간계 ERP&quot;]
   DLV --&gt;|&quot;출고 완료&quot;| KFK
   KFK --&gt;|&quot;도착지 입고 검증 데이터&quot;| RCP
   SCAN --&gt;|&quot;입고 건 조회&quot;| RCP
   CAMR --&gt;|&quot;전표 이미지&quot;| RCP
   RCP --&gt;|&quot;작업 상태&quot;| RDS
-  RCP --&gt;|&quot;인식 요청&quot;| PRE
+  RCP --&gt;|&quot;전표 촬영 이벤트&quot;| KFK
+  KFK --&gt;|&quot;인식 요청&quot;| PRE
   PRE --&gt; GCV
-  PRE --&gt; POCR
-  GCV --&gt; ZONE
+  GCV --&gt; POCR
   POCR --&gt; ZONE
-  ZONE --&gt;|&quot;판독 결과&quot;| RCP
-  RCP --&gt;|&quot;검토 필요&quot;| ADM
-  ADM --&gt;|&quot;알림&quot;| MGR
+  ZONE --&gt;|&quot;판독 결과 이벤트&quot;| KFK
+  KFK --&gt;|&quot;판독 결과&quot;| RCP
+  VISION --&gt; ADB
+  RCP --&gt;|&quot;검토 알림&quot;| ADMWEB
+  ADMWEB --&gt; MGR
   RCP --&gt;|&quot;입고 확정&quot;| KFK
   KFK --&gt;|&quot;연계&quot;| EAI">flowchart LR
   subgraph KIOSK[&quot;무인 키오스크&quot;]
@@ -79,39 +82,42 @@
   subgraph BACK[&quot;LOGION 백엔드 · MSA&quot;]
     DLV[&quot;Delivery 서비스&lt;br/&gt;출고·출력물&quot;]
     RCP[&quot;Receipt 서비스&lt;br/&gt;입고 검증·상태 변경&quot;]
-    ADM[&quot;Admin 서비스&lt;br/&gt;관리자 페이지·기준 정보&quot;]
     RDS[(&quot;Redis&lt;br/&gt;키오스크 작업 상태&quot;)]
   end
-  subgraph VISION[&quot;전표 인식 처리&quot;]
-    PRE[&quot;이미지 전처리&quot;]
-    GCV[&quot;Google Cloud Vision&quot;]
-    POCR[&quot;PaddleOCR&quot;]
+  KFK[&quot;Kafka&lt;br/&gt;출고·전표 인식·입고 이벤트&quot;]
+  subgraph VISION[&quot;Vision AI 연동 서버 · Python·FastAPI&quot;]
+    PRE[&quot;이미지 전처리&lt;br/&gt;OpenCV 노이즈 제거·각도 보정&quot;]
+    GCV[&quot;Google Cloud Vision&lt;br/&gt;양식 구역 검출&quot;]
+    POCR[&quot;PaddleOCR&lt;br/&gt;구역 글자 판독&quot;]
     ZONE[&quot;구역 기준&lt;br/&gt;필드·인감 판정&quot;]
   end
-  KFK[&quot;Kafka&lt;br/&gt;출고·입고 이벤트&quot;]
-  EAI[&quot;EAI 연계&lt;br/&gt;기간계·고객사 시스템&quot;]
-  MGR[&quot;현장 관리자&quot;]
+  ADB[(&quot;Amazon Aurora&lt;br/&gt;AI 관련 데이터&quot;)]
+  ADMWEB[&quot;관리자 페이지(웹)&quot;]
+  MGR[&quot;현장 관리자·센터 직원&quot;]
+  EAI[&quot;EAI 연계&lt;br/&gt;고객사 ERP·내부 기간계 ERP&quot;]
   DLV --&gt;|&quot;출고 완료&quot;| KFK
   KFK --&gt;|&quot;도착지 입고 검증 데이터&quot;| RCP
   SCAN --&gt;|&quot;입고 건 조회&quot;| RCP
   CAMR --&gt;|&quot;전표 이미지&quot;| RCP
   RCP --&gt;|&quot;작업 상태&quot;| RDS
-  RCP --&gt;|&quot;인식 요청&quot;| PRE
+  RCP --&gt;|&quot;전표 촬영 이벤트&quot;| KFK
+  KFK --&gt;|&quot;인식 요청&quot;| PRE
   PRE --&gt; GCV
-  PRE --&gt; POCR
-  GCV --&gt; ZONE
+  GCV --&gt; POCR
   POCR --&gt; ZONE
-  ZONE --&gt;|&quot;판독 결과&quot;| RCP
-  RCP --&gt;|&quot;검토 필요&quot;| ADM
-  ADM --&gt;|&quot;알림&quot;| MGR
+  ZONE --&gt;|&quot;판독 결과 이벤트&quot;| KFK
+  KFK --&gt;|&quot;판독 결과&quot;| RCP
+  VISION --&gt; ADB
+  RCP --&gt;|&quot;검토 알림&quot;| ADMWEB
+  ADMWEB --&gt; MGR
   RCP --&gt;|&quot;입고 확정&quot;| KFK
   KFK --&gt;|&quot;연계&quot;| EAI</pre></div><figcaption>직접 그린 개념도. 서비스 이름은 LOGION 의 업무 경계(Bounded Context) 기준</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">전표 인식 처리 흐름 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>촬영한 전표를 Google Cloud Vision 과 PaddleOCR 이 함께 읽고, 그 결과를 양식의 구역(핵심 필드·도착지 인감 영역)에 맞춰 배치해 핵심 정보와 인감을 확인합니다. 확인이 끝나면 고객사의 입고 정책에 따라 바로 확정되거나 관리자 검토로 넘어갑니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">전표 인식 처리 흐름</h2><div class="sec__lead"><p>키오스크 카메라로 찍은 전표는 먼저 OpenCV 로 노이즈를 지우고 각도를 바로잡습니다. 그다음 Google Cloud Vision 이 전표 양식의 구역을 잡고, 그 구역의 글자를 PaddleOCR 이 읽은 뒤, 결과를 양식의 구역(핵심 필드·도착지 인감 영역)에 맞춰 배치합니다. 읽은 핵심 필드는 바코드로 불러온 입고 건 내역(품목·수량 등)과 대조하고, 도착지 인감도 확인합니다. 확인이 끝나면 고객사의 입고 정책에 따라 바로 확정되거나 관리자 검토로 넘어갑니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
-  C1[&quot;키오스크 카메라&lt;br/&gt;전표 촬영&quot;] --&gt; P1[&quot;이미지 전처리&quot;]
+  C1[&quot;키오스크 카메라&lt;br/&gt;전표 촬영&quot;] --&gt; P1[&quot;이미지 전처리&lt;br/&gt;OpenCV 노이즈 제거·각도 보정&quot;]
   P1 --&gt; G1[&quot;Google Cloud Vision&lt;br/&gt;양식 구역·맥락 검출&quot;]
   G1 --&gt; O1[&quot;PaddleOCR&lt;br/&gt;구역별 글자 판독&quot;]
   O1 --&gt; Z1[&quot;판독 결과 정리&lt;br/&gt;양식 구역 기준 배치&quot;]
@@ -123,7 +129,7 @@
   D1 --&gt;|&quot;검토&quot;| R2[&quot;관리자 검토&lt;br/&gt;전표·인감 이미지 확인&quot;]
   R2 --&gt;|&quot;승인&quot;| R1
   R2 --&gt;|&quot;반려&quot;| R3[&quot;반려&quot;]">flowchart LR
-  C1[&quot;키오스크 카메라&lt;br/&gt;전표 촬영&quot;] --&gt; P1[&quot;이미지 전처리&quot;]
+  C1[&quot;키오스크 카메라&lt;br/&gt;전표 촬영&quot;] --&gt; P1[&quot;이미지 전처리&lt;br/&gt;OpenCV 노이즈 제거·각도 보정&quot;]
   P1 --&gt; G1[&quot;Google Cloud Vision&lt;br/&gt;양식 구역·맥락 검출&quot;]
   G1 --&gt; O1[&quot;PaddleOCR&lt;br/&gt;구역별 글자 판독&quot;]
   O1 --&gt; Z1[&quot;판독 결과 정리&lt;br/&gt;양식 구역 기준 배치&quot;]
@@ -134,24 +140,24 @@
   D1 --&gt;|&quot;자동 확정&quot;| R1[&quot;입고 확정&quot;]
   D1 --&gt;|&quot;검토&quot;| R2[&quot;관리자 검토&lt;br/&gt;전표·인감 이미지 확인&quot;]
   R2 --&gt;|&quot;승인&quot;| R1
-  R2 --&gt;|&quot;반려&quot;| R3[&quot;반려&quot;]</pre></div><figcaption>인식 단계 개념도</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  R2 --&gt;|&quot;반려&quot;| R3[&quot;반려&quot;]</pre></div><figcaption>직접 그린 개념도. 인식은 Python·FastAPI 로 만든 Vision AI 연동 서버에서 처리</figcaption></figure></div>
+
 </section>
 <section class="sec sec--glow sec--flip">
-<div class="sec__head"><h2 class="sec__title">입고 검증 흐름</h2><div class="sec__lead"><p>도착지에서 하차가 시작되면 운송기사는 키오스크에서 입고를 고르고 바코드로 입고 건을 불러옵니다. 내역을 확인한 뒤 전표를 카메라 앞에 두면 판독이 진행됩니다. 판독 결과는 고객사 설정에 따라 바로 입고 확정되거나 검토 단계로 넘어가고, 기사는 키오스크 수거함에 전표를 넣으면 업무가 끝납니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">입고 검증 흐름</h2><div class="sec__lead"><p>도착지에서 하차가 시작되면 운송기사는 키오스크에서 입고를 고르고 바코드로 입고 건을 불러옵니다. 내역을 확인한 뒤 전표를 카메라 앞에 두면, 입고 서비스가 Kafka 이벤트로 판독을 요청하고 Vision AI 연동 서버가 결과를 이벤트로 돌려줍니다. 판독 결과는 고객사 설정에 따라 바로 입고 확정되거나 검토 단계로 넘어가고, 기사는 키오스크 수거함에 전표를 넣으면 업무가 끝납니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="sequenceDiagram
   participant D as 운송기사
   participant K as 키오스크
   participant R as 입고 서비스
-  participant V as 전표 인식 Vision AI·OCR
+  participant V as Vision AI 연동 서버
   participant A as 관리자 페이지
   D-&gt;&gt;K: 입고 선택 후 바코드 스캔
   K-&gt;&gt;R: 입고 건 조회
   R--&gt;&gt;K: 입고 품목 내역
   D-&gt;&gt;K: 내역 확인 후 전표를 카메라 앞에 둠
   K-&gt;&gt;R: 전표 이미지 전달
-  R-&gt;&gt;V: 인식 요청
-  V--&gt;&gt;R: 구역별 필드와 도착지 인감 판독 결과
+  R-&gt;&gt;V: 인식 요청(Kafka 이벤트)
+  V--&gt;&gt;R: 판독 결과(Kafka 이벤트) · 구역별 필드와 도착지 인감
   Note over R,V: 인식 처리 3초 내외
   alt 자동 확정 고객사
     R-&gt;&gt;R: 입고 확정
@@ -163,15 +169,15 @@
   participant D as 운송기사
   participant K as 키오스크
   participant R as 입고 서비스
-  participant V as 전표 인식 Vision AI·OCR
+  participant V as Vision AI 연동 서버
   participant A as 관리자 페이지
   D-&gt;&gt;K: 입고 선택 후 바코드 스캔
   K-&gt;&gt;R: 입고 건 조회
   R--&gt;&gt;K: 입고 품목 내역
   D-&gt;&gt;K: 내역 확인 후 전표를 카메라 앞에 둠
   K-&gt;&gt;R: 전표 이미지 전달
-  R-&gt;&gt;V: 인식 요청
-  V--&gt;&gt;R: 구역별 필드와 도착지 인감 판독 결과
+  R-&gt;&gt;V: 인식 요청(Kafka 이벤트)
+  V--&gt;&gt;R: 판독 결과(Kafka 이벤트) · 구역별 필드와 도착지 인감
   Note over R,V: 인식 처리 3초 내외
   alt 자동 확정 고객사
     R-&gt;&gt;R: 입고 확정
@@ -214,10 +220,10 @@
 
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">개념 데이터 모델 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>법인 아래에 하위 센터를 두는 고객사 구조 위에서, 출고 한 건이 도착지의 입고 한 건으로 이어집니다. 입고마다 전표 이미지와 판독 결과, 검토 이력이 붙습니다. 실제 테이블이 아니라 개념 단위로 다시 그린 모델입니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">개념 데이터 모델</h2><div class="sec__lead"><p>법인 아래에 하위 센터를 두는 고객사 구조 위에서, 출고 한 건이 도착지의 입고 한 건으로 이어집니다. 입고마다 전표 이미지와 판독 결과, 검토 이력이 붙습니다. 실제 테이블이 아니라 개념 단위로 다시 그린 모델입니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="erDiagram
-  TENANT ||--o{ CENTER : &quot;보유&quot;
-  TENANT ||--o{ RECEIPT_POLICY : &quot;입고 정책&quot;
+  CORPORATION ||--o{ CENTER : &quot;보유&quot;
+  CORPORATION ||--o{ RECEIPT_POLICY : &quot;입고 정책&quot;
   CENTER ||--o{ KIOSK : &quot;설치&quot;
   CENTER ||--o{ DELIVERY : &quot;도착지&quot;
   CENTER ||--o{ RECEIPT : &quot;입고 센터&quot;
@@ -227,13 +233,13 @@
   KIOSK ||--o{ SLIP_IMAGE : &quot;촬영 기기&quot;
   SLIP_IMAGE ||--o| RECOGNITION : &quot;판독 결과&quot;
   RECEIPT ||--o{ REVIEW : &quot;검토 이력&quot;
-  TENANT {
-    string tenant_id PK
+  CORPORATION {
+    string corp_id PK
     string name
   }
   CENTER {
     string center_id PK
-    string tenant_id FK
+    string corp_id FK
     string name
   }
   KIOSK {
@@ -242,7 +248,7 @@
   }
   RECEIPT_POLICY {
     string policy_id PK
-    string tenant_id FK
+    string corp_id FK
     string confirm_mode
   }
   DELIVERY {
@@ -281,8 +287,8 @@
     string decision
     datetime reviewed_at
   }">erDiagram
-  TENANT ||--o{ CENTER : &quot;보유&quot;
-  TENANT ||--o{ RECEIPT_POLICY : &quot;입고 정책&quot;
+  CORPORATION ||--o{ CENTER : &quot;보유&quot;
+  CORPORATION ||--o{ RECEIPT_POLICY : &quot;입고 정책&quot;
   CENTER ||--o{ KIOSK : &quot;설치&quot;
   CENTER ||--o{ DELIVERY : &quot;도착지&quot;
   CENTER ||--o{ RECEIPT : &quot;입고 센터&quot;
@@ -292,13 +298,13 @@
   KIOSK ||--o{ SLIP_IMAGE : &quot;촬영 기기&quot;
   SLIP_IMAGE ||--o| RECOGNITION : &quot;판독 결과&quot;
   RECEIPT ||--o{ REVIEW : &quot;검토 이력&quot;
-  TENANT {
-    string tenant_id PK
+  CORPORATION {
+    string corp_id PK
     string name
   }
   CENTER {
     string center_id PK
-    string tenant_id FK
+    string corp_id FK
     string name
   }
   KIOSK {
@@ -307,7 +313,7 @@
   }
   RECEIPT_POLICY {
     string policy_id PK
-    string tenant_id FK
+    string corp_id FK
     string confirm_mode
   }
   DELIVERY {
@@ -346,11 +352,11 @@
     string decision
     datetime reviewed_at
   }</pre></div><figcaption>개념 ERD(실제 스키마 아님)</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+
 </section>
 <section class="sec sec--glow">
 <div class="sec__head"><h2 class="sec__title">왜 이렇게 설계했나</h2></div>
-<div class="sec__body"><div class="tiles"><div class="tile"><h3>엔진 하나 대신 역할을 나눈 두 엔진</h3><p>오픈소스 OCR, 전처리 강화, 딥러닝 OCR, 상용 API 단독 사용을 차례로 시험했습니다. 방식마다 막히는 곳이 구겨짐, 복잡한 배경, 비용 대비 효율로 서로 달랐습니다. 그래서 Google Cloud Vision 은 이미지 맥락으로 전표 양식의 구역을 잡는 데, PaddleOCR 은 그 구역의 글자를 읽는 데 써서 서로의 약점을 메웠습니다.</p></div><div class="tile"><h3>글자 위치가 아니라 구역 기준으로 추출</h3><p>이동전표는 LOGION 이 출력하는 정해진 양식입니다. 하지만 카메라 앞에 놓이는 위치와 훼손 상태는 매번 달랐습니다. 그래서 고정된 글자 위치를 읽지 않고, 양식의 구역(핵심 필드·도착지 인감 영역)을 기준으로 정보를 찾게 했습니다. 찢기거나 비뚤어진 전표에서도 핵심 정보를 읽기 위해서입니다.</p></div><div class="tile"><h3>자동 확정과 검토는 고객사가 선택</h3><p>입고 확정 규칙이 고객사마다 달랐습니다. 인식 결과를 바로 확정할지 검토 단계로 넘길지는 고객사 설정으로 나눴습니다. 검토 건은 관리자 페이지에서 업로드된 전표와 추출된 인감 이미지를 보고 확정하거나 반려합니다.</p></div><div class="tile"><h3>입고 검증은 독립된 경계(Receipt)로</h3><p>키오스크는 24시간 무인으로 돌아야 했고, 한 업무에 문제가 생겨도 같은 기기의 다른 업무는 계속되어야 했습니다. 그래서 입고 품목 연계, 전표 촬영 검증, 상태 변경을 Receipt 경계에 모으고 출고·관리 서비스와 분리했습니다. 이동전표 같은 출력물의 구성 항목이 바뀌어도 따로 배포할 수 있게 하려는 목적도 있었습니다.</p></div><div class="tile"><h3>출고 완료 알림은 Kafka 이벤트로</h3><p>출고 한 건의 결과는 기간계·고객사 연계, 도착지 키오스크의 입고 검증 데이터, 집계, 관리자 알림으로 함께 퍼져야 했고, 장애가 나면 다시 처리할 수 있어야 했습니다. 메시지를 일정 기간 보관하고 오프셋을 되돌려 재처리할 수 있으며, 여러 소비자가 같은 이벤트를 받을 수 있는 Kafka 를 골랐습니다.</p></div><div class="tile"><h3>키오스크 작업 상태는 Redis 에</h3><p>도착지·차량 정보, 인식된 바코드, 전표 촬영 데이터는 한 번의 입고 작업 동안만 필요한 가벼운 상태입니다. 이런 상태는 Redis 에 두었습니다.</p></div></div></div>
+<div class="sec__body"><div class="tiles"><div class="tile"><h3>엔진 하나 대신 역할을 나눈 두 엔진</h3><p>오픈소스 OCR, 전처리 강화, 딥러닝 OCR, 상용 API 단독 사용을 차례로 시험했습니다. 방식마다 막히는 곳이 구겨짐, 복잡한 배경, 비용 대비 효율로 서로 달랐습니다. 그래서 Google Cloud Vision 은 이미지 맥락으로 전표 양식의 구역을 잡는 데, PaddleOCR 은 그 구역의 글자를 읽는 데 써서 서로의 약점을 메웠습니다. OpenCV 노이즈 제거·각도 보정은 단독으로는 구겨짐을 풀지 못했지만, 최종 구성에서도 엔진 앞 전처리로 남겼습니다.</p></div><div class="tile"><h3>글자 위치가 아니라 구역 기준으로 추출</h3><p>이동전표는 LOGION 이 출력하는 정해진 양식입니다. 하지만 카메라 앞에 놓이는 위치와 훼손 상태는 매번 달랐습니다. 그래서 고정된 글자 위치를 읽지 않고, 양식의 구역(핵심 필드·도착지 인감 영역)을 기준으로 정보를 찾게 했습니다. 찢기거나 비뚤어진 전표에서도 핵심 정보를 읽기 위해서입니다.</p></div><div class="tile"><h3>자동 확정과 검토는 고객사가 선택</h3><p>입고 확정 규칙이 고객사마다 달랐습니다. 인식 결과를 바로 확정할지 검토 단계로 넘길지는 고객사 설정으로 나눴습니다. 검토 건은 관리자 페이지에서 업로드된 전표와 추출된 인감 이미지를 보고 확정하거나 반려합니다.</p></div><div class="tile"><h3>입고 검증은 독립된 경계(Receipt)로</h3><p>키오스크는 24시간 무인으로 돌아야 했고, 한 업무에 문제가 생겨도 같은 기기의 다른 업무는 계속되어야 했습니다. 그래서 입고 품목 연계, 전표 촬영 검증, 상태 변경을 Receipt 경계에 모으고 출고·관리 서비스와 분리했습니다. 이동전표 같은 출력물의 구성 항목이 바뀌어도 따로 배포할 수 있게 하려는 목적도 있었습니다.</p></div><div class="tile"><h3>출고 완료 알림은 Kafka 이벤트로</h3><p>출고 한 건의 결과는 기간계·고객사 연계, 도착지 키오스크의 입고 검증 데이터, 집계, 관리자 알림으로 함께 퍼져야 했고, 장애가 나면 다시 처리할 수 있어야 했습니다. 메시지를 일정 기간 보관하고 오프셋을 되돌려 재처리할 수 있으며, 여러 소비자가 같은 이벤트를 받을 수 있는 Kafka 를 골랐습니다.</p></div><div class="tile"><h3>키오스크 작업 상태는 Redis 에</h3><p>도착지·차량 정보, 인식된 바코드, 전표 촬영 데이터는 한 번의 입고 작업 동안만 필요한 가벼운 상태입니다. 이런 상태는 Redis 에 두었습니다.</p></div></div></div>
 
 </section>
 <section class="sec">
@@ -370,9 +376,9 @@
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">기술 스택</h2></div>
-<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>기술</th><th>쓴 곳</th><th>고른 이유·비고</th></tr></thead><tbody><tr><td>Google Cloud Vision API</td><td>전표 이미지 판독(커스터마이징)</td><td>이미지 맥락을 읽어 추출. 단독으로는 비용 대비 효율이 부족해 PaddleOCR 과 조합</td></tr><tr><td>PaddleOCR</td><td>전표 글자 판독</td><td>딥러닝 OCR. 단독으로는 복잡한 배경에서 인식이 낮아 Google Cloud Vision 과 조합</td></tr><tr><td>Tesseract OCR</td><td>가설 검증 1단계</td><td>기본 텍스트 추출 시험에서 정확도 40%에 그쳐 기각(원본 포트폴리오 기준)</td></tr><tr><td>OpenCV</td><td>가설 검증 2단계</td><td>노이즈 제거·각도 보정을 더해도 구겨짐을 해결하지 못해 단독 방식 기각</td></tr><tr><td>Python 3.9 · FastAPI</td><td>전표 인식 처리</td><td>인식 라이브러리(PaddleOCR)가 Python 기반</td></tr><tr><td>Java 22 · Spring Boot 3.4 · Spring Security 6 · JWT</td><td>입고·출고·관리 업무 서비스와 인증</td><td>LOGION 의 다섯 업무 경계별 서비스</td></tr><tr><td>Kafka Streams</td><td>출고 완료 → 도착지 입고 검증 데이터</td><td>여러 시스템이 같은 이벤트를 받아 쓰고, 장애 때 오프셋을 되돌려 재처리. LOGION 전체 일 평균 10만 건</td></tr><tr><td>Redis</td><td>키오스크 작업 상태</td><td>도착지·차량·바코드·촬영 데이터처럼 가벼운 작업 상태</td></tr><tr><td>EAI</td><td>기간계·고객사 시스템 연계</td><td>솔루션별 백엔드·DB 인터페이스를 하나로 통합</td></tr><tr><td>WhaTap APM</td><td>성능 측정</td><td>LOGION 비즈니스 API 응답 1~1.5초 이내(광고 영상 API 제외)</td></tr></tbody></table></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>기술</th><th>쓴 곳</th><th>고른 이유·비고</th></tr></thead><tbody><tr><td>Google Cloud Vision API</td><td>전표 양식 구역 검출(커스터마이징)</td><td>이미지 맥락으로 양식의 구역을 잡음. 단독으로는 비용 대비 효율이 부족해 PaddleOCR 과 조합</td></tr><tr><td>PaddleOCR</td><td>구역별 글자 판독</td><td>딥러닝 OCR. 단독으로는 복잡한 배경에서 인식이 낮아 Google Cloud Vision 과 조합</td></tr><tr><td>Tesseract OCR</td><td>가설 검증 1단계</td><td>기본 텍스트 추출 시험에서 정확도 40%에 그쳐 기각(원본 포트폴리오 기준)</td></tr><tr><td>OpenCV</td><td>가설 검증 2단계 · 최종 구성의 전처리</td><td>노이즈 제거·각도 보정. 단독으로는 구겨짐을 해결하지 못해 기각, 최종 구성에서는 엔진 앞 전처리로 사용</td></tr><tr><td>Python 3.9 · FastAPI</td><td>Vision AI 연동 서버(전표 인식 처리)</td><td>인식 라이브러리(PaddleOCR)가 Python 기반</td></tr><tr><td>Java 22 · Spring Boot 3.4 · Spring Security 6 · JWT</td><td>입고·출고·관리 업무 서비스와 인증</td><td>LOGION 의 다섯 업무 경계별 서비스</td></tr><tr><td>Kafka · Kafka Streams</td><td>출고 완료 → 도착지 입고 검증 데이터, 전표 인식 요청·판독 결과, 입고 확정 → EAI 연계</td><td>여러 시스템이 같은 이벤트를 받아 쓰고, 장애 때 오프셋을 되돌려 재처리. LOGION 전체 Kafka Streams 일 평균 10만 건</td></tr><tr><td>Redis</td><td>키오스크 작업 상태</td><td>도착지·차량·바코드·촬영 데이터처럼 가벼운 작업 상태</td></tr><tr><td>EAI</td><td>입고·출고 결과를 고객사 ERP·내부 기간계 ERP 로 연계</td><td>솔루션별 백엔드·DB 인터페이스를 하나로 통합</td></tr><tr><td>WhaTap APM</td><td>성능 측정</td><td>LOGION 비즈니스 API 응답 1~1.5초 이내(광고 영상 API 제외)</td></tr></tbody></table></div></div>
 
-</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>인식</h3><div class="card__tags"><span class="tag">Google Cloud Vision API(커스터마이징)</span><span class="tag">PaddleOCR</span></div></div><div class="stack__group"><h3>가설 검증 단계에서 시험</h3><div class="card__tags"><span class="tag">Tesseract OCR</span><span class="tag">OpenCV</span></div></div><div class="stack__group"><h3>서비스</h3><div class="card__tags"><span class="tag">Python 3.9</span><span class="tag">FastAPI</span><span class="tag">Java 22</span><span class="tag">Spring Boot 3.4</span><span class="tag">Spring Security 6</span><span class="tag">JWT</span></div></div><div class="stack__group"><h3>연계·데이터</h3><div class="card__tags"><span class="tag">Kafka Streams</span><span class="tag">Redis</span><span class="tag">EAI</span><span class="tag">JPA</span><span class="tag">MyBatis</span><span class="tag">Amazon Aurora(AI 관련 DB)</span></div></div><div class="stack__group"><h3>운영</h3><div class="card__tags"><span class="tag">OCI Cloud</span><span class="tag">Jenkins</span><span class="tag">Docker</span><span class="tag">WhaTap APM</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">훼손된 이동전표 인식 실패 → 5단계 가설 검증 끝에 하이브리드 채택 · 대면 입고 확인 병목 → 키오스크 무인 검증 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
+</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>인식</h3><div class="card__tags"><span class="tag">Google Cloud Vision API(커스터마이징)</span><span class="tag">PaddleOCR</span><span class="tag">OpenCV</span></div></div><div class="stack__group"><h3>가설 검증 단계에서 시험</h3><div class="card__tags"><span class="tag">Tesseract OCR</span></div></div><div class="stack__group"><h3>서비스</h3><div class="card__tags"><span class="tag">Python 3.9</span><span class="tag">FastAPI</span><span class="tag">Java 22</span><span class="tag">Spring Boot 3.4</span><span class="tag">Spring Security 6</span><span class="tag">JWT</span></div></div><div class="stack__group"><h3>연계·데이터</h3><div class="card__tags"><span class="tag">Kafka</span><span class="tag">Kafka Streams</span><span class="tag">Redis</span><span class="tag">EAI</span><span class="tag">JPA</span><span class="tag">MyBatis</span><span class="tag">Amazon Aurora(AI 관련 DB)</span></div></div><div class="stack__group"><h3>운영</h3><div class="card__tags"><span class="tag">OCI Cloud</span><span class="tag">Jenkins</span><span class="tag">Docker</span><span class="tag">WhaTap APM</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">훼손된 이동전표 인식 실패 → 5단계 가설 검증 끝에 하이브리드 채택 · 대면 입고 확인 병목 → 키오스크 무인 검증 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
 <div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 3개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 훼손된 이동전표 인식 실패 → 5단계 가설 검증 끝에 하이브리드 채택</span></a><a class="ctl" href="#case-2"><span>02 대면 입고 확인 병목 → 키오스크 무인 검증</span></a><a class="ctl" href="#case-3"><span>03 고객사마다 다른 입고 확정 규칙 → 자동 확정·검토 분기</span></a></div></section><article class="case sec--glow" id="case-1">
 <div class="case__head"><span class="case__no">CASE 01 · AI통합</span><h3 class="case__title">훼손된 이동전표 인식 실패 → 5단계 가설 검증 끝에 하이브리드 채택</h3></div>
 <div class="steps">
@@ -452,14 +458,14 @@
   V1 --&gt; V2[&quot;전표·인감 이미지 확인&quot;]
   V2 --&gt;|&quot;승인&quot;| C1
   V2 --&gt;|&quot;반려&quot;| J1[&quot;반려 처리&quot;]
-  C1 --&gt; I1[&quot;기간계·고객사 시스템 연계&quot;]">flowchart TD
+  C1 --&gt; I1[&quot;Kafka 이벤트 · EAI&lt;br/&gt;고객사 ERP · 내부 기간계 ERP 연계&quot;]">flowchart TD
   R1[&quot;전표 인식 결과&quot;] --&gt; P1{&quot;고객사 입고 정책&quot;}
   P1 --&gt;|&quot;자동 확정&quot;| C1[&quot;입고 확정&quot;]
   P1 --&gt;|&quot;검토&quot;| V1[&quot;관리자 페이지 알림&quot;]
   V1 --&gt; V2[&quot;전표·인감 이미지 확인&quot;]
   V2 --&gt;|&quot;승인&quot;| C1
   V2 --&gt;|&quot;반려&quot;| J1[&quot;반려 처리&quot;]
-  C1 --&gt; I1[&quot;기간계·고객사 시스템 연계&quot;]</pre></div></figure><div class="lesson"><b>배운 점</b><p>자동화 범위는 고객사가 고르게 하고, 사람이 확인하는 경로는 남겨 두었습니다. 그렇게 해서 고객사마다 다른 검수 기준을 하나의 흐름에 담을 수 있었습니다.</p></div>
+  C1 --&gt; I1[&quot;Kafka 이벤트 · EAI&lt;br/&gt;고객사 ERP · 내부 기간계 ERP 연계&quot;]</pre></div></figure><div class="lesson"><b>배운 점</b><p>자동화 범위는 고객사가 고르게 하고, 사람이 확인하는 경로는 남겨 두었습니다. 그렇게 해서 고객사마다 다른 검수 기준을 하나의 흐름에 담을 수 있었습니다.</p></div>
 
 </article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>어느 도구가 더 나은지 따지기보다, 실패 유형마다 가설을 하나씩 세우고 버리는 편이 빨랐습니다. 최종 판단은 데이터 검증과 현장 테스트로 내렸습니다.</p><p>현장 업무 순서를 먼저 그리고, 인식 기능은 그 순서 안에 넣었을 때 현장에서 실제로 쓰였습니다. 인식 정확도만큼 사람이 어느 단계에서 확인하는지가 중요했습니다.</p><p>자동화 범위는 고객사가 고르게 하고, 사람이 확인하는 경로는 남겨 두었습니다. 그렇게 해서 고객사마다 다른 검수 기준을 하나의 흐름에 담을 수 있었습니다.</p></section></div>
 <nav class="pager" aria-label="다른 프로젝트"><a href="logion-platform.html"><small>← 이전 프로젝트</small><b>LOGION 무인 수불 자동화 솔루션</b></a><a class="next" href="elk-chatbot-stt.html"><small>다음 프로젝트 →</small><b>그룹웨어 ChatBot · ELK 검색 · Whisper STT 지능형 ARS</b></a></nav>

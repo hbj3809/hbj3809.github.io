@@ -113,11 +113,11 @@
   ADP --&gt; SD
   ADP --&gt; FI
   PRED -.-&gt; APP
-  OPS -.-&gt; APP</pre></div><figcaption>직접 그린 개념도입니다. 실제 서버 구성과 이름은 다릅니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>진입: 전사 SSO(OAuth 2.0), Access/Refresh Token 기반 무상태 인증</li><li>현지화: 국가별 시간대·통화·언어셋을 맞추는 공통 어댑터</li><li>도메인: 영업·고객·주문·정산 4개 경계</li><li>연동: 견적·주문·정산에서 나가는 SAP MM·PP·SD·FI 호출을 공통 연동 모듈 한 곳으로</li><li>저장: Oracle, 4개국 법인 데이터 논리·물리 격리</li><li>예측: 별도 프로젝트의 축우 등급·D등급 고객 예측 결과를 화면에 연결</li><li>운영: Jenkins·Docker 배포, Jennifer APM 응답 감시</li></ul></div></div>
+  OPS -.-&gt; APP</pre></div><figcaption>직접 그린 개념도입니다. 실제 서버 구성과 이름은 다릅니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>진입: 전사 SSO(OAuth 2.0), Access/Refresh Token 기반 무상태 인증</li><li>현지화: 국가별 시간대·통화·언어셋을 맞추는 공통 어댑터</li><li>도메인: 영업·고객·주문·정산 4개 경계</li><li>연동: 견적·주문·정산에서 나가는 SAP MM·PP·SD·FI 호출을 공통 연동 모듈 한 곳으로</li><li>저장: Oracle, 4개국 법인 데이터는 법인별 DB·스키마로 나눠 격리</li><li>예측: 별도 프로젝트의 축우 등급·D등급 고객 예측 결과를 화면에 연결</li><li>운영: Jenkins·Docker 배포, Jennifer APM 응답 감시</li></ul></div></div>
 
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">도메인 모델<span class="dim">개념 ERD</span> <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>영업 과정을 상담에서 정산까지 이어지는 하나의 데이터 흐름으로 보고, 경계마다 핵심 개념을 둘씩 두었습니다. 영업(Deal·Activity), 고객(Partner·Contact), 주문(SalesOrder·Delivery), 정산(Invoice·Credit)입니다. 4개국 확장의 기준점으로 국가 법인과 영업사원을 더했습니다.</p><p>아래 그림은 이해를 돕는 <strong class="hl">개념 모델</strong>이며 실제 테이블 구조와 같지 않습니다. 관계와 속성은 업무 흐름을 바탕으로 다시 구성했습니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">도메인 모델<span class="dim">개념 ERD</span></h2><div class="sec__lead"><p>영업 과정을 상담에서 정산까지 이어지는 하나의 데이터 흐름으로 보고, 경계마다 핵심 개념을 둘씩 두었습니다. 영업(Deal·Activity), 고객(Partner·Contact), 주문(SalesOrder·Delivery), 정산(Invoice·Credit)입니다. 4개국 확장의 기준점으로 국가 법인과 영업사원을 더했습니다.</p><p>아래 그림은 이해를 돕는 <strong class="hl">개념 모델</strong>이며 실제 테이블 구조와 같지 않습니다. 관계와 속성은 업무 흐름을 바탕으로 다시 구성했습니다. 법인 데이터는 법인별 DB·스키마로 나뉘어 있어 실제로는 법인마다 이 구조가 따로 있습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="erDiagram
   CORP_TENANT ||--o{ SALES_REP : &quot;소속&quot;
   CORP_TENANT ||--o{ PARTNER : &quot;관리&quot;
@@ -138,12 +138,10 @@
   }
   SALES_REP {
     string rep_id PK
-    string corp_code FK
     string business_unit
   }
   PARTNER {
     string partner_id PK
-    string corp_code FK
     string partner_name
     string customer_grade
   }
@@ -204,12 +202,10 @@
   }
   SALES_REP {
     string rep_id PK
-    string corp_code FK
     string business_unit
   }
   PARTNER {
     string partner_id PK
-    string corp_code FK
     string partner_name
     string customer_grade
   }
@@ -250,8 +246,8 @@
     string partner_id PK
     decimal credit_limit
     decimal receivable
-  }</pre></div><figcaption>4개 경계의 8개 개념에 법인과 영업사원을 더한 개념 ERD입니다(관계·속성은 초안).</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>영업: 상담·기회(Deal)와 활동(Activity) — 영업사원의 활동 기록</li><li>고객: 거래처(Partner)와 담당자(Contact)</li><li>주문: 주문서(SalesOrder)와 배송(Delivery) — SAP 판매 주문과 연결</li><li>정산: 청구서(Invoice)와 여신(Credit) — 여신 한도·미수금</li></ul></div></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  }</pre></div><figcaption>직접 그린 개념도입니다. 실제 테이블 구조와 다릅니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>영업: 상담·기회(Deal)와 활동(Activity) — 영업사원의 활동 기록</li><li>고객: 거래처(Partner)와 담당자(Contact)</li><li>주문: 주문서(SalesOrder)와 배송(Delivery) — SAP 판매 주문과 연결</li><li>정산: 청구서(Invoice)와 여신(Credit) — 여신 한도·미수금</li></ul></div></div>
+
 </section>
 <section class="sec sec--glow sec--flip">
 <div class="sec__head"><h2 class="sec__title">SAP ERP 연동 구조</h2><div class="sec__lead"><p>SFA/CRM 은 영업 화면입니다. 하지만 품목·재고·생산·출하·여신 같은 실제 업무 데이터는 SAP ERP 에 있습니다. 그래서 SAP 의 네 모듈과 주고받는 인터페이스를 공통 연동 모듈 한 곳에 모았고, 어떤 데이터든 같은 형식으로 주고받도록 표준화했습니다.</p><p>2023년 말 그룹 ERP 통합 프로젝트에서 이 플랫폼이 기준 모델로 검토된 이유가 이 인터페이스의 완성도였습니다.</p></div></div>
@@ -305,16 +301,18 @@
 
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">핵심 흐름<span class="dim">주문에서 여신 확인, 출하까지</span> <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>주문 한 건이 SAP 의 여러 모듈을 거치는 순서입니다. 먼저 재고 가용성(MM)과 거래처 여신 한도(FI)를 확인합니다. 둘 다 통과하면 판매 주문(SD)을 만들고, 재고가 모자라면 생산 지시(PP)로 넘어갑니다. 출하 뒤 배송 상태는 SD 에서 다시 받아 영업사원과 고객 화면에 보여 줍니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">핵심 흐름<span class="dim">주문에서 여신 확인, 출하까지</span></h2><div class="sec__lead"><p>주문 한 건이 SAP 의 여러 모듈을 거치는 순서입니다. 주문은 먼저 SFA 에 가주문으로 접수되고, 이때 재고 가용성(MM)과 거래처 여신 한도(FI)를 확인합니다. 여신 한도 안이면 실주문을 SAP 로 넘겨 판매 주문(SD)을 만들고, 재고가 모자라면 생산 지시(PP)로 넘어갑니다. 출하 뒤 배송 상태는 SD 에서 다시 받아 영업사원과 고객 화면에 보여 줍니다.</p><p>여신 한도를 넘은 가주문은 별도 상태로 실패 처리하고 담당자에게 알립니다. 현업이 승인하거나 여신을 처리하면 그때 실주문이 SAP 로 넘어갑니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="sequenceDiagram
   participant R as 영업사원·고객
   participant O as 주문 도메인
+  participant H as 담당자·현업
   participant A as 공통 연동 모듈
   participant MM as SAP MM
   participant FI as SAP FI
   participant SD as SAP SD
   participant PP as SAP PP
   R-&gt;&gt;O: 주문 입력
+  Note over O: SFA 에 가주문으로 접수
   O-&gt;&gt;A: 가용 재고 조회
   A-&gt;&gt;MM: 품목·가용성 체크
   MM--&gt;&gt;A: 가용 수량
@@ -323,27 +321,30 @@
   A-&gt;&gt;FI: 거래처 여신 한도 조회
   FI--&gt;&gt;A: 잔여 한도
   A--&gt;&gt;O: 여신 결과
-  alt 한도 초과
-    O--&gt;&gt;R: 주문 보류 안내
-  else 한도 이내
-    O-&gt;&gt;A: 주문 생성
-    A-&gt;&gt;SD: 판매 주문 생성
-    SD--&gt;&gt;A: ERP 주문 번호
-    opt 재고 부족
-      A-&gt;&gt;PP: 주문 연동 생산 지시
-    end
-    A-&gt;&gt;SD: 출하 지시 (재고 확보 후)
-    A--&gt;&gt;O: 주문 확정
-    O--&gt;&gt;R: 주문 확정과 배송 상태 조회
-  end">sequenceDiagram
+  opt 여신 한도 초과
+    Note over O: 별도 상태로 실패 처리
+    O--&gt;&gt;H: 여신 초과 알림
+    H-&gt;&gt;O: 승인 또는 여신 처리
+  end
+  O-&gt;&gt;A: 실주문 전달 (한도 안이거나 승인·여신 처리 뒤)
+  A-&gt;&gt;SD: 판매 주문 생성
+  SD--&gt;&gt;A: ERP 주문 번호
+  opt 재고 부족
+    A-&gt;&gt;PP: 주문 연동 생산 지시
+  end
+  A-&gt;&gt;SD: 출하 지시 (재고 확보 후)
+  A--&gt;&gt;O: 주문 확정
+  O--&gt;&gt;R: 주문 확정과 배송 상태 조회">sequenceDiagram
   participant R as 영업사원·고객
   participant O as 주문 도메인
+  participant H as 담당자·현업
   participant A as 공통 연동 모듈
   participant MM as SAP MM
   participant FI as SAP FI
   participant SD as SAP SD
   participant PP as SAP PP
   R-&gt;&gt;O: 주문 입력
+  Note over O: SFA 에 가주문으로 접수
   O-&gt;&gt;A: 가용 재고 조회
   A-&gt;&gt;MM: 품목·가용성 체크
   MM--&gt;&gt;A: 가용 수량
@@ -352,32 +353,35 @@
   A-&gt;&gt;FI: 거래처 여신 한도 조회
   FI--&gt;&gt;A: 잔여 한도
   A--&gt;&gt;O: 여신 결과
-  alt 한도 초과
-    O--&gt;&gt;R: 주문 보류 안내
-  else 한도 이내
-    O-&gt;&gt;A: 주문 생성
-    A-&gt;&gt;SD: 판매 주문 생성
-    SD--&gt;&gt;A: ERP 주문 번호
-    opt 재고 부족
-      A-&gt;&gt;PP: 주문 연동 생산 지시
-    end
-    A-&gt;&gt;SD: 출하 지시 (재고 확보 후)
-    A--&gt;&gt;O: 주문 확정
-    O--&gt;&gt;R: 주문 확정과 배송 상태 조회
-  end</pre></div><figcaption>모듈별 연동 범위를 바탕으로 다시 구성한 처리 순서입니다(초안).</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  opt 여신 한도 초과
+    Note over O: 별도 상태로 실패 처리
+    O--&gt;&gt;H: 여신 초과 알림
+    H-&gt;&gt;O: 승인 또는 여신 처리
+  end
+  O-&gt;&gt;A: 실주문 전달 (한도 안이거나 승인·여신 처리 뒤)
+  A-&gt;&gt;SD: 판매 주문 생성
+  SD--&gt;&gt;A: ERP 주문 번호
+  opt 재고 부족
+    A-&gt;&gt;PP: 주문 연동 생산 지시
+  end
+  A-&gt;&gt;SD: 출하 지시 (재고 확보 후)
+  A--&gt;&gt;O: 주문 확정
+  O--&gt;&gt;R: 주문 확정과 배송 상태 조회</pre></div><figcaption>직접 그린 개념도입니다. 실제 처리 순서를 단순화했습니다.</figcaption></figure></div>
+
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">4개국 글로벌 멀티테넌시·현지화 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>국내와 4개국 법인이 같은 플랫폼을 씁니다. 그래서 법인 데이터는 법인별 DB·스키마로 나눠 물리적으로 격리하고, 국가마다 다른 시간대·통화·언어셋은 공통 어댑터에서 맞췄습니다. 국가별 차이를 기능 코드 곳곳에 분기로 흩어 두지 않고 어댑터 한 곳에 모은 이유가 있습니다. 법인이 늘 때마다 모든 기능을 고치지 않으려는 것이었습니다.</p><p>언어는 서버 문구를 Spring Message 로 관리하고, 화면에서 나중에 그려지는 요소는 MutationObserver 로 처리했습니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">4개국 글로벌 멀티테넌시·현지화</h2><div class="sec__lead"><p>국내와 4개국 법인이 같은 플랫폼을 씁니다. 그래서 법인 데이터는 법인별 DB·스키마로 나눠 격리하고, 국가마다 다른 시간대·통화·언어셋은 공통 어댑터에서 맞췄습니다. 요청이 어느 법인 것인지는 법인별 접속 주소·서버, 로그인 토큰의 법인 정보, 로그인한 사용자의 소속 법인 조회를 모두 써서 정했습니다.</p><p>국가별 차이를 기능 코드 곳곳에 분기로 흩어 두지 않고 어댑터 한 곳에 모은 이유가 있습니다. 법인이 늘 때마다 모든 기능을 고치지 않으려는 것이었습니다. 법인마다 다른 업무 규칙도 법인별 설정값과 공통 코드 표로 두고 같은 코드가 읽게 했습니다.</p><p>언어는 서버 문구를 Spring Message 로 관리하고, 화면에서 나중에 그려지는 요소는 MutationObserver 로 감지해 번역 문구를 넣었습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
+  ENT[&quot;법인별 접속 주소·서버&quot;]
   LGN[&quot;전사 SSO 로그인&lt;br/&gt;Access·Refresh Token&quot;]
-  CTX[&quot;요청의 법인 정보&lt;br/&gt;국가·법인 코드&quot;]
+  CTX[&quot;요청의 법인 확인&lt;br/&gt;토큰의 법인 정보 · 소속 법인 조회&quot;]
   ADPT[&quot;현지화 공통 어댑터&quot;]
   subgraph CONV[&quot;어댑터가 맞추는 것&quot;]
     TZ[&quot;시간대&lt;br/&gt;법인별 Timezone&quot;]
     CUR[&quot;통화&lt;br/&gt;법인별 통화&quot;]
     LANG[&quot;언어&lt;br/&gt;Spring Message · 화면 문구&quot;]
   end
+  RULE[&quot;업무 규칙&lt;br/&gt;법인별 설정값 · 공통 코드&quot;]
   DOM[&quot;공통 도메인 로직&lt;br/&gt;영업·고객·주문·정산&quot;]
   subgraph ISO[&quot;법인별 DB·스키마 분리&quot;]
     KR[&quot;국내&quot;]
@@ -386,21 +390,26 @@
     IND[&quot;인도&quot;]
     MMR[&quot;미얀마&quot;]
   end
+  ENT --&gt; LGN
   LGN --&gt; CTX
   CTX --&gt; ADPT
+  CTX --&gt; RULE
   ADPT --&gt; TZ
   ADPT --&gt; CUR
   ADPT --&gt; LANG
   CONV --&gt; DOM
+  RULE --&gt; DOM
   DOM --&gt; ISO">flowchart TB
+  ENT[&quot;법인별 접속 주소·서버&quot;]
   LGN[&quot;전사 SSO 로그인&lt;br/&gt;Access·Refresh Token&quot;]
-  CTX[&quot;요청의 법인 정보&lt;br/&gt;국가·법인 코드&quot;]
+  CTX[&quot;요청의 법인 확인&lt;br/&gt;토큰의 법인 정보 · 소속 법인 조회&quot;]
   ADPT[&quot;현지화 공통 어댑터&quot;]
   subgraph CONV[&quot;어댑터가 맞추는 것&quot;]
     TZ[&quot;시간대&lt;br/&gt;법인별 Timezone&quot;]
     CUR[&quot;통화&lt;br/&gt;법인별 통화&quot;]
     LANG[&quot;언어&lt;br/&gt;Spring Message · 화면 문구&quot;]
   end
+  RULE[&quot;업무 규칙&lt;br/&gt;법인별 설정값 · 공통 코드&quot;]
   DOM[&quot;공통 도메인 로직&lt;br/&gt;영업·고객·주문·정산&quot;]
   subgraph ISO[&quot;법인별 DB·스키마 분리&quot;]
     KR[&quot;국내&quot;]
@@ -409,14 +418,17 @@
     IND[&quot;인도&quot;]
     MMR[&quot;미얀마&quot;]
   end
+  ENT --&gt; LGN
   LGN --&gt; CTX
   CTX --&gt; ADPT
+  CTX --&gt; RULE
   ADPT --&gt; TZ
   ADPT --&gt; CUR
   ADPT --&gt; LANG
   CONV --&gt; DOM
-  DOM --&gt; ISO</pre></div><figcaption>요청에서 법인 정보를 얻는 방식과 시간대·통화 처리 세부는 초안입니다. 법인별 DB·스키마 분리는 확인된 내용입니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>격리: 법인별 DB·스키마 분리</li><li>시간대: 법인별 Timezone</li><li>통화: 법인별 통화</li><li>언어: Spring Message·MutationObserver 기반 다국어</li></ul></div></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  RULE --&gt; DOM
+  DOM --&gt; ISO</pre></div><figcaption>직접 그린 개념도입니다. 법인별 DB·스키마 분리와 요청의 법인을 정하는 방식(접속 주소·서버, 로그인 토큰, 소속 법인 조회)은 확인된 내용입니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>격리: 법인별 DB·스키마 분리</li><li>법인 확인: 법인별 접속 주소·서버, 로그인 토큰의 법인 정보, 사용자 소속 법인 조회</li><li>시간대: 법인별 Timezone</li><li>통화: 법인별 통화</li><li>업무 규칙: 법인별 설정값·공통 코드</li><li>언어: Spring Message·MutationObserver 기반 다국어</li></ul></div></div>
+
 </section>
 <section class="sec sec--glow">
 <div class="sec__head"><h2 class="sec__title">설계 결정<span class="dim">왜 이렇게 만들었나</span></h2></div>
@@ -435,7 +447,7 @@
 </section>
 <section class="sec sec--glow sec--flip">
 <div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">어디에 썼나</span></h2></div>
-<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>영역</th><th>기술</th><th>쓴 곳</th></tr></thead><tbody><tr><td>백엔드</td><td>Java, Spring Boot</td><td>영업·고객·주문·정산 도메인 서비스, 공통 연동 모듈</td></tr><tr><td>다국어</td><td>Spring Message(i18n), MutationObserver</td><td>서버 문구와 화면 문구의 언어별 처리</td></tr><tr><td>연동</td><td>SAP RFC(직접 호출)</td><td>MM·PP·SD·FI 인터페이스</td></tr><tr><td>데이터</td><td>Oracle</td><td>도메인 데이터, 법인별 데이터 격리</td></tr><tr><td>인증</td><td>OAuth 2.0, JWT</td><td>전사 SSO, Access/Refresh Token 무상태 인증</td></tr><tr><td>화면</td><td>JSP, JavaScript, TreeGrid</td><td>디자인 템플릿, 목록·그리드 화면</td></tr><tr><td>배포·운영</td><td>Jenkins, Docker, Jennifer APM</td><td>배포 자동화, 응답 시간 감시</td></tr></tbody></table></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>영역</th><th>기술</th><th>쓴 곳</th></tr></thead><tbody><tr><td>백엔드</td><td>Java, Spring Boot</td><td>영업·고객·주문·정산 도메인 서비스, 공통 연동 모듈</td></tr><tr><td>다국어</td><td>Spring Message(i18n), MutationObserver</td><td>서버 문구 번역(Spring Message), 나중에 그려지는 화면 요소 번역(MutationObserver)</td></tr><tr><td>연동</td><td>SAP RFC(직접 호출)</td><td>MM·PP·SD·FI 인터페이스</td></tr><tr><td>데이터</td><td>Oracle</td><td>도메인 데이터, 법인별 DB·스키마 분리</td></tr><tr><td>인증</td><td>OAuth 2.0, JWT</td><td>전사 SSO, Access/Refresh Token 무상태 인증</td></tr><tr><td>화면</td><td>JSP, JavaScript, TreeGrid</td><td>디자인 템플릿, 목록·그리드 화면</td></tr><tr><td>배포·운영</td><td>Jenkins, Docker, Jennifer APM</td><td>배포 자동화, 응답 시간 감시</td></tr></tbody></table></div></div>
 
 </section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>백엔드</h3><div class="card__tags"><span class="tag">Java</span><span class="tag">Spring Boot</span><span class="tag">Spring Message(i18n)</span></div></div><div class="stack__group"><h3>연동</h3><div class="card__tags"><span class="tag">SAP RFC(직접 호출)</span></div></div><div class="stack__group"><h3>데이터</h3><div class="card__tags"><span class="tag">Oracle</span></div></div><div class="stack__group"><h3>인증</h3><div class="card__tags"><span class="tag">OAuth 2.0</span><span class="tag">JWT</span></div></div><div class="stack__group"><h3>화면</h3><div class="card__tags"><span class="tag">JSP</span><span class="tag">JavaScript</span><span class="tag">TreeGrid</span><span class="tag">MutationObserver</span></div></div><div class="stack__group"><h3>배포·운영</h3><div class="card__tags"><span class="tag">Jenkins</span><span class="tag">Docker</span><span class="tag">Jennifer APM</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">계열사마다 다른 외주 CRM → 그룹 계열사 공통 ERP 표준 모델 · 디자인 템플릿 외주 견적 9,000만원 → 입사 1개월 자체 구축 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
 <div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 4개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 계열사마다 다른 외주 CRM → 그룹 계열사 공통 ERP 표준 모델</span></a><a class="ctl" href="#case-2"><span>02 디자인 템플릿 외주 견적 9,000만원 → 입사 1개월 자체 구축</span></a><a class="ctl" href="#case-3"><span>03 4개국 언어·시간대·통화를 국가마다 다시 만들지 않기</span></a><a class="ctl" href="#case-4"><span>04 현지 네트워크가 느린 법인을 위한 경량화</span></a></div></section><article class="case sec--glow" id="case-1">
@@ -446,7 +458,7 @@
 <div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>영업·고객·주문·정산을 DDD 경계로 나눠, 국가와 사업부가 늘어도 버티는 도메인 모델 설계</li><li>SAP MM·PP·SD·FI 인터페이스를 공통 연동 모듈로 표준화</li><li>한 부서가 아니라 여러 사업부·마케팅·임원의 요구를 함께 반영하고, 배포 전 인프라·보안 요구사항 점검</li><li>국내 배포 직후 들어온 해외 법인 요청에 다국어 구조로 대응해 4개국 배포</li><li>별도 예측 모델 프로젝트(DBA 1명과 2인 수행)의 축우 등급·D등급 고객 예측 결과를 플랫폼에 연결</li></ol></div>
 <div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>2023년 말 그룹 ERP 통합 프로젝트에서 SAP 모듈 인터페이스의 완성도와 예측 모델 도입 성과를 인정받았습니다. 그 결과 2024.02 그룹 계열사 공통 ERP 표준 모델로 채택됐습니다. 그보다 앞선 2023.02 에는 한국저작권위원회에 저작권도 등록했습니다.</p></div>
 </div>
-<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">배포 법인</div><div class="delta__val"><span class="to">4개국 (국내 별도)</span></div></div><div class="delta"><div class="delta__label">SAP 연동 모듈</div><div class="delta__val"><span class="to">MM·PP·SD·FI 4개</span></div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">2022.01</div><div class="tl__what"><b>착수</b><span>국내 영업 지원 시스템으로 기획, 해외 법인 제공도 목표에 포함</span></div></li><li><div class="tl__when">입사 1개월</div><div class="tl__what"><b>해외 법인용 디자인 템플릿 자체 구축</b><span>외주 견적 9,000만원 대신 직접 구축</span></div></li><li><div class="tl__when">국내 배포 직후</div><div class="tl__what"><b>해외 법인 사용 요청</b><span>베트남·필리핀 법인 요청에 다국어 구조로 대응, 이후 인도·미얀마까지 배포</span></div></li><li><div class="tl__when">2023.02</div><div class="tl__what"><b>저작권 등록</b><span>한국저작권위원회</span></div></li><li><div class="tl__when">2023년 말</div><div class="tl__what"><b>그룹 ERP 통합 프로젝트</b><span>SAP 4개 모듈 인터페이스 완성도와 예측 모델 도입 성과로 기준 모델 검토</span></div></li><li><div class="tl__when">2024.02</div><div class="tl__what"><b>표준 모델 채택</b><span>그룹 계열사 공통 ERP 표준 모델</span></div></li></ol><p class="sub-h">전/후 구조</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">배포 법인</div><div class="delta__val"><span class="to">4개국 (국내 별도)</span></div></div><div class="delta"><div class="delta__label">SAP 연동 모듈</div><div class="delta__val"><span class="to">MM·PP·SD·FI 4개</span></div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">2022.01</div><div class="tl__what"><b>착수</b><span>국내 영업 지원 시스템으로 기획, 해외 법인 제공도 목표에 포함</span></div></li><li><div class="tl__when">입사 1개월</div><div class="tl__what"><b>해외 법인용 디자인 템플릿 자체 구축</b><span>외주 견적 9,000만원 대신 직접 구축</span></div></li><li><div class="tl__when">국내 배포 직후</div><div class="tl__what"><b>해외 법인 사용 요청</b><span>베트남·필리핀 법인 요청에 다국어 구조로 대응, 인도·미얀마까지 4개국 법인에 배포</span></div></li><li><div class="tl__when">2023.02</div><div class="tl__what"><b>저작권 등록</b><span>한국저작권위원회</span></div></li><li><div class="tl__when">2023년 말</div><div class="tl__what"><b>그룹 ERP 통합 프로젝트</b><span>SAP 4개 모듈 인터페이스 완성도와 예측 모델 도입 성과로 기준 모델 검토</span></div></li><li><div class="tl__when">2024.02</div><div class="tl__what"><b>표준 모델 채택</b><span>그룹 계열사 공통 ERP 표준 모델</span></div></li></ol><p class="sub-h">전/후 구조</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
   subgraph BEFORE[&quot;전: 계열사별 외주 CRM&quot;]
     X1[&quot;계열사 CRM&lt;br/&gt;외주사 A&quot;]
     X2[&quot;계열사 CRM&lt;br/&gt;외주사 B&quot;]
@@ -517,14 +529,14 @@
 
 </article>
 <article class="case sec--glow sec--flip" id="case-3">
-<div class="case__head"><span class="case__no">CASE 03 · 현지대응</span><h3 class="case__title">4개국 언어·시간대·통화를 국가마다 다시 만들지 않기 <span class="badge-draft">초안</span></h3></div>
+<div class="case__head"><span class="case__no">CASE 03 · 현지대응</span><h3 class="case__title">4개국 언어·시간대·통화를 국가마다 다시 만들지 않기</h3></div>
 <div class="steps">
-<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>국내 배포 직후 베트남·필리핀 법인에서 사용 요청이 들어왔고, 이후 인도·미얀마도 같은 플랫폼을 쓰게 됐습니다. 법인마다 언어·시간대·통화가 다릅니다.</p></div>
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>국내 배포 직후 베트남·필리핀 법인에서 사용 요청이 들어왔고, 인도·미얀마까지 4개국 법인이 같은 플랫폼을 쓰게 됐습니다. 법인마다 언어·시간대·통화가 다르고, 업무 규칙에도 차이가 있습니다.</p></div>
 <div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>국가별 차이를 기능 코드 안의 분기로 처리하면, 법인이 늘 때마다 영업·주문·정산 기능을 모두 고쳐야 합니다. 화면 일부는 나중에 동적으로 그려지기 때문에 서버 문구만 바꿔서는 번역이 빠질 수도 있습니다.</p></div>
-<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>국가별 Timezone·통화·언어셋을 공통 어댑터 한 곳으로 모음</li><li>서버 문구는 Spring Message 로 언어별 메시지 관리</li><li>화면에서 나중에 그려지는 요소는 MutationObserver 로 감지해 문구 적용</li><li>4개국 법인 데이터를 논리·물리로 격리</li></ol></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>국가별 Timezone·통화·언어셋을 공통 어댑터 한 곳으로 모음</li><li>법인마다 다른 업무 규칙은 법인별 설정값·공통 코드로 관리</li><li>서버 문구는 Spring Message 로 언어별 메시지 관리</li><li>화면에서 나중에 그려지는 요소는 MutationObserver 로 감지해 번역 문구 적용</li><li>4개국 법인 데이터를 법인별 DB·스키마로 나눠 격리</li></ol></div>
 <div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>국내 배포 직후 들어온 해외 법인 요청에 다국어 SFA 를 빠르게 제공했고, 베트남·필리핀·인도·미얀마 법인에 같은 플랫폼으로 배포했습니다.</p></div>
 </div>
-<p class="sub-h">다국어 처리 흐름(초안)</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<p class="sub-h">다국어 처리 흐름</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
   REQ[&quot;요청&lt;br/&gt;법인·언어 정보&quot;] --&gt; SM[&quot;서버 문구&lt;br/&gt;Spring Message&quot;]
   SM --&gt; MSG[&quot;언어별 메시지 파일&quot;]
   REQ --&gt; PG[&quot;화면 렌더링&lt;br/&gt;JSP · 공통 템플릿&quot;]
@@ -537,7 +549,7 @@
   MSG --&gt; PG
   PG --&gt; MO[&quot;나중에 그려지는 요소&lt;br/&gt;MutationObserver 감지&quot;]
   MO --&gt; TR[&quot;문구 치환&quot;]</pre></div></figure><div class="lesson"><b>배운 점</b><p>국가 간 차이는 기능이 아니라 설정 문제로 다뤄야 확장 비용이 줄어든다는 것을 배웠습니다.</p></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+
 </article>
 <article class="case" id="case-4">
 <div class="case__head"><span class="case__no">CASE 04 · 현지대응</span><h3 class="case__title">현지 네트워크가 느린 법인을 위한 경량화</h3></div>

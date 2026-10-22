@@ -36,7 +36,7 @@
 
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">전체 아키텍처</h2><div class="sec__lead"><p>몰의 Web·Mobile 요청은 API Gateway 를 거쳐 결제·정산·원장 서비스로 나뉩니다. 세 서비스가 내는 주문·결제 이벤트는 Kafka 로 모입니다. Kafka Streams 가 이를 윈도 단위로 집계해 원장을 만들고, 결과는 RDBMS(MySQL)와 ELK Stack 에 쌓이며 SAP 에는 비동기로 넘어갑니다. 검색은 상용 엔진 대신 FastAPI 검색 API·ELK·벡터 DB 로 직접 구축했습니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">전체 아키텍처</h2><div class="sec__lead"><p>몰의 Web·Mobile 요청은 API Gateway 를 거쳐 결제·정산·원장 서비스로 나뉩니다. 세 서비스가 내는 주문·결제 이벤트는 Kafka 로 모입니다. Kafka Streams 가 이를 윈도 단위로 집계해 원장을 만들고, 결과는 RDBMS(MySQL)와 ELK Stack 에 쌓이고, SAP 에는 거래처별 월 마감 때 비동기로 넘어갑니다. 검색은 상용 엔진 대신 FastAPI 검색 API·ELK·벡터 DB 로 직접 구축했습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
   U1[&quot;제약사 이커머스 몰&lt;br/&gt;Web·Mobile&quot;]
   BO[&quot;백오피스 어드민&lt;br/&gt;Kafka 현황 대시보드&quot;]
@@ -69,7 +69,7 @@
   LDG --&gt; KT
   KT --&gt; KS
   KS --&gt; DB
-  KS --&gt;|&quot;비동기&quot;| ERP
+  KS --&gt;|&quot;비동기&lt;br/&gt;거래처별 월 마감&quot;| ERP
   KS --&gt; ES
   U1 -.-&gt;|&quot;검색&quot;| SAPI
   BO -.-&gt;|&quot;검색&quot;| SAPI
@@ -108,7 +108,7 @@
   LDG --&gt; KT
   KT --&gt; KS
   KS --&gt; DB
-  KS --&gt;|&quot;비동기&quot;| ERP
+  KS --&gt;|&quot;비동기&lt;br/&gt;거래처별 월 마감&quot;| ERP
   KS --&gt; ES
   U1 -.-&gt;|&quot;검색&quot;| SAPI
   BO -.-&gt;|&quot;검색&quot;| SAPI
@@ -223,7 +223,7 @@
   S-&gt;&gt;S: Tumbling·Hopping 윈도 집계
   S-)L: 거래원장·정산 데이터 반영
   L-&gt;&gt;D: 원장·정산 저장
-  L-)E: 정산·세금계산서 연동 (비동기)
+  L-)E: 거래처별 월 마감 때 정산·세금계산서 연동 (비동기)
   Note over P,K: 결제 응답과 원장·정산 처리를 분리">sequenceDiagram
   participant U as 고객 화면
   participant G as API Gateway
@@ -246,8 +246,8 @@
   S-&gt;&gt;S: Tumbling·Hopping 윈도 집계
   S-)L: 거래원장·정산 데이터 반영
   L-&gt;&gt;D: 원장·정산 저장
-  L-)E: 정산·세금계산서 연동 (비동기)
-  Note over P,K: 결제 응답과 원장·정산 처리를 분리</pre></div><figcaption>결제 승인부터 원장·정산·ERP 반영까지의 개념 흐름. 이벤트 발행 순서와 SAP 전송 주체는 개념 수준으로 그렸습니다.</figcaption></figure></div>
+  L-)E: 거래처별 월 마감 때 정산·세금계산서 연동 (비동기)
+  Note over P,K: 결제 응답과 원장·정산 처리를 분리</pre></div><figcaption>결제 승인부터 원장·정산·ERP 반영까지의 개념 흐름. SAP 로 넘기는 정산·세금계산서 데이터는 거래처별 월 마감 때 묶어 보냅니다. SAP 전송 주체는 개념 수준으로 그렸습니다.</figcaption></figure></div>
 
 </section>
 <section class="sec">
@@ -282,23 +282,25 @@
   TW --&gt; AG1
   HW --&gt; AG2
   AG1 --&gt; LD
-  AG2 --&gt; MON</pre></div><figcaption>두 윈도 방식의 차이와 쓰임을 나눈 개념도. 어느 집계에 어느 윈도를 썼는지는 개념 수준으로 그렸습니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>Tumbling: 구간 합계의 합 = 전체 합계 → 정산·원장 대사에 적합</li><li>Hopping: 같은 이벤트가 여러 구간에 포함 → 추이·현황 확인에 적합</li><li>결과 저장: RDBMS·ELK Stack, ERP 반영은 비동기</li></ul></div></div>
+  AG2 --&gt; MON</pre></div><figcaption>두 윈도 방식의 차이와 쓰임을 나눈 개념도. 어느 집계에 어느 윈도를 썼는지는 개념 수준으로 그렸습니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>Tumbling: 구간 합계의 합 = 전체 합계 → 정산·원장 대사에 적합</li><li>Hopping: 같은 이벤트가 여러 구간에 포함 → 추이·현황 확인에 적합</li><li>결과 저장: RDBMS·ELK Stack, ERP 반영은 거래처별 월 마감 때 비동기</li></ul></div></div>
 
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">개념 데이터 모델 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>주문에서 결제, 결제 이벤트, 거래원장, 정산 구간, 세금계산서·ERP 연동으로 이어지는 흐름을 개념 엔티티로 정리했습니다. 원장 항목은 결제 이벤트에서 만들어지고, 정산 구간(윈도)이 원장 항목을 묶어 세금계산서와 ERP 전송의 단위가 됩니다. 결제 정보는 암호화·토큰화해 보관합니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">개념 데이터 모델</h2><div class="sec__lead"><p>주문에서 결제, 결제 이벤트, 거래원장, 정산 구간, 거래처별 월 마감, 세금계산서·ERP 연동으로 이어지는 흐름을 개념 엔티티로 정리했습니다. 결제 1건에는 여러 결제수단을 함께 쓸 수 있습니다. 원장 항목은 결제가 저장(커밋)된 뒤 발행된 결제 이벤트에서 만들어집니다. 원장은 이벤트가 들어오는 대로 정산 구간(Tumbling 윈도)에 집계하고, 세금계산서·ERP 전송은 거래처별 월 마감으로 묶었습니다. 결제 쪽에는 SAP 전송 결과와 세금계산서 발행 상태를 함께 기록했습니다. 결제 정보는 암호화·토큰화해 보관합니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="erDiagram
   MEMBER ||--o{ SALES_ORDER : &quot;주문&quot;
   SALES_ORDER ||--o{ PAYMENT : &quot;결제&quot;
-  PAYMENT_METHOD ||--o{ PAYMENT : &quot;결제수단&quot;
+  PAYMENT ||--|{ PAYMENT_ITEM : &quot;결제수단별 금액&quot;
+  PAYMENT_METHOD ||--o{ PAYMENT_ITEM : &quot;결제수단&quot;
   PAYMENT ||--o{ PAYMENT_EVENT : &quot;이벤트 발행&quot;
   PAYMENT_EVENT ||--o{ LEDGER_ENTRY : &quot;원장 생성&quot;
   SETTLEMENT_WINDOW ||--o{ LEDGER_ENTRY : &quot;윈도 집계&quot;
-  SETTLEMENT_WINDOW ||--o| TAX_INVOICE : &quot;세금계산서&quot;
-  SETTLEMENT_WINDOW ||--o{ ERP_TRANSFER : &quot;ERP 연동&quot;
+  MEMBER ||--o{ MONTHLY_SETTLEMENT : &quot;월 마감&quot;
+  MONTHLY_SETTLEMENT ||--o{ LEDGER_ENTRY : &quot;마감 대상&quot;
+  MONTHLY_SETTLEMENT ||--o| TAX_INVOICE : &quot;세금계산서&quot;
+  MONTHLY_SETTLEMENT ||--o{ ERP_TRANSFER : &quot;ERP 연동&quot;
   MEMBER {
     string member_id PK
-    string member_grade
   }
   SALES_ORDER {
     string order_id PK
@@ -306,15 +308,20 @@
     decimal order_amount
     datetime ordered_at
   }
+  PAYMENT {
+    string payment_id PK
+    string order_id FK
+    string status
+  }
   PAYMENT_METHOD {
     string method_code PK
     string method_type
   }
-  PAYMENT {
-    string payment_id PK
-    string order_id FK
+  PAYMENT_ITEM {
+    string payment_item_id PK
+    string payment_id FK
     string method_code FK
-    string status
+    decimal amount
   }
   PAYMENT_EVENT {
     string event_id PK
@@ -326,6 +333,7 @@
     string entry_id PK
     string event_id FK
     string window_id FK
+    string settlement_id FK
     decimal amount
   }
   SETTLEMENT_WINDOW {
@@ -334,28 +342,36 @@
     datetime window_end
     decimal total_amount
   }
+  MONTHLY_SETTLEMENT {
+    string settlement_id PK
+    string member_id FK
+    string settlement_month
+    decimal total_amount
+  }
   TAX_INVOICE {
     string invoice_id PK
-    string window_id FK
+    string settlement_id FK
     string issue_status
   }
   ERP_TRANSFER {
     string transfer_id PK
-    string window_id FK
+    string settlement_id FK
     string transfer_status
     datetime sent_at
   }">erDiagram
   MEMBER ||--o{ SALES_ORDER : &quot;주문&quot;
   SALES_ORDER ||--o{ PAYMENT : &quot;결제&quot;
-  PAYMENT_METHOD ||--o{ PAYMENT : &quot;결제수단&quot;
+  PAYMENT ||--|{ PAYMENT_ITEM : &quot;결제수단별 금액&quot;
+  PAYMENT_METHOD ||--o{ PAYMENT_ITEM : &quot;결제수단&quot;
   PAYMENT ||--o{ PAYMENT_EVENT : &quot;이벤트 발행&quot;
   PAYMENT_EVENT ||--o{ LEDGER_ENTRY : &quot;원장 생성&quot;
   SETTLEMENT_WINDOW ||--o{ LEDGER_ENTRY : &quot;윈도 집계&quot;
-  SETTLEMENT_WINDOW ||--o| TAX_INVOICE : &quot;세금계산서&quot;
-  SETTLEMENT_WINDOW ||--o{ ERP_TRANSFER : &quot;ERP 연동&quot;
+  MEMBER ||--o{ MONTHLY_SETTLEMENT : &quot;월 마감&quot;
+  MONTHLY_SETTLEMENT ||--o{ LEDGER_ENTRY : &quot;마감 대상&quot;
+  MONTHLY_SETTLEMENT ||--o| TAX_INVOICE : &quot;세금계산서&quot;
+  MONTHLY_SETTLEMENT ||--o{ ERP_TRANSFER : &quot;ERP 연동&quot;
   MEMBER {
     string member_id PK
-    string member_grade
   }
   SALES_ORDER {
     string order_id PK
@@ -363,15 +379,20 @@
     decimal order_amount
     datetime ordered_at
   }
+  PAYMENT {
+    string payment_id PK
+    string order_id FK
+    string status
+  }
   PAYMENT_METHOD {
     string method_code PK
     string method_type
   }
-  PAYMENT {
-    string payment_id PK
-    string order_id FK
+  PAYMENT_ITEM {
+    string payment_item_id PK
+    string payment_id FK
     string method_code FK
-    string status
+    decimal amount
   }
   PAYMENT_EVENT {
     string event_id PK
@@ -383,6 +404,7 @@
     string entry_id PK
     string event_id FK
     string window_id FK
+    string settlement_id FK
     decimal amount
   }
   SETTLEMENT_WINDOW {
@@ -391,18 +413,24 @@
     datetime window_end
     decimal total_amount
   }
+  MONTHLY_SETTLEMENT {
+    string settlement_id PK
+    string member_id FK
+    string settlement_month
+    decimal total_amount
+  }
   TAX_INVOICE {
     string invoice_id PK
-    string window_id FK
+    string settlement_id FK
     string issue_status
   }
   ERP_TRANSFER {
     string transfer_id PK
-    string window_id FK
+    string settlement_id FK
     string transfer_status
     datetime sent_at
-  }</pre></div><figcaption>실제 테이블이 아닌 개념 모델입니다. 결제수단(예치금·적립금·쿠폰·기타)은 하나의 축으로 묶었습니다.</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  }</pre></div><figcaption>직접 그린 개념 모델입니다. 실제 테이블·컬럼 이름이 아닌 개념 이름입니다. 결제 1건에 예치금·적립금·쿠폰·기타 결제수단을 함께 쓸 수 있어 결제수단별 금액을 따로 두었습니다.</figcaption></figure></div>
+
 </section>
 <section class="sec sec--glow">
 <div class="sec__head"><h2 class="sec__title">설계 결정<span class="dim">왜 이렇게 했나</span></h2></div>
@@ -423,7 +451,7 @@
 <div class="sec__head"><h2 class="sec__title">성능 시험 리포트</h2><div class="sec__lead"><p>JMeter 로 부하를 걸고 Scouter APM 으로 메모리·CPU·응답 시간을 관측했습니다. 시험은 dev → stg → prod 순으로 진행했고, 내부·외부 QA 인력 20명이 참여했습니다. 동시 사용자는 실제 사람 50명에서 100명까지 단계적으로 늘렸고, 테스트 함수로 부하 강도를 더 높이는 시험도 했습니다. 동시 트랜잭션 처리 때 메모리·CPU·응답 시간을 기존 구조와 개선 구조로 나눠 비교했으며, 그래프의 수치는 싣지 않았습니다. 리포트의 판단은 자원 효율 향상, 처리 성능 안정화, MSA 독립 배포 체계 확보였습니다.</p></div></div>
 <div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>시험 항목</th><th>비교</th><th>조건</th><th>결과</th></tr></thead><tbody><tr><td>메모리 사용량(Peak)</td><td>기존(모놀리스·배치) vs 개선(MSA·스트림)</td><td>동시 트랜잭션 처리 · JMeter 부하, Scouter APM 관측</td><td>구조별 비교 그래프(값은 싣지 않음)</td></tr><tr><td>CPU 사용률</td><td>기존(정산 배치 수행 시) vs 개선(실시간 스트림)</td><td>동시 트랜잭션 처리 시 · JMeter 부하, Scouter APM 관측</td><td>구조별 비교 그래프(값은 싣지 않음)</td></tr><tr><td>평균 응답 시간</td><td>기존(모놀리스) vs 개선(MSA)</td><td>동시 사용자 50명 → 100명 단계별(실제 사람) + 테스트 함수로 부하 강화</td><td>구조별 비교 그래프(값은 싣지 않음)</td></tr><tr><td>연속 운영 시험</td><td>개선 구조</td><td>24시간 연속 운영</td><td>통과(PASS)</td></tr></tbody></table></div></div>
 
-</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>백엔드</h3><div class="card__tags"><span class="tag">Java 22</span><span class="tag">Spring Boot</span><span class="tag">MSA</span><span class="tag">REST API</span><span class="tag">API Gateway</span><span class="tag">KICC·이지페이 PG(REST API)</span></div></div><div class="stack__group"><h3>메시징·스트림</h3><div class="card__tags"><span class="tag">Apache Kafka</span><span class="tag">Kafka Streams(Tumbling·Hopping Window)</span></div></div><div class="stack__group"><h3>데이터·검색</h3><div class="card__tags"><span class="tag">MySQL</span><span class="tag">ELK Stack</span><span class="tag">FastAPI</span><span class="tag">벡터 DB</span></div></div><div class="stack__group"><h3>ERP 연동</h3><div class="card__tags"><span class="tag">SAP(RFC/SOAP)</span><span class="tag">SAP SD·PP·FI 정산·세금계산서 연동</span></div></div><div class="stack__group"><h3>보안</h3><div class="card__tags"><span class="tag">AES-256 암호화</span><span class="tag">토큰화</span><span class="tag">PCI-DSS 기준 이중 인증·접근 제어</span></div></div><div class="stack__group"><h3>DevOps·관측</h3><div class="card__tags"><span class="tag">Jenkins</span><span class="tag">Docker(Blue/Green 배포)</span><span class="tag">Kubernetes</span><span class="tag">Grafana</span><span class="tag">Scouter APM</span><span class="tag">JMeter</span><span class="tag">Scouter APM</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">SDK 내장 결제 모듈의 정산 정합성·배포 리스크 · 정산 배치가 만드는 DB 부하 스파이크 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
+</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>백엔드</h3><div class="card__tags"><span class="tag">Java 22</span><span class="tag">Spring Boot</span><span class="tag">MSA</span><span class="tag">REST API</span><span class="tag">API Gateway</span><span class="tag">KICC·이지페이 PG(REST API)</span></div></div><div class="stack__group"><h3>메시징·스트림</h3><div class="card__tags"><span class="tag">Apache Kafka</span><span class="tag">Kafka Streams(Tumbling·Hopping Window)</span></div></div><div class="stack__group"><h3>데이터·검색</h3><div class="card__tags"><span class="tag">MySQL</span><span class="tag">ELK Stack</span><span class="tag">FastAPI</span><span class="tag">벡터 DB</span></div></div><div class="stack__group"><h3>ERP 연동</h3><div class="card__tags"><span class="tag">SAP(RFC/SOAP)</span><span class="tag">SAP SD·PP·FI 정산·세금계산서 연동</span></div></div><div class="stack__group"><h3>보안</h3><div class="card__tags"><span class="tag">AES-256 암호화</span><span class="tag">토큰화</span><span class="tag">PCI-DSS 기준 이중 인증·접근 제어</span></div></div><div class="stack__group"><h3>DevOps·관측</h3><div class="card__tags"><span class="tag">Jenkins</span><span class="tag">Docker(Blue/Green 배포)</span><span class="tag">Kubernetes</span><span class="tag">Grafana</span><span class="tag">Scouter APM</span><span class="tag">JMeter</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">SDK 내장 결제 모듈의 정산 정합성·배포 리스크 · 정산 배치가 만드는 DB 부하 스파이크 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
 <div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 4개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 SDK 내장 결제 모듈의 정산 정합성·배포 리스크</span></a><a class="ctl" href="#case-2"><span>02 정산 배치가 만드는 DB 부하 스파이크</span></a><a class="ctl" href="#case-3"><span>03 A사 검색엔진 라이선스를 자체 검색으로 대체</span></a><a class="ctl" href="#case-4"><span>04 Kafka 에 익숙하지 않은 팀을 위한 운영 가시성</span></a></div></section><article class="case sec--glow" id="case-1">
 <div class="case__head"><span class="case__no">CASE 01 · MSA전환</span><h3 class="case__title">SDK 내장 결제 모듈의 정산 정합성·배포 리스크</h3></div>
 <div class="steps">
@@ -482,7 +510,7 @@
 <div class="steps">
 <div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>정산은 Spring Batch·Cron 배치로 돌았고, 배치가 도는 시점마다 DB 부하가 튀었습니다. 결제 한 건은 SAP·정산 데이터·내부 상태 변경으로 동시에 퍼지면서도 일관되게 처리돼야 했습니다.</p></div>
 <div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>정산을 정해진 시점에 한꺼번에 처리하는 배치 구조라 부하가 그 시점에 몰렸습니다. 결제 후속 처리가 여러 시스템으로 퍼지는데, 그중 하나가 실패했을 때 다시 처리할 수단도 필요했습니다.</p></div>
-<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>메시지 처리 후보(Kafka·Redis·RabbitMQ)를 '여러 시스템으로의 확장', '재처리' 두 기준으로 비교해 Kafka 선택</li><li>주문·결제 완료 뒤 원장을 만들 때 Kafka Streams Tumbling·Hopping Window 를 나눠 배치</li><li>윈도 집계 결과를 RDBMS·ELK Stack 에 저장하고 SAP 에는 비동기로 반영</li><li>Kafka 기반 일 평균 1.5만 건 결제 트랜잭션 처리 체계 구성</li></ol></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>메시지 처리 후보(Kafka·Redis·RabbitMQ)를 '여러 시스템으로의 확장', '재처리' 두 기준으로 비교해 Kafka 선택</li><li>주문·결제 완료 뒤 원장을 만들 때 Kafka Streams Tumbling·Hopping Window 를 나눠 배치</li><li>윈도 집계 결과를 RDBMS·ELK Stack 에 저장하고, SAP 에는 거래처별 월 마감 때 비동기로 반영</li><li>Kafka 기반 일 평균 1.5만 건 결제 트랜잭션 처리 체계 구성</li></ol></div>
 <div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>정산을 배치 시점에 몰지 않고, 이벤트가 들어올 때마다 윈도 단위로 나눠 처리하는 구조(Batch → Event Stream)로 바꿨습니다. Kafka 로 일 평균 1.5만 건의 결제 트랜잭션을 처리했습니다.</p></div>
 </div>
 <p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">정산 처리 방식</div><div class="delta__val"><span class="from">Batch·Cron</span><span class="arrow">→</span><span class="to">Event Stream(Windowing)</span></div></div><div class="delta"><div class="delta__label">Kafka 결제 트랜잭션</div><div class="delta__val"><span class="to">일 평균 1.5만 건</span></div></div></div><p class="sub-h">가설을 하나씩 버린 과정</p><ol class="funnel"><li class=""><span class="n">1</span><div><b>Spring Batch·Cron 정산 배치 유지</b><span>기존 방식. 정산 시점에 DB 부하가 몰리는 구조가 그대로 남음</span></div><span class="out">기각</span></li><li class=""><span class="n">2</span><div><b>Redis 기반 메시지 처리</b><span>후보. 한 이벤트의 여러 시스템 확장과 재처리 기준으로 비교</span></div><span class="out">비채택</span></li><li class=""><span class="n">3</span><div><b>RabbitMQ</b><span>후보. 같은 두 기준으로 비교</span></div><span class="out">비채택</span></li><li class="is-adopted"><span class="n">4</span><div><b>Kafka + Kafka Streams Windowing</b><span>결제 이벤트를 SAP·정산·내부 상태로 넓히고, 실패 시 다시 처리</span></div><span class="out">채택</span></li></ol><p class="sub-h">정산 처리 방식의 전/후</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
@@ -498,14 +526,14 @@
     E2[&quot;Kafka&quot;]
     E3[&quot;Kafka Streams&lt;br/&gt;윈도 단위 집계&quot;]
     E4[(&quot;원장·정산 저장&lt;br/&gt;RDBMS&quot;)]
-    E5[&quot;SAP 비동기 연동&quot;]
+    E5[&quot;SAP 비동기 연동&lt;br/&gt;거래처별 월 마감&quot;]
   end
   C1 --&gt; C2
   C2 --&gt; C3
   E1 --&gt; E2
   E2 --&gt; E3
   E3 --&gt; E4
-  E3 --&gt; E5
+  E4 --&gt; E5
   BAT ==&gt;|&quot;Batch → Event Stream&quot;| STR">flowchart LR
   subgraph BAT[&quot;전: 정산 배치&quot;]
     direction TB
@@ -519,14 +547,14 @@
     E2[&quot;Kafka&quot;]
     E3[&quot;Kafka Streams&lt;br/&gt;윈도 단위 집계&quot;]
     E4[(&quot;원장·정산 저장&lt;br/&gt;RDBMS&quot;)]
-    E5[&quot;SAP 비동기 연동&quot;]
+    E5[&quot;SAP 비동기 연동&lt;br/&gt;거래처별 월 마감&quot;]
   end
   C1 --&gt; C2
   C2 --&gt; C3
   E1 --&gt; E2
   E2 --&gt; E3
   E3 --&gt; E4
-  E3 --&gt; E5
+  E4 --&gt; E5
   BAT ==&gt;|&quot;Batch → Event Stream&quot;| STR</pre></div></figure><div class="lesson"><b>배운 점</b><p>메시지 도구는 익숙함이 아니라 '한 이벤트가 몇 곳으로 퍼지는가, 실패하면 다시 돌릴 수 있는가'로 고른다는 기준을 세웠습니다.</p></div>
 
 </article>

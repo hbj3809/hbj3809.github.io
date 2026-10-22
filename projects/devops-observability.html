@@ -36,7 +36,7 @@
 
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">아키텍처<span class="dim">배포·운영·인증·관제 네 축</span></h2><div class="sec__lead"><p>구성은 네 축입니다. 배포 자동화는 Git→Jenkins(빌드·테스트)→Docker 이미지로 이어지며, 해외 법인 쪽은 커밋하면 파이프라인이 자동으로 돌고 국내는 수동으로 실행합니다. 운영 환경은 개발/운영을 나눈 뒤 Blue/Green 방식으로 버전을 바꾸는데, 새 버전은 자동 헬스체크로 정상 여부를 확인하고 Nginx 에서 트래픽을 넘깁니다. 통합 인증은 Google Workspace 와 연동한 상용 SSO 제품으로 OAuth 2.0 기반 전사 SSO 를 적용했고, 각 시스템은 세션 없이 JWT(Access/Refresh) 기반 무상태 인증을 씁니다. 통합 관제는 로그를 ELK 로, 지표를 Grafana·APM 으로 모으고 임계치를 넘으면 Slack 으로 알립니다.</p><p>네 축을 한 플랫폼으로 묶은 이유는 문제의 뿌리가 같았기 때문입니다. 배포·로그·로그인을 시스템마다 따로 다루면 사람이 직접 챙겨야 할 곳이 시스템 수만큼 늘고, 그 사이에서 반영 실수와 늦은 장애 확인이 생겼습니다. 새 시스템도 같은 파이프라인·SSO·로그 수집에 붙여 같은 기준으로 운영하는 것을 목표로 했습니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">아키텍처<span class="dim">배포·운영·인증·관제 네 축</span></h2><div class="sec__lead"><p>구성은 네 축입니다. 배포 자동화는 Git→Jenkins(빌드·테스트)→Docker 이미지로 이어지며, 해외 법인 쪽은 커밋하면 파이프라인이 자동으로 돌고 국내는 수동으로 실행합니다. 운영 환경은 개발/운영을 나눈 뒤 Blue/Green 방식으로 버전을 바꾸는데, 새 버전은 자동 헬스체크로 정상 여부를 확인하고 Nginx 에서 트래픽을 넘깁니다. 통합 인증은 로그인을 Google Workspace 와 연동한 상용 SSO 제품에 맡겨 OAuth 2.0 기반 전사 SSO 를 적용했고, 토큰(JWT Access/Refresh)은 직접 만든 Spring Security 공통 인증 모듈이 발급해 각 시스템은 세션 없이 무상태 인증을 씁니다. 통합 관제는 로그를 ELK 로, 지표를 Grafana·APM 으로 모으고 임계치를 넘으면 Slack 으로 알립니다.</p><p>네 축을 한 플랫폼으로 묶은 이유는 문제의 뿌리가 같았기 때문입니다. 배포·로그·로그인을 시스템마다 따로 다루면 사람이 직접 챙겨야 할 곳이 시스템 수만큼 늘고, 그 사이에서 반영 실수와 늦은 장애 확인이 생겼습니다. 새 시스템도 같은 파이프라인·SSO·로그 수집에 붙여 같은 기준으로 운영하는 것을 목표로 했습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
   EMP[&quot;사용자&lt;br/&gt;국내·해외 법인 임직원&quot;]
   subgraph CI[&quot;① 배포 자동화&quot;]
@@ -49,7 +49,7 @@
     HC[&quot;자동 헬스체크&quot;] -.-&gt;|&quot;정상 여부 확인&quot;| GREEN
   end
   subgraph AUTH[&quot;③ 통합 인증&quot;]
-    SSO[&quot;전사 SSO&lt;br/&gt;상용 SSO 제품 · Google Workspace 연동&quot;] --&gt; TOK[&quot;OAuth 2.0&lt;br/&gt;JWT(Access · Refresh)&quot;]
+    SSO[&quot;전사 SSO · OAuth 2.0&lt;br/&gt;상용 SSO 제품 · Google Workspace 연동&quot;] --&gt;|&quot;로그인 성공&quot;| TOK[&quot;공통 인증 모듈 · Spring Security&lt;br/&gt;JWT(Access · Refresh) 발급&quot;]
   end
   subgraph OBS[&quot;④ 통합 관제&quot;]
     LS[&quot;Logstash&lt;br/&gt;로그 수집&quot;] --&gt; ES[&quot;Elasticsearch&quot;]
@@ -74,7 +74,7 @@
     HC[&quot;자동 헬스체크&quot;] -.-&gt;|&quot;정상 여부 확인&quot;| GREEN
   end
   subgraph AUTH[&quot;③ 통합 인증&quot;]
-    SSO[&quot;전사 SSO&lt;br/&gt;상용 SSO 제품 · Google Workspace 연동&quot;] --&gt; TOK[&quot;OAuth 2.0&lt;br/&gt;JWT(Access · Refresh)&quot;]
+    SSO[&quot;전사 SSO · OAuth 2.0&lt;br/&gt;상용 SSO 제품 · Google Workspace 연동&quot;] --&gt;|&quot;로그인 성공&quot;| TOK[&quot;공통 인증 모듈 · Spring Security&lt;br/&gt;JWT(Access · Refresh) 발급&quot;]
   end
   subgraph OBS[&quot;④ 통합 관제&quot;]
     LS[&quot;Logstash&lt;br/&gt;로그 수집&quot;] --&gt; ES[&quot;Elasticsearch&quot;]
@@ -140,35 +140,39 @@
 
 </section>
 <section class="sec sec--glow sec--flip">
-<div class="sec__head"><h2 class="sec__title">핵심 흐름 ②<span class="dim">OAuth 2.0 SSO 와 무상태 토큰 인증</span> <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>사용자는 Google Workspace 와 연동한 상용 SSO 제품에서 한 번 로그인하고, SFA/CRM·TMS/WMS·MES·그룹웨어 등 사내 시스템을 다시 로그인하지 않고 씁니다. 인증 서버를 직접 만들지 않고 상용 제품을 연동한 것입니다. 인증은 OAuth 2.0 기반 SSO 와 JWT(Access/Refresh) 기반 무상태(Stateless) 인증으로 처리해, 각 업무 시스템은 세션을 따로 저장하지 않고 요청에 담긴 토큰으로 사용자를 확인합니다. Access Token 이 만료되면 Refresh Token 으로 새 토큰을 받습니다.</p><p>업무 시스템 쪽 인증·인가 규칙은 Spring Security 로 공통화해, 시스템마다 로그인과 권한 검사를 따로 만들지 않도록 했습니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">핵심 흐름 ②<span class="dim">OAuth 2.0 SSO 와 무상태 토큰 인증</span></h2><div class="sec__lead"><p>사용자는 Google Workspace 와 연동한 상용 SSO 제품에서 한 번 로그인하고, SFA/CRM·TMS/WMS·MES·그룹웨어 등 사내 시스템을 다시 로그인하지 않고 씁니다. 로그인(신원 확인)은 상용 SSO 제품에 맡기고, 토큰 발급·재발급은 직접 만든 Spring Security 코드(공통 인증 모듈)가 맡았습니다. 인증은 OAuth 2.0 기반 SSO 와 JWT(Access/Refresh) 기반 무상태(Stateless) 인증으로 처리해, 각 업무 시스템은 세션을 따로 저장하지 않고 요청에 담긴 토큰으로 사용자를 확인합니다. Access Token 이 만료되면 Refresh Token 으로 새 토큰을 받습니다.</p><p>업무 시스템 쪽 인증·인가 규칙은 Spring Security 로 공통화해, 시스템마다 로그인과 권한 검사를 따로 만들지 않도록 했습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="sequenceDiagram
   participant U as 사용자
   participant APP as 업무 시스템
   participant SSO as 상용 SSO 제품
+  participant AUTH as 공통 인증 모듈
   U-&gt;&gt;APP: 접속
   APP--&gt;&gt;U: 토큰 없음 - SSO 로그인으로 이동
   U-&gt;&gt;SSO: Google Workspace 연동 로그인
-  SSO--&gt;&gt;U: Access Token · Refresh Token
+  SSO--&gt;&gt;AUTH: 로그인 성공(신원 확인)
+  AUTH--&gt;&gt;U: Access Token · Refresh Token 발급
   U-&gt;&gt;APP: Access Token 을 담아 요청
-  APP-&gt;&gt;APP: 토큰 검증 · 권한 확인
+  APP-&gt;&gt;APP: 공통 인증 모듈로 토큰 검증 · 권한 확인
   APP--&gt;&gt;U: 권한 범위의 데이터 응답
   Note over APP: 세션을 저장하지 않는 무상태 검증
-  U-&gt;&gt;SSO: Access 만료 시 Refresh Token 으로 재발급 요청
-  SSO--&gt;&gt;U: 새 Access Token">sequenceDiagram
+  U-&gt;&gt;AUTH: Access 만료 시 Refresh Token 으로 재발급 요청
+  AUTH--&gt;&gt;U: 새 Access Token">sequenceDiagram
   participant U as 사용자
   participant APP as 업무 시스템
   participant SSO as 상용 SSO 제품
+  participant AUTH as 공통 인증 모듈
   U-&gt;&gt;APP: 접속
   APP--&gt;&gt;U: 토큰 없음 - SSO 로그인으로 이동
   U-&gt;&gt;SSO: Google Workspace 연동 로그인
-  SSO--&gt;&gt;U: Access Token · Refresh Token
+  SSO--&gt;&gt;AUTH: 로그인 성공(신원 확인)
+  AUTH--&gt;&gt;U: Access Token · Refresh Token 발급
   U-&gt;&gt;APP: Access Token 을 담아 요청
-  APP-&gt;&gt;APP: 토큰 검증 · 권한 확인
+  APP-&gt;&gt;APP: 공통 인증 모듈로 토큰 검증 · 권한 확인
   APP--&gt;&gt;U: 권한 범위의 데이터 응답
   Note over APP: 세션을 저장하지 않는 무상태 검증
-  U-&gt;&gt;SSO: Access 만료 시 Refresh Token 으로 재발급 요청
-  SSO--&gt;&gt;U: 새 Access Token</pre></div><figcaption>전사 SSO 인증 흐름(초안). 상용 SSO 제품·Google Workspace 연동과 적용 범위는 확인된 내용이고, 토큰을 주고받는 세부 순서와 검증 항목은 일반적인 흐름으로 그렸습니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>SSO: Google Workspace 와 연동한 상용 SSO 제품(직접 만든 인증 서버가 아님)</li><li>적용 범위: SFA/CRM·TMS/WMS·MES·그룹웨어·기타 사내 시스템</li><li>인증 방식: OAuth 2.0 기반 SSO, JWT(Access/Refresh) 기반 무상태 인증</li></ul></div></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  U-&gt;&gt;AUTH: Access 만료 시 Refresh Token 으로 재발급 요청
+  AUTH--&gt;&gt;U: 새 Access Token</pre></div><figcaption>직접 그린 개념도. 세부 순서는 단순화했습니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>SSO: Google Workspace 와 연동한 상용 SSO 제품(로그인 담당, 토큰은 직접 만든 코드가 발급)</li><li>적용 범위: SFA/CRM·TMS/WMS·MES·그룹웨어·기타 사내 시스템</li><li>인증 방식: OAuth 2.0 기반 SSO, JWT(Access/Refresh) 기반 무상태 인증</li><li>인증 처리: Spring Security 공통 모듈을 여러 업무 시스템이 함께 사용</li></ul></div></div>
+
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">핵심 흐름 ③<span class="dim">로그·지표 수집과 임계치 알림</span></h2><div class="sec__lead"><p>시스템별 애플리케이션 로그는 ELK(Logstash→Elasticsearch→Kibana)로 모아 한 화면에서 검색합니다. 실시간 트래픽·JVM 힙 메모리·API 응답 속도 같은 지표는 Grafana 와 APM 으로 추적합니다.</p><p>오류나 지표가 임계치를 넘으면 Slack Webhook 으로 개발자 채널에 바로 알리고, 개발자는 같은 시간대의 로그와 지표를 한곳에서 보며 원인을 좇습니다.</p></div></div>
@@ -202,7 +206,7 @@
 
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">개념 모델<span class="dim">인증·환경·관제</span> <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>인증(법인·사용자·권한), 운영 환경(시스템·개발/운영 환경·배포), 관제(로그·알림 규칙·알림)를 개념 수준으로 정리한 모델입니다. 실제 테이블 이름이 아니라 역할을 나타내는 일반 이름으로 그렸습니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">개념 모델<span class="dim">인증·환경·관제</span></h2><div class="sec__lead"><p>인증(법인·사용자·권한), 운영 환경(시스템·개발/운영 환경·배포), 관제(로그·알림 규칙·알림)를 직접 설계한 관리 DB 로 묶어 관리했고, 여기서는 개념 수준으로 정리했습니다. 실제 테이블 이름이 아니라 역할을 나타내는 일반 이름으로 그렸습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="erDiagram
   CORPORATION ||--o{ USER_ACCOUNT : &quot;소속&quot;
   USER_ACCOUNT }o--o{ ROLE : &quot;권한 부여&quot;
@@ -309,17 +313,17 @@
     string event_id PK
     datetime fired_at
     string channel
-  }</pre></div><figcaption>개념 ERD(초안). slot 은 Blue/Green 구분, stage 는 개발/운영 구분입니다. 국가별 언어 차이는 공통 어댑터에서 처리해 법인 속성에는 넣지 않았습니다.</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  }</pre></div><figcaption>직접 그린 개념도. slot 은 Blue/Green 구분, stage 는 개발/운영 구분입니다.</figcaption></figure></div>
+
 </section>
 <section class="sec sec--glow">
 <div class="sec__head"><h2 class="sec__title">설계 결정<span class="dim">왜 이렇게 골랐나</span></h2><div class="sec__lead"><p>도구를 고르기보다 '사람이 지켜봐야 하는 단계'와 '사용자가 먼저 알게 되는 장애'를 줄이는 쪽으로 결정했습니다.</p></div></div>
-<div class="sec__body"><div class="tiles"><div class="tile"><h3>Blue/Green 배포</h3><p>공지→수작업 반영→확인 순서는 사람이 모든 단계를 지켜야 했습니다. 새 버전을 기존 버전 옆에 올려 자동 헬스체크로 확인한 뒤 Nginx 에서 트래픽을 넘기면, 확인이 끝날 때까지 기존 버전이 그대로 서비스하고 이상이 보이면 전환하지 않으면 됩니다.</p></div><div class="tile"><h3>Docker 이미지 단위 배포</h3><p>빌드 결과를 이미지 하나로 고정해, 사람이 직접 반영하던 단계를 줄이고 그 과정의 반영 실수를 막았습니다.</p></div><div class="tile"><h3>해외는 커밋 시 자동, 국내는 수동 실행</h3><p>해외 법인 쪽은 ERP 가 가볍고 데이터가 많지 않아 커밋하면 파이프라인이 바로 돌게 했고, 국내는 수동으로 실행했습니다. 어느 쪽이든 테스트 단계는 거치게 했습니다.</p></div><div class="tile"><h3>상용 SSO 제품 + 무상태 토큰 인증</h3><p>인증 서버를 직접 만들지 않고, Google Workspace 와 연동한 상용 SSO 제품으로 OAuth 2.0 기반 전사 통합 로그인을 적용해 보안 기준을 한곳에 모으고 사용자 경험도 단순하게 했습니다. 각 시스템은 세션을 공유하지 않고 JWT(Access/Refresh) 기반 무상태 인증을 쓰므로, 시스템이 늘어도 같은 방식으로 붙이면 됩니다.</p></div><div class="tile"><h3>로그는 ELK 로 한곳에</h3><p>시스템별로 따로 보던 로그를 중앙에 모아, 장애 때 같은 시간대의 기록을 한 화면에서 검색하도록 했습니다.</p></div><div class="tile"><h3>임계치 알림은 Slack Webhook</h3><p>현업의 전화보다 개발자가 먼저 알도록, 트래픽·JVM 힙·API 응답 속도가 임계치를 넘으면 개발자 채널로 바로 알림이 가게 했습니다.</p></div><div class="tile"><h3>환경 분리와 법인 데이터 격리</h3><p>개발 작업이 운영 데이터·설정에 닿지 않도록 개발/운영 환경을 나눴습니다. 4개국 법인(베트남·필리핀·인도·미얀마) 데이터는 SFA/CRM 에서 법인별 DB·스키마로 나눠 격리했고, 국가별 시간대·통화·언어 차이는 공통 어댑터 패턴으로 처리했습니다.</p></div></div></div>
+<div class="sec__body"><div class="tiles"><div class="tile"><h3>Blue/Green 배포</h3><p>공지→수작업 반영→확인 순서는 사람이 모든 단계를 지켜야 했습니다. 새 버전을 기존 버전 옆에 올려 자동 헬스체크로 확인한 뒤 Nginx 에서 트래픽을 넘기면, 확인이 끝날 때까지 기존 버전이 그대로 서비스하고 이상이 보이면 전환하지 않으면 됩니다.</p></div><div class="tile"><h3>Docker 이미지 단위 배포</h3><p>빌드 결과를 이미지 하나로 고정해, 사람이 직접 반영하던 단계를 줄이고 그 과정의 반영 실수를 막았습니다.</p></div><div class="tile"><h3>해외는 커밋 시 자동, 국내는 수동 실행</h3><p>해외 법인 쪽은 ERP 가 가볍고 데이터가 많지 않아 커밋하면 파이프라인이 바로 돌게 했고, 국내는 수동으로 실행했습니다. 어느 쪽이든 테스트 단계는 거치게 했습니다.</p></div><div class="tile"><h3>상용 SSO 제품 + 무상태 토큰 인증</h3><p>로그인은 Google Workspace 와 연동한 상용 SSO 제품에 맡기고 OAuth 2.0 기반 전사 통합 로그인을 적용해, 보안 기준을 한곳에 모으고 사용자 경험도 단순하게 했습니다. 토큰(JWT Access/Refresh)은 직접 만든 Spring Security 공통 모듈이 발급하고, 각 시스템은 세션을 공유하지 않고 이 토큰으로 무상태 인증을 하므로 시스템이 늘어도 같은 방식으로 붙이면 됩니다.</p></div><div class="tile"><h3>로그는 ELK 로 한곳에</h3><p>시스템별로 따로 보던 로그를 중앙에 모아, 장애 때 같은 시간대의 기록을 한 화면에서 검색하도록 했습니다.</p></div><div class="tile"><h3>임계치 알림은 Slack Webhook</h3><p>현업의 전화보다 개발자가 먼저 알도록, 트래픽·JVM 힙·API 응답 속도가 임계치를 넘으면 개발자 채널로 바로 알림이 가게 했습니다.</p></div><div class="tile"><h3>환경 분리와 법인 데이터 격리</h3><p>개발 작업이 운영 데이터·설정에 닿지 않도록 개발/운영 환경을 나눴습니다. 4개국 법인(베트남·필리핀·인도·미얀마) 데이터는 SFA/CRM 에서 법인별 DB·스키마로 나눠 격리했고, 국가별 시간대·통화·언어 차이는 공통 어댑터 패턴으로 처리했습니다.</p></div></div></div>
 
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">주요 구현<span class="dim">네 가지 축</span></h2><div class="sec__lead"><p>원본 포트폴리오에서 정리한 네 축을 구현 내용과 효과로 나눴습니다.</p></div></div>
-<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>축</th><th>구현</th><th>효과</th></tr></thead><tbody><tr><td>CI/CD 파이프라인</td><td>Jenkins·Docker 기반 빌드·테스트·배포(해외 법인은 커밋 시 자동 실행, 국내는 수동 실행), 자동 헬스체크 뒤 Nginx 로 Blue/Green 전환</td><td>배포 리드타임 평균 60분→10분(80% 단축, 실측), 신속한 기능 릴리즈</td></tr><tr><td>통합 관제</td><td>ELK 로 로그 중앙화·시각화, Grafana·WhaTap APM 지표 대시보드</td><td>장애 감지 시간 약 90% 단축(추정), 선제적 대응 체계</td></tr><tr><td>보안 표준화</td><td>Google Workspace 와 연동한 상용 SSO 제품으로 OAuth 2.0 기반 전사 SSO 적용(SFA/CRM·TMS/WMS·MES·그룹웨어 등), Access/Refresh 무상태 인증, 개발/운영 환경 분리, SFA/CRM 의 법인별 DB·스키마 분리(멀티테넌시)</td><td>시스템별 인증을 하나의 체계로 통합, 보안성 강화</td></tr><tr><td>모니터링 체계</td><td>실시간 트래픽·JVM 힙 메모리·API 응답 속도 추적, 임계치 기반 Slack 자동 알림</td><td>이상 징후를 개발자가 먼저 확인</td></tr></tbody></table></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>축</th><th>구현</th><th>효과</th></tr></thead><tbody><tr><td>CI/CD 파이프라인</td><td>Jenkins·Docker 기반 빌드·테스트·배포(해외 법인은 커밋 시 자동 실행, 국내는 수동 실행), 자동 헬스체크 뒤 Nginx 로 Blue/Green 전환</td><td>배포 리드타임 평균 60분→10분(80% 단축, 실측), 신속한 기능 릴리즈</td></tr><tr><td>통합 관제</td><td>ELK 로 로그 중앙화·시각화, Grafana·WhaTap APM 지표 대시보드</td><td>장애 감지 시간 약 90% 단축(추정), 선제적 대응 체계</td></tr><tr><td>보안 표준화</td><td>Google Workspace 와 연동한 상용 SSO 제품으로 OAuth 2.0 기반 전사 SSO 적용(SFA/CRM·TMS/WMS·MES·그룹웨어 등), 직접 만든 Spring Security 공통 모듈로 Access/Refresh 발급·무상태 검증, 개발/운영 환경 분리, SFA/CRM 의 법인별 DB·스키마 분리(멀티테넌시)</td><td>시스템별 인증을 하나의 체계로 통합, 보안성 강화</td></tr><tr><td>모니터링 체계</td><td>실시간 트래픽·JVM 힙 메모리·API 응답 속도 추적, 임계치 기반 Slack 자동 알림</td><td>이상 징후를 개발자가 먼저 확인</td></tr></tbody></table></div></div>
 
 </section>
 <section class="sec">
@@ -329,7 +333,7 @@
 </section>
 <section class="sec sec--glow sec--flip">
 <div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">무엇을 어디에 썼나</span></h2></div>
-<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>기술</th><th>쓰임</th><th>고른 이유</th></tr></thead><tbody><tr><td>Jenkins</td><td>빌드·테스트·배포 파이프라인(해외 법인 커밋 시 자동 실행, 국내 수동 실행)</td><td>수작업 배포 단계를 파이프라인으로 고정</td></tr><tr><td>Docker</td><td>배포 단위 이미지</td><td>사람이 직접 하던 반영을 이미지 교체로 대신</td></tr><tr><td>Blue/Green 무중단 배포</td><td>자동 헬스체크로 새 버전 확인 뒤 트래픽 전환</td><td>확인이 끝날 때까지 기존 버전이 계속 서비스</td></tr><tr><td>Nginx</td><td>Blue/Green 트래픽 전환</td><td>기존 버전을 둔 채 요청이 갈 곳만 새 버전으로 바꿈</td></tr><tr><td>ELK Stack</td><td>로그 수집·저장·검색</td><td>시스템별로 흩어진 로그를 한곳에서 검색</td></tr><tr><td>Grafana · APM</td><td>트래픽·JVM 힙·API 응답 속도 대시보드</td><td>지표로 이상 징후를 먼저 파악</td></tr><tr><td>Slack Webhook</td><td>임계치·오류 알림</td><td>현업 연락보다 먼저 개발자에게 전달</td></tr><tr><td>상용 SSO 제품 · Google Workspace</td><td>OAuth 2.0 기반 전사 SSO — SFA/CRM·TMS/WMS·MES·그룹웨어 등</td><td>인증 서버를 직접 만들지 않고 여러 시스템 로그인을 하나로 묶음</td></tr><tr><td>Spring Security · JWT(Access/Refresh)</td><td>업무 시스템 쪽 무상태 인증</td><td>시스템마다 세션을 공유하지 않고 토큰으로 검증</td></tr></tbody></table></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>기술</th><th>쓰임</th><th>고른 이유</th></tr></thead><tbody><tr><td>Jenkins</td><td>빌드·테스트·배포 파이프라인(해외 법인 커밋 시 자동 실행, 국내 수동 실행)</td><td>수작업 배포 단계를 파이프라인으로 고정</td></tr><tr><td>Docker</td><td>배포 단위 이미지</td><td>사람이 직접 하던 반영을 이미지 교체로 대신</td></tr><tr><td>Blue/Green 무중단 배포</td><td>자동 헬스체크로 새 버전 확인 뒤 트래픽 전환</td><td>확인이 끝날 때까지 기존 버전이 계속 서비스</td></tr><tr><td>Nginx</td><td>Blue/Green 트래픽 전환</td><td>기존 버전을 둔 채 요청이 갈 곳만 새 버전으로 바꿈</td></tr><tr><td>ELK Stack</td><td>로그 수집·저장·검색</td><td>시스템별로 흩어진 로그를 한곳에서 검색</td></tr><tr><td>Grafana · APM</td><td>트래픽·JVM 힙·API 응답 속도 대시보드</td><td>지표로 이상 징후를 먼저 파악</td></tr><tr><td>Slack Webhook</td><td>임계치·오류 알림</td><td>현업 연락보다 먼저 개발자에게 전달</td></tr><tr><td>상용 SSO 제품 · Google Workspace</td><td>OAuth 2.0 기반 전사 SSO — SFA/CRM·TMS/WMS·MES·그룹웨어 등</td><td>로그인은 상용 SSO 제품에 맡기고 여러 시스템 로그인을 하나로 묶음</td></tr><tr><td>Spring Security · JWT(Access/Refresh)</td><td>토큰 발급·검증(무상태 인증)</td><td>공통 모듈 하나를 여러 업무 시스템이 함께 써, 세션을 공유하지 않고 같은 방식으로 토큰을 검증</td></tr></tbody></table></div></div>
 
 </section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>배포 자동화</h3><div class="card__tags"><span class="tag">Jenkins</span><span class="tag">Docker</span><span class="tag">Blue/Green 무중단 배포</span><span class="tag">Nginx</span><span class="tag">Git</span></div></div><div class="stack__group"><h3>통합 관제·모니터링</h3><div class="card__tags"><span class="tag">ELK Stack(Elasticsearch·Logstash·Kibana)</span><span class="tag">Grafana</span><span class="tag">WhaTap APM</span><span class="tag">Slack Webhook</span></div></div><div class="stack__group"><h3>인증·보안</h3><div class="card__tags"><span class="tag">상용 SSO 제품(Google Workspace 연동)</span><span class="tag">OAuth 2.0</span><span class="tag">Spring Security</span><span class="tag">JWT(Access·Refresh)</span></div></div><div class="stack__group"><h3>기타</h3><div class="card__tags"><span class="tag">Flask</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">배포 한 번에 평균 1시간 → 10분 · 장애를 전화로 알던 구조 → 알림으로 먼저 감지 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
 <div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 3개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 배포 한 번에 평균 1시간 → 10분</span></a><a class="ctl" href="#case-2"><span>02 장애를 전화로 알던 구조 → 알림으로 먼저 감지</span></a><a class="ctl" href="#case-3"><span>03 시스템마다 다른 인증 → 전사 SSO 와 법인 데이터 격리</span></a></div></section><article class="case sec--glow" id="case-1">
@@ -403,19 +407,19 @@
 <div class="steps">
 <div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>사내 업무 시스템(SFA/CRM·TMS/WMS·MES·그룹웨어 등)이 늘고 베트남·필리핀·인도·미얀마 법인까지 SFA/CRM 을 함께 쓰게 되면서, 인증과 데이터 경계를 시스템마다 따로 다루면 보안 기준이 흩어질 위험이 있었습니다.</p></div>
 <div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>인증·인가 규칙이 시스템별로 구현되면 같은 사용자라도 시스템마다 다른 기준으로 검사되고, 개발과 운영, 법인과 법인 사이의 경계도 코드마다 다르게 지켜질 수 있습니다.</p></div>
-<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>인증 서버를 직접 만들지 않고 Google Workspace 와 연동한 상용 SSO 제품으로 OAuth 2.0 기반 전사 SSO 적용 — SFA/CRM·TMS/WMS·MES·그룹웨어·기타 사내 시스템 로그인 일원화</li><li>JWT(Access/Refresh) 기반 무상태 인증 — 각 시스템은 세션을 따로 두지 않음</li><li>개발/운영 환경 분리로 운영 데이터·설정을 개발 작업과 격리</li><li>SSO 와 함께, SFA/CRM 에서는 4개국 법인 데이터를 법인별 DB·스키마로 나눠 격리하고 시간대·통화·언어 차이는 공통 어댑터로 처리</li></ol></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>로그인은 Google Workspace 와 연동한 상용 SSO 제품에 맡기고 OAuth 2.0 기반 전사 SSO 적용 — SFA/CRM·TMS/WMS·MES·그룹웨어·기타 사내 시스템 로그인 일원화</li><li>직접 만든 Spring Security 공통 모듈이 JWT(Access/Refresh)를 발급하고 여러 업무 시스템이 같은 모듈로 토큰을 검증 — 각 시스템은 세션을 따로 두지 않음</li><li>개발/운영 환경 분리로 운영 데이터·설정을 개발 작업과 격리</li><li>SSO 와 함께, SFA/CRM 에서는 4개국 법인 데이터를 법인별 DB·스키마로 나눠 격리하고 시간대·통화·언어 차이는 공통 어댑터로 처리</li></ol></div>
 <div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>로그인과 인증 규칙을 하나의 체계로 묶어 보안 기준을 표준화했고, 사용자는 한 번 로그인으로 SFA/CRM·TMS/WMS·MES·그룹웨어 등 여러 시스템을 쓰게 되었습니다. 이 영역은 따로 잰 숫자가 없습니다.</p></div>
 </div>
 <p class="sub-h">도입 후 인증 구조. 법인 데이터 격리는 SFA/CRM 의 법인별 DB·스키마 분리입니다.</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
   U[&quot;임직원&lt;br/&gt;국내·해외 법인&quot;] --&gt; SSO[&quot;상용 SSO 제품&lt;br/&gt;Google Workspace 연동 · OAuth 2.0&quot;]
-  SSO --&gt; TOK[&quot;JWT(Access · Refresh)&lt;br/&gt;무상태 인증&quot;]
+  SSO --&gt;|&quot;로그인 성공&quot;| TOK[&quot;공통 인증 모듈 · Spring Security&lt;br/&gt;JWT(Access · Refresh) 발급 · 무상태 인증&quot;]
   TOK --&gt; S1[&quot;SFA/CRM&quot;]
   TOK --&gt; S2[&quot;TMS/WMS&quot;]
   TOK --&gt; S3[&quot;MES&quot;]
   TOK --&gt; S4[&quot;그룹웨어 · 기타&lt;br/&gt;사내 시스템&quot;]
   S1 --&gt; ISO[&quot;법인별 DB · 스키마 분리&lt;br/&gt;시간대 · 통화 · 언어 어댑터&quot;]">flowchart LR
   U[&quot;임직원&lt;br/&gt;국내·해외 법인&quot;] --&gt; SSO[&quot;상용 SSO 제품&lt;br/&gt;Google Workspace 연동 · OAuth 2.0&quot;]
-  SSO --&gt; TOK[&quot;JWT(Access · Refresh)&lt;br/&gt;무상태 인증&quot;]
+  SSO --&gt;|&quot;로그인 성공&quot;| TOK[&quot;공통 인증 모듈 · Spring Security&lt;br/&gt;JWT(Access · Refresh) 발급 · 무상태 인증&quot;]
   TOK --&gt; S1[&quot;SFA/CRM&quot;]
   TOK --&gt; S2[&quot;TMS/WMS&quot;]
   TOK --&gt; S3[&quot;MES&quot;]
