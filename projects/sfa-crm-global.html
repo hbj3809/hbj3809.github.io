@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="../assets/css/site.css?v=a01858cc">
+<link rel="stylesheet" href="../assets/css/site.css?v=75c9176d">
 </head>
 <body>
 <a class="skip" href="#main">본문 바로가기</a>
@@ -52,7 +52,7 @@
     C4[&quot;정산&lt;br/&gt;청구·여신&quot;]
   end
   DB[(&quot;Oracle&lt;br/&gt;법인별 데이터 격리&quot;)]
-  ADP[&quot;공통 연동 모듈&lt;br/&gt;SAP RFC · EAI&quot;]
+  ADP[&quot;공통 연동 모듈&lt;br/&gt;SAP RFC 직접 호출&quot;]
   subgraph ERP[&quot;SAP ERP&quot;]
     MM[&quot;MM 자재&quot;]
     PP[&quot;PP 생산&quot;]
@@ -90,7 +90,7 @@
     C4[&quot;정산&lt;br/&gt;청구·여신&quot;]
   end
   DB[(&quot;Oracle&lt;br/&gt;법인별 데이터 격리&quot;)]
-  ADP[&quot;공통 연동 모듈&lt;br/&gt;SAP RFC · EAI&quot;]
+  ADP[&quot;공통 연동 모듈&lt;br/&gt;SAP RFC 직접 호출&quot;]
   subgraph ERP[&quot;SAP ERP&quot;]
     MM[&quot;MM 자재&quot;]
     PP[&quot;PP 생산&quot;]
@@ -368,7 +368,7 @@
 <p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">4개국 글로벌 멀티테넌시·현지화 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>국내와 4개국 법인이 같은 플랫폼을 씁니다. 그래서 법인 데이터는 서로 격리하고, 국가마다 다른 시간대·통화·언어셋은 공통 어댑터에서 맞췄습니다. 국가별 차이를 기능 코드 곳곳에 분기로 흩어 두지 않고 어댑터 한 곳에 모은 이유가 있습니다. 법인이 늘 때마다 모든 기능을 고치지 않으려는 것이었습니다.</p><p>언어는 서버 문구를 Spring Message 로 관리하고, 화면에서 나중에 그려지는 요소는 MutationObserver 로 처리했습니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">4개국 글로벌 멀티테넌시·현지화 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>국내와 4개국 법인이 같은 플랫폼을 씁니다. 그래서 법인 데이터는 법인별 DB·스키마로 나눠 물리적으로 격리하고, 국가마다 다른 시간대·통화·언어셋은 공통 어댑터에서 맞췄습니다. 국가별 차이를 기능 코드 곳곳에 분기로 흩어 두지 않고 어댑터 한 곳에 모은 이유가 있습니다. 법인이 늘 때마다 모든 기능을 고치지 않으려는 것이었습니다.</p><p>언어는 서버 문구를 Spring Message 로 관리하고, 화면에서 나중에 그려지는 요소는 MutationObserver 로 처리했습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
   LGN[&quot;전사 SSO 로그인&lt;br/&gt;Access·Refresh Token&quot;]
   CTX[&quot;요청의 법인 정보&lt;br/&gt;국가·법인 코드&quot;]
@@ -379,7 +379,7 @@
     LANG[&quot;언어&lt;br/&gt;Spring Message · 화면 문구&quot;]
   end
   DOM[&quot;공통 도메인 로직&lt;br/&gt;영업·고객·주문·정산&quot;]
-  subgraph ISO[&quot;법인 데이터 격리 (논리·물리)&quot;]
+  subgraph ISO[&quot;법인별 DB·스키마 분리&quot;]
     KR[&quot;국내&quot;]
     VN[&quot;베트남&quot;]
     PH[&quot;필리핀&quot;]
@@ -402,7 +402,7 @@
     LANG[&quot;언어&lt;br/&gt;Spring Message · 화면 문구&quot;]
   end
   DOM[&quot;공통 도메인 로직&lt;br/&gt;영업·고객·주문·정산&quot;]
-  subgraph ISO[&quot;법인 데이터 격리 (논리·물리)&quot;]
+  subgraph ISO[&quot;법인별 DB·스키마 분리&quot;]
     KR[&quot;국내&quot;]
     VN[&quot;베트남&quot;]
     PH[&quot;필리핀&quot;]
@@ -415,7 +415,7 @@
   ADPT --&gt; CUR
   ADPT --&gt; LANG
   CONV --&gt; DOM
-  DOM --&gt; ISO</pre></div><figcaption>요청에서 법인 정보를 얻는 방식과 격리 방법의 세부 내용은 초안입니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>격리: 4개국 법인 데이터의 논리·물리 격리</li><li>시간대: 법인별 Timezone</li><li>통화: 법인별 통화</li><li>언어: Spring Message·MutationObserver 기반 다국어</li></ul></div></div>
+  DOM --&gt; ISO</pre></div><figcaption>요청에서 법인 정보를 얻는 방식과 시간대·통화 처리 세부는 초안입니다. 법인별 DB·스키마 분리는 확인된 내용입니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>격리: 법인별 DB·스키마 분리</li><li>시간대: 법인별 Timezone</li><li>통화: 법인별 통화</li><li>언어: Spring Message·MutationObserver 기반 다국어</li></ul></div></div>
 <p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
 </section>
 <section class="sec sec--glow">
@@ -435,9 +435,9 @@
 </section>
 <section class="sec sec--glow sec--flip">
 <div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">어디에 썼나</span></h2></div>
-<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>영역</th><th>기술</th><th>쓴 곳</th></tr></thead><tbody><tr><td>백엔드</td><td>Java, Spring Boot</td><td>영업·고객·주문·정산 도메인 서비스, 공통 연동 모듈</td></tr><tr><td>다국어</td><td>Spring Message(i18n), MutationObserver</td><td>서버 문구와 화면 문구의 언어별 처리</td></tr><tr><td>연동</td><td>SAP RFC, EAI</td><td>MM·PP·SD·FI 인터페이스</td></tr><tr><td>데이터</td><td>Oracle</td><td>도메인 데이터, 법인별 데이터 격리</td></tr><tr><td>인증</td><td>OAuth 2.0, JWT</td><td>전사 SSO, Access/Refresh Token 무상태 인증</td></tr><tr><td>화면</td><td>JSP, JavaScript, TreeGrid</td><td>디자인 템플릿, 목록·그리드 화면</td></tr><tr><td>배포·운영</td><td>Jenkins, Docker, Jennifer APM</td><td>배포 자동화, 응답 시간 감시</td></tr></tbody></table></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>영역</th><th>기술</th><th>쓴 곳</th></tr></thead><tbody><tr><td>백엔드</td><td>Java, Spring Boot</td><td>영업·고객·주문·정산 도메인 서비스, 공통 연동 모듈</td></tr><tr><td>다국어</td><td>Spring Message(i18n), MutationObserver</td><td>서버 문구와 화면 문구의 언어별 처리</td></tr><tr><td>연동</td><td>SAP RFC(직접 호출)</td><td>MM·PP·SD·FI 인터페이스</td></tr><tr><td>데이터</td><td>Oracle</td><td>도메인 데이터, 법인별 데이터 격리</td></tr><tr><td>인증</td><td>OAuth 2.0, JWT</td><td>전사 SSO, Access/Refresh Token 무상태 인증</td></tr><tr><td>화면</td><td>JSP, JavaScript, TreeGrid</td><td>디자인 템플릿, 목록·그리드 화면</td></tr><tr><td>배포·운영</td><td>Jenkins, Docker, Jennifer APM</td><td>배포 자동화, 응답 시간 감시</td></tr></tbody></table></div></div>
 
-</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>백엔드</h3><div class="card__tags"><span class="tag">Java</span><span class="tag">Spring Boot</span><span class="tag">Spring Message(i18n)</span></div></div><div class="stack__group"><h3>연동</h3><div class="card__tags"><span class="tag">SAP RFC</span><span class="tag">EAI</span></div></div><div class="stack__group"><h3>데이터</h3><div class="card__tags"><span class="tag">Oracle</span></div></div><div class="stack__group"><h3>인증</h3><div class="card__tags"><span class="tag">OAuth 2.0</span><span class="tag">JWT</span></div></div><div class="stack__group"><h3>화면</h3><div class="card__tags"><span class="tag">JSP</span><span class="tag">JavaScript</span><span class="tag">TreeGrid</span><span class="tag">MutationObserver</span></div></div><div class="stack__group"><h3>배포·운영</h3><div class="card__tags"><span class="tag">Jenkins</span><span class="tag">Docker</span><span class="tag">Jennifer APM</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">계열사마다 다른 외주 CRM → 그룹 계열사 공통 ERP 표준 모델 · 디자인 템플릿 외주 견적 9,000만원 → 입사 1개월 자체 구축 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
+</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>백엔드</h3><div class="card__tags"><span class="tag">Java</span><span class="tag">Spring Boot</span><span class="tag">Spring Message(i18n)</span></div></div><div class="stack__group"><h3>연동</h3><div class="card__tags"><span class="tag">SAP RFC(직접 호출)</span></div></div><div class="stack__group"><h3>데이터</h3><div class="card__tags"><span class="tag">Oracle</span></div></div><div class="stack__group"><h3>인증</h3><div class="card__tags"><span class="tag">OAuth 2.0</span><span class="tag">JWT</span></div></div><div class="stack__group"><h3>화면</h3><div class="card__tags"><span class="tag">JSP</span><span class="tag">JavaScript</span><span class="tag">TreeGrid</span><span class="tag">MutationObserver</span></div></div><div class="stack__group"><h3>배포·운영</h3><div class="card__tags"><span class="tag">Jenkins</span><span class="tag">Docker</span><span class="tag">Jennifer APM</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">계열사마다 다른 외주 CRM → 그룹 계열사 공통 ERP 표준 모델 · 디자인 템플릿 외주 견적 9,000만원 → 입사 1개월 자체 구축 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
 <div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 4개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 계열사마다 다른 외주 CRM → 그룹 계열사 공통 ERP 표준 모델</span></a><a class="ctl" href="#case-2"><span>02 디자인 템플릿 외주 견적 9,000만원 → 입사 1개월 자체 구축</span></a><a class="ctl" href="#case-3"><span>03 4개국 언어·시간대·통화를 국가마다 다시 만들지 않기</span></a><a class="ctl" href="#case-4"><span>04 현지 네트워크가 느린 법인을 위한 경량화</span></a></div></section><article class="case sec--glow" id="case-1">
 <div class="case__head"><span class="case__no">CASE 01 · 플랫폼설계</span><h3 class="case__title">계열사마다 다른 외주 CRM → 그룹 계열사 공통 ERP 표준 모델</h3></div>
 <div class="steps">
@@ -540,15 +540,15 @@
 <p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
 </article>
 <article class="case" id="case-4">
-<div class="case__head"><span class="case__no">CASE 04 · 현지대응</span><h3 class="case__title">현지 네트워크가 느린 법인을 위한 경량화 <span class="badge-draft">초안</span></h3></div>
+<div class="case__head"><span class="case__no">CASE 04 · 현지대응</span><h3 class="case__title">현지 네트워크가 느린 법인을 위한 경량화</h3></div>
 <div class="steps">
 <div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>해외 법인 일부는 현지 네트워크 환경이 좋지 않았습니다. 국내 기준으로 만든 화면과 SAP 실시간 조회를 그대로 쓰면 느리게 동작할 수 있었습니다.</p></div>
-<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>화면을 열 때마다 리소스를 새로 받고 재고·여신 같은 SAP 조회를 화면에서 여러 번 주고받으면, 왕복할 때마다 지연이 쌓입니다.</p></div>
-<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>모든 법인이 같은 디자인 템플릿을 써서 정적 리소스를 캐시로 재사용</li><li>목록은 TreeGrid 로 필요한 만큼만 나눠 불러오기</li><li>재고·여신 같은 SAP 조회는 서버의 공통 연동 모듈에서 모아 한 번에 응답</li><li>무상태 토큰 인증이라 연결이 끊겨도 세션을 복구하지 않고 다시 요청</li><li>Jennifer APM 으로 법인별 응답 시간 관찰</li></ol></div>
-<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>4개국 법인에 같은 플랫폼을 배포해 운영했습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>화면을 열 때마다 리소스를 새로 받고 재고·여신 같은 SAP 조회를 화면에서 여러 번 주고받으면, 왕복할 때마다 지연이 쌓입니다. 현지 연결이 불안정해 처리 도중 끊기면, 큰 트랜잭션 하나가 통째로 실패해 주문 같은 핵심 업무가 멈출 수 있었습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>현지 연결 불안정에 대비해 트랜잭션을 업무상 중요한 처리 단위별로 나눠, 일부가 실패해도 핵심 업무 처리에 문제가 번지지 않게 구현</li><li>문제가 생기면 webhook 알림이나 APM 알림을 받아 바로 대응</li><li>모든 법인이 같은 디자인 템플릿을 써서 정적 리소스를 캐시로 재사용</li><li>목록은 TreeGrid 로 필요한 만큼만 나눠 불러오기</li><li>재고·여신 같은 SAP 조회는 서버의 공통 연동 모듈에서 모아 한 번에 응답</li><li>무상태 토큰 인증이라 연결이 끊겨도 세션을 복구하지 않고 다시 요청</li><li>Jennifer APM 으로 법인별 응답 시간 관찰</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>4개국 법인에 같은 플랫폼을 배포해 운영했고, 연결이 끊겨도 처리 단위별로 나눠 둔 덕분에 핵심 업무가 멈추지 않게 했으며 이상은 webhook·APM 알림으로 받아 대응했습니다.</p></div>
 </div>
 <div class="lesson"><b>배운 점</b><p>현지 환경을 국내 기준으로 가정하지 말고, 설계 단계에서 왕복 횟수와 화면 무게를 줄이는 것을 기본으로 삼아야 한다는 것을 배웠습니다.</p></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+
 </article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>한 부서의 요구를 구현하는 일과 여러 조직이 함께 쓰는 시스템을 만드는 일은 다르다는 것을 배웠습니다. 인터페이스를 먼저 표준화해 두면 기능과 법인이 늘어도 구조가 버팁니다.</p><p>비용을 줄인 것보다 구조를 직접 쥐고 있었다는 점이 더 컸습니다. 그 덕분에 해외 법인 확장, SAP 연동, 그룹 표준 채택까지 이어 갈 수 있었습니다. 이후 모든 프로젝트에서 &quot;단순 구현이 아닌 구조 설계&quot;를 기준으로 삼게 됐습니다.</p><p>국가 간 차이는 기능이 아니라 설정 문제로 다뤄야 확장 비용이 줄어든다는 것을 배웠습니다.</p></section></div>
 <nav class="pager" aria-label="다른 프로젝트"><a href="payment-msa.html"><small>← 이전 프로젝트</small><b>제약사 이커머스 몰 결제 시스템 MSA 전환</b></a><a class="next" href="devops-observability.html"><small>다음 프로젝트 →</small><b>전사 CI/CD·SSO·통합 로그 관제 플랫폼</b></a></nav>
 <footer class="footer"><p>황병준 · 백엔드·데이터 엔지니어 · <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p><small>디자인 바탕: <a href="https://once-ui.com" target="_blank" rel="noopener">Once UI</a> Magic Portfolio · 도표는 직접 그린 개념도입니다</small></footer>

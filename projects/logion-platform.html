@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="../assets/css/site.css?v=a01858cc">
+<link rel="stylesheet" href="../assets/css/site.css?v=75c9176d">
 </head>
 <body>
 <a class="skip" href="#main">본문 바로가기</a>
@@ -78,7 +78,7 @@
 
 </section>
 <section class="sec sec--glow sec--flip">
-<div class="sec__head"><h2 class="sec__title">아키텍처<span class="dim">5개 Bounded Context 와 이벤트 버스</span></h2><div class="sec__lead"><p>API Gateway 뒤에 업무 경계별 다섯 서비스를 두고, 서비스 사이 데이터 흐름은 Kafka 이벤트로 이었습니다. 외부 기간계·고객사 시스템과는 EAI 로 연동하고, 전표 인식은 Vision AI 로 분리했습니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">아키텍처<span class="dim">5개 Bounded Context 와 이벤트 버스</span></h2><div class="sec__lead"><p>API Gateway 뒤에 업무 경계별 다섯 서비스를 두고, 서비스 사이 데이터 흐름은 Kafka 이벤트로 이었습니다. 입고·출고 모두 키오스크에서 처리한 결과를 EAI 를 통해 고객사 ERP 와 내부 기간계 ERP 에 연동했고, 전표 인식은 Vision AI 로 분리했습니다. 업무 DB 는 Oracle, AI 관련 데이터는 Amazon Aurora 에 두었습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
   subgraph CH[&quot;현장 · 관리 채널&quot;]
     KIOSK[&quot;현장 키오스크&lt;br/&gt;출고 · 입고 · 전표 촬영&quot;]
@@ -94,9 +94,10 @@
   end
   VAI[&quot;Vision AI · OCR&lt;br/&gt;이동전표 · 인감 인식&quot;]
   BUS[&quot;Kafka · Kafka Streams&lt;br/&gt;이벤트 버스 · 실시간 집계&quot;]
-  DB[(&quot;MySQL · Redis&quot;)]
+  DB[(&quot;Oracle · Redis&lt;br/&gt;업무 데이터 · 세션 상태&quot;)]
+  ADB[(&quot;Amazon Aurora&lt;br/&gt;AI 관련 데이터&quot;)]
   EAI[&quot;EAI&lt;br/&gt;인터페이스 통합&quot;]
-  EXT[&quot;기간계 · 고객사 TMS/WMS&quot;]
+  EXT[&quot;고객사 ERP · 내부 기간계 ERP&quot;]
   OBS[&quot;WhaTap APM · ELK&lt;br/&gt;응답 시간 · 로그&quot;]
   KIOSK --&gt; GW
   ADMWEB --&gt; GW
@@ -104,8 +105,10 @@
   RCP --&gt;|&quot;전표 이미지&quot;| VAI
   DLV --&gt;|&quot;출고 완료 이벤트&quot;| BUS
   BUS --&gt;|&quot;도착지 입고 데이터&quot;| RCP
+  RCP --&gt;|&quot;입고 확정 이벤트&quot;| BUS
+  VAI --&gt; ADB
   BUS --&gt;|&quot;집계 반영&quot;| WPMS
-  BUS --&gt;|&quot;연동 요청&quot;| EAI
+  BUS --&gt;|&quot;입고·출고 연동 요청&quot;| EAI
   EAI --&gt; EXT
   BC --&gt;|&quot;업무 데이터 · 세션 상태&quot;| DB
   BC -.-&gt;|&quot;로그 · 지표&quot;| OBS">flowchart TB
@@ -123,9 +126,10 @@
   end
   VAI[&quot;Vision AI · OCR&lt;br/&gt;이동전표 · 인감 인식&quot;]
   BUS[&quot;Kafka · Kafka Streams&lt;br/&gt;이벤트 버스 · 실시간 집계&quot;]
-  DB[(&quot;MySQL · Redis&quot;)]
+  DB[(&quot;Oracle · Redis&lt;br/&gt;업무 데이터 · 세션 상태&quot;)]
+  ADB[(&quot;Amazon Aurora&lt;br/&gt;AI 관련 데이터&quot;)]
   EAI[&quot;EAI&lt;br/&gt;인터페이스 통합&quot;]
-  EXT[&quot;기간계 · 고객사 TMS/WMS&quot;]
+  EXT[&quot;고객사 ERP · 내부 기간계 ERP&quot;]
   OBS[&quot;WhaTap APM · ELK&lt;br/&gt;응답 시간 · 로그&quot;]
   KIOSK --&gt; GW
   ADMWEB --&gt; GW
@@ -133,8 +137,10 @@
   RCP --&gt;|&quot;전표 이미지&quot;| VAI
   DLV --&gt;|&quot;출고 완료 이벤트&quot;| BUS
   BUS --&gt;|&quot;도착지 입고 데이터&quot;| RCP
+  RCP --&gt;|&quot;입고 확정 이벤트&quot;| BUS
+  VAI --&gt; ADB
   BUS --&gt;|&quot;집계 반영&quot;| WPMS
-  BUS --&gt;|&quot;연동 요청&quot;| EAI
+  BUS --&gt;|&quot;입고·출고 연동 요청&quot;| EAI
   EAI --&gt; EXT
   BC --&gt;|&quot;업무 데이터 · 세션 상태&quot;| DB
   BC -.-&gt;|&quot;로그 · 지표&quot;| OBS</pre></div><figcaption>직접 그린 개념도 — 구성요소와 데이터 흐름</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>Auth: JWT·키 구성 알고리즘, 외부 API 호출용 암호화, Spring Security 권한, 법인-센터 계정 테넌트</li><li>Delivery: 차량·도착지 기준 출고 생성, 출력물·인터페이스</li><li>Receipt: 입고 품목 연동, 전표 촬영 검증, 입고 확정·검토 상태 변경</li><li>Admin: 계정·공통코드·카테고리·발송지·도착지·출력물 관리</li><li>WPMS: ERP 가 없는 업체용 자산관리 — 집계·처리 현황·품목 마스터</li></ul></div></div>
@@ -239,17 +245,18 @@
 
 </section>
 <section class="sec sec--glow">
-<div class="sec__head"><h2 class="sec__title">데이터 모델<span class="dim">출고 애그리거트</span> <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>출고(Delivery)를 루트 애그리거트로 두고 품목·이력·출력물·내부/외부 연동·상태를 그 아래에 묶었습니다. 품목은 출고 없이 생길 수 없고, 이력과 출력물은 한 출고 기준으로 관리되며, 연동 결과나 관리자 결정으로 상태가 바뀔 때도 하위 엔티티와 함께 처리돼야 했기 때문입니다. 출고 업무의 무결성을 가장 오래 고민한 부분입니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">데이터 모델<span class="dim">출고 애그리거트</span></h2><div class="sec__lead"><p>출고(Delivery)를 루트 애그리거트로 두고 품목·이력·출력물·내부/외부 연동·상태를 그 아래에 묶었습니다. 품목은 출고 없이 생길 수 없고, 이력과 출력물은 한 출고 기준으로 관리되며, 연동 결과나 관리자 결정으로 상태가 바뀔 때도 하위 엔티티와 함께 처리돼야 했기 때문입니다. 출고 업무의 무결성을 가장 오래 고민한 부분입니다. 입고·출고 모두 키오스크 처리 결과를 EAI 를 거쳐 고객사 ERP 와 내부 기간계 ERP 에 보냈고, 연동마다 결과를 따로 남겨 실패 건을 재전송할 수 있게 했습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="erDiagram
   CORPORATION ||--o{ CENTER : &quot;소속&quot;
   CENTER ||--o{ DELIVERY : &quot;출고 등록&quot;
   DELIVERY ||--|{ DELIVERY_ITEM : &quot;품목 포함&quot;
   DELIVERY ||--o{ DELIVERY_HIST : &quot;이력 기록&quot;
   DELIVERY ||--o{ DELIVERY_PRINT : &quot;출력물 발행&quot;
-  DELIVERY ||--o{ DELIVERY_INTERFACE : &quot;내부 연동&quot;
-  DELIVERY ||--o{ DELIVERY_EX_INTERFACE : &quot;외부 연동&quot;
+  DELIVERY ||--o{ DELIVERY_INTERFACE : &quot;기간계 ERP 연동&quot;
+  DELIVERY ||--o{ DELIVERY_EX_INTERFACE : &quot;고객사 ERP 연동&quot;
   DELIVERY ||--o{ DELIVERY_STATUS : &quot;상태 변경&quot;
   DELIVERY ||--o| RECEIPT : &quot;도착지 입고&quot;
+  RECEIPT ||--o{ RECEIPT_INTERFACE : &quot;고객사·기간계 ERP 연동&quot;
   CORPORATION {
     string corp_id PK
     string corp_name
@@ -299,6 +306,12 @@
     string delivery_id FK
     string status
     string changed_by
+  }
+  RECEIPT_INTERFACE {
+    string rif_id PK
+    string receipt_id FK
+    string target_system
+    string result
   }
   RECEIPT {
     string receipt_id PK
@@ -311,10 +324,11 @@
   DELIVERY ||--|{ DELIVERY_ITEM : &quot;품목 포함&quot;
   DELIVERY ||--o{ DELIVERY_HIST : &quot;이력 기록&quot;
   DELIVERY ||--o{ DELIVERY_PRINT : &quot;출력물 발행&quot;
-  DELIVERY ||--o{ DELIVERY_INTERFACE : &quot;내부 연동&quot;
-  DELIVERY ||--o{ DELIVERY_EX_INTERFACE : &quot;외부 연동&quot;
+  DELIVERY ||--o{ DELIVERY_INTERFACE : &quot;기간계 ERP 연동&quot;
+  DELIVERY ||--o{ DELIVERY_EX_INTERFACE : &quot;고객사 ERP 연동&quot;
   DELIVERY ||--o{ DELIVERY_STATUS : &quot;상태 변경&quot;
   DELIVERY ||--o| RECEIPT : &quot;도착지 입고&quot;
+  RECEIPT ||--o{ RECEIPT_INTERFACE : &quot;고객사·기간계 ERP 연동&quot;
   CORPORATION {
     string corp_id PK
     string corp_name
@@ -365,13 +379,19 @@
     string status
     string changed_by
   }
+  RECEIPT_INTERFACE {
+    string rif_id PK
+    string receipt_id FK
+    string target_system
+    string result
+  }
   RECEIPT {
     string receipt_id PK
     string delivery_id FK
     string verify_result
     string status
   }</pre></div><figcaption>개념 ERD — 엔티티는 설계 당시 도메인 모델, 속성은 이해를 돕는 개념 이름(실제 컬럼명 아님). 법인·센터는 Auth 의 테넌트 구조</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">설계 결정<span class="dim">무엇을 왜 골랐나</span></h2></div>
@@ -400,18 +420,18 @@
 </section>
 <section class="sec sec--glow">
 <div class="sec__head"><h2 class="sec__title">기술별 쓰임새<span class="dim">어디에 · 왜</span></h2></div>
-<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>영역</th><th>기술</th><th>어디에 · 왜</th></tr></thead><tbody><tr><td>백엔드</td><td>Java 22 · Spring Boot 3.4 · JPA · MyBatis</td><td>5개 컨텍스트 서비스 구현</td></tr><tr><td>인증 · 보안</td><td>Spring Security 6 · JWT</td><td>권한 관리, 법인-센터 테넌트, 외부 API 호출 암호화</td></tr><tr><td>이벤트 · 집계</td><td>Kafka · Kafka Streams</td><td>출고 후 연동·원장 집계, 토픽 로그 보관으로 재처리, 역할별 컨슈머 그룹</td></tr><tr><td>저장 · 상태</td><td>MySQL · Redis</td><td>업무 데이터 / 로그인·입출고 중 가벼운 세션성 데이터</td></tr><tr><td>연동</td><td>EAI</td><td>기간계·고객사 인터페이스 통합, 이력·실패 로그</td></tr><tr><td>AI 연동</td><td>Vision AI(Google Vision 커스터마이징) · OCR · Python 3.9 · FastAPI</td><td>이동전표 정보·도착지 인감 인식</td></tr><tr><td>인프라 · 배포</td><td>OCI Cloud · Jenkins · Docker</td><td>서비스 단위 자동 빌드·배포</td></tr><tr><td>관측</td><td>WhaTap APM · ELK</td><td>응답 시간 측정, 로그·모니터링</td></tr><tr><td>설계</td><td>DDD · MSA · EDA · Facade 패턴</td><td>경계·애그리거트·이벤트 흐름</td></tr></tbody></table></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>영역</th><th>기술</th><th>어디에 · 왜</th></tr></thead><tbody><tr><td>백엔드</td><td>Java 22 · Spring Boot 3.4 · JPA · MyBatis</td><td>5개 컨텍스트 서비스 구현</td></tr><tr><td>인증 · 보안</td><td>Spring Security 6 · JWT</td><td>권한 관리, 법인-센터 테넌트, 외부 API 호출 암호화</td></tr><tr><td>이벤트 · 집계</td><td>Kafka · Kafka Streams</td><td>출고 후 연동·원장 집계, 토픽 로그 보관으로 재처리, 역할별 컨슈머 그룹</td></tr><tr><td>저장 · 상태</td><td>Oracle · Redis (AI 관련 데이터는 Amazon Aurora)</td><td>업무 데이터 / 로그인·입출고 중 가벼운 세션성 데이터</td></tr><tr><td>연동</td><td>EAI</td><td>기간계·고객사 인터페이스 통합, 이력·실패 로그</td></tr><tr><td>AI 연동</td><td>Vision AI(Google Vision 커스터마이징) · OCR · Python 3.9 · FastAPI</td><td>이동전표 정보·도착지 인감 인식</td></tr><tr><td>인프라 · 배포</td><td>OCI Cloud · Jenkins · Docker</td><td>서비스 단위 자동 빌드·배포</td></tr><tr><td>관측</td><td>WhaTap APM · ELK</td><td>응답 시간 측정, 로그·모니터링</td></tr><tr><td>설계</td><td>DDD · MSA · EDA · Facade 패턴</td><td>경계·애그리거트·이벤트 흐름</td></tr></tbody></table></div></div>
 
-</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>백엔드</h3><div class="card__tags"><span class="tag">Java 22</span><span class="tag">Spring Boot 3.4</span><span class="tag">Spring Security 6</span><span class="tag">JWT</span><span class="tag">JPA</span><span class="tag">MyBatis</span></div></div><div class="stack__group"><h3>이벤트·데이터</h3><div class="card__tags"><span class="tag">Kafka</span><span class="tag">Kafka Streams</span><span class="tag">MySQL</span><span class="tag">Redis</span><span class="tag">EAI</span></div></div><div class="stack__group"><h3>AI 연동</h3><div class="card__tags"><span class="tag">Vision AI(Google Vision 커스터마이징)</span><span class="tag">OCR</span><span class="tag">Python 3.9</span><span class="tag">FastAPI</span></div></div><div class="stack__group"><h3>인프라·운영</h3><div class="card__tags"><span class="tag">OCI Cloud</span><span class="tag">Jenkins</span><span class="tag">Docker</span><span class="tag">WhaTap APM</span><span class="tag">ELK</span></div></div><div class="stack__group"><h3>설계</h3><div class="card__tags"><span class="tag">DDD</span><span class="tag">MSA</span><span class="tag">EDA</span><span class="tag">Facade 패턴</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">처리는 끝났는데 고객사 시스템엔 없던 출고 — 연동 타임아웃 · 출고 직후 상태가 뒤집히다 — 메시지 순서 역전 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
+</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>백엔드</h3><div class="card__tags"><span class="tag">Java 22</span><span class="tag">Spring Boot 3.4</span><span class="tag">Spring Security 6</span><span class="tag">JWT</span><span class="tag">JPA</span><span class="tag">MyBatis</span></div></div><div class="stack__group"><h3>이벤트·데이터</h3><div class="card__tags"><span class="tag">Kafka</span><span class="tag">Kafka Streams</span><span class="tag">Oracle(LOGION 업무 DB)</span><span class="tag">Amazon Aurora(AI 관련 DB)</span><span class="tag">Redis</span><span class="tag">EAI</span></div></div><div class="stack__group"><h3>AI 연동</h3><div class="card__tags"><span class="tag">Vision AI(Google Vision 커스터마이징)</span><span class="tag">OCR</span><span class="tag">Python 3.9</span><span class="tag">FastAPI</span></div></div><div class="stack__group"><h3>인프라·운영</h3><div class="card__tags"><span class="tag">OCI Cloud</span><span class="tag">Jenkins</span><span class="tag">Docker</span><span class="tag">WhaTap APM</span><span class="tag">ELK</span></div></div><div class="stack__group"><h3>설계</h3><div class="card__tags"><span class="tag">DDD</span><span class="tag">MSA</span><span class="tag">EDA</span><span class="tag">Facade 패턴</span><span class="tag">Circuit Breaker</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">처리는 끝났는데 고객사 시스템엔 없던 출고 — 연동 타임아웃 · 출고 직후 상태가 뒤집히다 — 메시지 순서 역전 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
 <div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 4개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 처리는 끝났는데 고객사 시스템엔 없던 출고 — 연동 타임아웃</span></a><a class="ctl" href="#case-2"><span>02 출고 직후 상태가 뒤집히다 — 메시지 순서 역전</span></a><a class="ctl" href="#case-3"><span>03 자정마다 몰리는 집계 — 마감 배치를 이벤트로 나누다</span></a><a class="ctl" href="#case-4"><span>04 나눈 서비스가 다시 엮이지 않게 — 장애 전파 차단</span></a></div></section><article class="case sec--glow" id="case-1">
 <div class="case__head"><span class="case__no">CASE 01 · 장애대응</span><h3 class="case__title">처리는 끝났는데 고객사 시스템엔 없던 출고 — 연동 타임아웃</h3></div>
 <div class="steps">
 <div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>표준형 키오스크를 처음 도입한 고객사에서, 키오스크 출고 처리는 정상 완료됐는데 도착지 인터페이스와 고객사 TMS/WMS 에는 반영되지 않았습니다. 현장은 반영을 기다리며 대기 시간이 늘었습니다.</p></div>
 <div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>결과 파일과 내부 출고 데이터는 정상이었고 인터페이스 요청도 생성돼 있었습니다. 이력·실패 로그와 EAI 로그를 대조하니 인터페이스 처리 시간이 40초를 넘긴 뒤 단순 실패 코드로 끝나 있었고, 직접 만든 예외 처리 프레임워크가 분류하지 못한 예외였습니다. 고객사 IT 담당과 확인한 결과 고객사 인프라·방화벽 정책 변경에 따른 네트워크 타임아웃이었습니다. 이 유형을 가를 예외 분류가 없었던 것이 우리 쪽의 약점이었습니다.</p></div>
-<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>유선 접수 통화 녹음을 텍스트로 바꾸며 범위 산정 — 출고 업무 문제인지, 내부 처리 실패인지, 실패 결과를 고객사 시스템에 직접 반영할 수 있는지부터 확인</li><li>결과 데이터 → 인터페이스 환경 설정 → 이력·실패 로그 테이블 → EAI 로그 순서로 범위 축소</li><li>고객사 IT 담당과 원인 확인 후 정책 업데이트 요청</li><li>관리자 페이지 재전송으로 미반영 데이터 우선 동기화</li><li>커스텀 예외 핸들러와 예외 분류별 로그 적재를 네트워크 영역까지 확장, 일정 고지 후 자동화 배포</li><li>원인·조치 내역을 고객사에 공유하고, 고객사 TMS/WMS·ERP 통신 쪽에도 예외 처리 추가 요청</li></ol></div>
-<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>미반영 데이터는 재전송으로 정상화했고, 네트워크 타임아웃이 별도 예외 코드와 로그로 분류되도록 바뀌었습니다. 원인은 고객사 쪽 정책 변경이었고 서비스 운영 클레임 0건을 유지했습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>유선 접수 통화 녹음을 텍스트로 바꾸며 범위 산정 — 출고 업무 문제인지, 내부 처리 실패인지, 실패 결과를 고객사 시스템에 직접 반영할 수 있는지부터 확인</li><li>결과 데이터 → 인터페이스 환경 설정 → 이력·실패 로그 테이블 → EAI 로그 순서로 범위 축소</li><li>고객사 IT 담당과 원인 확인 후 정책 업데이트 요청</li><li>관리자 페이지에 원래 있던 재전송 기능으로 미반영 데이터 우선 동기화</li><li>커스텀 예외 핸들러와 예외 분류별 로그 적재를 네트워크 영역까지 확장, 일정 고지 후 자동화 배포</li><li>원인·조치 내역을 고객사에 공유하고, 고객사 TMS/WMS·ERP 통신 쪽에도 예외 처리 추가 요청</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>원인 규명부터 우선 복구·재발 방지 배포까지 당일에 마쳤습니다. 미반영 데이터는 재전송으로 정상화했고, 네트워크 타임아웃이 별도 예외 코드와 로그로 분류되도록 바뀌었습니다. 원인은 고객사 쪽 정책 변경이었고 서비스 운영 클레임 0건을 유지했습니다.</p></div>
 </div>
-<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">장애 당시 인터페이스 처리 시간</div><div class="delta__val"><span class="to">40초 초과</span></div><div class="delta__note">연동 이력의 처리 시간 기록</div></div><div class="delta"><div class="delta__label">미반영 출고 데이터</div><div class="delta__val"><span class="to">관리자 재전송으로 동기화</span></div></div><div class="delta"><div class="delta__label">서비스 운영 클레임</div><div class="delta__val"><span class="to">0건 유지</span></div><div class="delta__note">원인은 고객사 측 정책 변경</div></div></div><p class="sub-h">가설을 하나씩 버린 과정</p><ol class="funnel"><li class=""><span class="n">1</span><div><b>내부 처리 실패?</b><span>출고 데이터가 내부에 반영됐는지 확인</span></div><span class="out">기각 — 내부 출고 데이터 정상 반영</span></li><li class=""><span class="n">2</span><div><b>결과 파일 생성 실패?</b><span>연동용 결과 파일 확인</span></div><span class="out">기각 — 파일 정상 생성</span></li><li class=""><span class="n">3</span><div><b>인터페이스 요청 미생성?</b><span>이력·실패 로그 테이블 확인</span></div><span class="out">기각 — 요청 정상 생성</span></li><li class="is-adopted"><span class="n">4</span><div><b>인터페이스 응답 지연 · 미분류 예외</b><span>EAI 로그에서 처리 시간 40초 초과, 단순 실패 코드</span></div><span class="out">채택 — 고객사 방화벽 정책 변경에 따른 타임아웃</span></li></ol><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">1단계</div><div class="tl__what"><b>접수 · 범위 산정</b><span>유선 접수 통화 녹음을 텍스트로 바꾸며 출고 업무·내부 처리·고객사 반영 가능 여부부터 확인</span></div></li><li><div class="tl__when">2단계</div><div class="tl__what"><b>결과 데이터 확인</b><span>파일 생성 정상, 내부 출고 데이터 반영 확인 → 인터페이스 쪽으로 범위 축소</span></div></li><li><div class="tl__when">3단계</div><div class="tl__what"><b>이력 · 로그 대조</b><span>이력·실패 로그와 EAI 로그에서 처리 시간 40초 초과, 분류되지 않은 예외 확인</span></div></li><li><div class="tl__when">4단계</div><div class="tl__what"><b>원인 규명</b><span>고객사 IT 담당과 방화벽 정책 변경에 따른 타임아웃 확인, 정책 업데이트 요청</span></div></li><li><div class="tl__when">5단계</div><div class="tl__what"><b>우선 복구</b><span>관리자 페이지 재전송으로 미반영 데이터 동기화</span></div></li><li><div class="tl__when">6단계</div><div class="tl__what"><b>재발 방지 배포</b><span>예외 핸들러·분류별 로그 적재를 네트워크 영역까지 확장, 일정 고지 후 자동화 배포</span></div></li><li><div class="tl__when">7단계</div><div class="tl__what"><b>사후 공유</b><span>원인·조치 공유, 고객사 통신 쪽 예외 처리 추가 요청</span></div></li></ol><p class="sub-h">연동 실패를 원인별로 가르고 복구 경로를 둔 전후 구조</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">장애 당시 인터페이스 처리 시간</div><div class="delta__val"><span class="to">40초 초과</span></div><div class="delta__note">연동 이력의 처리 시간 기록</div></div><div class="delta"><div class="delta__label">미반영 출고 데이터</div><div class="delta__val"><span class="to">관리자 재전송으로 동기화</span></div></div><div class="delta"><div class="delta__label">서비스 운영 클레임</div><div class="delta__val"><span class="to">0건 유지</span></div><div class="delta__note">원인은 고객사 측 정책 변경</div></div></div><p class="sub-h">가설을 하나씩 버린 과정</p><ol class="funnel"><li class=""><span class="n">1</span><div><b>내부 처리 실패?</b><span>출고 데이터가 내부에 반영됐는지 확인</span></div><span class="out">기각 — 내부 출고 데이터 정상 반영</span></li><li class=""><span class="n">2</span><div><b>결과 파일 생성 실패?</b><span>연동용 결과 파일 확인</span></div><span class="out">기각 — 파일 정상 생성</span></li><li class=""><span class="n">3</span><div><b>인터페이스 요청 미생성?</b><span>이력·실패 로그 테이블 확인</span></div><span class="out">기각 — 요청 정상 생성</span></li><li class="is-adopted"><span class="n">4</span><div><b>인터페이스 응답 지연 · 미분류 예외</b><span>EAI 로그에서 처리 시간 40초 초과, 단순 실패 코드</span></div><span class="out">채택 — 고객사 방화벽 정책 변경에 따른 타임아웃</span></li></ol><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">당일 · 1단계</div><div class="tl__what"><b>접수 · 범위 산정</b><span>유선 접수 통화 녹음을 텍스트로 바꾸며 출고 업무·내부 처리·고객사 반영 가능 여부부터 확인</span></div></li><li><div class="tl__when">당일 · 2단계</div><div class="tl__what"><b>결과 데이터 확인</b><span>파일 생성 정상, 내부 출고 데이터 반영 확인 → 인터페이스 쪽으로 범위 축소</span></div></li><li><div class="tl__when">당일 · 3단계</div><div class="tl__what"><b>이력 · 로그 대조</b><span>이력·실패 로그와 EAI 로그에서 처리 시간 40초 초과, 분류되지 않은 예외 확인</span></div></li><li><div class="tl__when">당일 · 4단계</div><div class="tl__what"><b>원인 규명</b><span>고객사 IT 담당과 방화벽 정책 변경에 따른 타임아웃 확인, 정책 업데이트 요청</span></div></li><li><div class="tl__when">당일 · 5단계</div><div class="tl__what"><b>우선 복구</b><span>관리자 페이지에 원래 있던 재전송 기능으로 미반영 데이터 동기화</span></div></li><li><div class="tl__when">당일 · 6단계</div><div class="tl__what"><b>재발 방지 배포</b><span>예외 핸들러·분류별 로그 적재를 네트워크 영역까지 확장, 일정 고지 후 자동화 배포</span></div></li><li><div class="tl__when">이후 · 7단계</div><div class="tl__what"><b>사후 공유</b><span>원인·조치 공유, 고객사 통신 쪽 예외 처리 추가 요청</span></div></li></ol><p class="sub-h">연동 실패를 원인별로 가르고 복구 경로를 둔 전후 구조</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
   subgraph PRE[&quot;전: 미분류 예외로 끝나던 연동&quot;]
     P1N[&quot;키오스크 출고 처리 완료&quot;] --&gt; P2N[&quot;EAI 인터페이스 호출&quot;]
     P2N --&gt; P3N[&quot;고객사 방화벽 정책 변경&lt;br/&gt;응답 지연 · 타임아웃&quot;]
@@ -509,7 +529,7 @@
 <div class="steps">
 <div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>MSA 로 나누자 서비스 간 호출이 늘었고, 네트워크 지연이나 한 서비스 장애가 연쇄적으로 번질 수 있는 구조적 위험이 생겼습니다. 24시간 무인 키오스크에서는 한 업무 문제로 다른 업무까지 멈추면 안 됐습니다.</p></div>
 <div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>서비스 사이를 동기 호출로 이으면 외부 연동 같은 느린 구간의 지연이 핵심 업무 응답까지 그대로 전달됩니다.</p></div>
-<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>서비스 간 동기 호출을 줄이고 이벤트 기반 비동기 구조로 전환</li><li>외부 인터페이스와 핵심 업무 로직을 분리해 연동이 실패해도 핵심 처리는 유지</li><li>서비스별 헬스체크 · APM 모니터링 · 별도 로그 관제로 장애를 실시간으로 감지</li><li>서비스 단위 롤링 업데이트로 정기 업그레이드</li></ol></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>서비스 간 동기 호출을 줄이고 이벤트 기반 비동기 구조로 전환</li><li>서비스 간 호출에 Circuit Breaker 를 걸어, 한 서비스가 느려지거나 멈춰도 호출하는 쪽까지 묶이지 않게 함</li><li>외부 인터페이스와 핵심 업무 로직을 분리해 연동이 실패해도 핵심 처리는 유지</li><li>서비스별 헬스체크 · APM 모니터링 · 별도 로그 관제로 장애를 실시간으로 감지</li><li>서비스 단위 롤링 업데이트로 정기 업그레이드</li></ol></div>
 <div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>정기 업그레이드(헬스체크 포함 3~5분) 중 한 서비스가 잠시 멈춰도 다른 업무는 계속 쓸 수 있었고, 서비스 운영 클레임 0건을 유지했습니다. 납품 뒤 도입한 WhaTap APM 기준 비즈니스 API 응답은 1~1.5초 이내였습니다(광고 영상 API 제외).</p></div>
 </div>
 <p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">정기 업그레이드 중 다른 업무</div><div class="delta__val"><span class="to">지장 없음</span></div><div class="delta__note">3~5분 작업 중 한 서비스 일시 중단</div></div><div class="delta"><div class="delta__label">비즈니스 API 응답</div><div class="delta__val"><span class="to">1~1.5초 이내</span></div><div class="delta__note">WhaTap APM, 광고 영상 API 제외</div></div><div class="delta"><div class="delta__label">서비스 운영 클레임</div><div class="delta__val"><span class="to">0건</span></div></div></div><p class="sub-h">핵심 업무와 외부 연동을 이벤트로 끊은 전후 구조</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR

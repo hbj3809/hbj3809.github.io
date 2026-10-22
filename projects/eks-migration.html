@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="../assets/css/site.css?v=a01858cc">
+<link rel="stylesheet" href="../assets/css/site.css?v=75c9176d">
 </head>
 <body>
 <a class="skip" href="#main">본문 바로가기</a>
@@ -32,7 +32,7 @@
 <div><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 사례 4개 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div></div>
 </div><section class="sec sec--glow">
 <div class="sec__head"><h2 class="sec__title">개요<span class="dim">배경·목표·내 역할</span></h2><div class="sec__lead"><p>온프레미스 임대 서버 위의 쿠버네티스(k3s)는 컨트롤 플레인이 1대뿐이었고, 볼륨이 노드 디스크에 묶여 노드를 비울(drain) 수 없었으며, 백업은 DB 일일 덤프가 전부였습니다. 회사가 AWS EKS 이관 방향을 논의하던 시점에 기술 검토와 사이징을 맡았고, 승인된 구성안대로 새 플랫폼을 코드로 짓고 사내 서비스를 같은 이름으로 옮겼습니다. 이관 뒤에는 분석 DB 의 복구 경로를 리허설과 노드 강제 종료 훈련으로 실증했습니다.</p></div></div>
-<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>목표: 서버 1대 장애가 전 서비스 정지로 번지지 않는 기반 · 모든 변경은 코드와 PR 로만 · 기존 서비스는 같은 호스트 이름으로 순차 이관</li><li>내 역할: 기술 검토·실사용 기반 사이징·로드맵 → Terraform·GitOps 설계·구축 → 서비스 전용 운영 환경 신축 → 순차 이관 → DB 복구 실증</li><li>결정 주체: 구성안·예산은 팀장 승인, 분석 DB 의 비용·구조 제약은 회사 결정</li><li>팀: 스타트업 개발팀, 인프라 전담 인력 없음 · Claude Code·Codex 에이전트와 협업, 위험 작업은 본인 승인</li><li>기간: 2026.08 ~ 2026.09 — 검토·승인 → 기반 구축 하루 → 운영 환경 신축·서비스 이관 나흘 → 3노드 안정화</li><li>범위 밖: 온프레미스 게이트웨이 교체·클러스터 보안 하드닝(별도 사례), 프론트엔드 코드</li></ul></div></div>
+<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>목표: 서버 1대 장애가 전 서비스 정지로 번지지 않는 기반 · 모든 변경은 코드와 PR 로만 · 기존 서비스는 같은 호스트 이름으로 순차 이관</li><li>내 역할: 기술 검토·실사용 기반 사이징·로드맵 → Terraform·GitOps 설계·구축 → 서비스 전용 운영 환경 신축 → 순차 이관 → DB 복구 실증</li><li>결정 주체: 구성안·예산은 팀장 승인, 분석 DB 의 비용·구조 제약은 회사 결정</li><li>팀: 스타트업 개발팀, 인프라 전담 인력 없음 · Claude Code·Codex 에이전트와 협업, 위험 작업은 본인 승인</li><li>기간: 2026.08 ~ 2026.09 — 검토·승인 → 기반 구축 하루 → 운영 환경 신축·서비스 이관 나흘 → 3노드 안정화</li><li>범위 밖: 온프레미스 게이트웨이 교체·클러스터 보안 하드닝(별도 사례), 프론트엔드 코드</li><li>구 환경 정리: 이관을 마친 뒤 예전 온프레미스 클러스터와 임대 서버 정리(해지)까지 끝냄</li><li>복구 훈련: 이관 뒤에도 PITR 리허설과 노드 강제 종료 복구 훈련을 정기적으로 반복</li></ul></div></div>
 
 </section>
 <section class="sec">
@@ -284,7 +284,7 @@
 
 </section>
 <section class="sec sec--glow sec--flip">
-<div class="sec__head"><h2 class="sec__title">분석 DB 복구 모델<span class="dim">단일 writer 의 장애 경로</span></h2><div class="sec__lead"><p>추가 노드·관리형 DB 없이 3노드를 유지하기로 한 회사 결정에 맞춰, 분석 DB 는 단일 writer + 객체 저장소 시점 복구(PITR) 구조로 정했습니다. 자동 failover 가 없는 DR 구조라서, 장애 경로마다 어떻게 돌아오는지를 정하고 실제로 해 봤습니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">분석 DB 복구 모델<span class="dim">단일 writer 의 장애 경로</span></h2><div class="sec__lead"><p>추가 노드·관리형 DB 없이 3노드를 유지하기로 한 회사 결정에 맞춰, 분석 DB 는 단일 writer + 객체 저장소 시점 복구(PITR) 구조로 정했습니다. 자동 failover 가 없는 DR 구조라서, 장애 경로마다 어떻게 돌아오는지를 정하고 실제로 해 봤습니다. 이 경로는 이관 때 한 번 시험하고 끝내지 않고, PITR 리허설과 노드 복구 훈련으로 정기적으로 다시 확인합니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="stateDiagram-v2
   state &quot;정상 운영 · 단일 writer&quot; as Normal
   state &quot;DB 파드 재시작&quot; as PodRestart

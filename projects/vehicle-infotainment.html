@@ -4,40 +4,40 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>국내 완성차 브랜드 차량 인포테인먼트 애플리케이션 개발 — 황병준 포트폴리오</title>
-<meta name="description" content="국내 완성차 브랜드의 차량용 디스플레이 오디오 2세대 플랫폼에 들어가는 인포테인먼트 애플리케이션을 C++·Qt/QML 로 개발했습니다. 설계·개발한 개발자 모드는 당시 신차부터 이후 출시된 전 차종에 탑재됐고, 디자인 리뉴얼 뒤에도 같은 기능이 현행 플랫폼까지 유지되고 있습니다. 인도향 기도 방향(키블라) 안내 앱은 구면 삼각법 알고리즘을 직접 구현하고 Kalman Filter 로 위치 오차를 보정해 방위각 오차 1% 미만으로 완성했습니다. 북미향 전 차종의 GPS(NMEA) 데이터 수집·추적 서비스를 개발하고, 미국 현지에서 3개월간 품질 확인·양산 대응을 맡았습니다.">
+<meta name="description" content="국내 완성차 브랜드의 차량용 디스플레이 오디오 2세대 플랫폼에 들어가는 인포테인먼트 애플리케이션을 C++·Qt/QML 로 개발했습니다. 기존에 만들어진 개발자 모드를 고도화했고, 이 기능은 당시 신차부터 이후 출시된 전 차종에 탑재돼 디자인 리뉴얼 뒤에도 현행 플랫폼까지 유지되고 있습니다. 인도향 기도 방향(키블라) 안내 기능은 직접 개발했습니다. 구면 삼각법 알고리즘을 구현하고 Kalman Filter 로 위치 오차를 보정해, 방위각 오차를 360° 대비 1% 미만(약 3.6° 이내)으로 맞췄습니다. 북미향 전 차종의 GPS(NMEA) 데이터 수집·추적 서비스도 직접 개발하고, 미국 현지에서 3개월간 품질 확인·양산 대응을 맡았습니다.">
 <meta name="theme-color" content="#15161a">
 <meta property="og:title" content="국내 완성차 브랜드 차량 인포테인먼트 애플리케이션 개발 — 황병준 포트폴리오">
-<meta property="og:description" content="국내 완성차 브랜드의 차량용 디스플레이 오디오 2세대 플랫폼에 들어가는 인포테인먼트 애플리케이션을 C++·Qt/QML 로 개발했습니다. 설계·개발한 개발자 모드는 당시 신차부터 이후 출시된 전 차종에 탑재됐고, 디자인 리뉴얼 뒤에도 같은 기능이 현행 플랫폼까지 유지되고 있습니다. 인도향 기도 방향(키블라) 안내 앱은 구면 삼각법 알고리즘을 직접 구현하고 Kalman Filter 로 위치 오차를 보정해 방위각 오차 1% 미만으로 완성했습니다. 북미향 전 차종의 GPS(NMEA) 데이터 수집·추적 서비스를 개발하고, 미국 현지에서 3개월간 품질 확인·양산 대응을 맡았습니다.">
+<meta property="og:description" content="국내 완성차 브랜드의 차량용 디스플레이 오디오 2세대 플랫폼에 들어가는 인포테인먼트 애플리케이션을 C++·Qt/QML 로 개발했습니다. 기존에 만들어진 개발자 모드를 고도화했고, 이 기능은 당시 신차부터 이후 출시된 전 차종에 탑재돼 디자인 리뉴얼 뒤에도 현행 플랫폼까지 유지되고 있습니다. 인도향 기도 방향(키블라) 안내 기능은 직접 개발했습니다. 구면 삼각법 알고리즘을 구현하고 Kalman Filter 로 위치 오차를 보정해, 방위각 오차를 360° 대비 1% 미만(약 3.6° 이내)으로 맞췄습니다. 북미향 전 차종의 GPS(NMEA) 데이터 수집·추적 서비스도 직접 개발하고, 미국 현지에서 3개월간 품질 확인·양산 대응을 맡았습니다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="../assets/css/site.css?v=a01858cc">
+<link rel="stylesheet" href="../assets/css/site.css?v=75c9176d">
 </head>
 <body>
 <a class="skip" href="#main">본문 바로가기</a>
 <nav class="nav" aria-label="주 메뉴"><a class="nav__item" href="../index.html" aria-label="홈"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.99778 19.3275V14.3275H13.9978V19.3275C13.9978 19.8775 14.4478 20.3275 14.9978 20.3275H17.9978C18.5478 20.3275 18.9978 19.8775 18.9978 19.3275V12.3275H20.6978C21.1578 12.3275 21.3778 11.7575 21.0278 11.4575L12.6678 3.9275C12.2878 3.5875 11.7078 3.5875 11.3278 3.9275L2.96778 11.4575C2.62778 11.7575 2.83778 12.3275 3.29778 12.3275H4.99778V19.3275C4.99778 19.8775 5.44778 20.3275 5.99778 20.3275H8.99778C9.54778 20.3275 9.99778 19.8775 9.99778 19.3275Z"/></svg><span class="nav__tip">홈</span></a><a class="nav__item" href="../about.html" aria-label="소개"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1c0 .55.45 1 1 1h14c.55 0 1-.45 1-1v-1c0-2.66-5.33-4-8-4z"/></svg><span class="nav__tip">소개</span></a><a class="nav__item" href="../experience.html" aria-label="경력"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg><span class="nav__tip">경력</span></a><a class="nav__item" href="../projects.html" aria-current="page" aria-label="프로젝트"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.0142 17.3073L17.3042 18.0173C17.1042 18.2173 16.7942 18.2173 16.5942 18.0173C16.3942 17.8173 16.3942 17.5073 16.5942 17.3073L17.3042 16.5973L15.3642 14.6573L14.6542 15.3673C14.4542 15.5673 14.1442 15.5673 13.9442 15.3673C13.7442 15.1673 13.7442 14.8573 13.9442 14.6573L14.6542 13.9473L12.7142 12.0073L12.0042 12.7173C11.8042 12.9173 11.4942 12.9173 11.2942 12.7173C11.0942 12.5173 11.0942 12.2073 11.2942 12.0073L12.0042 11.2973L10.0542 9.34731L9.34423 10.0573C9.14423 10.2573 8.83423 10.2573 8.63423 10.0573C8.43423 9.85731 8.43423 9.54731 8.63423 9.34731L9.34423 8.63731L7.40423 6.69731L6.69423 7.40731C6.49423 7.60731 6.18423 7.60731 5.98423 7.40731C5.78423 7.20731 5.78423 6.89731 5.98423 6.69731L6.69423 5.98731L5.20423 4.49731C4.89423 4.18731 4.35423 4.40731 4.35423 4.85731V17.6473C4.35423 18.7473 5.25423 19.6473 6.35423 19.6473H19.1442C19.5942 19.6473 19.8142 19.1073 19.4942 18.7973L18.0142 17.3073ZM7.35423 15.6473V10.8873L13.1142 16.6473H8.35423C7.80423 16.6473 7.35423 16.1973 7.35423 15.6473Z"/></svg><span class="nav__tip">프로젝트</span></a><a class="nav__item" href="../ai.html" aria-label="AI로 일하는 방식"><svg class="" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M14.2206 28C13.7539 28 13.3939 27.5867 13.4606 27.12L14.6606 18.6667H9.99395C8.82062 18.6667 9.55395 17.6667 9.58062 17.6267C11.2606 14.6533 13.7806 10.2533 17.114 4.38667C17.2473 4.14667 17.514 4 17.7806 4C18.2473 4 18.6073 4.41333 18.5406 4.88L17.3406 13.3333H22.0206C22.554 13.3333 22.8473 13.5867 22.554 14.2133C18.1673 21.8667 15.6206 26.3333 14.8873 27.6133C14.754 27.8533 14.5006 28 14.2206 28Z"/></svg><span class="nav__tip">AI로 일하는 방식</span></a><a class="nav__item" href="../skills.html" aria-label="기술"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.61 18.99l-9.08-9.08c.93-2.34.45-5.1-1.44-7C9.79.61 6.21.4 3.66 2.26L7.5 6.11 6.08 7.52 2.25 3.69C.39 6.23.6 9.82 2.9 12.11c1.86 1.86 4.57 2.35 6.89 1.48l9.11 9.11c.39.39 1.02.39 1.41 0l2.3-2.3c.4-.38.4-1.01 0-1.41z"/></svg><span class="nav__tip">기술</span></a><div class="nav__div" aria-hidden="true"><span></span></div><a class="nav__item" href="mailto:hbj3809@naver.com" aria-label="이메일 보내기"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg><span class="nav__tip">hbj3809@naver.com</span></a></nav>
 <main id="main" class="page">
-<header class="intro"><p class="intro__eyebrow">인포뱅크 프로젝트</p><h1>국내 완성차 브랜드 차량 인포테인먼트 애플리케이션 개발</h1><div class="intro__text"><p>C++·Qt/QML 헤드유닛 앱(개발자 모드·기도 방향 안내·GPS 수집) 개발과 북미 현지 3개월 품질 검증</p></div><div class="intro__meta"><span><b>인포뱅크</b></span><span>2018.11 ~ 2019.06</span><span>양산 탑재 · 개발자 모드 기능은 현행 플랫폼까지 유지</span><span>백엔드</span></div></header>
+<header class="intro"><p class="intro__eyebrow">인포뱅크 프로젝트</p><h1>국내 완성차 브랜드 차량 인포테인먼트 애플리케이션 개발</h1><div class="intro__text"><p>C++·Qt/QML 헤드유닛 앱 개발(개발자 모드 고도화·기도 방향 안내·GPS 수집)과 북미 현지 3개월 품질 검증</p></div><div class="intro__meta"><span><b>인포뱅크</b></span><span>2018.11 ~ 2019.06</span><span>양산 탑재 · 개발자 모드 기능은 현행 플랫폼까지 유지</span><span>백엔드</span></div></header>
 <div class="controls" role="tablist" aria-label="프로젝트 보기">
 <button class="ctl" type="button" role="tab" id="tab-detail" data-panel="detail" aria-controls="panel-detail" aria-selected="true"><span>상세</span></button>
 <button class="ctl" type="button" role="tab" id="tab-problems" data-panel="problems" aria-controls="panel-problems" aria-selected="false"><span>문제해결 <span class="count">3</span></span></button>
 <div class="controls__end"><a class="ctl" href="../projects.html?axis=backend"><span>백엔드 프로젝트 목록 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div>
 </div>
-<div class="card hero-card"><div class="card__media"><div class="cover cover--backend"><p class="cover__title">차량 인포테인먼트</p><p class="cover__sub">C++·Qt/QML 헤드유닛 앱(개발자 모드·기도 방향 안내·GPS 수집) 개발과 북미 현지 3개월 품질 검증</p></div></div></div>
+<div class="card hero-card"><div class="card__media"><div class="cover cover--backend"><p class="cover__title">차량 인포테인먼트</p><p class="cover__sub">C++·Qt/QML 헤드유닛 앱 개발(개발자 모드 고도화·기도 방향 안내·GPS 수집)과 북미 현지 3개월 품질 검증</p></div></div></div>
 <div class="panel" id="panel-detail" role="tabpanel" aria-labelledby="tab-detail"><div class="overview">
-<div class="overview__side"><div class="stat"><p class="stat__value">전 차종</p><p class="stat__label">개발자 모드 탑재</p><p class="stat__note">당시 신차 이후 출시 차종 · 현행 플랫폼까지 기능 유지</p></div><div class="stat"><p class="stat__value">1% 미만</p><p class="stat__label">기도 방향 안내 방위각 오차</p><p class="stat__note">인도향 전 차종 · 구면 삼각법 + Kalman Filter</p></div><div class="stat"><p class="stat__value">3개월</p><p class="stat__label">북미 현지 품질 검증</p><p class="stat__note">품질 확인·양산 대응</p></div>
+<div class="overview__side"><div class="stat"><p class="stat__value">전 차종</p><p class="stat__label">개발자 모드 탑재</p><p class="stat__note">기존 기능 고도화 · 당시 신차 이후 출시 차종 · 현행 플랫폼까지 유지</p></div><div class="stat"><p class="stat__value">1% 미만</p><p class="stat__label">기도 방향 방위각 오차(360° 대비)</p><p class="stat__note">약 3.6° 이내 · 인도향 전 차종 · 직접 개발</p></div><div class="stat"><p class="stat__value">3개월</p><p class="stat__label">북미 현지 품질 검증</p><p class="stat__note">품질 확인·양산 대응 · 현지 설정·실차 환경 이슈 대응</p></div>
 <dl class="facts"><div><dt>회사</dt><dd>인포뱅크 · iMotors 사업부 Media팀 · 연구원</dd></div><div><dt>기간</dt><dd>2018.11 ~ 2019.06</dd></div><div><dt>역할</dt><dd>연구원 · 차량용 임베디드 애플리케이션 개발</dd></div><div><dt>팀</dt><dd>iMotors 사업부 Media팀</dd></div><div><dt>상태</dt><dd>양산 탑재 · 개발자 모드 기능은 현행 플랫폼까지 유지</dd></div></dl></div>
-<div class="overview__body"><h2>프로젝트 개요<br><span class="dim">무엇을, 왜 만들었나</span></h2><p class="overview__lead">국내 완성차 브랜드의 차량용 디스플레이 오디오 2세대 플랫폼에 들어가는 인포테인먼트 애플리케이션을 C++·Qt/QML 로 개발했습니다. 설계·개발한 개발자 모드는 당시 신차부터 이후 출시된 전 차종에 탑재됐고, 디자인 리뉴얼 뒤에도 같은 기능이 현행 플랫폼까지 유지되고 있습니다. 인도향 기도 방향(키블라) 안내 앱은 구면 삼각법 알고리즘을 직접 구현하고 Kalman Filter 로 위치 오차를 보정해 방위각 오차 1% 미만으로 완성했습니다. 북미향 전 차종의 GPS(NMEA) 데이터 수집·추적 서비스를 개발하고, 미국 현지에서 3개월간 품질 확인·양산 대응을 맡았습니다.</p><p class="overview__more">연구원 · 차량용 임베디드 애플리케이션 개발 · iMotors 사업부 Media팀</p>
+<div class="overview__body"><h2>프로젝트 개요<br><span class="dim">무엇을, 왜 만들었나</span></h2><p class="overview__lead">국내 완성차 브랜드의 차량용 디스플레이 오디오 2세대 플랫폼에 들어가는 인포테인먼트 애플리케이션을 C++·Qt/QML 로 개발했습니다. 기존에 만들어진 개발자 모드를 고도화했고, 이 기능은 당시 신차부터 이후 출시된 전 차종에 탑재돼 디자인 리뉴얼 뒤에도 현행 플랫폼까지 유지되고 있습니다. 인도향 기도 방향(키블라) 안내 기능은 직접 개발했습니다. 구면 삼각법 알고리즘을 구현하고 Kalman Filter 로 위치 오차를 보정해, 방위각 오차를 360° 대비 1% 미만(약 3.6° 이내)으로 맞췄습니다. 북미향 전 차종의 GPS(NMEA) 데이터 수집·추적 서비스도 직접 개발하고, 미국 현지에서 3개월간 품질 확인·양산 대응을 맡았습니다.</p><p class="overview__more">연구원 · 차량용 임베디드 애플리케이션 개발 · iMotors 사업부 Media팀</p>
 <div><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 사례 3개 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div></div>
 </div><section class="sec sec--glow">
 <div class="sec__head"><h2 class="sec__title">프로젝트 개요</h2><div class="sec__lead"><p>인포뱅크 iMotors 사업부 Media팀 연구원으로, 국내 완성차 브랜드의 차량용 디스플레이 오디오 2세대 플랫폼에 들어가는 애플리케이션을 개발했습니다. 차종·시장마다 필요한 기능을 헤드유닛 안에 넣고, 양산 전에 현지에서 품질 확인까지 마치는 일이었습니다.</p></div></div>
-<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>기간: 2018.11 ~ 2019.06</li><li>소속·직급: iMotors 사업부 Media팀 · 연구원</li><li>담당: 개발자 모드 설계·개발, 기도 방향(키블라) 안내 앱 알고리즘 구현, 북미향 GPS(NMEA) 데이터 수집·추적 서비스 개발, Connectivity 기능 개발</li><li>현지 대응: 미국 현지 3개월 품질 확인·양산 대응</li><li>성격: 차량 헤드유닛에서 동작하는 임베디드 애플리케이션 — GPS 위치 데이터를 앱에서 직접 보정·계산</li></ul></div></div>
+<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>기간: 2018.11 ~ 2019.06</li><li>소속·직급: iMotors 사업부 Media팀 · 연구원</li><li>담당: 기존 개발자 모드 고도화, 기도 방향(키블라) 안내 기능 직접 개발(방위각 알고리즘 포함), 북미향 GPS(NMEA) 데이터 수집·추적 서비스 직접 개발, Connectivity 기능 개발</li><li>현지 대응: 미국 현지 3개월 품질 확인·양산 대응</li><li>성격: 차량 헤드유닛에서 동작하는 임베디드 애플리케이션 — GPS 위치 데이터를 앱에서 직접 보정·계산</li></ul></div></div>
 
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">담당 기능</h2><div class="sec__lead"><p>담당한 기능은 대상 시장과 목적이 서로 다릅니다.</p></div></div>
-<div class="sec__body"><div class="tiles"><div class="tile"><h3>개발자 모드</h3><p>C++·Qt·QML Signal-slot 구조로 설계·개발. 당시 신차부터 이후 출시된 전 차종에 탑재, 디자인 리뉴얼 뒤에도 같은 기능이 현행 플랫폼까지 유지.</p></div><div class="tile"><h3>기도 방향(키블라) 안내</h3><p>인도향 전 차종. C++ Vector 기반 구면 삼각법 알고리즘을 직접 구현하고 Kalman Filter 로 위치 오차를 보정, 방위각 오차 1% 미만.</p></div><div class="tile"><h3>GPS(NMEA) 수집·추적</h3><p>북미향 전 차종. 내비게이션 영역에서 차량 위치 데이터를 수집·추적하는 서비스 개발. 현지에서는 실종·유기 아동을 찾는 데에도 쓰였다고 전해 들음.</p></div><div class="tile"><h3>북미 현지 검증</h3><p>미국 현지 2개 지역에서 3개월. 양산 전 품질 확인과 양산 대응.</p></div></div></div>
+<div class="sec__body"><div class="tiles"><div class="tile"><h3>개발자 모드</h3><p>기존에 만들어진 개발자 모드를 C++·Qt/QML(Signal-slot) 로 고도화. 당시 신차부터 이후 출시된 전 차종에 탑재, 디자인 리뉴얼 뒤에도 같은 기능이 현행 플랫폼까지 유지.</p></div><div class="tile"><h3>기도 방향(키블라) 안내</h3><p>인도향 전 차종. 직접 개발. C++ Vector 기반 구면 삼각법 알고리즘을 구현하고 Kalman Filter 로 위치 오차를 보정, 방위각 오차 360° 대비 1% 미만(약 3.6° 이내).</p></div><div class="tile"><h3>GPS(NMEA) 수집·추적</h3><p>북미향 전 차종. 내비게이션 영역에서 차량 위치 데이터를 수집·추적하는 서비스 직접 개발. 현지에서는 실종·유기 아동을 찾는 데에도 쓰였다고 전해 들음.</p></div><div class="tile"><h3>북미 현지 검증</h3><p>미국 현지 2개 지역에서 3개월. 양산 전 품질 확인과 양산 대응. 현지 설정·언어·지역 차이와 실차 환경 호환·성능 이슈를 현지에서 확인해 대응.</p></div></div></div>
 
 </section>
 <section class="sec">
@@ -96,7 +96,7 @@
 <p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
 </section>
 <section class="sec sec--glow sec--flip">
-<div class="sec__head"><h2 class="sec__title">핵심 흐름 ① 기도 방향 방위각 계산 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>위치 한 건이 들어와 화면의 방향 표시가 바뀌기까지의 흐름입니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">핵심 흐름 ① 기도 방향 방위각 계산</h2><div class="sec__lead"><p>직접 개발한 기도 방향 안내 기능에서, 위치 한 건이 들어와 화면의 방향 표시가 바뀌기까지의 흐름입니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="sequenceDiagram
   participant G as GPS 수신기
   participant P as NMEA 파서
@@ -121,117 +121,119 @@
   K-&gt;&gt;Q: 보정된 현재 위치
   Q-&gt;&gt;Q: 구면 삼각법으로 성지 방향 방위각 계산
   Q-&gt;&gt;U: 방위각 값 전달(Signal)
-  U-&gt;&gt;U: 방향 표시 갱신</pre></div><figcaption>개념 흐름(초안) — 구성 요소는 실제 사용 기술 기준, 호출 순서는 재구성</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>보정 전 위치는 방위각 계산에 바로 넣지 않음</li><li>지구를 구로 보고 현재 위치에서 성지(메카) 방향의 방위각 계산</li><li>계산 결과는 Signal 로 화면에 전달 — 화면은 계산 방식을 모름</li></ul></div></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  U-&gt;&gt;U: 방향 표시 갱신</pre></div><figcaption>개념 흐름 — 구성 요소는 실제 사용 기술 기준, 세부 호출 순서는 일반화해 그림</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>GPS 위치는 Kalman Filter 로 보정한 뒤 방위각 계산에 사용</li><li>지구를 구로 보고 현재 위치에서 성지(메카) 방향의 방위각 계산 — 먼 거리 방향 계산에 일반적으로 쓰는 구면 삼각법</li><li>계산 결과는 Signal 로 QML 안내 화면에 전달</li><li>방위각 오차는 360° 대비 각도 오차로 검증 — 1% 미만(약 3.6° 이내)</li></ul></div></div>
+
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">핵심 흐름 ② GPS(NMEA) 수집·추적 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>북미향 차종의 위치 수집 흐름입니다. 표준 NMEA 문장을 검사한 뒤 필요한 필드만 꺼내 기록합니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">핵심 흐름 ② GPS(NMEA) 수집·추적</h2><div class="sec__lead"><p>직접 개발한 북미향 차종의 위치 수집·추적 흐름입니다. GPS 수신기의 NMEA 문장을 받아 위치 기록으로 남기고 위치 추적 서비스로 연동합니다. 검사·추출 단계는 NMEA 표준의 일반적인 처리 순서로 그렸습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
   A1[&quot;GPS 수신기&quot;] --&gt;|&quot;NMEA 문장&quot;| B1[&quot;문장 검사&lt;br/&gt;체크섬·형식&quot;]
   B1 --&gt;|&quot;정상&quot;| C1[&quot;필드 추출&lt;br/&gt;시각·위치·속도&quot;]
   B1 --&gt;|&quot;오류&quot;| D1[&quot;기록 제외&quot;]
   C1 --&gt; E1[&quot;위치 기록 저장&quot;]
   E1 --&gt; F1[&quot;위치 추적 서비스 연동&quot;]
-  F1 --&gt; G1[&quot;현지 활용&lt;br/&gt;실종·유기 아동 찾기 등&quot;]">flowchart LR
+  F1 --&gt; G1[&quot;현지 활용 사례(전해 들음)&lt;br/&gt;실종·유기 아동 찾기&quot;]">flowchart LR
   A1[&quot;GPS 수신기&quot;] --&gt;|&quot;NMEA 문장&quot;| B1[&quot;문장 검사&lt;br/&gt;체크섬·형식&quot;]
   B1 --&gt;|&quot;정상&quot;| C1[&quot;필드 추출&lt;br/&gt;시각·위치·속도&quot;]
   B1 --&gt;|&quot;오류&quot;| D1[&quot;기록 제외&quot;]
   C1 --&gt; E1[&quot;위치 기록 저장&quot;]
   E1 --&gt; F1[&quot;위치 추적 서비스 연동&quot;]
-  F1 --&gt; G1[&quot;현지 활용&lt;br/&gt;실종·유기 아동 찾기 등&quot;]</pre></div><figcaption>개념 흐름(초안) — 검사 단계는 NMEA 표준 기준으로 재구성</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>체크섬·형식이 맞지 않는 문장은 기록에서 제외</li><li>시각·위치·속도 필드를 꺼내 위치 기록으로 저장</li><li>기록은 위치 추적 서비스로 연동</li></ul></div></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  F1 --&gt; G1[&quot;현지 활용 사례(전해 들음)&lt;br/&gt;실종·유기 아동 찾기&quot;]</pre></div><figcaption>개념 흐름 — 수집·추적 서비스는 직접 개발, 검사·추출 단계는 NMEA 표준의 일반적인 처리 순서로 그림</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>GPS 수신기에서 표준 NMEA 문장으로 위치 데이터 수신</li><li>일반적인 NMEA 처리 순서: 체크섬·형식 검사 → 시각·위치·속도 필드 추출 → 위치 기록 저장</li><li>기록은 위치 추적 서비스로 연동</li></ul></div></div>
+
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">현지 검증 이슈 처리 흐름 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>미국 현지 품질 확인 기간에 이슈를 다룬 순서입니다. 현장에서 재현하고 기록을 먼저 확보하는 것이 출발점입니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">현지 검증 이슈 처리 흐름</h2><div class="sec__lead"><p>미국 현지 2개 지역에서 3개월간 품질을 확인하며 실제로 만난 이슈는 크게 두 유형이었습니다. 현지 설정·언어·지역 차이에서 생기는 문제와, 실차 환경에서만 드러나는 호환·성능 문제입니다. 두 유형 모두 현지 조건에서 재현·확인한 뒤 대응했습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
-  A1[&quot;현지 주행·품질 확인 시험&quot;] --&gt; B1{&quot;이슈 발견&quot;}
-  B1 --&gt;|&quot;있음&quot;| C1[&quot;현장 재현&lt;br/&gt;로그·NMEA 원문 확보&quot;]
-  C1 --&gt; D1[&quot;원인 분석&quot;]
-  D1 --&gt; E1[&quot;수정 빌드 반영&quot;]
-  E1 --&gt; F1[&quot;같은 조건 재시험&quot;]
-  F1 --&gt;|&quot;재발&quot;| D1
-  F1 --&gt;|&quot;해소&quot;| A1
-  B1 --&gt;|&quot;없음&quot;| G1[&quot;품질 기준 통과&quot;]
+  A1[&quot;현지 주행·품질 확인&quot;] --&gt; B1{&quot;이슈 발견&quot;}
+  B1 --&gt;|&quot;현지 설정·언어·지역 차이&quot;| C1[&quot;현지 환경에서 재현&lt;br/&gt;지역 설정·언어 표시 확인&quot;]
+  B1 --&gt;|&quot;실차 환경 호환·성능&quot;| C2[&quot;실차에서 현장 확인&lt;br/&gt;호환·성능 문제&quot;]
+  C1 --&gt; D1[&quot;수정 반영&quot;]
+  C2 --&gt; D1
+  D1 --&gt; E1[&quot;같은 조건에서 다시 확인&quot;]
+  E1 --&gt;|&quot;남음&quot;| D1
+  E1 --&gt;|&quot;해소&quot;| A1
+  B1 --&gt;|&quot;없음&quot;| G1[&quot;품질 확인 통과&quot;]
   G1 --&gt; H1[&quot;양산 대응&quot;]">flowchart TB
-  A1[&quot;현지 주행·품질 확인 시험&quot;] --&gt; B1{&quot;이슈 발견&quot;}
-  B1 --&gt;|&quot;있음&quot;| C1[&quot;현장 재현&lt;br/&gt;로그·NMEA 원문 확보&quot;]
-  C1 --&gt; D1[&quot;원인 분석&quot;]
-  D1 --&gt; E1[&quot;수정 빌드 반영&quot;]
-  E1 --&gt; F1[&quot;같은 조건 재시험&quot;]
-  F1 --&gt;|&quot;재발&quot;| D1
-  F1 --&gt;|&quot;해소&quot;| A1
-  B1 --&gt;|&quot;없음&quot;| G1[&quot;품질 기준 통과&quot;]
-  G1 --&gt; H1[&quot;양산 대응&quot;]</pre></div><figcaption>개념 흐름(초안) — 현지 품질 확인·양산 대응 과정을 일반화</figcaption></figure></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+  A1[&quot;현지 주행·품질 확인&quot;] --&gt; B1{&quot;이슈 발견&quot;}
+  B1 --&gt;|&quot;현지 설정·언어·지역 차이&quot;| C1[&quot;현지 환경에서 재현&lt;br/&gt;지역 설정·언어 표시 확인&quot;]
+  B1 --&gt;|&quot;실차 환경 호환·성능&quot;| C2[&quot;실차에서 현장 확인&lt;br/&gt;호환·성능 문제&quot;]
+  C1 --&gt; D1[&quot;수정 반영&quot;]
+  C2 --&gt; D1
+  D1 --&gt; E1[&quot;같은 조건에서 다시 확인&quot;]
+  E1 --&gt;|&quot;남음&quot;| D1
+  E1 --&gt;|&quot;해소&quot;| A1
+  B1 --&gt;|&quot;없음&quot;| G1[&quot;품질 확인 통과&quot;]
+  G1 --&gt; H1[&quot;양산 대응&quot;]</pre></div><figcaption>흐름 — 이슈 유형은 실제 경험 기준, 처리 단계는 일반화해 그림(구체 증상은 적지 않음)</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>현지 설정·언어·지역 차이: 지역 설정·언어 표시 차이로 생기는 문제를 현지 환경에서 재현해 고침</li><li>실차 환경 호환·성능: 실차에서만 드러나는 호환·성능 문제를 현장에서 확인해 대응</li><li>품질 확인을 마친 뒤 양산 대응</li></ul></div></div>
+
 </section>
 <section class="sec sec--glow">
-<div class="sec__head"><h2 class="sec__title">설계 결정<span class="dim">왜 이 방식을 골랐나</span> <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>기능마다 '나중에 바뀌는 것'과 '오래 남아야 하는 것'을 먼저 나눴습니다.</p></div></div>
-<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>결정</th><th>왜 이 방식을 골랐나</th><th>결과</th></tr></thead><tbody><tr><td>화면(QML)과 기능(C++) 분리, Signal-slot 으로 연결</td><td>디자인은 플랫폼 세대마다 바뀌어도 기능은 그대로 다시 쓰도록 경계를 나눔</td><td>리뉴얼 뒤 디자인을 뺀 같은 기능이 현행 플랫폼까지 유지</td></tr><tr><td>방위각 계산을 구면 삼각법으로 직접 구현(C++ Vector 기반)</td><td>목적지가 멀어 평면 근사로는 방향이 어긋나고, 차량 환경에서 계산 과정을 직접 통제하기 위해</td><td>Kalman Filter 보정과 함께 방위각 오차 1% 미만</td></tr><tr><td>GPS 위치에 Kalman Filter 보정 적용</td><td>GPS 측정 잡음이 방위각으로 그대로 옮겨 가지 않도록 이전 추정과 새 측정을 함께 반영</td><td>보정된 위치만 방위각 계산에 사용</td></tr><tr><td>위치 데이터를 표준 NMEA 문장 단위로 수집</td><td>수신기 종류와 관계없이 같은 형식으로 검사·기록하기 위해</td><td>북미향 전 차종 GPS 수집·추적 서비스에 적용</td></tr></tbody></table></div></div>
+<div class="sec__head"><h2 class="sec__title">설계 결정<span class="dim">왜 이 방식을 골랐나</span> <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>기능마다 '나중에 바뀌는 것'과 '오래 남아야 하는 것'을 기준으로 정리했습니다.</p></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>결정</th><th>왜 이 방식을 골랐나</th><th>결과</th></tr></thead><tbody><tr><td>개발자 모드 고도화 시 화면(QML)과 기능(C++) 경계 유지, Signal-slot 으로 연결</td><td>디자인은 플랫폼 세대마다 바뀌어도 기능은 그대로 다시 쓸 수 있도록 기존 경계를 지킴</td><td>리뉴얼 뒤 디자인을 뺀 같은 기능이 현행 플랫폼까지 유지</td></tr><tr><td>방위각 계산을 구면 삼각법으로 직접 구현(C++ Vector 기반)</td><td>먼 거리의 방향은 평면 근사로 계산하면 어긋나기 쉬워, 일반적으로 구면 계산을 쓰는 방식</td><td>Kalman Filter 보정과 함께 방위각 오차 360° 대비 1% 미만(약 3.6° 이내)</td></tr><tr><td>GPS 위치에 Kalman Filter 보정 적용</td><td>잡음이 섞인 위치 데이터에 일반적으로 쓰는 방식 — 이전 추정과 새 측정을 함께 반영</td><td>보정된 위치를 방위각 계산에 사용</td></tr><tr><td>위치 데이터를 표준 NMEA 문장 단위로 수집</td><td>NMEA 는 GPS 수신기가 일반적으로 내보내는 표준 형식이라 같은 방식으로 검사·기록할 수 있음</td><td>북미향 전 차종 GPS 수집·추적 서비스에 적용</td></tr></tbody></table></div></div>
 <p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">성과<span class="dim">숫자로 보기</span></h2><div class="sec__lead"><p>숫자로 남은 결과는 탑재 범위, 방위각 오차, 현지 검증 기간입니다.</p></div></div>
-<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>성과</th><th>수치</th><th>범위</th></tr></thead><tbody><tr><td>개발자 모드 탑재</td><td>전 차종</td><td>당시 신차 이후 출시 차종 · 현행 플랫폼까지 같은 기능 유지</td></tr><tr><td>기도 방향 안내 방위각 오차</td><td>1% 미만</td><td>인도향 전 차종 · 구면 삼각법 + Kalman Filter</td></tr><tr><td>GPS(NMEA) 수집·추적 서비스</td><td>전 차종</td><td>북미향 차종</td></tr><tr><td>북미 현지 품질 검증</td><td>3개월</td><td>미국 현지 2개 지역 · 품질 확인·양산 대응</td></tr></tbody></table></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>성과</th><th>수치</th><th>범위</th></tr></thead><tbody><tr><td>개발자 모드 탑재(기존 기능 고도화)</td><td>전 차종</td><td>당시 신차 이후 출시 차종 · 현행 플랫폼까지 같은 기능 유지</td></tr><tr><td>기도 방향 안내 방위각 오차</td><td>360° 대비 1% 미만(약 3.6° 이내)</td><td>인도향 전 차종 · 직접 개발 · 구면 삼각법 + Kalman Filter</td></tr><tr><td>GPS(NMEA) 수집·추적 서비스</td><td>전 차종</td><td>북미향 차종 · 직접 개발</td></tr><tr><td>북미 현지 품질 검증</td><td>3개월</td><td>미국 현지 2개 지역 · 품질 확인·양산 대응</td></tr></tbody></table></div></div>
 
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">프로젝트 흐름 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>재직 기간과 이후 기능이 이어진 흐름입니다. 현지 출장 시기는 확인 중입니다.</p></div></div>
-<div class="sec__body"><ol class="tl"><li><div class="tl__when">2018.11</div><div class="tl__what"><b>iMotors 사업부 Media팀 합류</b><span>디스플레이 오디오 2세대 플랫폼 애플리케이션 개발 시작</span></div></li><li><div class="tl__when">재직 중</div><div class="tl__what"><b>개발자 모드·기도 방향 안내·GPS 수집 기능 개발</b><span>C++·Qt/QML 기반, 인도향·북미향 차종별 기능</span></div></li><li><div class="tl__when">재직 중</div><div class="tl__what"><b>미국 현지 3개월 품질 확인·양산 대응</b><span>미국 현지 2개 지역</span></div></li><li><div class="tl__when">2019.06</div><div class="tl__what"><b>재직 종료</b><span>담당 기능은 양산 차종에 탑재</span></div></li><li><div class="tl__when">이후</div><div class="tl__what"><b>개발자 모드 기능 유지</b><span>디자인 리뉴얼 뒤에도 현행 플랫폼까지 같은 기능 적용</span></div></li></ol></div>
+<div class="sec__body"><ol class="tl"><li><div class="tl__when">2018.11</div><div class="tl__what"><b>iMotors 사업부 Media팀 합류</b><span>디스플레이 오디오 2세대 플랫폼 애플리케이션 개발 시작</span></div></li><li><div class="tl__when">재직 중</div><div class="tl__what"><b>개발자 모드 고도화, 기도 방향 안내·GPS 수집 기능 개발</b><span>C++·Qt/QML 기반, 인도향·북미향 차종별 기능</span></div></li><li><div class="tl__when">재직 중</div><div class="tl__what"><b>미국 현지 3개월 품질 확인·양산 대응</b><span>미국 현지 2개 지역</span></div></li><li><div class="tl__when">2019.06</div><div class="tl__what"><b>재직 종료</b><span>담당 기능은 양산 차종에 탑재</span></div></li><li><div class="tl__when">이후</div><div class="tl__what"><b>개발자 모드 기능 유지</b><span>디자인 리뉴얼 뒤에도 현행 플랫폼까지 같은 기능 적용</span></div></li></ol></div>
 <p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
 </section>
 <section class="sec sec--glow sec--flip">
 <div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서의 쓰임</span> <span class="badge-draft">초안</span></h2></div>
-<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>기술</th><th>이 프로젝트에서의 쓰임</th></tr></thead><tbody><tr><td>C++</td><td>기능 계층 전반, 구면 삼각법 방위각 계산(Vector 기반)·NMEA 처리</td></tr><tr><td>Qt · QML</td><td>개발자 모드·기도 방향 안내 화면 구성</td></tr><tr><td>Qt Signal-slot</td><td>화면과 기능 계층 사이 이벤트 연결</td></tr><tr><td>GPS/NMEA</td><td>차량 위치 데이터 수집 형식</td></tr><tr><td>Kalman Filter</td><td>GPS 위치 잡음 보정</td></tr><tr><td>구면 삼각법</td><td>현재 위치에서 성지 방향 방위각 계산</td></tr><tr><td>Linux Embedded</td><td>헤드유닛 실행 환경</td></tr><tr><td>Android NDK</td><td>네이티브(C++) 모듈 개발 환경</td></tr></tbody></table></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>기술</th><th>이 프로젝트에서의 쓰임</th></tr></thead><tbody><tr><td>C++</td><td>기능 계층 전반, 구면 삼각법 방위각 계산(Vector 기반)·NMEA 처리</td></tr><tr><td>Qt · QML</td><td>개발자 모드(고도화)·기도 방향 안내 화면</td></tr><tr><td>Qt Signal-slot</td><td>화면과 기능 계층 사이 이벤트 연결</td></tr><tr><td>GPS/NMEA</td><td>차량 위치 데이터 수집 형식</td></tr><tr><td>Kalman Filter</td><td>GPS 위치 잡음 보정</td></tr><tr><td>구면 삼각법</td><td>현재 위치에서 성지 방향 방위각 계산</td></tr><tr><td>Linux Embedded</td><td>헤드유닛 실행 환경</td></tr><tr><td>Android NDK</td><td>네이티브(C++) 모듈 개발 환경</td></tr></tbody></table></div></div>
 <p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">이 경험이 지금 일에 남긴 것 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>지금은 백엔드·데이터 일을 하지만, 차량 헤드유닛과 GPS 데이터를 다루며 들인 습관이 그대로 이어지고 있습니다.</p></div></div>
-<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>센서 원값을 그대로 쓰지 않고 보정한 뒤 계산 → 데이터 파이프라인에서 정제·검수 단계를 먼저 두는 습관</li><li>화면과 기능의 경계 지키기 → API 계약과 내부 구현 분리</li><li>Signal-slot 이벤트 연결 → 이벤트 기반(Kafka) 설계</li><li>문제가 나는 자리에서 재현하고 기록 남기기 → 운영 장애 대응</li></ul></div></div>
+<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>센서 원값을 그대로 쓰지 않고 보정한 뒤 계산 → 데이터 파이프라인에서 정제·검수 단계를 먼저 두는 습관</li><li>화면과 기능의 경계 지키기 → API 계약과 내부 구현 분리</li><li>Signal-slot 이벤트 연결 → 이벤트 기반(Kafka) 설계</li><li>문제가 나는 현장(현지 설정·실차 환경)에서 직접 재현·확인하기 → 운영 장애 대응</li></ul></div></div>
 <p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
 </section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>언어·UI 프레임워크</h3><div class="card__tags"><span class="tag">C++</span><span class="tag">Qt</span><span class="tag">QML</span><span class="tag">Qt Signal-slot</span></div></div><div class="stack__group"><h3>임베디드·플랫폼</h3><div class="card__tags"><span class="tag">Linux Embedded</span><span class="tag">Android NDK</span></div></div><div class="stack__group"><h3>위치·알고리즘</h3><div class="card__tags"><span class="tag">GPS/NMEA</span><span class="tag">Kalman Filter</span><span class="tag">구면 삼각법</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">흔들리는 GPS 위치에서 기도 방향 방위각 계산하기 · 북미 현지 3개월 품질 확인·양산 대응 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
 <div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 3개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 흔들리는 GPS 위치에서 기도 방향 방위각 계산하기</span></a><a class="ctl" href="#case-2"><span>02 북미 현지 3개월 품질 확인·양산 대응</span></a><a class="ctl" href="#case-3"><span>03 디자인이 바뀌어도 남는 개발자 모드</span></a></div></section><article class="case sec--glow" id="case-1">
-<div class="case__head"><span class="case__no">CASE 01 · 알고리즘구현</span><h3 class="case__title">흔들리는 GPS 위치에서 기도 방향 방위각 계산하기 <span class="badge-draft">초안</span></h3></div>
+<div class="case__head"><span class="case__no">CASE 01 · 알고리즘구현</span><h3 class="case__title">흔들리는 GPS 위치에서 기도 방향 방위각 계산하기</h3></div>
 <div class="steps">
-<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>인도향 전 차종에 들어가는 기도 방향(키블라) 안내 앱은 차량의 현재 위치에서 성지(메카) 방향의 방위각을 계산해 화면에 보여 줘야 했습니다. 차량은 계속 움직이고, GPS 위치에는 측정 잡음이 섞입니다.</p></div>
-<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>방위각은 입력 위치에 그대로 끌려갑니다. GPS 원값을 바로 쓰면 위치가 튈 때 방향 표시도 함께 흔들리고, 멀리 떨어진 목적지를 평면 지도처럼 계산하면 방향 자체가 어긋납니다.</p></div>
-<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>C++ Vector 기반 구면 삼각법 방위각 계산 직접 구현 — 지구를 구로 보고 두 지점 사이 방향 계산</li><li>Kalman Filter 로 GPS 위치 오차 보정 — 이전 추정과 새 측정을 함께 반영</li><li>보정된 위치만 방위각 계산에 투입, 결과는 Signal-slot 으로 QML 안내 화면에 전달</li><li>기준 방위각과 계산 결과를 비교해 오차 확인</li></ol></div>
-<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>인도향 전 차종 기도 방향 안내 앱 개발 완료, 방위각 오차 1% 미만.</p></div>
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>인도향 전 차종에 들어가는 기도 방향(키블라) 안내 기능을 직접 개발했습니다. 차량의 현재 위치에서 성지(메카) 방향의 방위각을 계산해 화면에 보여 줘야 했고, 차량은 계속 움직이며 GPS 위치에는 측정 잡음이 섞입니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>방위각은 입력 위치를 그대로 따라가므로, 일반적으로 GPS 원값을 바로 쓰면 위치가 튈 때 방향 표시도 함께 흔들릴 수 있습니다. 또 멀리 떨어진 목적지는 평면 지도처럼 계산하면 방향이 어긋나기 쉬워, 이런 계산에는 보통 구면 계산을 씁니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>C++ Vector 기반 구면 삼각법 방위각 계산 직접 구현 — 지구를 구로 보고 두 지점 사이 방향을 구하는, 먼 거리 방향 계산에 일반적으로 쓰는 방식</li><li>Kalman Filter 로 GPS 위치 오차 보정 — 이전 추정과 새 측정을 함께 반영하는, 잡음 섞인 위치 데이터에 일반적으로 쓰는 방식</li><li>보정된 위치로 방위각을 계산하고, 결과는 Signal-slot 으로 QML 안내 화면에 전달</li><li>방위각 오차를 360° 대비 각도 오차로 검증</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>인도향 전 차종 기도 방향 안내 기능 직접 개발 완료, 방위각 오차 360° 대비 1% 미만(약 3.6° 이내).</p></div>
 </div>
-<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">방위각 오차</div><div class="delta__val"><span class="to">1% 미만</span></div><div class="delta__note">인도향 전 차종</div></div></div><p class="sub-h">보정 없는 단순 계산(비교용 개념)과 채택한 방식</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">방위각 오차(360° 대비)</div><div class="delta__val"><span class="to">1% 미만</span></div><div class="delta__note">약 3.6° 이내 · 인도향 전 차종</div></div></div><p class="sub-h">보정 없는 단순 계산(비교용 개념)과 채택한 방식</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
   subgraph S1[&quot;비교: 보정 없이 평면으로 계산할 때(개념)&quot;]
     A1[&quot;GPS 원값&quot;] --&gt; A2[&quot;평면 근사&lt;br/&gt;방향 계산&quot;] --&gt; A3[&quot;화면 표시&lt;br/&gt;위치가 튀면 방향도 흔들림&quot;]
   end
   subgraph S2[&quot;채택한 방식&quot;]
-    B1[&quot;GPS 위치&lt;br/&gt;NMEA&quot;] --&gt; B2[&quot;Kalman Filter&lt;br/&gt;위치 오차 보정&quot;] --&gt; B3[&quot;구면 삼각법&lt;br/&gt;방위각 계산&quot;] --&gt; B4[&quot;화면 표시&lt;br/&gt;방위각 오차 1% 미만&quot;]
+    B1[&quot;GPS 위치&lt;br/&gt;NMEA&quot;] --&gt; B2[&quot;Kalman Filter&lt;br/&gt;위치 오차 보정&quot;] --&gt; B3[&quot;구면 삼각법&lt;br/&gt;방위각 계산&quot;] --&gt; B4[&quot;화면 표시&lt;br/&gt;오차 360° 대비 1% 미만&lt;br/&gt;약 3.6° 이내&quot;]
   end">flowchart LR
   subgraph S1[&quot;비교: 보정 없이 평면으로 계산할 때(개념)&quot;]
     A1[&quot;GPS 원값&quot;] --&gt; A2[&quot;평면 근사&lt;br/&gt;방향 계산&quot;] --&gt; A3[&quot;화면 표시&lt;br/&gt;위치가 튀면 방향도 흔들림&quot;]
   end
   subgraph S2[&quot;채택한 방식&quot;]
-    B1[&quot;GPS 위치&lt;br/&gt;NMEA&quot;] --&gt; B2[&quot;Kalman Filter&lt;br/&gt;위치 오차 보정&quot;] --&gt; B3[&quot;구면 삼각법&lt;br/&gt;방위각 계산&quot;] --&gt; B4[&quot;화면 표시&lt;br/&gt;방위각 오차 1% 미만&quot;]
+    B1[&quot;GPS 위치&lt;br/&gt;NMEA&quot;] --&gt; B2[&quot;Kalman Filter&lt;br/&gt;위치 오차 보정&quot;] --&gt; B3[&quot;구면 삼각법&lt;br/&gt;방위각 계산&quot;] --&gt; B4[&quot;화면 표시&lt;br/&gt;오차 360° 대비 1% 미만&lt;br/&gt;약 3.6° 이내&quot;]
   end</pre></div></figure><div class="lesson"><b>배운 점</b><p>센서 데이터는 받은 그대로 쓰지 않고 잡음을 보정한 뒤 계산에 넣는다. 지금 데이터 파이프라인에서 정제·검수 단계를 먼저 세우는 습관의 출발점입니다.</p></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+
 </article>
 <article class="case" id="case-2">
-<div class="case__head"><span class="case__no">CASE 02 · 현지대응</span><h3 class="case__title">북미 현지 3개월 품질 확인·양산 대응 <span class="badge-draft">초안</span></h3></div>
+<div class="case__head"><span class="case__no">CASE 02 · 현지대응</span><h3 class="case__title">북미 현지 3개월 품질 확인·양산 대응</h3></div>
 <div class="steps">
-<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>북미향 전 차종에 GPS(NMEA) 수집·추적 서비스가 들어가면서, 양산 전에 현지 도로·수신 환경에서 품질 확인을 받아야 했습니다.</p></div>
-<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>GPS 수신 환경과 주행 조건은 지역마다 다르기 때문에, 현지 조건에서만 드러나는 문제는 국내 시험만으로 확인하기 어렵습니다.</p></div>
-<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>미국 현지 2개 지역에서 3개월간 품질 확인 시험 대응</li><li>이슈가 나오면 현장에서 재현하고 로그·NMEA 원문 확보</li><li>원인 분석 → 수정 빌드 반영 → 같은 조건 재시험</li><li>품질 기준 통과 뒤 양산 대응</li></ol></div>
-<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>북미향 전 차종 GPS 수집·추적 서비스 개발, 미국 현지 3개월 품질 확인·양산 대응.</p></div>
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>북미향 차종에 들어가는 애플리케이션을 양산 전에 현지에서 확인해야 했습니다. 미국 현지 2개 지역에서 3개월간 품질 확인과 양산 대응을 맡았습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>현지 설정·언어·지역 차이와 실차 환경은 국내 시험 환경과 다르기 때문에, 이런 조건에서만 드러나는 문제는 국내 시험만으로 다 확인하기 어렵습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>미국 현지 2개 지역에서 3개월간 품질 확인 시험 대응</li><li>현지 설정·언어·지역 차이: 지역 설정·언어 표시 차이로 생기는 문제를 현지 환경에서 재현해 고침</li><li>실차 환경 호환·성능: 실차에서만 드러나는 호환·성능 문제를 현장에서 확인해 대응</li><li>품질 확인을 마친 뒤 양산 대응</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>북미향 전 차종 GPS(NMEA) 수집·추적 서비스 직접 개발, 미국 현지 3개월 품질 확인·양산 대응. 현지 설정·언어·지역 차이와 실차 환경 호환·성능, 두 유형의 이슈를 현지에서 확인해 대응했습니다.</p></div>
 </div>
-<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">현지 체류</div><div class="delta__val"><span class="to">3개월</span></div><div class="delta__note">미국 현지 2개 지역</div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">출장 전</div><div class="tl__what"><b>국내 개발·사전 시험</b><span>북미향 NMEA 수집·추적 서비스 개발</span></div></li><li><div class="tl__when">현지 체류 중</div><div class="tl__what"><b>품질 확인 시험 대응</b><span>현지 주행 환경에서 기능 검증</span></div></li><li><div class="tl__when">현지 체류 중</div><div class="tl__what"><b>이슈 재현·수정·재시험</b><span>로그·NMEA 원문 확보 후 수정 빌드 반영</span></div></li><li><div class="tl__when">양산 단계</div><div class="tl__what"><b>양산 대응</b><span>북미향 전 차종 적용</span></div></li></ol><div class="lesson"><b>배운 점</b><p>원인은 문제가 나는 자리에서 재현하고 기록을 남겨야 좁혀진다. 이후 운영 중인 시스템에서 장애를 격리하고 재처리 경로를 먼저 만드는 방식으로 이어졌습니다.</p></div>
-<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">현지 체류</div><div class="delta__val"><span class="to">3개월</span></div><div class="delta__note">미국 현지 2개 지역</div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">출장 전</div><div class="tl__what"><b>국내 개발</b><span>북미향 GPS(NMEA) 수집·추적 서비스 직접 개발</span></div></li><li><div class="tl__when">현지 체류 중</div><div class="tl__what"><b>품질 확인 시험 대응</b><span>미국 현지 2개 지역에서 품질 확인</span></div></li><li><div class="tl__when">현지 체류 중</div><div class="tl__what"><b>현지 이슈 대응</b><span>현지 설정·언어·지역 차이, 실차 환경 호환·성능 문제를 현장에서 재현·확인해 대응</span></div></li><li><div class="tl__when">양산 단계</div><div class="tl__what"><b>양산 대응</b><span>북미향 전 차종 적용</span></div></li></ol><div class="lesson"><b>배운 점</b><p>원인은 문제가 나는 자리에서 재현해야 좁혀진다 — 국내 시험 환경과 다른 현지 설정·실차 조건이 그랬습니다. 이후 운영 중인 시스템에서 장애를 격리하고 재처리 경로를 먼저 만드는 방식으로 이어졌습니다.</p></div>
+
 </article>
 <article class="case sec--glow sec--flip" id="case-3">
 <div class="case__head"><span class="case__no">CASE 03 · 임베디드개발</span><h3 class="case__title">디자인이 바뀌어도 남는 개발자 모드 <span class="badge-draft">초안</span></h3></div>
 <div class="steps">
-<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>차량 인포테인먼트의 개발자 모드를 설계·개발했습니다. 당시 신차부터 이후 전 차종에 들어가는 기능이라, 플랫폼 세대 교체와 디자인 리뉴얼을 계속 거칠 수밖에 없었습니다.</p></div>
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>차량 인포테인먼트에 기존에 만들어진 개발자 모드를 고도화했습니다. 당시 신차부터 이후 전 차종에 들어가는 기능이라, 플랫폼 세대 교체와 디자인 리뉴얼을 계속 거칠 수밖에 없었습니다.</p></div>
 <div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>화면 코드와 기능 코드가 섞여 있으면 디자인을 바꿀 때마다 기능까지 다시 만들고 다시 검증해야 합니다.</p></div>
-<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>화면은 QML, 기능은 C++ 로 계층 분리</li><li>두 계층 사이를 Qt Signal-slot 으로 연결 — 화면이 기능 내부를 직접 부르지 않는 구조</li><li>화면 교체가 기능 계층에 영향을 주지 않도록 설계</li></ol></div>
-<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>당시 신차부터 이후 출시된 전 차종에 탑재. 리뉴얼 뒤 디자인 변경을 빼면 현행 플랫폼까지 같은 기능이 유지되고 있습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>기존 개발자 모드의 기능 고도화</li><li>고도화하는 기능도 화면(QML)과 기능(C++) 경계를 지켜 반영 — 두 계층은 Qt Signal-slot 으로 연결</li><li>화면 교체가 기능 계층에 영향을 주지 않도록 경계 유지</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>고도화한 개발자 모드가 당시 신차부터 이후 출시된 전 차종에 탑재. 리뉴얼 뒤 디자인 변경을 빼면 현행 플랫폼까지 같은 기능이 유지되고 있습니다.</p></div>
 </div>
-<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">탑재 범위</div><div class="delta__val"><span class="to">전 차종</span></div><div class="delta__note">당시 신차 이후 · 현행 플랫폼까지 기능 유지</div></div></div><p class="sub-h">화면은 바뀌고 기능 계층은 그대로 남는 구조(개념도)</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">탑재 범위</div><div class="delta__val"><span class="to">전 차종</span></div><div class="delta__note">기존 기능 고도화 · 당시 신차 이후 · 현행 플랫폼까지 기능 유지</div></div></div><p class="sub-h">화면은 바뀌고 기능 계층은 그대로 남는 구조(개념도)</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
   subgraph OLD[&quot;리뉴얼 전&quot;]
     U1[&quot;개발자 모드 화면&lt;br/&gt;기존 디자인 QML&quot;]
   end
@@ -261,7 +263,7 @@
   U2 --&gt; I1
   I1 --&gt; L1</pre></div></figure><div class="lesson"><b>배운 점</b><p>화면의 수명보다 기능의 수명이 길다. 경계를 지키면 기능은 살아남는다는 기준이 백엔드에서 API 계약과 내부 구현을 나누는 습관이 됐습니다.</p></div>
 <p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
-</article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>센서 데이터는 받은 그대로 쓰지 않고 잡음을 보정한 뒤 계산에 넣는다. 지금 데이터 파이프라인에서 정제·검수 단계를 먼저 세우는 습관의 출발점입니다.</p><p>원인은 문제가 나는 자리에서 재현하고 기록을 남겨야 좁혀진다. 이후 운영 중인 시스템에서 장애를 격리하고 재처리 경로를 먼저 만드는 방식으로 이어졌습니다.</p><p>화면의 수명보다 기능의 수명이 길다. 경계를 지키면 기능은 살아남는다는 기준이 백엔드에서 API 계약과 내부 구현을 나누는 습관이 됐습니다.</p></section></div>
+</article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>센서 데이터는 받은 그대로 쓰지 않고 잡음을 보정한 뒤 계산에 넣는다. 지금 데이터 파이프라인에서 정제·검수 단계를 먼저 세우는 습관의 출발점입니다.</p><p>원인은 문제가 나는 자리에서 재현해야 좁혀진다 — 국내 시험 환경과 다른 현지 설정·실차 조건이 그랬습니다. 이후 운영 중인 시스템에서 장애를 격리하고 재처리 경로를 먼저 만드는 방식으로 이어졌습니다.</p><p>화면의 수명보다 기능의 수명이 길다. 경계를 지키면 기능은 살아남는다는 기준이 백엔드에서 API 계약과 내부 구현을 나누는 습관이 됐습니다.</p></section></div>
 <nav class="pager" aria-label="다른 프로젝트"><a href="election-vms-openequella.html"><small>← 이전 프로젝트</small><b>해외 선거관리 시스템·디지털 콘텐츠 저장소 구축</b></a><span></span></nav>
 <footer class="footer"><p>황병준 · 백엔드·데이터 엔지니어 · <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p><small>디자인 바탕: <a href="https://once-ui.com" target="_blank" rel="noopener">Once UI</a> Magic Portfolio · 도표는 직접 그린 개념도입니다</small></footer>
 </main>

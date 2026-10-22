@@ -481,3 +481,7 @@ table.t tr:last-child td { border-bottom: 0; }
   * { transition: none !important; scroll-behavior: auto !important; }
   .card { transform: none !important; }
 }
+
+/* 본문 안 다른 프로젝트 링크 */
+.inlink { color: var(--primary-900); text-decoration: underline; text-decoration-color: rgba(205, 216, 251, 0.4); text-underline-offset: 3px; }
+.inlink:hover { text-decoration-color: var(--primary-900); }
