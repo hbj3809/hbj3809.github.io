@@ -3,77 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>기술 · 황병준</title>
-<meta name="description" content="황병준이 실무에서 쓴 기술과 근거가 된 프로젝트">
-<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<title>기술 — 황병준 포트폴리오</title>
+<meta name="description" content="기술 스택 &amp; 역량">
+<meta name="theme-color" content="#15161a">
+<meta property="og:title" content="기술 — 황병준 포트폴리오">
+<meta property="og:description" content="기술 스택 &amp; 역량">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/site.css?v=a01858cc">
 </head>
 <body>
-<header class="site-header">
-  <div class="wrap">
-    <a class="brand" href="index.html">황병준<span>Byeongjun Hwang</span></a>
-    <nav class="nav" aria-label="주 메뉴">
-      <a href="index.html">홈</a>
-      <a href="about.html">소개</a>
-      <a href="experience.html">경력</a>
-      <a href="projects.html">프로젝트</a>
-      <a href="ai.html">AI로 일하는 방식</a>
-      <a href="skills.html">기술</a>
-    </nav>
-    <div>
-      <button class="theme-btn" type="button" aria-label="밝게/어둡게 전환">◐</button>
-      <button class="menu-btn" type="button" aria-expanded="false" aria-label="메뉴 열기">메뉴</button>
-    </div>
-  </div>
-</header>
-
-<main class="wrap">
-  <p class="eyebrow">Skills</p>
-  <h1>실무에서 쓴 기술</h1>
-  <p class="lead">이름만 아는 기술은 빼고, 운영까지 가져간 기술만 적었습니다. 괄호는 근거가 된 일입니다.</p>
-
-  <div class="grid cols-2 section">
-    <div class="card skill-group">
-      <h3>백엔드</h3>
-      <p>Kotlin · Coroutines · Spring Boot 3 WebFlux · R2DBC · Spring Security · JWT (멀티테넌트 SaaS) / Java 17~22 · Spring Boot · JPA · MyBatis (물류 키오스크·결제·SFA) / Python · FastAPI · Flask (백오피스·AI 서버)</p>
-    </div>
-    <div class="card skill-group">
-      <h3>아키텍처</h3>
-      <p>MSA · DDD(Bounded Context·Aggregate) · 모듈러 모놀리스 · 이벤트 기반 · 멀티테넌트 격리 · 멱등 설계 · TDD(JUnit5 · Mockito · Testcontainers · pytest)</p>
-    </div>
-    <div class="card skill-group">
-      <h3>데이터</h3>
-      <p>PostgreSQL 17(파티셔닝·인덱스 설계·EXPLAIN·튜닝·PITR) · Apache Airflow 3 · Kafka · Kafka Streams · Redis/Valkey · Elasticsearch/ELK · OpenSearch · Oracle · Redshift · Spark</p>
-    </div>
-    <div class="card skill-group">
-      <h3>클라우드 · DevOps</h3>
-      <p>AWS(EKS · VPC · Route53 · S3 · IAM · KMS · EBS · EFS · ECR) · Terraform · Kubernetes · Argo CD(GitOps) · Helm · Kustomize · Jenkins(JCasC · kaniko) · Docker · Envoy Gateway · Keycloak(OIDC SSO) · cert-manager · Sealed Secrets · Velero</p>
-    </div>
-    <div class="card skill-group">
-      <h3>관측성</h3>
-      <p>Prometheus · Alertmanager · Grafana · Loki · Grafana Alloy · promtool 가상 시계 시험 · WhaTap · Scouter · Jennifer</p>
-    </div>
-    <div class="card skill-group">
-      <h3>AI</h3>
-      <p>Claude Code · Codex(에이전트 하네스·다중 에이전트 워크플로) · LLM 에이전트·RAG 설계(AWS Bedrock, Qwen · Claude) · Vision AI · Whisper STT · KorpatELECTRA · PaddleOCR · Qwen3-VL · scikit-learn · XGBoost · LightGBM · SHAP · TensorFlow · OpenCV</p>
-    </div>
-  </div>
-
-  <section class="section">
-    <h2>도메인</h2>
-    <div class="tags">
-      <span class="chip">물류(입출고·배차·자산)</span><span class="chip">제조·SCM</span><span class="chip">영업·CRM·ERP 연계</span><span class="chip">이커머스 결제·정산</span><span class="chip">제약 유통 데이터</span><span class="chip">공공·교육 솔루션</span><span class="chip">차량 인포테인먼트</span>
-    </div>
-  </section>
+<a class="skip" href="#main">본문 바로가기</a>
+<nav class="nav" aria-label="주 메뉴"><a class="nav__item" href="index.html" aria-label="홈"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.99778 19.3275V14.3275H13.9978V19.3275C13.9978 19.8775 14.4478 20.3275 14.9978 20.3275H17.9978C18.5478 20.3275 18.9978 19.8775 18.9978 19.3275V12.3275H20.6978C21.1578 12.3275 21.3778 11.7575 21.0278 11.4575L12.6678 3.9275C12.2878 3.5875 11.7078 3.5875 11.3278 3.9275L2.96778 11.4575C2.62778 11.7575 2.83778 12.3275 3.29778 12.3275H4.99778V19.3275C4.99778 19.8775 5.44778 20.3275 5.99778 20.3275H8.99778C9.54778 20.3275 9.99778 19.8775 9.99778 19.3275Z"/></svg><span class="nav__tip">홈</span></a><a class="nav__item" href="about.html" aria-label="소개"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1c0 .55.45 1 1 1h14c.55 0 1-.45 1-1v-1c0-2.66-5.33-4-8-4z"/></svg><span class="nav__tip">소개</span></a><a class="nav__item" href="experience.html" aria-label="경력"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg><span class="nav__tip">경력</span></a><a class="nav__item" href="projects.html" aria-label="프로젝트"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.0142 17.3073L17.3042 18.0173C17.1042 18.2173 16.7942 18.2173 16.5942 18.0173C16.3942 17.8173 16.3942 17.5073 16.5942 17.3073L17.3042 16.5973L15.3642 14.6573L14.6542 15.3673C14.4542 15.5673 14.1442 15.5673 13.9442 15.3673C13.7442 15.1673 13.7442 14.8573 13.9442 14.6573L14.6542 13.9473L12.7142 12.0073L12.0042 12.7173C11.8042 12.9173 11.4942 12.9173 11.2942 12.7173C11.0942 12.5173 11.0942 12.2073 11.2942 12.0073L12.0042 11.2973L10.0542 9.34731L9.34423 10.0573C9.14423 10.2573 8.83423 10.2573 8.63423 10.0573C8.43423 9.85731 8.43423 9.54731 8.63423 9.34731L9.34423 8.63731L7.40423 6.69731L6.69423 7.40731C6.49423 7.60731 6.18423 7.60731 5.98423 7.40731C5.78423 7.20731 5.78423 6.89731 5.98423 6.69731L6.69423 5.98731L5.20423 4.49731C4.89423 4.18731 4.35423 4.40731 4.35423 4.85731V17.6473C4.35423 18.7473 5.25423 19.6473 6.35423 19.6473H19.1442C19.5942 19.6473 19.8142 19.1073 19.4942 18.7973L18.0142 17.3073ZM7.35423 15.6473V10.8873L13.1142 16.6473H8.35423C7.80423 16.6473 7.35423 16.1973 7.35423 15.6473Z"/></svg><span class="nav__tip">프로젝트</span></a><a class="nav__item" href="ai.html" aria-label="AI로 일하는 방식"><svg class="" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M14.2206 28C13.7539 28 13.3939 27.5867 13.4606 27.12L14.6606 18.6667H9.99395C8.82062 18.6667 9.55395 17.6667 9.58062 17.6267C11.2606 14.6533 13.7806 10.2533 17.114 4.38667C17.2473 4.14667 17.514 4 17.7806 4C18.2473 4 18.6073 4.41333 18.5406 4.88L17.3406 13.3333H22.0206C22.554 13.3333 22.8473 13.5867 22.554 14.2133C18.1673 21.8667 15.6206 26.3333 14.8873 27.6133C14.754 27.8533 14.5006 28 14.2206 28Z"/></svg><span class="nav__tip">AI로 일하는 방식</span></a><a class="nav__item" href="skills.html" aria-current="page" aria-label="기술"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.61 18.99l-9.08-9.08c.93-2.34.45-5.1-1.44-7C9.79.61 6.21.4 3.66 2.26L7.5 6.11 6.08 7.52 2.25 3.69C.39 6.23.6 9.82 2.9 12.11c1.86 1.86 4.57 2.35 6.89 1.48l9.11 9.11c.39.39 1.02.39 1.41 0l2.3-2.3c.4-.38.4-1.01 0-1.41z"/></svg><span class="nav__tip">기술</span></a><div class="nav__div" aria-hidden="true"><span></span></div><a class="nav__item" href="mailto:hbj3809@naver.com" aria-label="이메일 보내기"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg><span class="nav__tip">hbj3809@naver.com</span></a></nav>
+<main id="main" class="page">
+<header class="intro"><p class="intro__eyebrow">Skills</p><h1>기술 스택 &amp; 역량</h1><div class="intro__text"><p>원본 포트폴리오의 기술 스택 8개 분류에 지금 회사에서 운영까지 가져간 기술을 더했습니다. 괄호는 근거가 된 일입니다.</p></div></header>
+<div class="stack" style="padding:8px"><div class="stack__group"><h3>1. Backend / Application</h3><div class="card__tags"><span class="tag">Java (Spring Boot, Spring Security, JPA, MyBatis)</span><span class="tag">Kotlin · Coroutines · Spring WebFlux · R2DBC</span><span class="tag">Spring Cloud</span><span class="tag">Spring Batch</span><span class="tag">Spring AOP</span><span class="tag">Python (FastAPI, Flask)</span><span class="tag">RESTful API 설계 및 구현</span><span class="tag">JSP / Vanilla JavaScript / JSTL / Thymeleaf</span><span class="tag">JWT 기반 인증·인가 시스템 설계</span><span class="tag">Spring Boot MSA</span></div></div><div class="stack__group"><h3>2. Architecture / System Design</h3><div class="card__tags"><span class="tag">MSA (Microservices Architecture) 설계 및 운영</span><span class="tag">Event-Driven Architecture (EDA)</span><span class="tag">DDD (Bounded Context, Aggregate) 기반 설계</span><span class="tag">Kafka 기반 비동기 처리 구조 설계</span><span class="tag">대용량 트랜잭션 처리 시스템 설계(일 10만 건)</span><span class="tag">모듈러 모놀리스 · 멀티테넌트 격리</span><span class="tag">멱등 설계 · 정본 서열·원장 대사</span></div></div><div class="stack__group"><h3>3. Data / Messaging</h3><div class="card__tags"><span class="tag">Apache Kafka (Producer / Consumer / Streams)</span><span class="tag">메시지 키 기반 파티셔닝 및 순서 보장 설계</span><span class="tag">Kafka Streams 실시간 집계 및 처리</span><span class="tag">Redis / Valkey (캐시 · 상태 관리)</span><span class="tag">Apache Airflow 3 파이프라인</span><span class="tag">Elasticsearch / ELK · OpenSearch</span></div></div><div class="stack__group"><h3>4. Database</h3><div class="card__tags"><span class="tag">Oracle</span><span class="tag">MySQL</span><span class="tag">PostgreSQL 17 (파티셔닝 · 인덱스 설계 · EXPLAIN · 튜닝 · PITR)</span><span class="tag">MS-SQL</span><span class="tag">Redshift</span><span class="tag">BigQuery</span><span class="tag">Milvus (VectorDB)</span><span class="tag">pgvector (VectorDB)</span><span class="tag">데이터 모델링 및 성능 최적화</span><span class="tag">트랜잭션 관리 및 정합성 설계</span></div></div><div class="stack__group"><h3>5. Infra / DevOps</h3><div class="card__tags"><span class="tag">Docker / Compose</span><span class="tag">Kubernetes (K8s) · Helm · Kustomize</span><span class="tag">AWS (EKS · VPC · Route53 · S3 · IAM · KMS · EBS · ECR)</span><span class="tag">Terraform (IaC)</span><span class="tag">Argo CD (GitOps)</span><span class="tag">Jenkins (CI/CD · JCasC · kaniko)</span><span class="tag">Envoy Gateway · Nginx / Tomcat</span><span class="tag">Keycloak (OIDC SSO) · cert-manager · Sealed Secrets · Velero</span><span class="tag">ELK Stack (Elasticsearch, Logstash, Kibana)</span><span class="tag">관측성: Prometheus · Alertmanager · Grafana · Loki · Alloy</span><span class="tag">APM: DataDog · WhaTap · Jennifer · Scouter</span><span class="tag">무중단 배포 (Blue-Green / Rolling)</span></div></div><div class="stack__group"><h3>6. AI / ML &amp; Data Engineering</h3><div class="card__tags"><span class="tag">OCR: PaddleOCR / Tesseract</span><span class="tag">OpenCV</span><span class="tag">WebRTC</span><span class="tag">VLM: Qwen-VL</span><span class="tag">LLM: Qwen · Gemini · GPT · Claude · vLLM</span><span class="tag">AWS Bedrock · RAG · LLM 에이전트 설계</span><span class="tag">Scikit-learn · XGBoost · LightGBM · SHAP</span><span class="tag">STT: Whisper</span><span class="tag">NLP: KorpatELECTRA · BERT</span><span class="tag">NER: GLiNER + Rule-based Hybrid System</span><span class="tag">Apache Airflow 파이프라인</span></div></div><div class="stack__group"><h3>7. Testing / Quality</h3><div class="card__tags"><span class="tag">JUnit5 / Mockito</span><span class="tag">SpringBootTest</span><span class="tag">Testcontainers · pytest</span><span class="tag">TDD (RED → GREEN → REFACTOR)</span><span class="tag">테스트 커버리지 기준 관리</span></div></div><div class="stack__group"><h3>8. Collaboration / Tools</h3><div class="card__tags"><span class="tag">Claude Code · Codex (에이전트 하네스)</span><span class="tag">Git</span><span class="tag">GitLab</span><span class="tag">GitHub</span><span class="tag">SVN</span><span class="tag">IntelliJ</span><span class="tag">Notion</span><span class="tag">Jira</span><span class="tag">Confluence</span><span class="tag">Swagger / OpenAPI</span></div></div></div>
+<h2 class="h2 block-title">도메인</h2>
+<div class="chips"><span class="tag">물류(입출고·배차·자산)</span><span class="tag">제조·SCM</span><span class="tag">영업·CRM·ERP 연계</span><span class="tag">이커머스 결제·정산</span><span class="tag">제약 유통 데이터</span><span class="tag">공공·교육 솔루션</span><span class="tag">차량 인포테인먼트</span></div>
+<footer class="footer"><p>황병준 · 백엔드·데이터 엔지니어 · <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p><small>디자인 바탕: <a href="https://once-ui.com" target="_blank" rel="noopener">Once UI</a> Magic Portfolio · 도표는 직접 그린 개념도입니다</small></footer>
 </main>
-
-<footer class="site-footer">
-  <div class="wrap">
-    <span>© 2026 황병준</span>
-    <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a>
-  </div>
-</footer>
-<script src="assets/js/site.js"></script>
+<script src="assets/js/site.js?v=fdaea7ac" defer></script>
 </body>
 </html>

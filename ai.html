@@ -3,131 +3,86 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI로 일하는 방식 · 황병준</title>
-<meta name="description" content="AI 코딩 에이전트 하네스 엔지니어링: 작업 규칙, 다중 에이전트 반박 검증, 검증 관문, 권한 분리">
-<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<title>AI로 일하는 방식 — 황병준 포트폴리오</title>
+<meta name="description" content="AI에게 맡기고, 사람이 검증합니다">
+<meta name="theme-color" content="#15161a">
+<meta property="og:title" content="AI로 일하는 방식 — 황병준 포트폴리오">
+<meta property="og:description" content="AI에게 맡기고, 사람이 검증합니다">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/site.css?v=a01858cc">
 </head>
 <body>
-<header class="site-header">
-  <div class="wrap">
-    <a class="brand" href="index.html">황병준<span>Byeongjun Hwang</span></a>
-    <nav class="nav" aria-label="주 메뉴">
-      <a href="index.html">홈</a>
-      <a href="about.html">소개</a>
-      <a href="experience.html">경력</a>
-      <a href="projects.html">프로젝트</a>
-      <a href="ai.html">AI로 일하는 방식</a>
-      <a href="skills.html">기술</a>
-    </nav>
-    <div>
-      <button class="theme-btn" type="button" aria-label="밝게/어둡게 전환">◐</button>
-      <button class="menu-btn" type="button" aria-expanded="false" aria-label="메뉴 열기">메뉴</button>
-    </div>
-  </div>
-</header>
+<a class="skip" href="#main">본문 바로가기</a>
+<nav class="nav" aria-label="주 메뉴"><a class="nav__item" href="index.html" aria-label="홈"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.99778 19.3275V14.3275H13.9978V19.3275C13.9978 19.8775 14.4478 20.3275 14.9978 20.3275H17.9978C18.5478 20.3275 18.9978 19.8775 18.9978 19.3275V12.3275H20.6978C21.1578 12.3275 21.3778 11.7575 21.0278 11.4575L12.6678 3.9275C12.2878 3.5875 11.7078 3.5875 11.3278 3.9275L2.96778 11.4575C2.62778 11.7575 2.83778 12.3275 3.29778 12.3275H4.99778V19.3275C4.99778 19.8775 5.44778 20.3275 5.99778 20.3275H8.99778C9.54778 20.3275 9.99778 19.8775 9.99778 19.3275Z"/></svg><span class="nav__tip">홈</span></a><a class="nav__item" href="about.html" aria-label="소개"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1c0 .55.45 1 1 1h14c.55 0 1-.45 1-1v-1c0-2.66-5.33-4-8-4z"/></svg><span class="nav__tip">소개</span></a><a class="nav__item" href="experience.html" aria-label="경력"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg><span class="nav__tip">경력</span></a><a class="nav__item" href="projects.html" aria-label="프로젝트"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.0142 17.3073L17.3042 18.0173C17.1042 18.2173 16.7942 18.2173 16.5942 18.0173C16.3942 17.8173 16.3942 17.5073 16.5942 17.3073L17.3042 16.5973L15.3642 14.6573L14.6542 15.3673C14.4542 15.5673 14.1442 15.5673 13.9442 15.3673C13.7442 15.1673 13.7442 14.8573 13.9442 14.6573L14.6542 13.9473L12.7142 12.0073L12.0042 12.7173C11.8042 12.9173 11.4942 12.9173 11.2942 12.7173C11.0942 12.5173 11.0942 12.2073 11.2942 12.0073L12.0042 11.2973L10.0542 9.34731L9.34423 10.0573C9.14423 10.2573 8.83423 10.2573 8.63423 10.0573C8.43423 9.85731 8.43423 9.54731 8.63423 9.34731L9.34423 8.63731L7.40423 6.69731L6.69423 7.40731C6.49423 7.60731 6.18423 7.60731 5.98423 7.40731C5.78423 7.20731 5.78423 6.89731 5.98423 6.69731L6.69423 5.98731L5.20423 4.49731C4.89423 4.18731 4.35423 4.40731 4.35423 4.85731V17.6473C4.35423 18.7473 5.25423 19.6473 6.35423 19.6473H19.1442C19.5942 19.6473 19.8142 19.1073 19.4942 18.7973L18.0142 17.3073ZM7.35423 15.6473V10.8873L13.1142 16.6473H8.35423C7.80423 16.6473 7.35423 16.1973 7.35423 15.6473Z"/></svg><span class="nav__tip">프로젝트</span></a><a class="nav__item" href="ai.html" aria-current="page" aria-label="AI로 일하는 방식"><svg class="" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M14.2206 28C13.7539 28 13.3939 27.5867 13.4606 27.12L14.6606 18.6667H9.99395C8.82062 18.6667 9.55395 17.6667 9.58062 17.6267C11.2606 14.6533 13.7806 10.2533 17.114 4.38667C17.2473 4.14667 17.514 4 17.7806 4C18.2473 4 18.6073 4.41333 18.5406 4.88L17.3406 13.3333H22.0206C22.554 13.3333 22.8473 13.5867 22.554 14.2133C18.1673 21.8667 15.6206 26.3333 14.8873 27.6133C14.754 27.8533 14.5006 28 14.2206 28Z"/></svg><span class="nav__tip">AI로 일하는 방식</span></a><a class="nav__item" href="skills.html" aria-label="기술"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.61 18.99l-9.08-9.08c.93-2.34.45-5.1-1.44-7C9.79.61 6.21.4 3.66 2.26L7.5 6.11 6.08 7.52 2.25 3.69C.39 6.23.6 9.82 2.9 12.11c1.86 1.86 4.57 2.35 6.89 1.48l9.11 9.11c.39.39 1.02.39 1.41 0l2.3-2.3c.4-.38.4-1.01 0-1.41z"/></svg><span class="nav__tip">기술</span></a><div class="nav__div" aria-hidden="true"><span></span></div><a class="nav__item" href="mailto:hbj3809@naver.com" aria-label="이메일 보내기"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg><span class="nav__tip">hbj3809@naver.com</span></a></nav>
+<main id="main" class="page">
+<header class="intro"><p class="intro__eyebrow">How I build with AI</p><h1>AI에게 맡기고, 사람이 검증합니다</h1><div class="intro__text"><p>스타트업 개발팀에서 백엔드·데이터·인프라를 넓게 맡으려면 AI 코딩 에이전트(Claude Code·Codex)가 필요했습니다. 그런데 에이전트는 저장소의 관례도, 지난 사고도 모른 채 같은 실수를 되풀이합니다.</p><p>그래서 에이전트가 안전하고 정확하게 일하도록 <strong class="hl">작업 규칙 · 반박 검증 · 시험 관문 · 권한 분리 · 기억</strong>을 먼저 설계했습니다. 이 구조를 하네스(harness)라고 부릅니다.</p></div></header>
+<div class="stats"><div class="stat"><p class="stat__value">324회</p><p class="stat__label">다중 에이전트 워크플로</p><p class="stat__note">2026.06~10, 에이전트 약 4,900개</p></div><div class="stat"><p class="stat__value">약 70%</p><p class="stat__label">반박 검증 단계 포함</p><p class="stat__note">찾은 것을 다른 에이전트가 다시 판정</p></div><div class="stat"><p class="stat__value">57.6%</p><p class="stat__label">AI 공동 작성 커밋</p><p class="stat__note">사내 저장소 17개, 1,806건 중(하한)</p></div><div class="stat"><p class="stat__value">46회</p><p class="stat__label">작업 규칙 개정</p><p class="stat__note">주력 저장소 작업 규칙 224줄</p></div></div>
+<div style="margin:24px 56px 0"><a class="ctl" href="projects/ai-agent-harness.html"><span>AI 에이전트 하네스 프로젝트 상세 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div>
+<section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">작업 규칙을 3단으로<span class="dim">위에서 아래로 갈수록 구체적으로</span></h2><div class="sec__lead"><p>규칙이 한 파일에 몰리면 묻히고, 저장소마다 따로 쓰면 어긋납니다. 도구 전역 → 작업공간 공통 → 저장소별로 나눠, 아래로 갈수록 구체적인 규칙을 두었습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TD
+  G[&quot;도구 전역 규칙&lt;br/&gt;응답 언어·안전 수칙·기억 관리&quot;] --&gt; W[&quot;작업공간 공통 규칙&lt;br/&gt;보안·시험·OpenAPI·감사 컬럼·Kafka/Redis 규약&quot;]
+  W --&gt; R1[&quot;저장소 규칙 A&lt;br/&gt;모듈 구조·테넌트 격리·응답 형식&quot;]
+  W --&gt; R2[&quot;저장소 규칙 B&lt;br/&gt;파이프라인 멱등·정본 서열&quot;]
+  W --&gt; R3[&quot;저장소 규칙 C&lt;br/&gt;IaC·GitOps 배포 순서&quot;]
+  M[&quot;기억 파일&lt;br/&gt;사고·결정·함정 기록&quot;] -.-&gt; R1
+  M -.-&gt; R2
+  M -.-&gt; R3">flowchart TD
+  G[&quot;도구 전역 규칙&lt;br/&gt;응답 언어·안전 수칙·기억 관리&quot;] --&gt; W[&quot;작업공간 공통 규칙&lt;br/&gt;보안·시험·OpenAPI·감사 컬럼·Kafka/Redis 규약&quot;]
+  W --&gt; R1[&quot;저장소 규칙 A&lt;br/&gt;모듈 구조·테넌트 격리·응답 형식&quot;]
+  W --&gt; R2[&quot;저장소 규칙 B&lt;br/&gt;파이프라인 멱등·정본 서열&quot;]
+  W --&gt; R3[&quot;저장소 규칙 C&lt;br/&gt;IaC·GitOps 배포 순서&quot;]
+  M[&quot;기억 파일&lt;br/&gt;사고·결정·함정 기록&quot;] -.-&gt; R1
+  M -.-&gt; R2
+  M -.-&gt; R3</pre></div></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>기획서 대조 검증: 기획 화면의 요소·유효성·동작을 코드 위치에 1:1로 대응시켜 구현됨/누락/불일치로 분류한다.</li><li>전체 시험 단일 관문: PR 전에 모듈 전체 시험(실제 DB·Redis·Kafka 를 띄운 통합 시험)을 통과하고 결과 원문을 남긴다. 단언 완화·케이스 삭제·비활성화로 빨간 빌드를 넘기지 않는다.</li><li>버그를 규칙으로: &quot;등록만 했는데 수정일이 찍힌다&quot;, &quot;CSV 한글이 깨진다&quot; 같은 실제 버그는 다음부터 반복되지 않도록 규칙으로 올렸다.</li></ul></div></div>
 
-<main class="wrap">
-  <p class="eyebrow">How I build with AI</p>
-  <h1>AI에게 맡기고, 사람이 검증합니다</h1>
-  <p class="lead">4명 개발팀에서 백엔드·데이터·인프라를 혼자 맡으려면 AI 코딩 에이전트(Claude Code·Codex)가 필요했습니다. 그런데 에이전트는 저장소의 관례도, 지난 사고도 모른 채 같은 실수를 되풀이합니다. 그래서 에이전트가 안전하고 정확하게 일하도록 <b>작업 규칙 · 반박 검증 · 시험 관문 · 권한 분리 · 기억</b>을 먼저 설계했습니다. 이 구조를 하네스(harness)라고 부릅니다.</p>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">찾기 → 반박 → 종합<span class="dim">그럴듯한 오답을 거르는 순서</span></h2><div class="sec__lead"><p>에이전트 하나의 자기 검증으로는 그럴듯한 오답을 거를 수 없습니다. 관점별 에이전트가 병렬로 찾고, 처음부터 의심하는 독립 에이전트가 하나하나 반박한 뒤, 살아남은 것만 사람이 판정합니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  Q[&quot;질문·범위&lt;br/&gt;(사람이 정함)&quot;] --&gt; F1[&quot;찾기 A&lt;br/&gt;보안 관점&quot;]
+  Q --&gt; F2[&quot;찾기 B&lt;br/&gt;정합성 관점&quot;]
+  Q --&gt; F3[&quot;찾기 C&lt;br/&gt;운영 관점&quot;]
+  F1 --&gt; V[&quot;독립 반박&lt;br/&gt;지적마다 다른 에이전트가 반증 시도&quot;]
+  F2 --&gt; V
+  F3 --&gt; V
+  V --&gt;|&quot;기각 약 27%&lt;br/&gt;(판정 기록 기준)&quot;| X[&quot;버림&quot;]
+  V --&gt;|살아남음| S[&quot;종합·비판&lt;br/&gt;빠진 관점 점검&quot;]
+  S --&gt; H[&quot;사람 판정&lt;br/&gt;고칠 것·미룰 것 결정&quot;]
+  H --&gt; T[&quot;수정 + 시험 관문&quot;]">flowchart LR
+  Q[&quot;질문·범위&lt;br/&gt;(사람이 정함)&quot;] --&gt; F1[&quot;찾기 A&lt;br/&gt;보안 관점&quot;]
+  Q --&gt; F2[&quot;찾기 B&lt;br/&gt;정합성 관점&quot;]
+  Q --&gt; F3[&quot;찾기 C&lt;br/&gt;운영 관점&quot;]
+  F1 --&gt; V[&quot;독립 반박&lt;br/&gt;지적마다 다른 에이전트가 반증 시도&quot;]
+  F2 --&gt; V
+  F3 --&gt; V
+  V --&gt;|&quot;기각 약 27%&lt;br/&gt;(판정 기록 기준)&quot;| X[&quot;버림&quot;]
+  V --&gt;|살아남음| S[&quot;종합·비판&lt;br/&gt;빠진 관점 점검&quot;]
+  S --&gt; H[&quot;사람 판정&lt;br/&gt;고칠 것·미룰 것 결정&quot;]
+  H --&gt; T[&quot;수정 + 시험 관문&quot;]</pre></div></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>보안 감사·삭제 가드 전수조사·장애 원인 조사·설계 심사에 썼고, 반박 판정 중 약 27%는 사람에게 오기 전에 기각됐습니다(판정 기록 기준).</li><li>데이터 파이프라인과 API 의 주요 변경 5건에서 확정 결함 62건을 배포 전에 고쳤습니다. 배포 직후 보강값이 되돌아갈 수 있던 치명 결함도 여기서 잡았습니다.</li><li>운영 공개 직전 보안 감사에서는 10개 축을 병렬로 찾고 반박을 통과한 고위험 2건·중위험 8건만 시험과 함께 고쳤습니다.</li></ul></div></div>
 
-  <section class="section">
-    <div class="grid cols-4">
-      <div class="card kpi"><div class="num">324회</div><div class="label">다중 에이전트 워크플로</div><div class="note">2026.06~10, 에이전트 약 4,900개</div></div>
-      <div class="card kpi"><div class="num">약 70%</div><div class="label">반박 검증 단계 포함</div><div class="note">찾은 것을 다른 에이전트가 다시 판정</div></div>
-      <div class="card kpi"><div class="num">57.6%</div><div class="label">AI 공동 작성 커밋</div><div class="note">사내 저장소 17개, 1,806건 중(하한)</div></div>
-      <div class="card kpi"><div class="num">46회</div><div class="label">작업 규칙 개정</div><div class="note">주력 저장소, 실제 버그를 규칙으로 승격</div></div>
-    </div>
-  </section>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">시험 관문과 권한 분리<span class="dim">되돌릴 수 없는 일은 사람이</span></h2><div class="sec__lead"><p>운영 대상 명령은 자동 승인에서 빼고, 바뀐 파일만 골라 올리며, 병합 권한 검사는 우회하지 않습니다.</p></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>에이전트가 한다</th><th>사람(제가)이 한다</th></tr></thead><tbody><tr><td>조사·설계안 초안·코드·시험 작성</td><td>범위·정책·설계 판단, 반박 결과 판정</td></tr><tr><td>브랜치·커밋·푸시·PR 작성</td><td>PR 검토와 병합(작성 PR 316건)</td></tr><tr><td>읽기 전용 확인 조회, 측정</td><td>운영 SQL·되돌릴 수 없는 단계 실행·배포</td></tr><tr><td>예약된 새벽 점검(쓰기·배포 금지)</td><td>점검 보고서를 보고 다음 단계 진행 결정</td></tr></tbody></table></div></div>
 
-  <section class="section">
-    <h2>1. 작업 규칙을 3단으로</h2>
-    <p>규칙이 한 파일에 몰리면 묻히고, 저장소마다 따로 쓰면 어긋납니다. 도구 전역 → 작업공간 공통 → 저장소별로 나눠, 아래로 갈수록 구체적인 규칙을 두었습니다.</p>
-    <div class="diagram" role="img" aria-label="작업 규칙 3단 구조: 도구 전역, 작업공간 공통, 저장소별">
-      <svg viewBox="0 0 720 230" xmlns="http://www.w3.org/2000/svg">
-        <rect class="box" x="20" y="20" width="680" height="54" rx="10" stroke-width="1.5"/>
-        <text x="40" y="44" font-size="15" font-weight="700">도구 전역</text>
-        <text x="40" y="64" font-size="13" class="label-soft">역할 · 안전 · 비밀값 취급 · 응답 언어</text>
-        <rect class="box" x="60" y="88" width="600" height="54" rx="10" stroke-width="1.5"/>
-        <text x="80" y="112" font-size="15" font-weight="700">작업공간 공통</text>
-        <text x="80" y="132" font-size="13" class="label-soft">기획서 대조 검증 · 시험 추가 의무 · 시험 약화 금지 · 공통 모듈 승격</text>
-        <rect class="box-accent" x="100" y="156" width="520" height="54" rx="10" stroke-width="1.5"/>
-        <text x="120" y="180" font-size="15" font-weight="700">저장소별</text>
-        <text x="120" y="200" font-size="13" class="label-soft">전체 시험 단일 관문 · 테넌트 격리 체크리스트 · 운영 함정 목록</text>
-      </svg>
-    </div>
-    <ul class="points">
-      <li><b>기획서 대조 검증</b>: 기획 화면의 요소·유효성·동작을 코드 위치에 1:1로 대응시켜 구현됨/누락/불일치로 분류한다.</li>
-      <li><b>전체 시험 단일 관문</b>: PR 전에 모듈 전체 시험(실제 DB·Redis·Kafka 를 띄운 통합 시험)을 통과하고 결과 원문을 남긴다. 단언 완화·케이스 삭제·비활성화로 빨간 빌드를 넘기지 않는다.</li>
-      <li><b>버그를 규칙으로</b>: "등록만 했는데 수정일이 찍힌다", "CSV 한글이 깨진다" 같은 실제 버그는 다음부터 반복되지 않도록 규칙으로 올렸다.</li>
-    </ul>
-  </section>
+</section>
+<section class="sec sec--glow sec--flip">
+<div class="sec__head"><h2 class="sec__title">실패에서 배운 것<span class="dim">보고를 믿지 않고 관문을 만든다</span></h2></div>
+<div class="sec__body"><div class="tiles"><div class="tile"><h3>&quot;렌더 통과&quot; 보고를 믿었다</h3><p>에이전트가 렌더 검사를 통과했다고 보고한 경보 템플릿을 그대로 배포했다가, 주석 속 한 줄 때문에 경보 서버가 재시작을 반복해 알림이 약 32분 끊겼습니다. 이후 배포본 기준 실제 파싱 검사와 기동 확인을 별도 관문으로 두었습니다.</p></div><div class="tile"><h3>로컬 시계를 믿었다</h3><p>에이전트가 9시간 어긋난 로컬 시각을 보고 업무 시간에 대량 재처리를 요청한 일이 있었습니다. 미리 넣어 둔 업무시간 가드가 막았고, 이후 시각 판정은 서버·DB 시각으로만 하게 했습니다.</p></div><div class="tile"><h3>사무실 네트워크에서 외부 확인을 했다</h3><p>외부 공개 범위를 점검하던 에이전트의 요청이 허용 목록에 든 사무실 네트워크로 나가, 잠긴 주소를 &quot;열림&quot;으로 볼 뻔했습니다. 외부 도달 여부는 게이트웨이 설정으로 확정하고 최종 확인은 사외망에서 합니다.</p></div><div class="tile"><h3>재개하면 캐시가 먹을 줄 알았다</h3><p>한도로 멈춘 대규모 워크플로를 재개했더니 이미 끝난 검증이 처음부터 다시 돌았습니다(재개 때 시작된 호출이 모두 새로 실행됨). 병렬을 중첩한 구조에서는 재개 대신 실행 기록에서 결과를 복구하는 절차를 만들었습니다.</p></div></div></div>
 
-  <section class="section">
-    <h2>2. 찾기 → 반박 → 종합</h2>
-    <p>에이전트 하나의 자기 검증으로는 그럴듯한 오답을 거를 수 없습니다. 관점별 에이전트가 병렬로 찾고, 처음부터 의심하는 독립 에이전트가 하나하나 반박한 뒤, 살아남은 것만 사람이 판정합니다.</p>
-    <div class="diagram" role="img" aria-label="다중 에이전트 워크플로: 관점별 찾기, 독립 반박, 종합, 사람 판정">
-      <svg viewBox="0 0 720 170" xmlns="http://www.w3.org/2000/svg">
-        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor" class="label-soft"/></marker></defs>
-        <rect class="box" x="10" y="20" width="150" height="34" rx="8"/><text x="85" y="42" font-size="13" text-anchor="middle">찾기 · 보안 관점</text>
-        <rect class="box" x="10" y="66" width="150" height="34" rx="8"/><text x="85" y="88" font-size="13" text-anchor="middle">찾기 · 정합성 관점</text>
-        <rect class="box" x="10" y="112" width="150" height="34" rx="8"/><text x="85" y="134" font-size="13" text-anchor="middle">찾기 · 성능 관점</text>
-        <path class="arrow" d="M162 37 L222 80" stroke-width="1.5" marker-end="url(#ah)"/>
-        <path class="arrow" d="M162 83 L222 83" stroke-width="1.5" marker-end="url(#ah)"/>
-        <path class="arrow" d="M162 129 L222 86" stroke-width="1.5" marker-end="url(#ah)"/>
-        <rect class="box-accent" x="226" y="56" width="160" height="54" rx="10"/><text x="306" y="80" font-size="14" font-weight="700" text-anchor="middle">독립 반박</text><text x="306" y="98" font-size="12" text-anchor="middle" class="label-soft">기본값은 "틀렸다"</text>
-        <path class="arrow" d="M388 83 L438 83" stroke-width="1.5" marker-end="url(#ah)"/>
-        <rect class="box" x="442" y="56" width="120" height="54" rx="10"/><text x="502" y="88" font-size="14" font-weight="700" text-anchor="middle">종합·비판</text>
-        <path class="arrow" d="M564 83 L604 83" stroke-width="1.5" marker-end="url(#ah)"/>
-        <rect class="box-accent" x="608" y="56" width="100" height="54" rx="10"/><text x="658" y="80" font-size="14" font-weight="700" text-anchor="middle">사람</text><text x="658" y="98" font-size="12" text-anchor="middle" class="label-soft">판정·반영</text>
-      </svg>
-    </div>
-    <ul class="points">
-      <li>보안 감사·삭제 가드 전수조사·장애 원인 조사·설계 심사에 썼고, 반박 판정 중 약 27%는 사람에게 오기 전에 기각됐습니다(판정 기록 기준).</li>
-      <li>데이터 파이프라인과 API 의 주요 변경 5건에서 확정 결함 62건을 배포 전에 고쳤습니다. 배포 직후 보강값이 되돌아갈 수 있던 치명 결함도 여기서 잡았습니다.</li>
-      <li>운영 공개 직전 보안 감사에서는 10개 축을 병렬로 찾고 반박을 통과한 고위험 2건·중위험 8건만 시험과 함께 고쳤습니다.</li>
-    </ul>
-  </section>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">LLM 서비스 설계로<span class="dim">같은 원칙을 서비스에도</span></h2><div class="sec__lead"><p>진행 중인 약국 AI Agent 서비스에서는 에이전트를 &quot;업무 지침 + 허용 도구 + 문맥·상태 + 실행 루프&quot;로 정의하고, 테넌트·승인·금액 계산은 모델이 아니라 서버 코드가 통제하도록 설계했습니다. 두 LLM 을 같은 업무 프로그램에서 모델만 바꿔 비교하고, 업무 성공률·수치 보존·도구 정확성·검색 품질·비용을 함께 재는 평가(고유 사례 100개 중 조정용 30개를 뺀 최종 70사례 × 2모델 × 3회 = 420회)를 준비하고 있습니다. 아직 실행 전이라 결과 숫자는 없습니다.</p><p>이 포트폴리오와 이력서 키트도 같은 방식으로 만들었습니다. 경력 기록에서 성과를 뽑는 에이전트와 그것을 반박하는 에이전트를 나눴고, 숫자는 출처와 분류(실측·보고·설문·추정·목표 등)를 붙여 사실 목록에 먼저 올린 값만 썼습니다.</p></div></div>
 
-  <section class="section">
-    <h2>3. 시험 관문과 권한 분리</h2>
-    <table class="before-after">
-      <thead><tr><th>에이전트가 한다</th><th>사람(제가)이 한다</th></tr></thead>
-      <tbody>
-        <tr><td>조사·설계안 초안·코드·시험 작성</td><td>범위·정책·설계 판단, 반박 결과 판정</td></tr>
-        <tr><td>브랜치·커밋·푸시·PR 작성</td><td>PR 검토와 병합(작성 PR 316건)</td></tr>
-        <tr><td>읽기 전용 확인 조회, 측정</td><td>운영 SQL·되돌릴 수 없는 단계 실행·배포</td></tr>
-        <tr><td>예약된 새벽 점검(쓰기·배포 금지)</td><td>점검 보고서를 보고 다음 단계 진행 결정</td></tr>
-      </tbody>
-    </table>
-    <p class="muted small">운영 대상 명령은 자동 승인에서 빼고, 바뀐 파일만 골라 올리며, 병합 권한 검사는 우회하지 않습니다.</p>
-  </section>
 
-  <section class="section">
-    <h2>4. 실패에서 배운 것</h2>
-    <div class="grid cols-2">
-      <div class="card"><h3>"렌더 통과" 보고를 믿었다</h3><p class="muted">에이전트가 렌더 검사를 통과했다고 보고한 경보 템플릿을 그대로 배포했다가, 주석 속 한 줄 때문에 경보 서버가 재시작을 반복해 알림이 약 32분 끊겼습니다. 이후 배포본 기준 실제 파싱 검사와 기동 확인을 별도 관문으로 두었습니다.</p></div>
-      <div class="card"><h3>로컬 시계를 믿었다</h3><p class="muted">에이전트가 9시간 어긋난 로컬 시각을 보고 업무 시간에 대량 재처리를 요청한 일이 있었습니다. 미리 넣어 둔 업무시간 가드가 막았고, 이후 시각 판정은 서버·DB 시각으로만 하게 했습니다.</p></div>
-      <div class="card"><h3>사무실 IP로 외부 확인을 했다</h3><p class="muted">외부 공개 범위를 점검하던 에이전트의 요청이 허용 목록에 든 사무실 IP 로 나가, 잠긴 주소를 "열림"으로 볼 뻔했습니다. 외부 도달 여부는 게이트웨이 설정으로 확정하고 최종 확인은 사외망에서 합니다.</p></div>
-      <div class="card"><h3>재개하면 캐시가 먹을 줄 알았다</h3><p class="muted">한도로 멈춘 대규모 워크플로를 재개했더니 이미 끝난 검증이 처음부터 다시 돌았습니다(시작 167건 중 재사용 0건). 병렬 구조에서는 재개 대신 실행 기록에서 결과를 복구하는 절차를 만들었습니다.</p></div>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2>5. LLM 서비스 설계로</h2>
-    <p>같은 원칙을 서비스 설계에도 씁니다. 진행 중인 약국 AI Agent 서비스에서는 에이전트를 "업무 지침 + 허용 도구 + 문맥·상태 + 실행 루프"로 정의하고, 테넌트·승인·금액 계산은 모델이 아니라 서버 코드가 통제하도록 설계했습니다. 두 LLM 을 같은 업무 프로그램에서 모델만 바꿔 비교하고, 업무 성공률·수치 보존·도구 정확성·검색 품질·비용을 함께 재는 평가(고유 사례 100개 × 2모델 × 3회)를 준비하고 있습니다. 아직 실행 전이라 결과 숫자는 없습니다.</p>
-    <p class="muted small">이 포트폴리오와 이력서 키트도 같은 방식으로 만들었습니다. 경력 기록에서 성과를 뽑는 에이전트와 그것을 반박하는 에이전트를 나눴고, 숫자는 실제로 잰 값만 사실 목록에 올려 썼습니다.</p>
-  </section>
+</section>
+<footer class="footer"><p>황병준 · 백엔드·데이터 엔지니어 · <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p><small>디자인 바탕: <a href="https://once-ui.com" target="_blank" rel="noopener">Once UI</a> Magic Portfolio · 도표는 직접 그린 개념도입니다</small></footer>
 </main>
-
-<footer class="site-footer">
-  <div class="wrap">
-    <span>© 2026 황병준</span>
-    <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a>
-  </div>
-</footer>
-<script src="assets/js/site.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" defer></script>
+<script src="assets/js/site.js?v=fdaea7ac" defer></script>
 </body>
 </html>

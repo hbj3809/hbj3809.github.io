@@ -3,110 +3,513 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>의약품 유통 매출 데이터 파이프라인 · 황병준</title>
-<meta name="description" content="Airflow·PostgreSQL 기반 매출 데이터 파이프라인: 연동 명세, 수천만 건 백필, 멱등 원장, 데이터 품질 가드">
-<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<title>의약품 유통 매출 데이터 파이프라인 — 황병준 포트폴리오</title>
+<meta name="description" content="국내 대형 의약품 유통사의 ERP 매출을 받아 제약사 분석 서비스 pharmscope 에 공급하는 데이터 파이프라인(수집 → 전처리 → 공개 → 서빙)을 AI 코딩 에이전트(Claude Code)와 함께 설계·구현했고, 그 작업을 주도했습니다. 새벽에만 호출할 수 있는 원천 API 와 약 2년 반 치 과거 파일을 원본 원장 하나로 모았습니다. 월 상태 원장·정본 서열·원장 대사를 둬서 몇 번을 다시 돌려도 결과가 같습니다. 2026년 9월부터는 정기 작업 7종이 매일 새벽 사람 손 없이 돌기 시작했습니다.">
+<meta name="theme-color" content="#15161a">
+<meta property="og:title" content="의약품 유통 매출 데이터 파이프라인 — 황병준 포트폴리오">
+<meta property="og:description" content="국내 대형 의약품 유통사의 ERP 매출을 받아 제약사 분석 서비스 pharmscope 에 공급하는 데이터 파이프라인(수집 → 전처리 → 공개 → 서빙)을 AI 코딩 에이전트(Claude Code)와 함께 설계·구현했고, 그 작업을 주도했습니다. 새벽에만 호출할 수 있는 원천 API 와 약 2년 반 치 과거 파일을 원본 원장 하나로 모았습니다. 월 상태 원장·정본 서열·원장 대사를 둬서 몇 번을 다시 돌려도 결과가 같습니다. 2026년 9월부터는 정기 작업 7종이 매일 새벽 사람 손 없이 돌기 시작했습니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/site.css?v=a01858cc">
 </head>
 <body>
-<header class="site-header">
-  <div class="wrap">
-    <a class="brand" href="../index.html">황병준<span>Byeongjun Hwang</span></a>
-    <nav class="nav" aria-label="주 메뉴">
-      <a href="../index.html">홈</a>
-      <a href="../about.html">소개</a>
-      <a href="../experience.html">경력</a>
-      <a href="../projects.html">프로젝트</a>
-      <a href="../ai.html">AI로 일하는 방식</a>
-      <a href="../skills.html">기술</a>
-    </nav>
-    <div>
-      <button class="theme-btn" type="button" aria-label="밝게/어둡게 전환">◐</button>
-      <button class="menu-btn" type="button" aria-expanded="false" aria-label="메뉴 열기">메뉴</button>
-    </div>
-  </div>
-</header>
+<a class="skip" href="#main">본문 바로가기</a>
+<nav class="nav" aria-label="주 메뉴"><a class="nav__item" href="../index.html" aria-label="홈"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.99778 19.3275V14.3275H13.9978V19.3275C13.9978 19.8775 14.4478 20.3275 14.9978 20.3275H17.9978C18.5478 20.3275 18.9978 19.8775 18.9978 19.3275V12.3275H20.6978C21.1578 12.3275 21.3778 11.7575 21.0278 11.4575L12.6678 3.9275C12.2878 3.5875 11.7078 3.5875 11.3278 3.9275L2.96778 11.4575C2.62778 11.7575 2.83778 12.3275 3.29778 12.3275H4.99778V19.3275C4.99778 19.8775 5.44778 20.3275 5.99778 20.3275H8.99778C9.54778 20.3275 9.99778 19.8775 9.99778 19.3275Z"/></svg><span class="nav__tip">홈</span></a><a class="nav__item" href="../about.html" aria-label="소개"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1c0 .55.45 1 1 1h14c.55 0 1-.45 1-1v-1c0-2.66-5.33-4-8-4z"/></svg><span class="nav__tip">소개</span></a><a class="nav__item" href="../experience.html" aria-label="경력"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg><span class="nav__tip">경력</span></a><a class="nav__item" href="../projects.html" aria-current="page" aria-label="프로젝트"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.0142 17.3073L17.3042 18.0173C17.1042 18.2173 16.7942 18.2173 16.5942 18.0173C16.3942 17.8173 16.3942 17.5073 16.5942 17.3073L17.3042 16.5973L15.3642 14.6573L14.6542 15.3673C14.4542 15.5673 14.1442 15.5673 13.9442 15.3673C13.7442 15.1673 13.7442 14.8573 13.9442 14.6573L14.6542 13.9473L12.7142 12.0073L12.0042 12.7173C11.8042 12.9173 11.4942 12.9173 11.2942 12.7173C11.0942 12.5173 11.0942 12.2073 11.2942 12.0073L12.0042 11.2973L10.0542 9.34731L9.34423 10.0573C9.14423 10.2573 8.83423 10.2573 8.63423 10.0573C8.43423 9.85731 8.43423 9.54731 8.63423 9.34731L9.34423 8.63731L7.40423 6.69731L6.69423 7.40731C6.49423 7.60731 6.18423 7.60731 5.98423 7.40731C5.78423 7.20731 5.78423 6.89731 5.98423 6.69731L6.69423 5.98731L5.20423 4.49731C4.89423 4.18731 4.35423 4.40731 4.35423 4.85731V17.6473C4.35423 18.7473 5.25423 19.6473 6.35423 19.6473H19.1442C19.5942 19.6473 19.8142 19.1073 19.4942 18.7973L18.0142 17.3073ZM7.35423 15.6473V10.8873L13.1142 16.6473H8.35423C7.80423 16.6473 7.35423 16.1973 7.35423 15.6473Z"/></svg><span class="nav__tip">프로젝트</span></a><a class="nav__item" href="../ai.html" aria-label="AI로 일하는 방식"><svg class="" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M14.2206 28C13.7539 28 13.3939 27.5867 13.4606 27.12L14.6606 18.6667H9.99395C8.82062 18.6667 9.55395 17.6667 9.58062 17.6267C11.2606 14.6533 13.7806 10.2533 17.114 4.38667C17.2473 4.14667 17.514 4 17.7806 4C18.2473 4 18.6073 4.41333 18.5406 4.88L17.3406 13.3333H22.0206C22.554 13.3333 22.8473 13.5867 22.554 14.2133C18.1673 21.8667 15.6206 26.3333 14.8873 27.6133C14.754 27.8533 14.5006 28 14.2206 28Z"/></svg><span class="nav__tip">AI로 일하는 방식</span></a><a class="nav__item" href="../skills.html" aria-label="기술"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.61 18.99l-9.08-9.08c.93-2.34.45-5.1-1.44-7C9.79.61 6.21.4 3.66 2.26L7.5 6.11 6.08 7.52 2.25 3.69C.39 6.23.6 9.82 2.9 12.11c1.86 1.86 4.57 2.35 6.89 1.48l9.11 9.11c.39.39 1.02.39 1.41 0l2.3-2.3c.4-.38.4-1.01 0-1.41z"/></svg><span class="nav__tip">기술</span></a><div class="nav__div" aria-hidden="true"><span></span></div><a class="nav__item" href="mailto:hbj3809@naver.com" aria-label="이메일 보내기"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg><span class="nav__tip">hbj3809@naver.com</span></a></nav>
+<main id="main" class="page">
+<header class="intro"><p class="intro__eyebrow">알스솔루션 프로젝트</p><h1>의약품 유통 매출 데이터 파이프라인</h1><div class="intro__text"><p>국내 대형 의약품 유통사의 ERP 매출을 수집·전처리·공개해 제약사 분석 서비스 pharmscope 에 공급하는 파이프라인</p></div><div class="intro__meta"><span><b>알스솔루션</b></span><span>2026.06 ~ 현재</span><span>운영 중</span><span>데이터</span></div></header>
+<div class="controls" role="tablist" aria-label="프로젝트 보기">
+<button class="ctl" type="button" role="tab" id="tab-detail" data-panel="detail" aria-controls="panel-detail" aria-selected="true"><span>상세</span></button>
+<button class="ctl" type="button" role="tab" id="tab-problems" data-panel="problems" aria-controls="panel-problems" aria-selected="false"><span>문제해결 <span class="count">4</span></span></button>
+<div class="controls__end"><a class="ctl" href="../projects.html?axis=data"><span>데이터 프로젝트 목록 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div>
+</div>
+<div class="card hero-card"><div class="card__media"><div class="cover cover--data"><p class="cover__title">매출 데이터 파이프라인</p><p class="cover__sub">국내 대형 의약품 유통사의 ERP 매출을 수집·전처리·공개해 제약사 분석 서비스 pharmscope 에 공급하는 파이프라인</p></div></div></div>
+<div class="panel" id="panel-detail" role="tabpanel" aria-labelledby="tab-detail"><div class="overview">
+<div class="overview__side"><div class="stat"><p class="stat__value">75분</p><p class="stat__label">수천만 건(약 100GB 규모) 과거분 백필 완주</p><p class="stat__note">1·2차는 18분 만에 멈춘 뒤 실패, 3차에 75분 38초로 완주하고 원천 총건수와 정확히 일치</p></div><div class="stat"><p class="stat__value">7종</p><p class="stat__label">정기 작업이 매일 새벽 무개입 운행</p><p class="stat__note">2026.09 기준. 첫 무개입 운행일 공개 시각 03:28~03:29</p></div><div class="stat"><p class="stat__value">1시간 4분</p><p class="stat__label">약 2년 반 치 전 기간 재처리</p><p class="stat__note">통과율 97.42%(2026.07 스냅샷)</p></div><div class="stat"><p class="stat__value">99% 이상</p><p class="stat__label">주소 파싱 실패 감소</p><p class="stat__note">주소 파서를 네 번째 버전까지 개선</p></div>
+<dl class="facts"><div><dt>회사</dt><dd>알스솔루션 · Engineering팀 · 선임연구원</dd></div><div><dt>기간</dt><dd>2026.06 ~ 현재</dd></div><div><dt>역할</dt><dd>설계·구현 주도</dd></div><div><dt>팀</dt><dd>스타트업 개발팀. 연동 API 개발은 유통사, 전처리 기준·검수는 현업 데이터 운영팀, 화면 기획은 기획팀이 맡음</dd></div><div><dt>상태</dt><dd>운영 중</dd></div></dl></div>
+<div class="overview__body"><h2>프로젝트 개요<br><span class="dim">무엇을, 왜 만들었나</span></h2><p class="overview__lead">국내 대형 의약품 유통사의 ERP 매출을 받아 제약사 분석 서비스 pharmscope 에 공급하는 데이터 파이프라인(수집 → 전처리 → 공개 → 서빙)을 AI 코딩 에이전트(Claude Code)와 함께 설계·구현했고, 그 작업을 주도했습니다. 새벽에만 호출할 수 있는 원천 API 와 약 2년 반 치 과거 파일을 원본 원장 하나로 모았습니다. 월 상태 원장·정본 서열·원장 대사를 둬서 몇 번을 다시 돌려도 결과가 같습니다. 2026년 9월부터는 정기 작업 7종이 매일 새벽 사람 손 없이 돌기 시작했습니다.</p><p class="overview__more">설계·구현 주도 · 스타트업 개발팀. 연동 API 개발은 유통사, 전처리 기준·검수는 현업 데이터 운영팀, 화면 기획은 기획팀이 맡음</p>
+<div><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 사례 4개 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div></div>
+</div><section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">개요<span class="dim">배경·목표·역할</span></h2><div class="sec__lead"><p>pharmscope 는 제약사 고객이 쓰는 의약품 유통 데이터 분석 서비스이고, 국내 대형 의약품 유통사의 ERP 매출을 원천으로 씁니다. 처음에는 원천에 연동 API 가 없었습니다. API 가 생긴 뒤에도 호출은 새벽 3시간 동안만 가능했습니다. 과거분 약 2년 반 치는 월별 수 GB 단위 JSON 파일로 따로 받았습니다. 유통사는 월마감 뒤에도 전월을 보정했고, 매입처마다 마감 시점이 달랐습니다. 명세는 진행 중에도 계속 바뀌었습니다.</p><p>목표는 두 가지였습니다. 하나는 수집부터 공개까지를 몇 번 다시 돌려도 결과가 같은 원장 구조 위에서 자동화하는 것입니다. 다른 하나는 실패한 행을 조용히 버리지 않는 것입니다.</p></div></div>
+<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>기간: 2026.06 ~ 현재, 운영 중</li><li>내 역할: 설계·구현 주도. 연동 명세, 수집·백필·전처리·월마감 작업, 전용 DB·스케줄러 구축, 운영 경보</li><li>다른 사람 몫: 연동 API 개발은 유통사, 전처리 기준과 검수는 현업 데이터 운영팀, 화면 기획은 기획팀. 오케스트레이터(Airflow) 채택은 팀 협의로 결정</li><li>이어지는 프로젝트: 매출 분석 서빙 API·성능 튜닝과 사내 데이터 보정·검수 백오피스는 별도 페이지</li><li>AI 활용: Claude Code 로 설계·구현. 자주 바뀌는 결정은 설계 정본 문서와 작업 메모리에 남겨 세션 사이에 이어 감. 주요 변경은 다중 에이전트 적대 리뷰를 거쳐 반영(파이프라인·API 주요 변경 5건에서 확정 결함 62건을 배포 전에 고침)</li></ul></div></div>
 
-<main class="wrap">
-  <p class="eyebrow"><a href="../projects.html">프로젝트</a> · 데이터</p>
-  <h1>의약품 유통 매출 데이터 파이프라인</h1>
-  <p class="lead">국내 대형 의약품 유통사의 매출 데이터를 받아, 제약사 고객이 보는 분석 서비스에 공급하는 파이프라인(수집 → 전처리 → 공개 → 서빙)을 설계·구현했습니다.</p>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">아키텍처<span class="dim">원천 셋, 원장 하나</span></h2><div class="sec__lead"><p>원천은 셋입니다. 유통사 ERP API(매출·재고·수신 설정), 과거 원본 파일, 공공 의약품·약국 마스터. 세 원천 모두 전용 PostgreSQL 의 원장으로 모입니다. 변환·검증·집계는 DB 안의 집합 SQL 이 맡고, Airflow 는 순서·재시도·시간 창만 관리합니다. 서빙 API 는 같은 DB 를 읽기 전용으로 읽습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph SRC[&quot;원천&quot;]
+    A1[&quot;유통사 ERP API&lt;br/&gt;매출·재고·수신 설정&quot;]
+    A2[&quot;과거 원본 파일&lt;br/&gt;약 2년 반 치 JSON&quot;]
+    A3[&quot;공공 의약품·약국&lt;br/&gt;마스터 API&quot;]
+  end
+  subgraph ORC[&quot;Airflow 3 · KubernetesExecutor&quot;]
+    B1[&quot;수집 작업&lt;br/&gt;전일분·월마감·재고·설정&quot;]
+    B2[&quot;백필 적재&lt;br/&gt;스트리밍 파서 + COPY&quot;]
+    B3[&quot;마스터 수집&lt;br/&gt;컨테이너 작업&quot;]
+    B4[&quot;전처리 작업&lt;br/&gt;월 단위 멱등&quot;]
+  end
+  OBJ[&quot;S3 호환 객체 저장소&lt;br/&gt;원본 파일 보관&quot;]
+  subgraph PG[&quot;전용 PostgreSQL 17&quot;]
+    C1[&quot;원본 원장&lt;br/&gt;월 파티션&quot;]
+    C2[&quot;수집 원장·월 상태 원장&quot;]
+    C3[&quot;정제 매출·리젝트&quot;]
+    C4[&quot;ATC 일 집계·일별 요약&quot;]
+    C5[&quot;공개 완료 기록&quot;]
+    C6[&quot;기준 정보&lt;br/&gt;약품·기관·지역&quot;]
+  end
+  E1[&quot;서빙 API&lt;br/&gt;Kotlin · WebFlux · R2DBC&quot;]
+  F1[&quot;pharmscope&lt;br/&gt;분석 화면·엑셀 다운로드&quot;]
+  A1 --&gt; B1 --&gt; C1
+  A2 --&gt; OBJ --&gt; B2 --&gt; C1
+  A3 --&gt; B3 --&gt; C6
+  B1 -.-&gt; C2
+  B2 -.-&gt; C2
+  C1 --&gt; B4
+  C6 --&gt; B4
+  B4 --&gt; C3 --&gt; C4 --&gt; C5
+  C3 --&gt; E1
+  C4 --&gt; E1
+  C1 --&gt;|&quot;엑셀은 원본 직접&quot;| E1
+  C5 -.-&gt;|&quot;캐시 교체 신호&quot;| E1
+  E1 --&gt; F1">flowchart LR
+  subgraph SRC[&quot;원천&quot;]
+    A1[&quot;유통사 ERP API&lt;br/&gt;매출·재고·수신 설정&quot;]
+    A2[&quot;과거 원본 파일&lt;br/&gt;약 2년 반 치 JSON&quot;]
+    A3[&quot;공공 의약품·약국&lt;br/&gt;마스터 API&quot;]
+  end
+  subgraph ORC[&quot;Airflow 3 · KubernetesExecutor&quot;]
+    B1[&quot;수집 작업&lt;br/&gt;전일분·월마감·재고·설정&quot;]
+    B2[&quot;백필 적재&lt;br/&gt;스트리밍 파서 + COPY&quot;]
+    B3[&quot;마스터 수집&lt;br/&gt;컨테이너 작업&quot;]
+    B4[&quot;전처리 작업&lt;br/&gt;월 단위 멱등&quot;]
+  end
+  OBJ[&quot;S3 호환 객체 저장소&lt;br/&gt;원본 파일 보관&quot;]
+  subgraph PG[&quot;전용 PostgreSQL 17&quot;]
+    C1[&quot;원본 원장&lt;br/&gt;월 파티션&quot;]
+    C2[&quot;수집 원장·월 상태 원장&quot;]
+    C3[&quot;정제 매출·리젝트&quot;]
+    C4[&quot;ATC 일 집계·일별 요약&quot;]
+    C5[&quot;공개 완료 기록&quot;]
+    C6[&quot;기준 정보&lt;br/&gt;약품·기관·지역&quot;]
+  end
+  E1[&quot;서빙 API&lt;br/&gt;Kotlin · WebFlux · R2DBC&quot;]
+  F1[&quot;pharmscope&lt;br/&gt;분석 화면·엑셀 다운로드&quot;]
+  A1 --&gt; B1 --&gt; C1
+  A2 --&gt; OBJ --&gt; B2 --&gt; C1
+  A3 --&gt; B3 --&gt; C6
+  B1 -.-&gt; C2
+  B2 -.-&gt; C2
+  C1 --&gt; B4
+  C6 --&gt; B4
+  B4 --&gt; C3 --&gt; C4 --&gt; C5
+  C3 --&gt; E1
+  C4 --&gt; E1
+  C1 --&gt;|&quot;엑셀은 원본 직접&quot;| E1
+  C5 -.-&gt;|&quot;캐시 교체 신호&quot;| E1
+  E1 --&gt; F1</pre></div><figcaption>직접 그린 개념도입니다. 실제 저장소·호스트·테이블 이름은 뺐습니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>전용 PostgreSQL 17: 매출·약품 마스터·스케줄러 메타 DB 를 서로 분리, 볼륨은 지워지지 않는 정적 볼륨</li><li>Airflow 3: 작업마다 파드를 띄우는 KubernetesExecutor, DAG 는 git push 뒤 git-sync 로 배포, 기본 관리자 계정 자동 생성은 끔</li><li>Argo CD·Sealed Secrets 로 GitOps 구성. 사내에 이미 있던 객체 저장소에는 원본 보관 공간과 그 공간 전용 접근 키만 따로 발급</li><li>공공 의약품·약국 마스터 수집기는 다른 개발자가 만든 것을 넘겨받아 컨테이너로 만들고 매일 정례 실행으로 올림</li><li>서빙 앱에 매출 DB 용 두 번째 마이그레이션·R2DBC 체인을 붙여 스키마를 코드로 관리</li><li>플랫폼은 이후 AWS EKS 로 이관(별도 프로젝트 페이지)</li></ul></div></div>
 
-  <div class="case">
-    <div>
-      <section>
-        <h2>문제</h2>
-        <ul class="points">
-          <li>원천에는 연동 API 가 없었고, 생긴 뒤에도 새벽 몇 시간만 호출할 수 있었습니다.</li>
-          <li>과거 2년 반 치는 월별 수 GB 짜리 JSON 파일로 따로 받았습니다.</li>
-          <li>유통사는 월마감 뒤에도 전월을 보정하고, 매입처마다 마감 시점이 다릅니다. 명세는 진행 중에도 계속 바뀌었습니다.</li>
-        </ul>
-      </section>
-      <section>
-        <h2>설계</h2>
-        <ul class="points">
-          <li><b>연동 명세를 먼저</b>: 매출·재고·수신 설정 API 의 연동 컬럼 82개를 영문 정의서로 직접 작성해 유통사의 API 개발 기준으로 제공했고, 실호출로 명세와 다른 점을 찾아 보정했습니다.</li>
-          <li><b>하나의 원장</b>: 원본 원장 → 전처리 결과·리젝트 → 일 집계 → 공개 경계 → 서빙 API 계층. 월 상태 원장과 정본 순서(월마감 &gt; 백필 &gt; 전일분), 잠금, 원장 대사로 <b>몇 번을 다시 돌려도 결과가 같게</b> 했습니다.</li>
-          <li><b>조용히 버리지 않기</b>: 매월 "원본 = 성공 + 리젝트" 항등식과 "한 행에 사유 하나" 규칙을 강제했습니다.</li>
-          <li><b>중단 없는 마감 교체</b>: 마감 보정분은 별도 테이블에 적재한 뒤 짧은 트랜잭션으로 파티션을 바꿔 끼우고, 행 해시 대사로 무엇이 바뀌었는지 남깁니다.</li>
-        </ul>
-        <div class="diagram" role="img" aria-label="파이프라인 흐름: 원천, 원본 원장, 전처리, 일 집계, 공개 경계, 서빙 API">
-          <svg viewBox="0 0 720 140" xmlns="http://www.w3.org/2000/svg">
-            <defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="label-soft"/></marker></defs>
-            <rect class="box" x="6" y="45" width="100" height="50" rx="10"/><text x="56" y="67" font-size="12" text-anchor="middle">원천 API</text><text x="56" y="84" font-size="11" text-anchor="middle" class="label-soft">+ 과거 파일</text>
-            <path class="arrow" d="M108 70 L126 70" stroke-width="1.5" marker-end="url(#a2)"/>
-            <rect class="box" x="130" y="45" width="100" height="50" rx="10"/><text x="180" y="67" font-size="12" text-anchor="middle">원본 원장</text><text x="180" y="84" font-size="11" text-anchor="middle" class="label-soft">대사·멱등</text>
-            <path class="arrow" d="M232 70 L250 70" stroke-width="1.5" marker-end="url(#a2)"/>
-            <rect class="box-accent" x="254" y="45" width="110" height="50" rx="10"/><text x="309" y="67" font-size="12" font-weight="700" text-anchor="middle">전처리</text><text x="309" y="84" font-size="11" text-anchor="middle" class="label-soft">성공 + 리젝트</text>
-            <path class="arrow" d="M366 70 L384 70" stroke-width="1.5" marker-end="url(#a2)"/>
-            <rect class="box" x="388" y="45" width="96" height="50" rx="10"/><text x="436" y="75" font-size="12" text-anchor="middle">일 집계</text>
-            <path class="arrow" d="M486 70 L504 70" stroke-width="1.5" marker-end="url(#a2)"/>
-            <rect class="box-accent" x="508" y="45" width="96" height="50" rx="10"/><text x="556" y="75" font-size="12" font-weight="700" text-anchor="middle">공개 경계</text>
-            <path class="arrow" d="M606 70 L624 70" stroke-width="1.5" marker-end="url(#a2)"/>
-            <rect class="box" x="628" y="45" width="86" height="50" rx="10"/><text x="671" y="75" font-size="12" text-anchor="middle">서빙 API</text>
-          </svg>
-        </div>
-      </section>
-      <section>
-        <h2>멈추던 백필을 끝까지</h2>
-        <p>과거분 전체 백필은 처음 두 번 모두 18분쯤 멈춘 뒤 실패했습니다. SQL 이 아니라 작업과 스케줄러 API 서버 사이의 통신 계층으로 범위를 좁혀, 메타DB 커넥션 풀 고갈과 제 DB 도구에 열어 둔 미커밋 트랜잭션이 파티션 생성을 막은 것을 찾았습니다. 파티션 선생성·풀 확장·유휴 트랜잭션 제한과 운영 규칙을 적용한 세 번째 실행에서 수천만 건(약 100GB 규모)을 <b>75분</b>에 원천 총건수와 정확히 맞게 적재했습니다.</p>
-      </section>
-      <section>
-        <h2>건수 검증의 함정</h2>
-        <p>공공 약국 마스터 동기화가 하룻밤에 평소보다 수백 배 많은 행을 삭제 처리했는데, 건수 검증은 통과했습니다. 원천 API 가 일부 페이지에 다른 페이지 내용을 중복으로 보내 고유키가 모자랐던 것입니다. 키 커버리지·페이지 중복·대량 삭제 가드를 세 겹으로 넣었고, 두 달 뒤 같은 결함이 재발했을 때 가드가 쓰기 전에 막았습니다. 교훈: <b>건수 검증은 커버리지 결손을 잡지 못한다.</b></p>
-      </section>
-      <section>
-        <h2>결과</h2>
-        <table class="before-after">
-          <thead><tr><th>지표</th><th>전</th><th>후</th></tr></thead>
-          <tbody>
-            <tr><td>과거분 백필</td><td>18분 정지 후 실패(2회)</td><td class="after">75분 완주, 원천 건수 일치</td></tr>
-            <tr><td>주소 파싱 실패</td><td>7,806행</td><td class="after">35행</td></tr>
-            <tr><td>전 기간 재처리</td><td>—</td><td class="after">1시간 4분, 통과율 97.42%</td></tr>
-            <tr><td>정기 운행</td><td>수동 실행</td><td class="after">정기 작업 7종 매일 새벽 무개입</td></tr>
-          </tbody>
-        </table>
-      </section>
-    </div>
-    <aside class="case-aside card">
-      <dl>
-        <dt>기간</dt><dd>2026.06 ~ 현재</dd>
-        <dt>회사</dt><dd>알스솔루션</dd>
-        <dt>역할</dt><dd>설계·구현 주도 (전처리 기준은 현업, API 는 유통사)</dd>
-        <dt>기술</dt><dd>Python · Apache Airflow 3 · PostgreSQL 17(파티션·advisory lock) · Kubernetes · Argo CD · S3</dd>
-        <dt>AI 활용</dt><dd>주요 변경마다 다중 에이전트 적대 리뷰</dd>
-      </dl>
-    </aside>
-  </div>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">새벽 체인<span class="dim">단계마다 바뀌는 것</span></h2><div class="sec__lead"><p>매일 새벽 정해진 작업이 차례로 돌고, 마지막 단계가 끝나야 '공개 완료 기록'이 찍힙니다. 고객 화면은 이 기록을 신호로 삼아 새 값을 보여 줍니다. 엑셀 다운로드는 원본을 바로 읽기 때문에 수집 직후부터 바뀝니다. 같은 데이터에 시계가 둘인 셈이어서, 고객 문의가 오면 이 차이부터 확인합니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
+  C1[&quot;수신 설정 전량 교체&lt;br/&gt;계약사별 제공 범위·엑셀 양식&quot;] --&gt; C2[&quot;재고 마감 확인&lt;br/&gt;마감된 달만 월 스냅샷 적재&quot;]
+  C2 --&gt; C3[&quot;전일분 매출 수집&lt;br/&gt;대상일 다시 적재·총건수 대사&quot;]
+  C3 --&gt; C4[&quot;기준 정보 동기화&lt;br/&gt;약품·요양기관·지역&quot;]
+  C4 --&gt; C5[&quot;당월 전처리&lt;br/&gt;지우고 다시 만들기·원장 대사&quot;]
+  C5 --&gt; C6[&quot;ATC 일 집계·일별 요약&quot;]
+  C6 --&gt; C7[&quot;매입처 기준 갱신&lt;br/&gt;저장소 정리·DB 메모리 미리 읽기&quot;]
+  C7 --&gt; C8[&quot;공개 완료 기록&lt;br/&gt;첫 무개입 운행일 03:28~03:29&quot;]
+  C8 --&gt; C9[&quot;월마감 확인&lt;br/&gt;마감 감지 시 그 달 교체&quot;]
+  C9 --&gt; C10[&quot;지연 점검&lt;br/&gt;공개 없음·수집 실패·누락일 경보&quot;]
+  C3 -.-&gt;|&quot;수집 직후&quot;| D1[&quot;엑셀 다운로드&lt;br/&gt;원본 원장을 바로 읽음&quot;]
+  C8 -.-&gt;|&quot;공개 기록 뒤&quot;| D2[&quot;분석 화면&lt;br/&gt;캐시 키가 바뀌며 새 값&quot;]">flowchart TB
+  C1[&quot;수신 설정 전량 교체&lt;br/&gt;계약사별 제공 범위·엑셀 양식&quot;] --&gt; C2[&quot;재고 마감 확인&lt;br/&gt;마감된 달만 월 스냅샷 적재&quot;]
+  C2 --&gt; C3[&quot;전일분 매출 수집&lt;br/&gt;대상일 다시 적재·총건수 대사&quot;]
+  C3 --&gt; C4[&quot;기준 정보 동기화&lt;br/&gt;약품·요양기관·지역&quot;]
+  C4 --&gt; C5[&quot;당월 전처리&lt;br/&gt;지우고 다시 만들기·원장 대사&quot;]
+  C5 --&gt; C6[&quot;ATC 일 집계·일별 요약&quot;]
+  C6 --&gt; C7[&quot;매입처 기준 갱신&lt;br/&gt;저장소 정리·DB 메모리 미리 읽기&quot;]
+  C7 --&gt; C8[&quot;공개 완료 기록&lt;br/&gt;첫 무개입 운행일 03:28~03:29&quot;]
+  C8 --&gt; C9[&quot;월마감 확인&lt;br/&gt;마감 감지 시 그 달 교체&quot;]
+  C9 --&gt; C10[&quot;지연 점검&lt;br/&gt;공개 없음·수집 실패·누락일 경보&quot;]
+  C3 -.-&gt;|&quot;수집 직후&quot;| D1[&quot;엑셀 다운로드&lt;br/&gt;원본 원장을 바로 읽음&quot;]
+  C8 -.-&gt;|&quot;공개 기록 뒤&quot;| D2[&quot;분석 화면&lt;br/&gt;캐시 키가 바뀌며 새 값&quot;]</pre></div><figcaption>개념 흐름이며 화살표는 새벽의 시각 순서입니다. 수신 설정·재고 확인·매출 수집·월마감 확인·지연 점검은 각자 시각표에 따라 시작합니다. 매출 수집이 성공하면 전처리부터 공개 기록까지 이어서 실행됩니다. 03:28~03:29 는 첫 무개입 운행일의 실측 시각입니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>DB 를 무겁게 쓰는 작업은 한 칸짜리 풀로 직렬화해 서로 DB 를 다투지 않게 하고, 실측 소요 시간을 바탕으로 새벽 시각표를 다시 확정</li><li>두 시계: 엑셀은 원본 원장을 캐시 없이 읽어 수집 직후에 바뀌고, 화면은 공개 완료 기록 뒤 캐시 키가 바뀌면서 새 값을 보여 줌</li><li>공개 완료 기록은 DB 행을 한꺼번에 바꾸는 장치가 아니라 '이제 새로 계산하라'는 신호. 전처리 확정과 공개 기록 사이에 옛 값과 새 값이 섞여 보이는 짧은 창이 있다는 점을 운영 문서에 남김</li><li>수집 실패 뒤 긴 공백이 알림 없이 지나간 일을 계기로 Teams 지연 점검 경보 추가, 기존 경보 웹훅 형식을 재사용</li></ul></div></div>
+
+</section>
+<section class="sec sec--glow sec--flip">
+<div class="sec__head"><h2 class="sec__title">하루치 수집<span class="dim">다시 돌려도 같은 결과</span></h2><div class="sec__lead"><p>전일분 수집은 대상일 데이터를 지우고 다시 넣습니다. 그래서 같은 날을 몇 번 다시 받아도 결과가 같습니다. 쓰기 전에는 잠금과 월 상태를 확인하고, 쓴 뒤에는 원천 총건수와 맞춰 보고 원장에 성공 또는 실패를 남깁니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="sequenceDiagram
+  participant SCH as 스케줄러(Airflow)
+  participant API as 유통사 매출 API
+  participant DB as 매출 DB
+  SCH-&gt;&gt;DB: advisory lock 획득
+  SCH-&gt;&gt;DB: 대상 월 상태 확인
+  alt 마감된 달
+    DB--&gt;&gt;SCH: 낮은 서열이라 쓰기 거부
+  else 열린 달
+    SCH-&gt;&gt;DB: 수집 원장에 실행 중 기록
+    SCH-&gt;&gt;DB: 대상일 행 삭제
+    loop 마지막 페이지까지
+      SCH-&gt;&gt;API: 페이지 요청
+      API--&gt;&gt;SCH: 매출 행
+      SCH-&gt;&gt;DB: 적재 후 페이지마다 커밋
+    end
+    SCH-&gt;&gt;DB: 원천 총건수와 적재 행 수 대사
+    alt 일치
+      SCH-&gt;&gt;DB: 성공 기록
+      SCH-&gt;&gt;SCH: 당월 전처리 실행 요청
+    else 불일치
+      SCH-&gt;&gt;DB: 실패 기록
+      SCH--&gt;&gt;SCH: 지연 점검이 경보
+    end
+  end">sequenceDiagram
+  participant SCH as 스케줄러(Airflow)
+  participant API as 유통사 매출 API
+  participant DB as 매출 DB
+  SCH-&gt;&gt;DB: advisory lock 획득
+  SCH-&gt;&gt;DB: 대상 월 상태 확인
+  alt 마감된 달
+    DB--&gt;&gt;SCH: 낮은 서열이라 쓰기 거부
+  else 열린 달
+    SCH-&gt;&gt;DB: 수집 원장에 실행 중 기록
+    SCH-&gt;&gt;DB: 대상일 행 삭제
+    loop 마지막 페이지까지
+      SCH-&gt;&gt;API: 페이지 요청
+      API--&gt;&gt;SCH: 매출 행
+      SCH-&gt;&gt;DB: 적재 후 페이지마다 커밋
+    end
+    SCH-&gt;&gt;DB: 원천 총건수와 적재 행 수 대사
+    alt 일치
+      SCH-&gt;&gt;DB: 성공 기록
+      SCH-&gt;&gt;SCH: 당월 전처리 실행 요청
+    else 불일치
+      SCH-&gt;&gt;DB: 실패 기록
+      SCH--&gt;&gt;SCH: 지연 점검이 경보
+    end
+  end</pre></div><figcaption>개념 시퀀스입니다. 실제 작업·테이블 이름은 일반 이름으로 바꿨습니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>HTTP 대기 시간을 긴 트랜잭션 밖에 두려고 페이지마다 커밋하고, 마지막에 원천 총건수로 대사</li><li>연동 명세: 매출·재고·수신 설정 API 의 연동 컬럼 82개 영문 명세를 작성해 유통사 API 개발 기준으로 제공, 실호출로 명세와 실서버의 차이 3건 점검·2건 보정</li><li>수신 설정 수집: 일부만 받은 데이터로 고객사 조회 범위가 통째로 바뀔 수 있는 위험을 자체 점검에서 발견, 페이지·건수 대사가 하나라도 어긋나면 실패로 처리하도록 엄격화하고 한 트랜잭션으로 전량 교체</li><li>재고 수집: 원천이 업체·제품 조합의 유일성을 보장하지 않아 원천 행 번호를 붙여 모든 필드를 보존, 급감 가드·페이지 단위 커밋·중단 지점 재개</li><li>원천 API 전체가 오류를 내던 기간에는 자동 실행을 끈 채 수집 작업별 최근 성공·경과 시간을 한 화면에서 보는 대시보드를 구성</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">개념 데이터 모델</h2><div class="sec__lead"><p>실제 테이블·컬럼 이름 대신 개념 이름으로 다시 그린 모델입니다. 원본·정제·리젝트는 월 파티션입니다. 모든 쓰기의 앞뒤를 수집 원장과 월 상태 원장이 지킵니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="erDiagram
+  COLLECTION_RUN {
+    string run_id PK
+    string source_kind
+    string status
+    int reported_count
+  }
+  MONTH_LEDGER {
+    date month_key PK
+    string state
+    string closing_source
+  }
+  CLOSE_CHANGE {
+    date month_key PK
+    string row_fingerprint PK
+    string change_kind
+  }
+  SOURCE_ROW {
+    string row_id PK
+    string run_id FK
+    date sale_date
+    string supplier_id FK
+  }
+  CURATED_SALE {
+    string row_id PK
+    string product_key FK
+    string region_key FK
+    decimal amount
+  }
+  REJECTED_ROW {
+    string row_id PK
+    string reason
+  }
+  REFERENCE_CODE {
+    string ref_key PK
+    string ref_kind
+    string display_name
+  }
+  MARKET_DAILY_TOTAL {
+    string atc_code PK
+    date sale_date PK
+    string supplier_id PK
+    decimal amount
+  }
+  SUPPLIER {
+    string supplier_id PK
+    string business_no
+    string consent_status
+  }
+  TENANT_SCOPE {
+    string tenant_id PK
+    string supplier_id PK
+    string scope_rule
+  }
+  COLLECTION_RUN ||--o{ SOURCE_ROW : &quot;적재&quot;
+  MONTH_LEDGER ||--o{ SOURCE_ROW : &quot;월 정본 관리&quot;
+  MONTH_LEDGER ||--o{ CLOSE_CHANGE : &quot;교체 이력&quot;
+  SOURCE_ROW ||--o| CURATED_SALE : &quot;성공&quot;
+  SOURCE_ROW ||--o| REJECTED_ROW : &quot;실패&quot;
+  REFERENCE_CODE ||--o{ CURATED_SALE : &quot;매핑&quot;
+  CURATED_SALE }o--|| MARKET_DAILY_TOTAL : &quot;일 집계&quot;
+  SUPPLIER ||--o{ SOURCE_ROW : &quot;매입처&quot;
+  SUPPLIER ||--o{ TENANT_SCOPE : &quot;조회 범위&quot;">erDiagram
+  COLLECTION_RUN {
+    string run_id PK
+    string source_kind
+    string status
+    int reported_count
+  }
+  MONTH_LEDGER {
+    date month_key PK
+    string state
+    string closing_source
+  }
+  CLOSE_CHANGE {
+    date month_key PK
+    string row_fingerprint PK
+    string change_kind
+  }
+  SOURCE_ROW {
+    string row_id PK
+    string run_id FK
+    date sale_date
+    string supplier_id FK
+  }
+  CURATED_SALE {
+    string row_id PK
+    string product_key FK
+    string region_key FK
+    decimal amount
+  }
+  REJECTED_ROW {
+    string row_id PK
+    string reason
+  }
+  REFERENCE_CODE {
+    string ref_key PK
+    string ref_kind
+    string display_name
+  }
+  MARKET_DAILY_TOTAL {
+    string atc_code PK
+    date sale_date PK
+    string supplier_id PK
+    decimal amount
+  }
+  SUPPLIER {
+    string supplier_id PK
+    string business_no
+    string consent_status
+  }
+  TENANT_SCOPE {
+    string tenant_id PK
+    string supplier_id PK
+    string scope_rule
+  }
+  COLLECTION_RUN ||--o{ SOURCE_ROW : &quot;적재&quot;
+  MONTH_LEDGER ||--o{ SOURCE_ROW : &quot;월 정본 관리&quot;
+  MONTH_LEDGER ||--o{ CLOSE_CHANGE : &quot;교체 이력&quot;
+  SOURCE_ROW ||--o| CURATED_SALE : &quot;성공&quot;
+  SOURCE_ROW ||--o| REJECTED_ROW : &quot;실패&quot;
+  REFERENCE_CODE ||--o{ CURATED_SALE : &quot;매핑&quot;
+  CURATED_SALE }o--|| MARKET_DAILY_TOTAL : &quot;일 집계&quot;
+  SUPPLIER ||--o{ SOURCE_ROW : &quot;매입처&quot;
+  SUPPLIER ||--o{ TENANT_SCOPE : &quot;조회 범위&quot;</pre></div><figcaption>개념 ERD 입니다. 엔티티와 속성은 일반 이름이고, 실제 스키마와 1:1 로 대응하지 않습니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>원본 한 행은 정제 매출과 리젝트 가운데 한쪽에만 들어감. '원본 = 성공 + 리젝트' 대사가 이 구조에 기댐</li><li>월 상태 원장에 그 달을 마지막으로 확정한 경로(월마감본·과거 파일·전일분)를 기록해 정본 서열을 강제</li><li>월마감 교체 때 행 지문으로 추가·삭제된 행을 남겨 '무엇이 바뀌었는지'를 데이터로 보관</li><li>정보 제공에 동의하지 않은 매입처는 판정 식을 한 곳에 정의해 모든 인입 경로에서 승격 전에 거름</li><li>계약사의 조회 범위는 매입처 단위로 해석되고, 서빙 API 가 조회 시점에 적용</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">전처리<span class="dim">원본 = 성공 + 리젝트</span></h2><div class="sec__lead"><p>ERP 원문에는 표준코드 결측, 의료기기 혼입, 자릿수가 다른 코드, 주소 표기 불일치, 행정구역 개편이 섞여 있어서 그대로 집계할 수 없었습니다. 실패한 행을 조용히 버리면 매출이 사라집니다. 그래서 매월 '원본 = 성공 + 리젝트' 항등식과 '한 행에 사유 하나' 규칙을 강제했습니다. 무엇을 리젝트할지는 현업 데이터 운영팀이 정했습니다. 저는 구현을 맡았고, 기준 초안에 빠져 있던 약품 매핑 단계를 보완했습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  P0[&quot;원본 원장&lt;br/&gt;그 달 전체&quot;] --&gt; P1[&quot;기준 정보 복사&lt;br/&gt;약품·요양기관·지역&quot;]
+  P1 --&gt; P2[&quot;주소 파싱&lt;br/&gt;중복 제거 주소만·캐시&quot;]
+  P2 --&gt; P3[&quot;약품 매핑&lt;br/&gt;표준코드 기준&quot;]
+  P3 --&gt; P4[&quot;월 단위 멱등 변환&lt;br/&gt;그 달 지우고 다시 만들기&quot;]
+  P4 --&gt; S1[&quot;정제 매출&quot;]
+  P4 --&gt; J1[&quot;리젝트&lt;br/&gt;한 행에 사유 하나&quot;]
+  S1 --&gt; Q1{&quot;정제 + 리젝트&lt;br/&gt;= 원본?&quot;}
+  J1 --&gt; Q1
+  Q1 --&gt;|&quot;불일치&quot;| F1[&quot;그 달 실패 기록&lt;br/&gt;공개하지 않음&quot;]
+  Q1 --&gt;|&quot;일치&quot;| G1[&quot;ATC 일 집계·일별 요약&quot;]
+  G1 --&gt; R1[&quot;이상 탐지 리포트&lt;br/&gt;현업 검수&quot;]
+  J1 --&gt; R1
+  R1 -.-&gt;|&quot;보정 회신&quot;| P4">flowchart LR
+  P0[&quot;원본 원장&lt;br/&gt;그 달 전체&quot;] --&gt; P1[&quot;기준 정보 복사&lt;br/&gt;약품·요양기관·지역&quot;]
+  P1 --&gt; P2[&quot;주소 파싱&lt;br/&gt;중복 제거 주소만·캐시&quot;]
+  P2 --&gt; P3[&quot;약품 매핑&lt;br/&gt;표준코드 기준&quot;]
+  P3 --&gt; P4[&quot;월 단위 멱등 변환&lt;br/&gt;그 달 지우고 다시 만들기&quot;]
+  P4 --&gt; S1[&quot;정제 매출&quot;]
+  P4 --&gt; J1[&quot;리젝트&lt;br/&gt;한 행에 사유 하나&quot;]
+  S1 --&gt; Q1{&quot;정제 + 리젝트&lt;br/&gt;= 원본?&quot;}
+  J1 --&gt; Q1
+  Q1 --&gt;|&quot;불일치&quot;| F1[&quot;그 달 실패 기록&lt;br/&gt;공개하지 않음&quot;]
+  Q1 --&gt;|&quot;일치&quot;| G1[&quot;ATC 일 집계·일별 요약&quot;]
+  G1 --&gt; R1[&quot;이상 탐지 리포트&lt;br/&gt;현업 검수&quot;]
+  J1 --&gt; R1
+  R1 -.-&gt;|&quot;보정 회신&quot;| P4</pre></div><figcaption>개념 흐름입니다. 같은 원본에서 성공과 실패를 한 번에 나누고, 대사가 맞지 않는 달은 공개하지 않습니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>리젝트를 사유별로 전수 분해: 자릿수가 다른 코드는 의료기기 자체 바코드(정당한 리젝트)로 확정, 표준코드 결측분은 현업에 판정 요청</li><li>주소 파서를 네 번째 버전까지 개선(광역시 접두형·세종 특례·분구 소급·시도 오타 허용)해 주소 파싱 실패 99% 이상 감소. 현업 보정을 반영한 뒤 주소 결측 리젝트도 99% 이상 감소</li><li>병렬 처리의 데드락 위험: 무거운 스캔은 임시 테이블에서 락 없이, 전역 advisory lock 은 작은 upsert 에만 잡도록 분리. 약 2년 반 치 전 기간 재처리 1시간 4분, 통과율 97.42%(2026.07 스냅샷)</li><li>이후 매일 도는 당월 재처리는 중앙값 약 14분</li><li>제품명 대조의 자동 승격이 다른 품목을 추천한 사례가 실제로 나오자 승인 게이트로 바꿨고, 이후 그 단계를 없앰</li></ul></div></div>
+
+</section>
+<section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">달 단위로 바뀌는 것<span class="dim">월 상태·월마감·시장 선정·재고</span></h2><div class="sec__lead"><p>화면과 다운로드를 크게 바꾸는 월 단위 작업은 셋입니다. 첫째는 월마감으로, 유통사가 확정한 한 달치로 그 달 전체를 교체합니다. 둘째는 ATC 시장 선정으로, 매월 시장 목록을 다시 고릅니다. 셋째는 매출과 따로 도는 재고 적재입니다. 세 작업 모두 월 상태 원장을 기준으로 움직입니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="stateDiagram-v2
+  state &quot;열림(전일분 누적)&quot; as OPEN
+  state &quot;마감(월마감본)&quot; as CLOSED_M
+  state &quot;마감(과거 파일 적재본)&quot; as CLOSED_B
+  [*] --&gt; OPEN : 새 달 시작
+  [*] --&gt; CLOSED_B : 과거 원본 파일 적재
+  OPEN --&gt; OPEN : 새벽 수집·다시 받기·낮 보정
+  OPEN --&gt; CLOSED_M : 마감 감지 후 별도 테이블 교체
+  CLOSED_M --&gt; CLOSED_M : 낮 보정 재전처리만
+  CLOSED_B --&gt; CLOSED_B : 낮 보정 재전처리만
+  note right of CLOSED_M
+    정본 서열은 월마감본, 과거 파일, 전일분 순
+    낮은 서열의 쓰기는 거부
+  end note">stateDiagram-v2
+  state &quot;열림(전일분 누적)&quot; as OPEN
+  state &quot;마감(월마감본)&quot; as CLOSED_M
+  state &quot;마감(과거 파일 적재본)&quot; as CLOSED_B
+  [*] --&gt; OPEN : 새 달 시작
+  [*] --&gt; CLOSED_B : 과거 원본 파일 적재
+  OPEN --&gt; OPEN : 새벽 수집·다시 받기·낮 보정
+  OPEN --&gt; CLOSED_M : 마감 감지 후 별도 테이블 교체
+  CLOSED_M --&gt; CLOSED_M : 낮 보정 재전처리만
+  CLOSED_B --&gt; CLOSED_B : 낮 보정 재전처리만
+  note right of CLOSED_M
+    정본 서열은 월마감본, 과거 파일, 전일분 순
+    낮은 서열의 쓰기는 거부
+  end note</pre></div><figcaption>월 상태 개념도입니다. 마감된 달에는 전일분 수집과 다시 받기가 들어가지 않습니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>월마감: 매일 새벽 전월·전전월의 마감 여부를 확인해 마감된 달 하나만 다시 받아 교체하고, 마감 전이면 건너뜀. 재시도 기본값을 '실패'로 둬 실행이 오래 붙잡히지 않게 함</li><li>교체 방식: 별도 테이블에 락 없이 적재하고 파티션 경계 CHECK 를 미리 붙여 부착 시 검증 스캔을 없앰. 짧은 트랜잭션에서 분리·부착하고, 행 지문 대사로 추가·삭제 행을 기록. 급감 가드로 빈 마감본이 정본을 덮지 못하게 함</li><li>마감 뒤 규칙: 엑셀은 마감월에만 유통사 원문처럼 반품·도매를 포함하고, 마감 전 달은 제외</li><li>ATC 시장 선정: 고정된 상위 목록을 매월 1일 기준 컷오프로 다시 고르는 선정 원장으로 전환. 기준은 현업이 확정했고, 실데이터 영향 측정·질의서 작성·구현은 본인 몫. 시장 실금액이 노출될 위험을 질의서에서 짚었고, 회신에 따라 목록에서 순위·금액을 빼고 자사가 유통한 시장만 보이게 구현</li><li>재고: 매출과 따로 도는 월 스냅샷. 매일 마감 여부를 확인하고 마감된 달만 적재</li><li>정보 제공 미동의 매입처 제외: 전 기간 정리는 월마감 교체 기계를 재사용(시험 실행 기본, 확인 문자열, 감사 기록). 약 400만 행을 계획과 일치하게 제거했고 잔존 0, 소요 약 19분</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">낮에 바뀌는 것<span class="dim">매출 다시 받기와 보정 연계</span></h2><div class="sec__lead"><p>새벽 수집이 실패하거나 오류 없이 0건으로 끝난 날은 다음 새벽의 자동 보충을 기다려야 했습니다. 이런 날을 같은 날 다시 받을 수 있게 하는 '매출 다시 받기'를 팀 논의에서 제안했고, 설계·구현을 주도했습니다. 버튼 화면은 FE 개발자가 만들었고, 업무시간 재조회 허용은 유통사 회신으로 받았습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  R1[&quot;새벽 수집 실패·0건인 날&lt;br/&gt;최근 수신 현황 띠에 표시&quot;] --&gt; R2[&quot;개발팀이 다시 받기 요청&lt;br/&gt;멱등 재전송·하루 상한&quot;]
+  R2 --&gt; R3{&quot;그날 원천 행이 정말 없는가&lt;br/&gt;두 번 증명&quot;}
+  R3 --&gt;|&quot;증명 못 함&quot;| R4[&quot;원천을 건드리지 않고 종료&quot;]
+  R3 --&gt;|&quot;증명됨&quot;| R5[&quot;그날 매출 적재&lt;br/&gt;낮에는 삭제 없이 추가만&quot;]
+  R5 --&gt; R6[&quot;엑셀 다운로드에 즉시 반영&quot;]
+  R5 --&gt; R7{&quot;그날 보정 슬롯에&lt;br/&gt;합류 가능한가&quot;}
+  R7 --&gt;|&quot;예&quot;| R8[&quot;낮 보정 묶음과 함께 재전처리&lt;br/&gt;공개 기록 뒤 화면 반영&quot;]
+  R7 --&gt;|&quot;아니오&quot;| R9[&quot;다음 새벽 체인에서 반영&quot;]
+  R2 -.-&gt;|&quot;연속 실패·고객 화면 오류&quot;| R10[&quot;자동 꺼짐&lt;br/&gt;원인 메모 후 재개&quot;]">flowchart LR
+  R1[&quot;새벽 수집 실패·0건인 날&lt;br/&gt;최근 수신 현황 띠에 표시&quot;] --&gt; R2[&quot;개발팀이 다시 받기 요청&lt;br/&gt;멱등 재전송·하루 상한&quot;]
+  R2 --&gt; R3{&quot;그날 원천 행이 정말 없는가&lt;br/&gt;두 번 증명&quot;}
+  R3 --&gt;|&quot;증명 못 함&quot;| R4[&quot;원천을 건드리지 않고 종료&quot;]
+  R3 --&gt;|&quot;증명됨&quot;| R5[&quot;그날 매출 적재&lt;br/&gt;낮에는 삭제 없이 추가만&quot;]
+  R5 --&gt; R6[&quot;엑셀 다운로드에 즉시 반영&quot;]
+  R5 --&gt; R7{&quot;그날 보정 슬롯에&lt;br/&gt;합류 가능한가&quot;}
+  R7 --&gt;|&quot;예&quot;| R8[&quot;낮 보정 묶음과 함께 재전처리&lt;br/&gt;공개 기록 뒤 화면 반영&quot;]
+  R7 --&gt;|&quot;아니오&quot;| R9[&quot;다음 새벽 체인에서 반영&quot;]
+  R2 -.-&gt;|&quot;연속 실패·고객 화면 오류&quot;| R10[&quot;자동 꺼짐&lt;br/&gt;원인 메모 후 재개&quot;]</pre></div><figcaption>개념 흐름입니다. 여기서도 엑셀이 먼저 바뀌고 화면이 나중에 바뀝니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>낮 재수집의 위험(고아 작업, 대량 삭제로 인한 캐시 밀어냄, 고객 알림 혼입)을 먼저 정리. 원천에 행이 없음을 두 번 증명한 날만 추가 적재, 새벽 시간대 접수 차단, 다시 받은 날짜는 고객 영향 목록·알림에서 제외</li><li>고객 API·관리자 API·배치의 3개 저장소를 Claude Code 멀티 에이전트 워크플로로 병행 구현하고, 저장소별 전체 시험 통과(실패 0)를 배포 관문으로 둠. 설계 착수 4일 만에 운영에서 켰고, 스모크 시험의 요청부터 완료까지 약 32초</li><li>낮 보정: 사내 데이터 보정·검수 백오피스에 접수된 보정은 영향받은 달만 재전처리해 그날 반영하고, 여러 달에 걸친 보정은 업무 외 시간의 야간 묶음으로 분리(별도 프로젝트 페이지)</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">설계 결정<span class="dim">왜 이렇게 했나</span></h2><div class="sec__lead"><p>원천이 느리고, 명세가 바뀌고, 같은 달이 여러 경로로 들어오는 조건이었습니다. 이 조건에서 '다시 돌려도 같은 결과'와 '조용히 버리지 않기'를 가장 먼저 지키는 쪽으로 골랐습니다.</p></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>결정</th><th>고른 이유</th><th>버린 대안·대가</th></tr></thead><tbody><tr><td>원본을 먼저 전량 적재(영속 원본 원장)</td><td>전처리 기준이 확정되기 전에도 원천을 잃지 않고, 기준이 바뀌면 원본에서 다시 만들 수 있음. 엑셀 다운로드도 유통사 원문 그대로 이 원장을 읽음(원본 우선 적재는 팀 의견으로 결정)</td><td>전처리 확정 뒤 적재: 기준이 바뀔 때마다 다시 받아야 함</td></tr><tr><td>변환·검증·집계는 PostgreSQL 집합 SQL, Airflow 는 순서·재시도·시간 창만</td><td>행 단위 왕복이 없고, 기준이 바뀌면 해당 월만 다시 실행해 회수. 전 기간 재처리도 1시간 4분</td><td>작업 코드에서 행 단위 처리: 느리고 대사 지점이 흩어짐</td></tr><tr><td>수집 원장·월 상태 원장을 스케줄러 메타DB 가 아니라 매출 DB 에 둠</td><td>화면의 '데이터 업데이트 일시', 멱등 검증, 신선도 판정이 한 곳의 기록에서 나옴</td><td>스케줄러에 상태 보관: 서빙 앱이 읽을 수 없음</td></tr><tr><td>월 단위 무조건 삭제 후 재적재 + 원장 대사 강제</td><td>증분 upsert 보다 단순하고 재실행 결과가 같음. 대사가 어긋나면 그 달을 실패로 남기고 공개하지 않음</td><td>증분 upsert: 원천에서 사라진 행이 남는 위험</td></tr><tr><td>정본 서열(월마감본, 과거 파일, 전일분 순) + advisory lock</td><td>같은 달을 여러 경로가 써도 서열이 낮은 데이터가 높은 데이터를 덮지 못함</td><td>경로별 개별 규칙: 덮어쓰기 사고 가능</td></tr><tr><td>월마감은 별도 테이블에 적재한 뒤 짧게 교체</td><td>교체 중에도 조회가 멈추지 않고, 빈 마감본은 가드에서 걸림</td><td>한 트랜잭션에서 분리·적재·부착: 긴 배타 락으로 조회 정지</td></tr><tr><td>무거운 DB 작업은 한 칸짜리 풀로 직렬화</td><td>작업끼리 DB 를 다투지 않고 공개 시각을 예측할 수 있음</td><td>병렬 실행: 원천 호출 창·DB 부하와 충돌</td></tr><tr><td>자동 보충은 fail-open</td><td>보충이 실패해도 정상 전일분 수집은 막지 않음. 보충 실패 때문에 더 큰 공백이 생기면 안 되기 때문</td><td>보충 실패 시 전체 중단</td></tr><tr><td>Airflow 3(KubernetesExecutor·git-sync)·전용 PostgreSQL 17 을 GitOps 로 운영</td><td>작업마다 파드로 자원 격리, DAG 는 git push 로 배포, 매출·마스터·메타 DB 분리. Airflow 는 팀 협의로 정했음(제 비교 문서는 앱 안에서 돌리는 방식을 먼저 권했음). 결정 뒤에는 그 위에 원장·멱등 규약을 맞춤</td><td>앱 내 스케줄링: 앱 배포와 파이프라인 배포가 묶임</td></tr><tr><td>분석 전용 엔진을 따로 두지 않고 PostgreSQL 하나로</td><td>당시 규모에서는 불필요하다고 보고 실측 뒤 재평가하기로 함. 서빙 지연은 인덱스·튜닝으로 해결(서빙 성능 페이지)</td><td>별도 OLAP 저장소: 동기화·운영 부담 추가</td></tr></tbody></table></div></div>
+
+</section>
+<section class="sec sec--glow sec--flip">
+<div class="sec__head"><h2 class="sec__title">성과</h2><div class="sec__lead"><p>규모가 큰 작업도 한 번에 끝까지 가고, 매일 도는 작업은 사람 손 없이 돕니다. 아래는 주요 작업의 실측 소요 시간입니다.</p></div></div>
+<div class="sec__body"><figure class="figure figure--soft"><div class="chart"><svg viewBox="0 0 720 200" role="img" aria-label="가로 막대 차트"><line x1="220" x2="220" y1="4" y2="196" stroke="#3f424d" stroke-width="1"/><text x="206" y="27" text-anchor="end" font-size="13" fill="#9196a5">과거분 전체 백필 적재(수천만</text><text x="206" y="43" text-anchor="end" font-size="13" fill="#9196a5">건)</text><path class="mark" tabindex="0" data-tip="과거분 전체 백필 적재(수천만 건): 75.6분" d="M220,21H521.4Q525.4,21 525.4,25V37Q525.4,41 521.4,41H220Z" fill="#3d6bf4"/><text x="535.4" y="36" font-size="14" font-weight="600" fill="#d7d8de">75.6분</text><text x="206" y="73" text-anchor="end" font-size="13" fill="#9196a5">약 2년 반 치 전 기간</text><text x="206" y="89" text-anchor="end" font-size="13" fill="#9196a5">재처리</text><path class="mark" tabindex="0" data-tip="약 2년 반 치 전 기간 재처리: 64분" d="M220,67H474.56Q478.56,67 478.56,71V83Q478.56,87 474.56,87H220Z" fill="#3d6bf4"/><text x="488.56" y="82" font-size="14" font-weight="600" fill="#d7d8de">64분</text><text x="206" y="119" text-anchor="end" font-size="13" fill="#9196a5">미동의 매입처 데이터 제거(약</text><text x="206" y="135" text-anchor="end" font-size="13" fill="#9196a5">400만 행)</text><path class="mark" tabindex="0" data-tip="미동의 매입처 데이터 제거(약 400만 행): 19분" d="M220,113H292.76Q296.76,113 296.76,117V129Q296.76,133 292.76,133H220Z" fill="#3d6bf4"/><text x="306.76" y="128" font-size="14" font-weight="600" fill="#d7d8de">19분</text><text x="206" y="173" text-anchor="end" font-size="13" fill="#9196a5">매일 당월 재처리(1개월)</text><path class="mark" tabindex="0" data-tip="매일 당월 재처리(1개월): 14분" d="M220,159H272.56Q276.56,159 276.56,163V175Q276.56,179 272.56,179H220Z" fill="#3d6bf4"/><text x="286.56" y="174" font-size="14" font-weight="600" fill="#d7d8de">14분</text></svg><details><summary>표로 보기</summary><div class="table-wrap"><table class="t"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>과거분 전체 백필 적재(수천만 건)</td><td>75.6분</td></tr><tr><td>약 2년 반 치 전 기간 재처리</td><td>64분</td></tr><tr><td>미동의 매입처 데이터 제거(약 400만 행)</td><td>19분</td></tr><tr><td>매일 당월 재처리(1개월)</td><td>14분</td></tr></tbody></table></div></details></div><figcaption style="padding:12px 0 0">실측. 서로 다른 작업의 소요 시간이며, 같은 기준에서 전후를 비교한 값이 아닙니다. 당월 재처리는 일 운행 중앙값입니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>과거분 백필: 1·2차는 18분 만에 멈춘 뒤 실패, 3차에 75분 38초로 완주하고 원천 총건수와 정확히 일치</li><li>운행: DAG 11종 운영, 그중 정기 7종이 매일 새벽 무개입 운행(2026.09 기준, 이후 보정·다시 받기 작업이 더해짐). 첫 무개입 운행일 공개 시각 03:28~03:29</li><li>품질: 전 기간 통과율 97.42%(2026.07 스냅샷), 주소 파싱 실패 99% 이상 감소</li><li>연동: 연동 컬럼 82개 영문 명세 작성, 실호출로 명세 차이 3건 점검·2건 보정</li><li>다시 받기: 설계 착수 4일 만에 운영에서 켬, 스모크 시험의 요청부터 완료까지 약 32초</li><li>재발 방지: 약국 마스터 오삭제 원인을 규명해 3중 가드를 넣었고, 두 달 뒤 같은 결함이 다시 왔을 때 쓰기 전에 차단</li></ul></div></div>
+
+</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>오케스트레이션</h3><div class="card__tags"><span class="tag">Apache Airflow 3(KubernetesExecutor·git-sync)</span></div></div><div class="stack__group"><h3>저장소</h3><div class="card__tags"><span class="tag">PostgreSQL 17(선언적 파티션·advisory lock·집합 SQL)</span><span class="tag">S3 호환 객체 저장소(원본 파일 보관)</span></div></div><div class="stack__group"><h3>언어·라이브러리</h3><div class="card__tags"><span class="tag">Python(psycopg, 표준 라이브러리 스트리밍 파서, COPY)</span><span class="tag">Node.js(공공 마스터 수집기)</span><span class="tag">Kotlin·Spring WebFlux·R2DBC·Flyway(서빙 연결·매출 DB 마이그레이션)</span></div></div><div class="stack__group"><h3>플랫폼·운영</h3><div class="card__tags"><span class="tag">Kubernetes</span><span class="tag">Argo CD(GitOps)</span><span class="tag">Sealed Secrets</span><span class="tag">Microsoft Teams 웹훅 경보</span><span class="tag">Grafana·Prometheus(수집 상태 대시보드)</span></div></div><div class="stack__group"><h3>AI 활용</h3><div class="card__tags"><span class="tag">Claude Code(설계·구현, 다중 에이전트 적대 리뷰·조사 워크플로)</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">멈추던 백필을 끝까지: 18분 정지의 원인은 SQL 밖에 있었다 · 건수 검증의 함정: 숫자는 맞았는데 키가 모자랐다 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
+<div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 4개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 멈추던 백필을 끝까지: 18분 정지의 원인은 SQL 밖에 있었다</span></a><a class="ctl" href="#case-2"><span>02 건수 검증의 함정: 숫자는 맞았는데 키가 모자랐다</span></a><a class="ctl" href="#case-3"><span>03 예고된 원천 점검: 자동 보충이 거절된 날 경보가 한 일</span></a><a class="ctl" href="#case-4"><span>04 몇 번을 다시 돌려도 같은 결과: 정본 서열과 중단 없는 월마감 교체</span></a></div></section><article class="case sec--glow" id="case-1">
+<div class="case__head"><span class="case__no">CASE 01 · 대용량처리</span><h3 class="case__title">멈추던 백필을 끝까지: 18분 정지의 원인은 SQL 밖에 있었다</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>약 2년 반 치 원본(수천만 건, 약 100GB 규모)을 월별 수 GB 단위 JSON 파일에서 적재해야 했습니다. 파일을 통째로 파싱할 수 없어서 스트리밍 파서와 COPY 로 적재 작업을 만들었습니다. 그런데 전체 실행이 두 번 모두 18분쯤 멈춘 뒤 실패했습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>먼저 작업 파드 로그로 범위를 좁혔습니다. SQL 오류는 없었고, 작업과 스케줄러 API 서버 사이의 통신 계층에서 멈추고 있었습니다. 원인은 두 가지였습니다. Airflow 3 API 서버의 메타DB 커넥션 풀이 고갈됐고, 제 DB 도구에 열어 둔 미커밋 트랜잭션이 월 파티션 생성을 막고 있었습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>표준 라이브러리 스트리밍 파서(UTF-8 청크 경계 처리, 깨진 레코드 크기 상한)와 COPY 로 적재</li><li>월 단위 무조건 삭제 후 적재, 원천 총건수 대사(불일치 시 롤백), 기간 겹침 거부, 고아 실행 정리</li><li>파티션을 미리 만들고 API 서버 커넥션 풀을 늘리고, 유휴 트랜잭션에 시간 제한 설정</li><li>운영 규칙을 런북에 기록: 실행 중 화면 그리드 조회 금지, DB 도구는 자동 커밋</li><li>적재 로직은 AI 에이전트 적대 리뷰에서 확정된 결함을 고친 뒤 실행</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>세 번째 실행에서 75분 38초 만에 완주했고, 적재 행 수가 원천 총건수와 정확히 일치했습니다. 이 원본 원장은 이후 전처리와 엑셀 다운로드의 정본이 됐습니다.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">과거분 전체 백필</div><div class="delta__val"><span class="from">18분 정지 후 실패(2회)</span><span class="arrow">→</span><span class="to">75분 38초 완주</span></div></div><div class="delta"><div class="delta__label">원천 총건수 대사</div><div class="delta__val"><span class="to">정확히 일치</span></div></div><div class="delta"><div class="delta__label">적재 규모</div><div class="delta__val"><span class="to">수천만 건·약 100GB 규모</span></div></div></div><p class="sub-h">가설을 하나씩 버린 과정</p><ol class="funnel"><li class=""><span class="n">1</span><div><b>SQL·적재 로직의 결함인가</b><span>두 번 모두 비슷한 시점에 멈춤</span></div><span class="out">작업 파드 로그에 SQL 오류 없음. 기각</span></li><li class="is-adopted"><span class="n">2</span><div><b>작업과 스케줄러 API 서버 사이 통신 계층</b><span>로그상 작업이 상태 보고 단계에서 멈춤</span></div><span class="out">조사 범위를 이 계층으로 좁힘</span></li><li class="is-adopted"><span class="n">3</span><div><b>API 서버 메타DB 커넥션 풀 고갈</b><span>오래 도는 동적 작업에서 풀이 바닥남</span></div><span class="out">원인 1 확정. 풀 확장</span></li><li class="is-adopted"><span class="n">4</span><div><b>DB 도구의 미커밋 트랜잭션</b><span>열어 둔 트랜잭션이 파티션 생성 DDL 을 막음</span></div><span class="out">원인 2 확정. 파티션 미리 생성, 유휴 트랜잭션 제한, 자동 커밋 규칙</span></li></ol><div class="lesson"><b>배운 점</b><p>실패 지점은 데이터가 아니라 주변 계층(스케줄러 메타DB, 내가 쓰던 DB 도구)에 있을 수도 있습니다. 매번 같은 시점에 멈추면 먼저 로그로 어느 계층인지 좁히고, 내 작업 환경도 원인 후보에 넣어야 합니다.</p></div>
+
+</article>
+<article class="case" id="case-2">
+<div class="case__head"><span class="case__no">CASE 02 · 장애대응</span><h3 class="case__title">건수 검증의 함정: 숫자는 맞았는데 키가 모자랐다</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>매일 도는 공공 약국 마스터 동기화가 하룻밤 사이에 평시 하루 삭제량의 수백 배에 이르는 행을 삭제 처리했습니다. 수집 건수 검증은 통과했기 때문에 경보가 울리지 않았습니다. 이 마스터는 매출 전처리가 쓰는 기준 정보라서, 그대로 두면 오류가 하류 데이터로 번질 수 있었습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>로그와 동기화·변경 기록의 숫자를 맞춰 보며 기전을 증명했습니다. 원천 API 가 일부 페이지에 다른 페이지의 내용을 중복으로 보내고 있었습니다. 그래서 건수는 같았지만 고유키가 크게 모자랐고, 목록에 없는 행이 삭제된 것으로 오판됐습니다. 삭제된 행의 분포가 정렬된 페이지 블록 모양이라는 점과, 같은 기전의 이전 사례가 있었다는 점도 확인했습니다. 원인은 외부 공공 API 의 결함이었고, 제가 맡은 일은 원인 규명과 재발 방지였습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>키 커버리지 가드: 고유키가 모자라면 쓰기 전에 실행 실패</li><li>페이지 중복 감지기: 서로 다른 페이지의 내용이 같으면 즉시 중단</li><li>대량 삭제 가드: 최근 실측한 평시 최대치로 임계값 보정, 우회는 테이블 단위로 수동 1회 주입할 때만 허용</li><li>AI 에이전트 적대 리뷰로 가드 자체의 결함을 찾아 고치고, 단위 시험과 실 PostgreSQL e2e 시험을 통과한 뒤 배포</li><li>복구를 확인하기 전까지 하류 전처리를 수동 실행하지 말라고 공지하고 롤백 SQL 준비</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>다음 날 정상 수집에서, 기존 복원 로직이 삭제 처리됐던 행을 거의 모두 되살린 것을 확인했습니다(남은 소수는 폐업 추정). 새 가드는 이 정상 실행을 잘못 막지 않았습니다. 두 달 뒤 같은 원천 결함이 다시 생겼을 때는 가드가 쓰기 전에 실행을 멈춰 마스터를 지켰고, 다음 날 정상으로 돌아왔습니다.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">같은 결함 재발 시</div><div class="delta__val"><span class="from">건수 검증 통과, 경보 없이 오삭제</span><span class="arrow">→</span><span class="to">쓰기 전에 실행 차단</span></div></div><div class="delta"><div class="delta__label">오삭제 행 복구</div><div class="delta__val"><span class="to">다음 날 실행에서 거의 전량 부활</span></div><div class="delta__note">남은 소수는 폐업 추정</div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">사고 밤</div><div class="tl__what"><b>대량 삭제 처리</b><span>건수 검증 통과, 경보 없음</span></div></li><li><div class="tl__when">같은 날</div><div class="tl__what"><b>기전 증명·3중 가드 배포</b><span>로그 숫자 맞추기로 페이지 중복·고유키 결손 증명, 적대 리뷰·실 DB e2e 시험 뒤 배포, 하류 전처리 실행 금지 공지</span></div></li><li><div class="tl__when">다음 날 실행</div><div class="tl__what"><b>거의 전량 부활</b><span>정상 수집에서 기존 복원 로직이 행을 되살림. 남은 소수는 폐업 추정, 가드 오작동 없음</span></div></li><li><div class="tl__when">두 달 뒤</div><div class="tl__what"><b>같은 결함 재발</b><span>가드가 쓰기 전에 실행을 멈춰 마스터 보존, 다음 날 정상 회복</span></div></li></ol><p class="sub-h">전후 개념도입니다. 몇 건이 왔는지가 아니라 무엇이 왔는지를 쓰기 전에 검증합니다.</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph OLD1[&quot;이전: 건수만 검증&quot;]
+    A1[&quot;원천 API 페이지 수집&quot;] --&gt; A2{&quot;총건수 일치?&quot;}
+    A2 --&gt;|&quot;예&quot;| A3[&quot;목록에 없는 행&lt;br/&gt;삭제 처리&quot;]
+  end
+  subgraph NEW1[&quot;이후: 3중 가드&quot;]
+    B1[&quot;원천 API 페이지 수집&quot;] --&gt; B2{&quot;서로 다른 페이지가&lt;br/&gt;같은 내용인가&quot;}
+    B2 --&gt;|&quot;예&quot;| B9[&quot;쓰기 전 실행 실패&quot;]
+    B2 --&gt;|&quot;아니오&quot;| B3{&quot;고유키 커버리지&lt;br/&gt;충분한가&quot;}
+    B3 --&gt;|&quot;아니오&quot;| B9
+    B3 --&gt;|&quot;예&quot;| B4{&quot;삭제 수가 평시&lt;br/&gt;최대치 이내인가&quot;}
+    B4 --&gt;|&quot;아니오&quot;| B9
+    B4 --&gt;|&quot;예&quot;| B5[&quot;변경분 반영&quot;]
+  end">flowchart LR
+  subgraph OLD1[&quot;이전: 건수만 검증&quot;]
+    A1[&quot;원천 API 페이지 수집&quot;] --&gt; A2{&quot;총건수 일치?&quot;}
+    A2 --&gt;|&quot;예&quot;| A3[&quot;목록에 없는 행&lt;br/&gt;삭제 처리&quot;]
+  end
+  subgraph NEW1[&quot;이후: 3중 가드&quot;]
+    B1[&quot;원천 API 페이지 수집&quot;] --&gt; B2{&quot;서로 다른 페이지가&lt;br/&gt;같은 내용인가&quot;}
+    B2 --&gt;|&quot;예&quot;| B9[&quot;쓰기 전 실행 실패&quot;]
+    B2 --&gt;|&quot;아니오&quot;| B3{&quot;고유키 커버리지&lt;br/&gt;충분한가&quot;}
+    B3 --&gt;|&quot;아니오&quot;| B9
+    B3 --&gt;|&quot;예&quot;| B4{&quot;삭제 수가 평시&lt;br/&gt;최대치 이내인가&quot;}
+    B4 --&gt;|&quot;아니오&quot;| B9
+    B4 --&gt;|&quot;예&quot;| B5[&quot;변경분 반영&quot;]
+  end</pre></div></figure><div class="lesson"><b>배운 점</b><p>건수 검증으로는 커버리지 결손을 잡지 못합니다. 수량이 아니라 고유키 커버리지와 페이지 중복을 검증해야 합니다. 가드 자체도 리뷰와 실 DB 시험을 거쳐야 믿을 수 있습니다.</p></div>
+
+</article>
+<article class="case sec--glow sec--flip" id="case-3">
+<div class="case__head"><span class="case__no">CASE 03 · 서비스운영</span><h3 class="case__title">예고된 원천 점검: 자동 보충이 거절된 날 경보가 한 일</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>유통사 매출 API 의 야간 점검이 예고됐습니다. 그런데 일 수집은 빠진 날을 스스로 메우지 못했고, 지연 점검은 날짜가 바뀌면 그 날을 더 보지 않았습니다. 그때까지 일 수집 이상은 사람이 발견해서 손으로 다시 받는 방식에 기대고 있었습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>Claude Code 다중 에이전트 조사(반박 검증 포함)로 코드·수집 원장·문서를 맞대어 실제 동작을 확정했습니다. 지연 점검은 '그날 시작한 최신 실행 1건'만 봤기 때문에, 빠진 날은 다음 날이 되면 시야에서 사라졌습니다. 같은 조사에서 응답은 정상인데 0건인 날이 성공으로 적재되는 무음 위험과, 문서와 다르게 동작하는 재시도도 찾았습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>새벽 자동 보충: 예약 실행이 전일분 수집에 앞서 최근 누락일·0건인 날을 제한된 횟수만큼 다시 받음. 연동 시간 창과 누적 시간 예산을 지키고, 원천에 행이 있으면 지우지 않음</li><li>fail-open: 보충이 실패해도 정상 전일분 수집은 막지 않음</li><li>지연 점검의 기준을 전일분 대상일로 바꾸고, 최근 누락일·미공개일이 메워질 때까지 Teams 로 경보</li><li>시각표 문서를 실제 재시도 동작에 맞게 정정</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>실제 점검에서는 상대 쪽 일자 배치가 돌지 않아 자동 보충이 거절됐습니다. 누락일 경보로 보충이 실패한 것을 확인한 뒤 상대 쪽에 배치 실행을 요청했습니다. 점검 뒤 첫 평일 오전에 수동으로 재수집해 유통사 건수와 같은 행 수를 적재했고, 데이터를 복구했습니다.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">누락일 인지</div><div class="delta__val"><span class="from">사람이 발견</span><span class="arrow">→</span><span class="to">메워질 때까지 울리는 경보</span></div></div><div class="delta"><div class="delta__label">점검 누락일 복구</div><div class="delta__val"><span class="to">점검 뒤 첫 평일 오전, 재수집 행 수가 유통사 건수와 일치</span></div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">점검 예고</div><div class="tl__what"><b>현재 동작 조사</b><span>다중 에이전트 조사로 코드·원장·문서를 대조해 무음 위험과 판정 공백 확인</span></div></li><li><div class="tl__when">점검 전</div><div class="tl__what"><b>자동 보충·누락일 경보 구현</b><span>fail-open 보충과, 메워질 때까지 울리는 경보</span></div></li><li><div class="tl__when">점검 뒤 새벽</div><div class="tl__what"><b>자동 보충 거절</b><span>상대 쪽 일자 배치가 실행되지 않음. 누락일 경보로 보충 실패 확인</span></div></li><li><div class="tl__when">점검 뒤 첫 평일 오전</div><div class="tl__what"><b>수동 재수집으로 복구</b><span>상대 쪽에 배치 실행을 요청한 뒤 재수집, 유통사 건수와 같은 행 수</span></div></li></ol><div class="lesson"><b>배운 점</b><p>상대 쪽 배치가 돌지 않은 경우는 자동 보충으로 해결할 수 없습니다. 자동 복구에만 기대지 말고, 메워질 때까지 울리는 경보와 사람이 판단하는 경로를 함께 둬야 합니다.</p></div>
+
+</article>
+<article class="case" id="case-4">
+<div class="case__head"><span class="case__no">CASE 04 · 아키텍처설계</span><h3 class="case__title">몇 번을 다시 돌려도 같은 결과: 정본 서열과 중단 없는 월마감 교체</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>같은 달의 매출이 여러 경로로 들어왔습니다. 새벽 전일분 수집, 과거 파일 백필, 유통사 월마감본, 낮 다시 받기. 유통사는 월마감 뒤 전월을 보정했고, 매입처마다 마감 시점이 달라 완료 시각을 예측할 수 없었습니다. 재실행하면 중복이 생기거나, 빈 마감본이 정본을 덮거나, 교체 중에 조회가 멈출 위험이 있었습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>근본 문제는 '누가 그 달의 정본인가'를 정하는 규칙이 없다는 것이었습니다. 처음 떠올린 방식은 한 트랜잭션 안에서 파티션을 분리·적재·부착하는 것이었는데, 적재 내내 배타 락을 잡아 서빙을 멈추게 하므로 쓸 수 없었습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>월 상태 원장과 정본 서열(월마감본, 과거 파일, 전일분 순) 도입: 마감된 달은 서열이 낮은 경로가 덮지 못함. 모든 쓰기의 앞뒤에 advisory lock·서열 확인·원장 기록을 둠</li><li>월 단위 무조건 삭제 후 재적재와 원장 대사를 강제해 재실행 결과를 고정</li><li>월마감은 별도 테이블에 락 없이 적재하고 파티션 경계 CHECK 를 미리 붙인 뒤, 짧은 트랜잭션에서 분리·부착(락 대기 제한·재시도). 행 지문 대사로 추가·삭제 행을 기록하고, 급감 가드에 걸리면 교체 보류</li><li>마감 감지를 '매일 확인, 마감 전이면 건너뛰기'로 재설계해 월 1회 실행과 반복 재시도 때문에 실행이 오래 붙잡히던 문제를 없앰</li><li>무거운 작업은 한 칸짜리 풀로 직렬화하고, 실측 소요 시간으로 새벽 시각표를 다시 확정</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>2026년 9월부터 정기 작업 7종이 매일 새벽 사람 손 없이 돌기 시작했고, 첫 무개입 운행일에는 03:28~03:29 에 데이터가 공개됐습니다. 정보 제공에 동의하지 않은 매입처의 데이터를 전 기간에서 빼야 했을 때도 같은 교체 기계를 재사용했습니다. 약 400만 행을 계획과 일치하게 제거했고(잔존 0), 약 19분이 걸렸습니다.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">정기 새벽 작업</div><div class="delta__val"><span class="to">7종 매일 무개입(2026.09 기준)</span></div></div><div class="delta"><div class="delta__label">첫 무개입 운행일 공개 시각</div><div class="delta__val"><span class="to">03:28~03:29</span></div></div><div class="delta"><div class="delta__label">미동의 매입처 데이터 전 기간 제거</div><div class="delta__val"><span class="to">약 400만 행 계획 일치·잔존 0, 약 19분</span></div><div class="delta__note">월마감 교체 기계 재사용</div></div></div><p class="sub-h">전후 개념도입니다. 교체하는 동안에도 조회가 멈추지 않고, 빈 마감본은 가드에서 걸립니다.</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
+  subgraph SOLD[&quot;버린 안: 한 트랜잭션에서 교체&quot;]
+    O1[&quot;기존 월 파티션 분리&quot;] --&gt; O2[&quot;마감본 적재·인덱스 생성&quot;] --&gt; O3[&quot;새 파티션 부착&quot;]
+    O3 --&gt; O4[&quot;그동안 배타 락 유지&lt;br/&gt;조회 정지 위험&quot;]
+  end
+  subgraph SNEW[&quot;채택안: 별도 테이블 교체&quot;]
+    N1[&quot;별도 테이블에 락 없이 적재&lt;br/&gt;인덱스·파티션 경계 CHECK 선부여&quot;] --&gt; N2[&quot;행 지문 대사&lt;br/&gt;추가·삭제 행 기록&quot;]
+    N2 --&gt; N3{&quot;급감 가드 통과?&quot;}
+    N3 --&gt;|&quot;아니오&quot;| N4[&quot;교체 보류&lt;br/&gt;기존 정본 유지&quot;]
+    N3 --&gt;|&quot;예&quot;| N5[&quot;짧은 트랜잭션에서 분리·부착&lt;br/&gt;락 대기 제한·재시도&quot;]
+    N5 --&gt; N6[&quot;월 상태 마감 기록&lt;br/&gt;마감월 재전처리&quot;]
+  end">flowchart TB
+  subgraph SOLD[&quot;버린 안: 한 트랜잭션에서 교체&quot;]
+    O1[&quot;기존 월 파티션 분리&quot;] --&gt; O2[&quot;마감본 적재·인덱스 생성&quot;] --&gt; O3[&quot;새 파티션 부착&quot;]
+    O3 --&gt; O4[&quot;그동안 배타 락 유지&lt;br/&gt;조회 정지 위험&quot;]
+  end
+  subgraph SNEW[&quot;채택안: 별도 테이블 교체&quot;]
+    N1[&quot;별도 테이블에 락 없이 적재&lt;br/&gt;인덱스·파티션 경계 CHECK 선부여&quot;] --&gt; N2[&quot;행 지문 대사&lt;br/&gt;추가·삭제 행 기록&quot;]
+    N2 --&gt; N3{&quot;급감 가드 통과?&quot;}
+    N3 --&gt;|&quot;아니오&quot;| N4[&quot;교체 보류&lt;br/&gt;기존 정본 유지&quot;]
+    N3 --&gt;|&quot;예&quot;| N5[&quot;짧은 트랜잭션에서 분리·부착&lt;br/&gt;락 대기 제한·재시도&quot;]
+    N5 --&gt; N6[&quot;월 상태 마감 기록&lt;br/&gt;마감월 재전처리&quot;]
+  end</pre></div></figure><div class="lesson"><b>배운 점</b><p>자동화를 맡기려면 먼저 '다시 돌려도 같은 결과'가 보장돼야 합니다. 정본 규칙과 대사를 먼저 세워 두면 새 요구(데이터 제외, 전 기간 정리)도 같은 기계로 받아낼 수 있습니다.</p></div>
+
+</article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>실패 지점은 데이터가 아니라 주변 계층(스케줄러 메타DB, 내가 쓰던 DB 도구)에 있을 수도 있습니다. 매번 같은 시점에 멈추면 먼저 로그로 어느 계층인지 좁히고, 내 작업 환경도 원인 후보에 넣어야 합니다.</p><p>건수 검증으로는 커버리지 결손을 잡지 못합니다. 수량이 아니라 고유키 커버리지와 페이지 중복을 검증해야 합니다. 가드 자체도 리뷰와 실 DB 시험을 거쳐야 믿을 수 있습니다.</p><p>상대 쪽 배치가 돌지 않은 경우는 자동 보충으로 해결할 수 없습니다. 자동 복구에만 기대지 말고, 메워질 때까지 울리는 경보와 사람이 판단하는 경로를 함께 둬야 합니다.</p></section></div>
+<nav class="pager" aria-label="다른 프로젝트"><a href="pharmscope-backend.html"><small>← 이전 프로젝트</small><b>멀티테넌트 의약품 유통 데이터 분석 SaaS 백엔드 (pharmscope)</b></a><a class="next" href="serving-api-performance.html"><small>다음 프로젝트 →</small><b>pharmscope 매출 분석 API·PostgreSQL 성능 튜닝</b></a></nav>
+<footer class="footer"><p>황병준 · 백엔드·데이터 엔지니어 · <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p><small>디자인 바탕: <a href="https://once-ui.com" target="_blank" rel="noopener">Once UI</a> Magic Portfolio · 도표는 직접 그린 개념도입니다</small></footer>
 </main>
-
-<footer class="site-footer">
-  <div class="wrap">
-    <span>© 2026 황병준</span>
-    <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a>
-  </div>
-</footer>
-<script src="../assets/js/site.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" defer></script>
+<script src="../assets/js/site.js?v=fdaea7ac" defer></script>
 </body>
 </html>

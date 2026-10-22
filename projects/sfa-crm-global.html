@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4개국 SFA/CRM 공통 플랫폼 단독 구축 — 식품·축산 그룹 ERP 표준 모델 채택 — 황병준 포트폴리오</title>
+<meta name="description" content="SFA 는 국내 영업 지원 시스템으로 시작했습니다. 현업 요구를 받으면서 SAP ERP 의 자재(MM)·생산(PP)·영업물류(SD)·재무회계(FI) 모듈과 연동하는 영업·고객·주문·정산 공통 플랫폼으로 넓혔습니다. 도메인은 DDD 경계 네 개로 나눴고, 국가마다 다른 언어·시간대·통화는 공통 어댑터 한 곳에서 처리했습니다. 이 구조로 베트남·필리핀·인도·미얀마 법인에 배포했습니다. 그룹은 계열사마다 다른 외주사의 CRM 을 쓰고 있어 데이터를 모으기 어려웠고, 2024.02 이 플랫폼을 계열사 공통 ERP 표준 모델로 채택했습니다. 현업 보고 자료를 보면 영업사원 생산성이 30%, 계약 전환율이 15% 올랐습니다. 외주 견적과 비교하면 1억 5,000만원을 아꼈습니다.">
+<meta name="theme-color" content="#15161a">
+<meta property="og:title" content="4개국 SFA/CRM 공통 플랫폼 단독 구축 — 식품·축산 그룹 ERP 표준 모델 채택 — 황병준 포트폴리오">
+<meta property="og:description" content="SFA 는 국내 영업 지원 시스템으로 시작했습니다. 현업 요구를 받으면서 SAP ERP 의 자재(MM)·생산(PP)·영업물류(SD)·재무회계(FI) 모듈과 연동하는 영업·고객·주문·정산 공통 플랫폼으로 넓혔습니다. 도메인은 DDD 경계 네 개로 나눴고, 국가마다 다른 언어·시간대·통화는 공통 어댑터 한 곳에서 처리했습니다. 이 구조로 베트남·필리핀·인도·미얀마 법인에 배포했습니다. 그룹은 계열사마다 다른 외주사의 CRM 을 쓰고 있어 데이터를 모으기 어려웠고, 2024.02 이 플랫폼을 계열사 공통 ERP 표준 모델로 채택했습니다. 현업 보고 자료를 보면 영업사원 생산성이 30%, 계약 전환율이 15% 올랐습니다. 외주 견적과 비교하면 1억 5,000만원을 아꼈습니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../assets/css/site.css?v=a01858cc">
+</head>
+<body>
+<a class="skip" href="#main">본문 바로가기</a>
+<nav class="nav" aria-label="주 메뉴"><a class="nav__item" href="../index.html" aria-label="홈"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.99778 19.3275V14.3275H13.9978V19.3275C13.9978 19.8775 14.4478 20.3275 14.9978 20.3275H17.9978C18.5478 20.3275 18.9978 19.8775 18.9978 19.3275V12.3275H20.6978C21.1578 12.3275 21.3778 11.7575 21.0278 11.4575L12.6678 3.9275C12.2878 3.5875 11.7078 3.5875 11.3278 3.9275L2.96778 11.4575C2.62778 11.7575 2.83778 12.3275 3.29778 12.3275H4.99778V19.3275C4.99778 19.8775 5.44778 20.3275 5.99778 20.3275H8.99778C9.54778 20.3275 9.99778 19.8775 9.99778 19.3275Z"/></svg><span class="nav__tip">홈</span></a><a class="nav__item" href="../about.html" aria-label="소개"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1c0 .55.45 1 1 1h14c.55 0 1-.45 1-1v-1c0-2.66-5.33-4-8-4z"/></svg><span class="nav__tip">소개</span></a><a class="nav__item" href="../experience.html" aria-label="경력"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg><span class="nav__tip">경력</span></a><a class="nav__item" href="../projects.html" aria-current="page" aria-label="프로젝트"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.0142 17.3073L17.3042 18.0173C17.1042 18.2173 16.7942 18.2173 16.5942 18.0173C16.3942 17.8173 16.3942 17.5073 16.5942 17.3073L17.3042 16.5973L15.3642 14.6573L14.6542 15.3673C14.4542 15.5673 14.1442 15.5673 13.9442 15.3673C13.7442 15.1673 13.7442 14.8573 13.9442 14.6573L14.6542 13.9473L12.7142 12.0073L12.0042 12.7173C11.8042 12.9173 11.4942 12.9173 11.2942 12.7173C11.0942 12.5173 11.0942 12.2073 11.2942 12.0073L12.0042 11.2973L10.0542 9.34731L9.34423 10.0573C9.14423 10.2573 8.83423 10.2573 8.63423 10.0573C8.43423 9.85731 8.43423 9.54731 8.63423 9.34731L9.34423 8.63731L7.40423 6.69731L6.69423 7.40731C6.49423 7.60731 6.18423 7.60731 5.98423 7.40731C5.78423 7.20731 5.78423 6.89731 5.98423 6.69731L6.69423 5.98731L5.20423 4.49731C4.89423 4.18731 4.35423 4.40731 4.35423 4.85731V17.6473C4.35423 18.7473 5.25423 19.6473 6.35423 19.6473H19.1442C19.5942 19.6473 19.8142 19.1073 19.4942 18.7973L18.0142 17.3073ZM7.35423 15.6473V10.8873L13.1142 16.6473H8.35423C7.80423 16.6473 7.35423 16.1973 7.35423 15.6473Z"/></svg><span class="nav__tip">프로젝트</span></a><a class="nav__item" href="../ai.html" aria-label="AI로 일하는 방식"><svg class="" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M14.2206 28C13.7539 28 13.3939 27.5867 13.4606 27.12L14.6606 18.6667H9.99395C8.82062 18.6667 9.55395 17.6667 9.58062 17.6267C11.2606 14.6533 13.7806 10.2533 17.114 4.38667C17.2473 4.14667 17.514 4 17.7806 4C18.2473 4 18.6073 4.41333 18.5406 4.88L17.3406 13.3333H22.0206C22.554 13.3333 22.8473 13.5867 22.554 14.2133C18.1673 21.8667 15.6206 26.3333 14.8873 27.6133C14.754 27.8533 14.5006 28 14.2206 28Z"/></svg><span class="nav__tip">AI로 일하는 방식</span></a><a class="nav__item" href="../skills.html" aria-label="기술"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.61 18.99l-9.08-9.08c.93-2.34.45-5.1-1.44-7C9.79.61 6.21.4 3.66 2.26L7.5 6.11 6.08 7.52 2.25 3.69C.39 6.23.6 9.82 2.9 12.11c1.86 1.86 4.57 2.35 6.89 1.48l9.11 9.11c.39.39 1.02.39 1.41 0l2.3-2.3c.4-.38.4-1.01 0-1.41z"/></svg><span class="nav__tip">기술</span></a><div class="nav__div" aria-hidden="true"><span></span></div><a class="nav__item" href="mailto:hbj3809@naver.com" aria-label="이메일 보내기"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg><span class="nav__tip">hbj3809@naver.com</span></a></nav>
+<main id="main" class="page">
+<header class="intro"><p class="intro__eyebrow">선진 프로젝트</p><h1>4개국 SFA/CRM 공통 플랫폼 단독 구축 — 식품·축산 그룹 ERP 표준 모델 채택</h1><div class="intro__text"><p>SAP ERP 4개 모듈과 연동하는 영업·고객·주문·정산 플랫폼을 혼자 설계·개발해(SAP 영역 제외) 해외 4개국 법인에 배포</p></div><div class="intro__meta"><span><b>선진</b></span><span>2022.01 ~ 2023.12</span><span>4개국 법인 배포 · 2024.02 그룹 계열사 공통 ERP 표준 모델 채택</span><span>백엔드</span></div></header>
+<div class="controls" role="tablist" aria-label="프로젝트 보기">
+<button class="ctl" type="button" role="tab" id="tab-detail" data-panel="detail" aria-controls="panel-detail" aria-selected="true"><span>상세</span></button>
+<button class="ctl" type="button" role="tab" id="tab-problems" data-panel="problems" aria-controls="panel-problems" aria-selected="false"><span>문제해결 <span class="count">4</span></span></button>
+<div class="controls__end"><a class="ctl" href="../projects.html?axis=backend"><span>백엔드 프로젝트 목록 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div>
+</div>
+<div class="card hero-card"><div class="card__media"><div class="cover cover--backend"><p class="cover__title">4개국 SFA/CRM</p><p class="cover__sub">SAP ERP 4개 모듈과 연동하는 영업·고객·주문·정산 플랫폼을 혼자 설계·개발해(SAP 영역 제외) 해외 4개국 법인에 배포</p></div></div></div>
+<div class="panel" id="panel-detail" role="tabpanel" aria-labelledby="tab-detail"><div class="overview">
+<div class="overview__side"><div class="stat"><p class="stat__value">4개국</p><p class="stat__label">해외 법인 배포</p><p class="stat__note">베트남·필리핀·인도·미얀마(국내 별도)</p></div><div class="stat"><p class="stat__value">30%</p><p class="stat__label">영업사원 생산성 향상</p><p class="stat__note">사업 본부 월간 보고 자료 기준</p></div><div class="stat"><p class="stat__value">15%</p><p class="stat__label">계약 전환율 증가</p><p class="stat__note">사업 본부 월간 보고 자료 기준</p></div><div class="stat"><p class="stat__value">1억 5,000만원</p><p class="stat__label">외주 견적 대비 절감</p><p class="stat__note">디자인 템플릿 9,000만원 + 해외 SFA 구축 6,000만원</p></div>
+<dl class="facts"><div><dt>회사</dt><dd>선진 · 기술연구소 디지털혁신센터 · 대리</dd></div><div><dt>기간</dt><dd>2022.01 ~ 2023.12</dd></div><div><dt>역할</dt><dd>SFA/CRM 기획·설계·개발·배포 단독 (SAP 영역 제외, 기여도 100%)</dd></div><div><dt>팀</dt><dd>기술연구소 디지털혁신센터 · 개발 1인 (SAP 영역 제외)</dd></div><div><dt>상태</dt><dd>4개국 법인 배포 · 2024.02 그룹 계열사 공통 ERP 표준 모델 채택</dd></div></dl></div>
+<div class="overview__body"><h2>프로젝트 개요<br><span class="dim">무엇을, 왜 만들었나</span></h2><p class="overview__lead">SFA 는 국내 영업 지원 시스템으로 시작했습니다. 현업 요구를 받으면서 SAP ERP 의 자재(MM)·생산(PP)·영업물류(SD)·재무회계(FI) 모듈과 연동하는 영업·고객·주문·정산 공통 플랫폼으로 넓혔습니다. 도메인은 DDD 경계 네 개로 나눴고, 국가마다 다른 언어·시간대·통화는 공통 어댑터 한 곳에서 처리했습니다. 이 구조로 베트남·필리핀·인도·미얀마 법인에 배포했습니다. 그룹은 계열사마다 다른 외주사의 CRM 을 쓰고 있어 데이터를 모으기 어려웠고, 2024.02 이 플랫폼을 계열사 공통 ERP 표준 모델로 채택했습니다. 현업 보고 자료를 보면 영업사원 생산성이 30%, 계약 전환율이 15% 올랐습니다. 외주 견적과 비교하면 1억 5,000만원을 아꼈습니다.</p><p class="overview__more">SFA/CRM 기획·설계·개발·배포 단독 (SAP 영역 제외, 기여도 100%) · 기술연구소 디지털혁신센터 · 개발 1인 (SAP 영역 제외)</p>
+<div><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 사례 4개 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div></div>
+</div><section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">개요<span class="dim">무엇을, 왜 만들었나</span></h2><div class="sec__lead"><p>그룹 계열사마다 서로 다른 외주사가 만든 CRM 을 쓰고 있었습니다. 그래서 그룹 차원에서 영업·운영 현황과 지표를 모을 때마다 연동이 맞지 않았습니다. SFA 는 처음에 국내 영업 지원 시스템으로 기획했고, 해외 법인에 제공하는 것도 목표였습니다.</p><p>여러 사업부·마케팅·임원의 요구를 받아 주문·고객 관리·여신·미수금까지 넓혔습니다. 그러면서 SFA 는 SAP ERP 의 자재(MM)·생산(PP)·영업물류(SD)·재무회계(FI) 모듈과 연동하는 <strong class="hl">공통 플랫폼</strong>이 됐습니다. 기획부터 설계·개발·배포까지 혼자 맡았습니다(SAP 영역 제외). 국내 배포 직후 해외 법인에서 사용 요청이 들어와 베트남·필리핀·인도·미얀마 법인에 배포했습니다.</p><p>2023년 말 그룹 ERP 통합 프로젝트는 SAP 표준 프로그램을 많이 쓰던 선진의 업무 모델을 통합 기준점으로 삼았습니다. 이 플랫폼은 그 안에서 SAP 4개 모듈 인터페이스의 완성도와 예측 모델 도입 성과를 인정받았고, 2024.02 그룹 계열사 공통 ERP 표준 모델로 채택됐습니다.</p></div></div>
+<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>기간: 2022.01 ~ 2023.12 (표준 모델 채택 2024.02)</li><li>역할: 기획·설계·개발·배포 1인 (SAP 영역 제외, 기여도 100%)</li><li>범위: 영업(상담·활동)·고객(거래처·담당자)·주문(주문서·배송)·정산(청구·여신·미수금)</li><li>설계 목표: 국가마다 다른 업무 규칙과 언어를 유연하게 처리해 4개국으로 넓힐 수 있는 구조</li><li>사용자: 영업사원, 발주·현황 대시보드를 쓰는 고객·대리점, 대시보드와 보고서 자동 추출을 쓰는 영업지원·경영지원 부서, 예측 결과를 보는 본부장·임원</li><li>연계: 별도 예측 모델 프로젝트(DBA 1명과 2인 수행)의 축우 등급·D등급 고객 예측 결과를 화면에 연결</li><li>인정: 2023.02 한국저작권위원회 저작권 등록, 2024.02 그룹 계열사 공통 ERP 표준 모델 채택</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">아키텍처<span class="dim">하나의 플랫폼, 두 개의 관문</span></h2><div class="sec__lead"><p>사용자는 국가와 상관없이 같은 플랫폼으로 들어옵니다. 국가마다 다른 부분은 <strong class="hl">현지화 공통 어댑터</strong> 한 곳에서 맞춥니다. SAP 로 나가는 호출은 모두 <strong class="hl">공통 연동 모듈</strong> 한 곳을 거칩니다. 앞뒤에 이 두 관문을 둔 이유는 도메인 로직이 국가 사정이나 SAP 사정에 덜 묶이게 하기 위해서입니다.</p><p>영업·고객·주문·정산은 DDD 의 Bounded Context 로 나눴습니다. 네 영역은 바뀌는 이유가 서로 다릅니다. 경계를 나누면 한 사업부의 요구가 다른 영역까지 번지는 일을 줄일 수 있습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph USR[&quot;사용자 (국내 + 4개국 법인)&quot;]
+    U1[&quot;영업사원&lt;br/&gt;상담·활동·주문&quot;]
+    U2[&quot;고객·대리점&lt;br/&gt;발주·현황 조회&quot;]
+    U3[&quot;영업·경영지원·임원&lt;br/&gt;대시보드·보고서·예측 결과&quot;]
+  end
+  SSO[&quot;전사 SSO&lt;br/&gt;OAuth 2.0 · JWT&quot;]
+  LOC[&quot;현지화 공통 어댑터&lt;br/&gt;시간대·통화·언어&quot;]
+  subgraph APP[&quot;SFA/CRM 공통 플랫폼 (Spring Boot)&quot;]
+    C1[&quot;영업&lt;br/&gt;상담·활동&quot;]
+    C2[&quot;고객&lt;br/&gt;거래처·담당자&quot;]
+    C3[&quot;주문&lt;br/&gt;주문서·배송&quot;]
+    C4[&quot;정산&lt;br/&gt;청구·여신&quot;]
+  end
+  DB[(&quot;Oracle&lt;br/&gt;법인별 데이터 격리&quot;)]
+  ADP[&quot;공통 연동 모듈&lt;br/&gt;SAP RFC · EAI&quot;]
+  subgraph ERP[&quot;SAP ERP&quot;]
+    MM[&quot;MM 자재&quot;]
+    PP[&quot;PP 생산&quot;]
+    SD[&quot;SD 영업·물류&quot;]
+    FI[&quot;FI 재무회계&quot;]
+  end
+  PRED[&quot;축우 등급·D등급 고객 예측&lt;br/&gt;(별도 프로젝트)&quot;]
+  OPS[&quot;Jenkins · Docker 배포&lt;br/&gt;Jennifer APM 감시&quot;]
+  U1 --&gt; SSO
+  U2 --&gt; SSO
+  U3 --&gt; SSO
+  SSO --&gt; LOC
+  LOC --&gt; APP
+  APP --&gt; DB
+  C1 --&gt; ADP
+  C3 --&gt; ADP
+  C4 --&gt; ADP
+  ADP --&gt; MM
+  ADP --&gt; PP
+  ADP --&gt; SD
+  ADP --&gt; FI
+  PRED -.-&gt; APP
+  OPS -.-&gt; APP">flowchart LR
+  subgraph USR[&quot;사용자 (국내 + 4개국 법인)&quot;]
+    U1[&quot;영업사원&lt;br/&gt;상담·활동·주문&quot;]
+    U2[&quot;고객·대리점&lt;br/&gt;발주·현황 조회&quot;]
+    U3[&quot;영업·경영지원·임원&lt;br/&gt;대시보드·보고서·예측 결과&quot;]
+  end
+  SSO[&quot;전사 SSO&lt;br/&gt;OAuth 2.0 · JWT&quot;]
+  LOC[&quot;현지화 공통 어댑터&lt;br/&gt;시간대·통화·언어&quot;]
+  subgraph APP[&quot;SFA/CRM 공통 플랫폼 (Spring Boot)&quot;]
+    C1[&quot;영업&lt;br/&gt;상담·활동&quot;]
+    C2[&quot;고객&lt;br/&gt;거래처·담당자&quot;]
+    C3[&quot;주문&lt;br/&gt;주문서·배송&quot;]
+    C4[&quot;정산&lt;br/&gt;청구·여신&quot;]
+  end
+  DB[(&quot;Oracle&lt;br/&gt;법인별 데이터 격리&quot;)]
+  ADP[&quot;공통 연동 모듈&lt;br/&gt;SAP RFC · EAI&quot;]
+  subgraph ERP[&quot;SAP ERP&quot;]
+    MM[&quot;MM 자재&quot;]
+    PP[&quot;PP 생산&quot;]
+    SD[&quot;SD 영업·물류&quot;]
+    FI[&quot;FI 재무회계&quot;]
+  end
+  PRED[&quot;축우 등급·D등급 고객 예측&lt;br/&gt;(별도 프로젝트)&quot;]
+  OPS[&quot;Jenkins · Docker 배포&lt;br/&gt;Jennifer APM 감시&quot;]
+  U1 --&gt; SSO
+  U2 --&gt; SSO
+  U3 --&gt; SSO
+  SSO --&gt; LOC
+  LOC --&gt; APP
+  APP --&gt; DB
+  C1 --&gt; ADP
+  C3 --&gt; ADP
+  C4 --&gt; ADP
+  ADP --&gt; MM
+  ADP --&gt; PP
+  ADP --&gt; SD
+  ADP --&gt; FI
+  PRED -.-&gt; APP
+  OPS -.-&gt; APP</pre></div><figcaption>직접 그린 개념도입니다. 실제 서버 구성과 이름은 다릅니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>진입: 전사 SSO(OAuth 2.0), Access/Refresh Token 기반 무상태 인증</li><li>현지화: 국가별 시간대·통화·언어셋을 맞추는 공통 어댑터</li><li>도메인: 영업·고객·주문·정산 4개 경계</li><li>연동: 견적·주문·정산에서 나가는 SAP MM·PP·SD·FI 호출을 공통 연동 모듈 한 곳으로</li><li>저장: Oracle, 4개국 법인 데이터 논리·물리 격리</li><li>예측: 별도 프로젝트의 축우 등급·D등급 고객 예측 결과를 화면에 연결</li><li>운영: Jenkins·Docker 배포, Jennifer APM 응답 감시</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">도메인 모델<span class="dim">개념 ERD</span> <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>영업 과정을 상담에서 정산까지 이어지는 하나의 데이터 흐름으로 보고, 경계마다 핵심 개념을 둘씩 두었습니다. 영업(Deal·Activity), 고객(Partner·Contact), 주문(SalesOrder·Delivery), 정산(Invoice·Credit)입니다. 4개국 확장의 기준점으로 국가 법인과 영업사원을 더했습니다.</p><p>아래 그림은 이해를 돕는 <strong class="hl">개념 모델</strong>이며 실제 테이블 구조와 같지 않습니다. 관계와 속성은 업무 흐름을 바탕으로 다시 구성했습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="erDiagram
+  CORP_TENANT ||--o{ SALES_REP : &quot;소속&quot;
+  CORP_TENANT ||--o{ PARTNER : &quot;관리&quot;
+  PARTNER ||--o{ CONTACT : &quot;담당자&quot;
+  PARTNER ||--o{ DEAL : &quot;상담&quot;
+  DEAL ||--o{ ACTIVITY : &quot;활동 기록&quot;
+  SALES_REP ||--o{ ACTIVITY : &quot;수행&quot;
+  DEAL ||--o| SALES_ORDER : &quot;주문 전환&quot;
+  PARTNER ||--o{ SALES_ORDER : &quot;발주&quot;
+  SALES_ORDER ||--o{ DELIVERY : &quot;출하&quot;
+  SALES_ORDER ||--o{ INVOICE : &quot;청구&quot;
+  PARTNER ||--|| CREDIT : &quot;여신 한도&quot;
+  CORP_TENANT {
+    string corp_code PK
+    string timezone
+    string currency
+    string locale
+  }
+  SALES_REP {
+    string rep_id PK
+    string corp_code FK
+    string business_unit
+  }
+  PARTNER {
+    string partner_id PK
+    string corp_code FK
+    string partner_name
+    string customer_grade
+  }
+  CONTACT {
+    string contact_id PK
+    string partner_id FK
+    string role
+  }
+  DEAL {
+    string deal_id PK
+    string partner_id FK
+    string stage
+  }
+  ACTIVITY {
+    string activity_id PK
+    string deal_id FK
+    string rep_id FK
+    datetime done_at
+  }
+  SALES_ORDER {
+    string order_id PK
+    string partner_id FK
+    string status
+    string erp_order_no
+  }
+  DELIVERY {
+    string delivery_id PK
+    string order_id FK
+    string ship_status
+  }
+  INVOICE {
+    string invoice_id PK
+    string order_id FK
+    decimal amount
+    string currency
+  }
+  CREDIT {
+    string partner_id PK
+    decimal credit_limit
+    decimal receivable
+  }">erDiagram
+  CORP_TENANT ||--o{ SALES_REP : &quot;소속&quot;
+  CORP_TENANT ||--o{ PARTNER : &quot;관리&quot;
+  PARTNER ||--o{ CONTACT : &quot;담당자&quot;
+  PARTNER ||--o{ DEAL : &quot;상담&quot;
+  DEAL ||--o{ ACTIVITY : &quot;활동 기록&quot;
+  SALES_REP ||--o{ ACTIVITY : &quot;수행&quot;
+  DEAL ||--o| SALES_ORDER : &quot;주문 전환&quot;
+  PARTNER ||--o{ SALES_ORDER : &quot;발주&quot;
+  SALES_ORDER ||--o{ DELIVERY : &quot;출하&quot;
+  SALES_ORDER ||--o{ INVOICE : &quot;청구&quot;
+  PARTNER ||--|| CREDIT : &quot;여신 한도&quot;
+  CORP_TENANT {
+    string corp_code PK
+    string timezone
+    string currency
+    string locale
+  }
+  SALES_REP {
+    string rep_id PK
+    string corp_code FK
+    string business_unit
+  }
+  PARTNER {
+    string partner_id PK
+    string corp_code FK
+    string partner_name
+    string customer_grade
+  }
+  CONTACT {
+    string contact_id PK
+    string partner_id FK
+    string role
+  }
+  DEAL {
+    string deal_id PK
+    string partner_id FK
+    string stage
+  }
+  ACTIVITY {
+    string activity_id PK
+    string deal_id FK
+    string rep_id FK
+    datetime done_at
+  }
+  SALES_ORDER {
+    string order_id PK
+    string partner_id FK
+    string status
+    string erp_order_no
+  }
+  DELIVERY {
+    string delivery_id PK
+    string order_id FK
+    string ship_status
+  }
+  INVOICE {
+    string invoice_id PK
+    string order_id FK
+    decimal amount
+    string currency
+  }
+  CREDIT {
+    string partner_id PK
+    decimal credit_limit
+    decimal receivable
+  }</pre></div><figcaption>4개 경계의 8개 개념에 법인과 영업사원을 더한 개념 ERD입니다(관계·속성은 초안).</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>영업: 상담·기회(Deal)와 활동(Activity) — 영업사원의 활동 기록</li><li>고객: 거래처(Partner)와 담당자(Contact)</li><li>주문: 주문서(SalesOrder)와 배송(Delivery) — SAP 판매 주문과 연결</li><li>정산: 청구서(Invoice)와 여신(Credit) — 여신 한도·미수금</li></ul></div></div>
+<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+</section>
+<section class="sec sec--glow sec--flip">
+<div class="sec__head"><h2 class="sec__title">SAP ERP 연동 구조</h2><div class="sec__lead"><p>SFA/CRM 은 영업 화면입니다. 하지만 품목·재고·생산·출하·여신 같은 실제 업무 데이터는 SAP ERP 에 있습니다. 그래서 SAP 의 네 모듈과 주고받는 인터페이스를 공통 연동 모듈 한 곳에 모았고, 어떤 데이터든 같은 형식으로 주고받도록 표준화했습니다.</p><p>2023년 말 그룹 ERP 통합 프로젝트에서 이 플랫폼이 기준 모델로 검토된 이유가 이 인터페이스의 완성도였습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph SFA[&quot;SFA/CRM 도메인&quot;]
+    S1[&quot;영업&lt;br/&gt;상담·견적&quot;]
+    S2[&quot;주문&lt;br/&gt;주문서·배송&quot;]
+    S3[&quot;정산&lt;br/&gt;청구·여신·미수금&quot;]
+    S4[&quot;품목·재고 조회&quot;]
+  end
+  ADP[&quot;공통 연동 모듈&lt;br/&gt;요청·응답 형식 표준화&quot;]
+  subgraph ERP[&quot;SAP ERP&quot;]
+    MM[&quot;MM 자재관리&lt;br/&gt;품목 마스터·가용 재고&quot;]
+    PP[&quot;PP 생산관리&lt;br/&gt;생산 계획·생산 지시&quot;]
+    SD[&quot;SD 영업·물류&lt;br/&gt;견적·주문·출하·배송 상태&quot;]
+    FI[&quot;FI 재무회계&lt;br/&gt;여신 한도·매출 전기·수금&quot;]
+  end
+  S4 --&gt;|&quot;품목 동기화·가용성 체크&quot;| ADP
+  S1 --&gt;|&quot;견적 생성&quot;| ADP
+  S2 --&gt;|&quot;주문 생성·출하 지시&quot;| ADP
+  S3 --&gt;|&quot;여신 체크·수금 조회&quot;| ADP
+  ADP --&gt; MM
+  ADP --&gt;|&quot;주문 연동 생산 지시&quot;| PP
+  ADP --&gt; SD
+  ADP --&gt; FI
+  SD -.-&gt;|&quot;배송 상태&quot;| S2
+  FI -.-&gt;|&quot;매출 전기·수금 현황&quot;| S3">flowchart LR
+  subgraph SFA[&quot;SFA/CRM 도메인&quot;]
+    S1[&quot;영업&lt;br/&gt;상담·견적&quot;]
+    S2[&quot;주문&lt;br/&gt;주문서·배송&quot;]
+    S3[&quot;정산&lt;br/&gt;청구·여신·미수금&quot;]
+    S4[&quot;품목·재고 조회&quot;]
+  end
+  ADP[&quot;공통 연동 모듈&lt;br/&gt;요청·응답 형식 표준화&quot;]
+  subgraph ERP[&quot;SAP ERP&quot;]
+    MM[&quot;MM 자재관리&lt;br/&gt;품목 마스터·가용 재고&quot;]
+    PP[&quot;PP 생산관리&lt;br/&gt;생산 계획·생산 지시&quot;]
+    SD[&quot;SD 영업·물류&lt;br/&gt;견적·주문·출하·배송 상태&quot;]
+    FI[&quot;FI 재무회계&lt;br/&gt;여신 한도·매출 전기·수금&quot;]
+  end
+  S4 --&gt;|&quot;품목 동기화·가용성 체크&quot;| ADP
+  S1 --&gt;|&quot;견적 생성&quot;| ADP
+  S2 --&gt;|&quot;주문 생성·출하 지시&quot;| ADP
+  S3 --&gt;|&quot;여신 체크·수금 조회&quot;| ADP
+  ADP --&gt; MM
+  ADP --&gt;|&quot;주문 연동 생산 지시&quot;| PP
+  ADP --&gt; SD
+  ADP --&gt; FI
+  SD -.-&gt;|&quot;배송 상태&quot;| S2
+  FI -.-&gt;|&quot;매출 전기·수금 현황&quot;| S3</pre></div><figcaption>실선은 SFA/CRM 이 보내는 요청, 점선은 SAP 에서 돌아오는 상태입니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>MM 자재관리: 품목 마스터 동기화, 실시간 재고 조회·가용성 체크</li><li>PP 생산관리: 생산 계획 연동, 주문에 따른 생산 지시 자동화</li><li>SD 영업·물류: 견적·주문 생성, 출하 지시, 배송 상태 추적</li><li>FI 재무회계: 거래처 여신 한도 실시간 체크, 매출 전기·수금 현황 조회</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">핵심 흐름<span class="dim">주문에서 여신 확인, 출하까지</span> <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>주문 한 건이 SAP 의 여러 모듈을 거치는 순서입니다. 먼저 재고 가용성(MM)과 거래처 여신 한도(FI)를 확인합니다. 둘 다 통과하면 판매 주문(SD)을 만들고, 재고가 모자라면 생산 지시(PP)로 넘어갑니다. 출하 뒤 배송 상태는 SD 에서 다시 받아 영업사원과 고객 화면에 보여 줍니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="sequenceDiagram
+  participant R as 영업사원·고객
+  participant O as 주문 도메인
+  participant A as 공통 연동 모듈
+  participant MM as SAP MM
+  participant FI as SAP FI
+  participant SD as SAP SD
+  participant PP as SAP PP
+  R-&gt;&gt;O: 주문 입력
+  O-&gt;&gt;A: 가용 재고 조회
+  A-&gt;&gt;MM: 품목·가용성 체크
+  MM--&gt;&gt;A: 가용 수량
+  A--&gt;&gt;O: 재고 결과
+  O-&gt;&gt;A: 여신 한도 체크
+  A-&gt;&gt;FI: 거래처 여신 한도 조회
+  FI--&gt;&gt;A: 잔여 한도
+  A--&gt;&gt;O: 여신 결과
+  alt 한도 초과
+    O--&gt;&gt;R: 주문 보류 안내
+  else 한도 이내
+    O-&gt;&gt;A: 주문 생성
+    A-&gt;&gt;SD: 판매 주문 생성
+    SD--&gt;&gt;A: ERP 주문 번호
+    opt 재고 부족
+      A-&gt;&gt;PP: 주문 연동 생산 지시
+    end
+    A-&gt;&gt;SD: 출하 지시 (재고 확보 후)
+    A--&gt;&gt;O: 주문 확정
+    O--&gt;&gt;R: 주문 확정과 배송 상태 조회
+  end">sequenceDiagram
+  participant R as 영업사원·고객
+  participant O as 주문 도메인
+  participant A as 공통 연동 모듈
+  participant MM as SAP MM
+  participant FI as SAP FI
+  participant SD as SAP SD
+  participant PP as SAP PP
+  R-&gt;&gt;O: 주문 입력
+  O-&gt;&gt;A: 가용 재고 조회
+  A-&gt;&gt;MM: 품목·가용성 체크
+  MM--&gt;&gt;A: 가용 수량
+  A--&gt;&gt;O: 재고 결과
+  O-&gt;&gt;A: 여신 한도 체크
+  A-&gt;&gt;FI: 거래처 여신 한도 조회
+  FI--&gt;&gt;A: 잔여 한도
+  A--&gt;&gt;O: 여신 결과
+  alt 한도 초과
+    O--&gt;&gt;R: 주문 보류 안내
+  else 한도 이내
+    O-&gt;&gt;A: 주문 생성
+    A-&gt;&gt;SD: 판매 주문 생성
+    SD--&gt;&gt;A: ERP 주문 번호
+    opt 재고 부족
+      A-&gt;&gt;PP: 주문 연동 생산 지시
+    end
+    A-&gt;&gt;SD: 출하 지시 (재고 확보 후)
+    A--&gt;&gt;O: 주문 확정
+    O--&gt;&gt;R: 주문 확정과 배송 상태 조회
+  end</pre></div><figcaption>모듈별 연동 범위를 바탕으로 다시 구성한 처리 순서입니다(초안).</figcaption></figure></div>
+<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">4개국 글로벌 멀티테넌시·현지화 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>국내와 4개국 법인이 같은 플랫폼을 씁니다. 그래서 법인 데이터는 서로 격리하고, 국가마다 다른 시간대·통화·언어셋은 공통 어댑터에서 맞췄습니다. 국가별 차이를 기능 코드 곳곳에 분기로 흩어 두지 않고 어댑터 한 곳에 모은 이유가 있습니다. 법인이 늘 때마다 모든 기능을 고치지 않으려는 것이었습니다.</p><p>언어는 서버 문구를 Spring Message 로 관리하고, 화면에서 나중에 그려지는 요소는 MutationObserver 로 처리했습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
+  LGN[&quot;전사 SSO 로그인&lt;br/&gt;Access·Refresh Token&quot;]
+  CTX[&quot;요청의 법인 정보&lt;br/&gt;국가·법인 코드&quot;]
+  ADPT[&quot;현지화 공통 어댑터&quot;]
+  subgraph CONV[&quot;어댑터가 맞추는 것&quot;]
+    TZ[&quot;시간대&lt;br/&gt;법인별 Timezone&quot;]
+    CUR[&quot;통화&lt;br/&gt;법인별 통화&quot;]
+    LANG[&quot;언어&lt;br/&gt;Spring Message · 화면 문구&quot;]
+  end
+  DOM[&quot;공통 도메인 로직&lt;br/&gt;영업·고객·주문·정산&quot;]
+  subgraph ISO[&quot;법인 데이터 격리 (논리·물리)&quot;]
+    KR[&quot;국내&quot;]
+    VN[&quot;베트남&quot;]
+    PH[&quot;필리핀&quot;]
+    IND[&quot;인도&quot;]
+    MMR[&quot;미얀마&quot;]
+  end
+  LGN --&gt; CTX
+  CTX --&gt; ADPT
+  ADPT --&gt; TZ
+  ADPT --&gt; CUR
+  ADPT --&gt; LANG
+  CONV --&gt; DOM
+  DOM --&gt; ISO">flowchart TB
+  LGN[&quot;전사 SSO 로그인&lt;br/&gt;Access·Refresh Token&quot;]
+  CTX[&quot;요청의 법인 정보&lt;br/&gt;국가·법인 코드&quot;]
+  ADPT[&quot;현지화 공통 어댑터&quot;]
+  subgraph CONV[&quot;어댑터가 맞추는 것&quot;]
+    TZ[&quot;시간대&lt;br/&gt;법인별 Timezone&quot;]
+    CUR[&quot;통화&lt;br/&gt;법인별 통화&quot;]
+    LANG[&quot;언어&lt;br/&gt;Spring Message · 화면 문구&quot;]
+  end
+  DOM[&quot;공통 도메인 로직&lt;br/&gt;영업·고객·주문·정산&quot;]
+  subgraph ISO[&quot;법인 데이터 격리 (논리·물리)&quot;]
+    KR[&quot;국내&quot;]
+    VN[&quot;베트남&quot;]
+    PH[&quot;필리핀&quot;]
+    IND[&quot;인도&quot;]
+    MMR[&quot;미얀마&quot;]
+  end
+  LGN --&gt; CTX
+  CTX --&gt; ADPT
+  ADPT --&gt; TZ
+  ADPT --&gt; CUR
+  ADPT --&gt; LANG
+  CONV --&gt; DOM
+  DOM --&gt; ISO</pre></div><figcaption>요청에서 법인 정보를 얻는 방식과 격리 방법의 세부 내용은 초안입니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>격리: 4개국 법인 데이터의 논리·물리 격리</li><li>시간대: 법인별 Timezone</li><li>통화: 법인별 통화</li><li>언어: Spring Message·MutationObserver 기반 다국어</li></ul></div></div>
+<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+</section>
+<section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">설계 결정<span class="dim">왜 이렇게 만들었나</span></h2></div>
+<div class="sec__body"><div class="tiles"><div class="tile"><h3>도메인을 4개 경계로</h3><p>영업·고객·주문·정산은 바뀌는 이유가 서로 다릅니다. 경계를 나눠 응집도는 높이고 결합도는 낮췄습니다. 사업부나 국가의 요구가 한 경계 안에서 처리되게 하는 것이 목표였습니다. 기능은 따로 움직여도 데이터는 상담에서 정산까지 &quot;하나의 흐름&quot;으로 이어지게 했습니다.</p></div><div class="tile"><h3>SAP 연동은 한 곳으로</h3><p>MM·PP·SD·FI 호출이 기능마다 흩어져 있으면 SAP 쪽이 바뀔 때마다 플랫폼 전체를 고쳐야 합니다. 그래서 호출을 공통 연동 모듈로 모으고 주고받는 형식을 표준화했습니다. 그룹 ERP 통합에서 이 플랫폼이 기준 모델로 검토된 근거도 이 인터페이스였습니다.</p></div><div class="tile"><h3>국가 차이는 어댑터로</h3><p>언어·시간대·통화 차이를 공통 어댑터에 모아 두면, 법인을 늘릴 때 도메인 코드를 덜 고쳐도 됩니다. 해외 법인 제공을 처음부터 목표로 두고 다국어 기반으로 설계했습니다. 그래서 국내 배포 직후 해외 법인 요청이 왔을 때 바로 제공할 수 있었습니다.</p></div><div class="tile"><h3>외주 대신 직접 구축</h3><p>해외 법인용 디자인 템플릿의 외주 견적이 9,000만원(VAT 별도)이었고, 시스템 전체도 외주로 진행할 예정이었습니다. 외주에 맡기면 장기적으로 유지보수 비용이 늘고 시스템을 우리가 통제하기 어려워진다고 판단했습니다. 그래서 자체 구축을 제안했습니다.</p></div><div class="tile"><h3>무상태 토큰 인증</h3><p>전사 SSO 로 통합 로그인을 구현해 보안을 강화하고 로그인을 한 번으로 줄였습니다. 인증은 Access/Refresh Token 으로 처리해 서버가 세션을 들고 있지 않습니다. 그래서 법인이나 서버가 늘어도 세션 공유를 따로 설계할 필요가 없습니다.</p></div></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">성과<span class="dim">영업 지표</span></h2><div class="sec__lead"><p>도입 뒤 사업 본부(BU)별 월간 영업 보고 자료에 두 지표가 실렸습니다. 영업사원 생산성은 계약·주문 건수와 배차 현황 데이터의 적재량을 도입 전과 비교한 값입니다. 같은 시기에 자체 구축한 MES 와 함께 업무가 자동화·일원화된 효과도 들어 있습니다. 계약 전환율은 고객이 직접 발주·현황 대시보드를 쓰게 된 뒤의 추가 계약과 신규 고객 증가를, 수기·전화 주문 시절과 비교해 집계한 값입니다.</p><p>같은 시기에 전사 CI/CD 를 구축해(별도 프로젝트) 배포 리드타임도 60분→10분(80% 단축)으로 줄었습니다.</p></div></div>
+<div class="sec__body"><figure class="figure figure--soft"><div class="chart"><svg viewBox="0 0 720 320" role="img" aria-label="막대 차트"><line x1="16" x2="704" y1="256" y2="256" stroke="#3f424d" stroke-width="1"/><path class="mark" tabindex="0" data-tip="영업사원 생산성 향상: 30%" d="M176,256V128Q176,124 180,124H196Q200,124 200,128V256Z" fill="#3d6bf4"/><text x="188" y="114" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">30%</text><text x="188" y="278" text-anchor="middle" font-size="13" fill="#9196a5">영업사원 생산성 향상</text><path class="mark" tabindex="0" data-tip="계약 전환율 증가: 15%" d="M520,256V194Q520,190 524,190H540Q544,190 544,194V256Z" fill="#3d6bf4"/><text x="532" y="180" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">15%</text><text x="532" y="278" text-anchor="middle" font-size="13" fill="#9196a5">계약 전환율 증가</text></svg><details><summary>표로 보기</summary><div class="table-wrap"><table class="t"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>영업사원 생산성 향상</td><td>30%</td></tr><tr><td>계약 전환율 증가</td><td>15%</td></tr></tbody></table></div></details></div><figcaption style="padding:12px 0 0">사업 본부별 월간 영업 보고 자료 기준(현업 보고)</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>현업 시스템 만족도 조사: 업무 중 SFA 사용 시간 비중을 묻는 질문에 '100%'를 고른 응답이 가장 많음</li><li>고객: 직접 발주하고 영업사원과 실시간으로 소통</li><li>영업지원·경영지원 부서: 대시보드로 현황 파악, 보고서 자료 추출 자동화</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">외주비 절감 구성</h2><div class="sec__lead"><p>SFA/CRM 으로 직접 줄인 외주 비용은 해외 법인용 디자인 템플릿 9,000만원과 해외 SFA 구축 6,000만원, 합계 <strong class="hl">1억 5,000만원</strong>입니다. 같은 시기 별도 프로젝트에서도 비용을 줄였습니다. TMS/WMS 유지보수를 외주 40%·자체 60% 로 나눠 맡아 연간 4,800만원을 줄였고, 전자계약을 자체 개발해 3,000만원을 더 줄였습니다. 네 항목을 합한 선진 재직 중 절감액은 2억 2,800만원입니다.</p></div></div>
+<div class="sec__body"><figure class="figure figure--soft"><div class="chart"><svg viewBox="0 0 720 200" role="img" aria-label="가로 막대 차트"><line x1="220" x2="220" y1="4" y2="196" stroke="#3f424d" stroke-width="1"/><text x="206" y="27" text-anchor="end" font-size="13" fill="#9196a5">해외 법인용 디자인</text><text x="206" y="43" text-anchor="end" font-size="13" fill="#9196a5">템플릿(견적, VAT 별도)</text><path class="mark" tabindex="0" data-tip="해외 법인용 디자인 템플릿(견적, VAT 별도): 9,000만원" d="M220,21H579.6Q583.6,21 583.6,25V37Q583.6,41 579.6,41H220Z" fill="#3d6bf4"/><text x="593.6" y="36" font-size="14" font-weight="600" fill="#d7d8de">9,000만원</text><text x="206" y="81" text-anchor="end" font-size="13" fill="#9196a5">해외 SFA 구축 외주</text><path class="mark" tabindex="0" data-tip="해외 SFA 구축 외주: 6,000만원" d="M220,67H458.4Q462.4,67 462.4,71V83Q462.4,87 458.4,87H220Z" fill="#3d6bf4"/><text x="472.4" y="82" font-size="14" font-weight="600" fill="#d7d8de">6,000만원</text><text x="206" y="127" text-anchor="end" font-size="13" fill="#9196a5">TMS/WMS 유지보수(연간)</text><path class="mark" tabindex="0" data-tip="TMS/WMS 유지보수(연간): 4,800만원" d="M220,113H409.9Q413.9,113 413.9,117V129Q413.9,133 409.9,133H220Z" fill="#3d6bf4"/><text x="423.9" y="128" font-size="14" font-weight="600" fill="#d7d8de">4,800만원</text><text x="206" y="173" text-anchor="end" font-size="13" fill="#9196a5">전자계약 구축(일회성)</text><path class="mark" tabindex="0" data-tip="전자계약 구축(일회성): 3,000만원" d="M220,159H337.2Q341.2,159 341.2,163V175Q341.2,179 337.2,179H220Z" fill="#3d6bf4"/><text x="351.2" y="174" font-size="14" font-weight="600" fill="#d7d8de">3,000만원</text></svg><details><summary>표로 보기</summary><div class="table-wrap"><table class="t"><thead><tr><th>항목</th><th>구분</th><th>값</th></tr></thead><tbody><tr><td>해외 법인용 디자인 템플릿(견적, VAT 별도)</td><td>SFA/CRM 직접</td><td>9,000만원</td></tr><tr><td>해외 SFA 구축 외주</td><td>SFA/CRM 직접</td><td>6,000만원</td></tr><tr><td>TMS/WMS 유지보수(연간)</td><td>같은 시기 내재화</td><td>4,800만원</td></tr><tr><td>전자계약 구축(일회성)</td><td>같은 시기 내재화</td><td>3,000만원</td></tr></tbody></table></div></details></div><figcaption style="padding:12px 0 0">견적 기준·연간·일회성 값이 섞여 있습니다. 위 두 항목이 SFA/CRM 직접 절감입니다.</figcaption></figure></div>
+
+</section>
+<section class="sec sec--glow sec--flip">
+<div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">어디에 썼나</span></h2></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>영역</th><th>기술</th><th>쓴 곳</th></tr></thead><tbody><tr><td>백엔드</td><td>Java, Spring Boot</td><td>영업·고객·주문·정산 도메인 서비스, 공통 연동 모듈</td></tr><tr><td>다국어</td><td>Spring Message(i18n), MutationObserver</td><td>서버 문구와 화면 문구의 언어별 처리</td></tr><tr><td>연동</td><td>SAP RFC, EAI</td><td>MM·PP·SD·FI 인터페이스</td></tr><tr><td>데이터</td><td>Oracle</td><td>도메인 데이터, 법인별 데이터 격리</td></tr><tr><td>인증</td><td>OAuth 2.0, JWT</td><td>전사 SSO, Access/Refresh Token 무상태 인증</td></tr><tr><td>화면</td><td>JSP, JavaScript, TreeGrid</td><td>디자인 템플릿, 목록·그리드 화면</td></tr><tr><td>배포·운영</td><td>Jenkins, Docker, Jennifer APM</td><td>배포 자동화, 응답 시간 감시</td></tr></tbody></table></div></div>
+
+</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>백엔드</h3><div class="card__tags"><span class="tag">Java</span><span class="tag">Spring Boot</span><span class="tag">Spring Message(i18n)</span></div></div><div class="stack__group"><h3>연동</h3><div class="card__tags"><span class="tag">SAP RFC</span><span class="tag">EAI</span></div></div><div class="stack__group"><h3>데이터</h3><div class="card__tags"><span class="tag">Oracle</span></div></div><div class="stack__group"><h3>인증</h3><div class="card__tags"><span class="tag">OAuth 2.0</span><span class="tag">JWT</span></div></div><div class="stack__group"><h3>화면</h3><div class="card__tags"><span class="tag">JSP</span><span class="tag">JavaScript</span><span class="tag">TreeGrid</span><span class="tag">MutationObserver</span></div></div><div class="stack__group"><h3>배포·운영</h3><div class="card__tags"><span class="tag">Jenkins</span><span class="tag">Docker</span><span class="tag">Jennifer APM</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">계열사마다 다른 외주 CRM → 그룹 계열사 공통 ERP 표준 모델 · 디자인 템플릿 외주 견적 9,000만원 → 입사 1개월 자체 구축 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
+<div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 4개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 계열사마다 다른 외주 CRM → 그룹 계열사 공통 ERP 표준 모델</span></a><a class="ctl" href="#case-2"><span>02 디자인 템플릿 외주 견적 9,000만원 → 입사 1개월 자체 구축</span></a><a class="ctl" href="#case-3"><span>03 4개국 언어·시간대·통화를 국가마다 다시 만들지 않기</span></a><a class="ctl" href="#case-4"><span>04 현지 네트워크가 느린 법인을 위한 경량화</span></a></div></section><article class="case sec--glow" id="case-1">
+<div class="case__head"><span class="case__no">CASE 01 · 플랫폼설계</span><h3 class="case__title">계열사마다 다른 외주 CRM → 그룹 계열사 공통 ERP 표준 모델</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>그룹 계열사마다 서로 다른 외주사가 CRM 을 만들고 운영하고 있었습니다. 그룹 차원에서 영업·운영 현황과 지표를 모을 때마다 인터페이스가 맞지 않았고, 모기업은 개선을 계속 요청했습니다. 제가 만들던 SFA 는 국내 영업 지원용으로 시작했지만, 현업 요구에 따라 SAP 의 여러 모듈 데이터를 다루는 플랫폼으로 넓어지고 있었습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>시스템마다 데이터 모델과 연동 방식이 달라서 같은 영업·주문 데이터를 한 기준으로 모을 수 없었습니다. 그룹 ERP 통합을 기획하려면 기준점이 될 업무 모델과 인터페이스가 필요했습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>영업·고객·주문·정산을 DDD 경계로 나눠, 국가와 사업부가 늘어도 버티는 도메인 모델 설계</li><li>SAP MM·PP·SD·FI 인터페이스를 공통 연동 모듈로 표준화</li><li>한 부서가 아니라 여러 사업부·마케팅·임원의 요구를 함께 반영하고, 배포 전 인프라·보안 요구사항 점검</li><li>국내 배포 직후 들어온 해외 법인 요청에 다국어 구조로 대응해 4개국 배포</li><li>별도 예측 모델 프로젝트(DBA 1명과 2인 수행)의 축우 등급·D등급 고객 예측 결과를 플랫폼에 연결</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>2023년 말 그룹 ERP 통합 프로젝트에서 SAP 모듈 인터페이스의 완성도와 예측 모델 도입 성과를 인정받았습니다. 그 결과 2024.02 그룹 계열사 공통 ERP 표준 모델로 채택됐습니다. 그보다 앞선 2023.02 에는 한국저작권위원회에 저작권도 등록했습니다.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">배포 법인</div><div class="delta__val"><span class="to">4개국 (국내 별도)</span></div></div><div class="delta"><div class="delta__label">SAP 연동 모듈</div><div class="delta__val"><span class="to">MM·PP·SD·FI 4개</span></div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">2022.01</div><div class="tl__what"><b>착수</b><span>국내 영업 지원 시스템으로 기획, 해외 법인 제공도 목표에 포함</span></div></li><li><div class="tl__when">입사 1개월</div><div class="tl__what"><b>해외 법인용 디자인 템플릿 자체 구축</b><span>외주 견적 9,000만원 대신 직접 구축</span></div></li><li><div class="tl__when">국내 배포 직후</div><div class="tl__what"><b>해외 법인 사용 요청</b><span>베트남·필리핀 법인 요청에 다국어 구조로 대응, 이후 인도·미얀마까지 배포</span></div></li><li><div class="tl__when">2023.02</div><div class="tl__what"><b>저작권 등록</b><span>한국저작권위원회</span></div></li><li><div class="tl__when">2023년 말</div><div class="tl__what"><b>그룹 ERP 통합 프로젝트</b><span>SAP 4개 모듈 인터페이스 완성도와 예측 모델 도입 성과로 기준 모델 검토</span></div></li><li><div class="tl__when">2024.02</div><div class="tl__what"><b>표준 모델 채택</b><span>그룹 계열사 공통 ERP 표준 모델</span></div></li></ol><p class="sub-h">전/후 구조</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph BEFORE[&quot;전: 계열사별 외주 CRM&quot;]
+    X1[&quot;계열사 CRM&lt;br/&gt;외주사 A&quot;]
+    X2[&quot;계열사 CRM&lt;br/&gt;외주사 B&quot;]
+    X3[&quot;계열사 CRM&lt;br/&gt;외주사 C&quot;]
+    XG[&quot;그룹 지표 취합&lt;br/&gt;시스템마다 다른 연동&quot;]
+    X1 --&gt; XG
+    X2 --&gt; XG
+    X3 --&gt; XG
+  end
+  subgraph AFTER[&quot;후: 공통 SFA/CRM 플랫폼&quot;]
+    P[&quot;공통 플랫폼&lt;br/&gt;영업·고객·주문·정산&quot;]
+    IFM[&quot;공통 연동 모듈&quot;]
+    E[&quot;SAP MM·PP·SD·FI&quot;]
+    GR[&quot;그룹 계열사 공통&lt;br/&gt;ERP 표준 모델&quot;]
+    P --&gt; IFM
+    IFM --&gt; E
+    P --&gt; GR
+  end
+  XG -.-&gt;|&quot;표준화&quot;| P">flowchart LR
+  subgraph BEFORE[&quot;전: 계열사별 외주 CRM&quot;]
+    X1[&quot;계열사 CRM&lt;br/&gt;외주사 A&quot;]
+    X2[&quot;계열사 CRM&lt;br/&gt;외주사 B&quot;]
+    X3[&quot;계열사 CRM&lt;br/&gt;외주사 C&quot;]
+    XG[&quot;그룹 지표 취합&lt;br/&gt;시스템마다 다른 연동&quot;]
+    X1 --&gt; XG
+    X2 --&gt; XG
+    X3 --&gt; XG
+  end
+  subgraph AFTER[&quot;후: 공통 SFA/CRM 플랫폼&quot;]
+    P[&quot;공통 플랫폼&lt;br/&gt;영업·고객·주문·정산&quot;]
+    IFM[&quot;공통 연동 모듈&quot;]
+    E[&quot;SAP MM·PP·SD·FI&quot;]
+    GR[&quot;그룹 계열사 공통&lt;br/&gt;ERP 표준 모델&quot;]
+    P --&gt; IFM
+    IFM --&gt; E
+    P --&gt; GR
+  end
+  XG -.-&gt;|&quot;표준화&quot;| P</pre></div></figure><div class="lesson"><b>배운 점</b><p>한 부서의 요구를 구현하는 일과 여러 조직이 함께 쓰는 시스템을 만드는 일은 다르다는 것을 배웠습니다. 인터페이스를 먼저 표준화해 두면 기능과 법인이 늘어도 구조가 버팁니다.</p></div>
+
+</article>
+<article class="case" id="case-2">
+<div class="case__head"><span class="case__no">CASE 02 · 비용절감</span><h3 class="case__title">디자인 템플릿 외주 견적 9,000만원 → 입사 1개월 자체 구축</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>해외 법인용 SFA 의 전용 디자인 템플릿을 외주사에 요청했더니 9,000만원(VAT 별도) 견적이 나왔습니다. 시스템 전체도 외주로 진행할 예정이었습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>외주로 가면 장기적으로 유지보수 비용이 늘고, 시스템을 우리가 통제하기 어려워진다고 판단했습니다. 해외 법인 확장과 SAP 연동을 계속 이어 가려면 구조를 직접 쥐고 있어야 했습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>디자인 템플릿을 포함해 시스템 전체를 자체 구축하는 방향 제안</li><li>입사 1개월 만에 해외 법인용 디자인 템플릿 직접 구축</li><li>다국어 지원(Spring Message·MutationObserver)을 설계해 해외 법인 배포에 대비</li><li>해외 SFA 구축도 외주 없이 같은 플랫폼으로 진행해 4개국 법인 배포</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>디자인 템플릿 견적 9,000만원을 전액 절감했습니다. 해외 SFA 구축 외주 비용 6,000만원도 추가로 줄여, 외주 견적 대비 모두 1억 5,000만원을 절감했습니다.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">해외 법인용 디자인 템플릿</div><div class="delta__val"><span class="from">외주 견적 9,000만원 (VAT 별도)</span><span class="arrow">→</span><span class="to">자체 구축 (입사 1개월)</span></div></div><div class="delta"><div class="delta__label">해외 SFA 구축</div><div class="delta__val"><span class="from">외주 6,000만원</span><span class="arrow">→</span><span class="to">자체 구축</span></div></div><div class="delta"><div class="delta__label">절감 합계</div><div class="delta__val"><span class="to">1억 5,000만원</span></div></div></div><p class="sub-h">전/후 구조</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph BEFORE[&quot;전: 외주 기반 계획&quot;]
+    B1[&quot;해외 법인용&lt;br/&gt;디자인 템플릿&quot;] --&gt; B2[&quot;외주 견적&lt;br/&gt;9,000만원 (VAT 별도)&quot;]
+    B2 --&gt; B3[&quot;해외 SFA 구축도&lt;br/&gt;외주 진행 예정&quot;]
+  end
+  subgraph AFTER[&quot;후: 자체 구축&quot;]
+    A1[&quot;디자인 템플릿&lt;br/&gt;입사 1개월 직접 구축&quot;] --&gt; A2[&quot;다국어 지원 설계&lt;br/&gt;Spring Message&quot;]
+    A2 --&gt; A3[&quot;4개국 법인 배포&lt;br/&gt;해외 SFA 외주 6,000만원 절감&quot;]
+  end
+  B3 -.-&gt;|&quot;자체 구축 제안&quot;| A1">flowchart LR
+  subgraph BEFORE[&quot;전: 외주 기반 계획&quot;]
+    B1[&quot;해외 법인용&lt;br/&gt;디자인 템플릿&quot;] --&gt; B2[&quot;외주 견적&lt;br/&gt;9,000만원 (VAT 별도)&quot;]
+    B2 --&gt; B3[&quot;해외 SFA 구축도&lt;br/&gt;외주 진행 예정&quot;]
+  end
+  subgraph AFTER[&quot;후: 자체 구축&quot;]
+    A1[&quot;디자인 템플릿&lt;br/&gt;입사 1개월 직접 구축&quot;] --&gt; A2[&quot;다국어 지원 설계&lt;br/&gt;Spring Message&quot;]
+    A2 --&gt; A3[&quot;4개국 법인 배포&lt;br/&gt;해외 SFA 외주 6,000만원 절감&quot;]
+  end
+  B3 -.-&gt;|&quot;자체 구축 제안&quot;| A1</pre></div></figure><div class="lesson"><b>배운 점</b><p>비용을 줄인 것보다 구조를 직접 쥐고 있었다는 점이 더 컸습니다. 그 덕분에 해외 법인 확장, SAP 연동, 그룹 표준 채택까지 이어 갈 수 있었습니다. 이후 모든 프로젝트에서 &quot;단순 구현이 아닌 구조 설계&quot;를 기준으로 삼게 됐습니다.</p></div>
+
+</article>
+<article class="case sec--glow sec--flip" id="case-3">
+<div class="case__head"><span class="case__no">CASE 03 · 현지대응</span><h3 class="case__title">4개국 언어·시간대·통화를 국가마다 다시 만들지 않기 <span class="badge-draft">초안</span></h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>국내 배포 직후 베트남·필리핀 법인에서 사용 요청이 들어왔고, 이후 인도·미얀마도 같은 플랫폼을 쓰게 됐습니다. 법인마다 언어·시간대·통화가 다릅니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>국가별 차이를 기능 코드 안의 분기로 처리하면, 법인이 늘 때마다 영업·주문·정산 기능을 모두 고쳐야 합니다. 화면 일부는 나중에 동적으로 그려지기 때문에 서버 문구만 바꿔서는 번역이 빠질 수도 있습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>국가별 Timezone·통화·언어셋을 공통 어댑터 한 곳으로 모음</li><li>서버 문구는 Spring Message 로 언어별 메시지 관리</li><li>화면에서 나중에 그려지는 요소는 MutationObserver 로 감지해 문구 적용</li><li>4개국 법인 데이터를 논리·물리로 격리</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>국내 배포 직후 들어온 해외 법인 요청에 다국어 SFA 를 빠르게 제공했고, 베트남·필리핀·인도·미얀마 법인에 같은 플랫폼으로 배포했습니다.</p></div>
+</div>
+<p class="sub-h">다국어 처리 흐름(초안)</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  REQ[&quot;요청&lt;br/&gt;법인·언어 정보&quot;] --&gt; SM[&quot;서버 문구&lt;br/&gt;Spring Message&quot;]
+  SM --&gt; MSG[&quot;언어별 메시지 파일&quot;]
+  REQ --&gt; PG[&quot;화면 렌더링&lt;br/&gt;JSP · 공통 템플릿&quot;]
+  MSG --&gt; PG
+  PG --&gt; MO[&quot;나중에 그려지는 요소&lt;br/&gt;MutationObserver 감지&quot;]
+  MO --&gt; TR[&quot;문구 치환&quot;]">flowchart LR
+  REQ[&quot;요청&lt;br/&gt;법인·언어 정보&quot;] --&gt; SM[&quot;서버 문구&lt;br/&gt;Spring Message&quot;]
+  SM --&gt; MSG[&quot;언어별 메시지 파일&quot;]
+  REQ --&gt; PG[&quot;화면 렌더링&lt;br/&gt;JSP · 공통 템플릿&quot;]
+  MSG --&gt; PG
+  PG --&gt; MO[&quot;나중에 그려지는 요소&lt;br/&gt;MutationObserver 감지&quot;]
+  MO --&gt; TR[&quot;문구 치환&quot;]</pre></div></figure><div class="lesson"><b>배운 점</b><p>국가 간 차이는 기능이 아니라 설정 문제로 다뤄야 확장 비용이 줄어든다는 것을 배웠습니다.</p></div>
+<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+</article>
+<article class="case" id="case-4">
+<div class="case__head"><span class="case__no">CASE 04 · 현지대응</span><h3 class="case__title">현지 네트워크가 느린 법인을 위한 경량화 <span class="badge-draft">초안</span></h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>해외 법인 일부는 현지 네트워크 환경이 좋지 않았습니다. 국내 기준으로 만든 화면과 SAP 실시간 조회를 그대로 쓰면 느리게 동작할 수 있었습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>화면을 열 때마다 리소스를 새로 받고 재고·여신 같은 SAP 조회를 화면에서 여러 번 주고받으면, 왕복할 때마다 지연이 쌓입니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>모든 법인이 같은 디자인 템플릿을 써서 정적 리소스를 캐시로 재사용</li><li>목록은 TreeGrid 로 필요한 만큼만 나눠 불러오기</li><li>재고·여신 같은 SAP 조회는 서버의 공통 연동 모듈에서 모아 한 번에 응답</li><li>무상태 토큰 인증이라 연결이 끊겨도 세션을 복구하지 않고 다시 요청</li><li>Jennifer APM 으로 법인별 응답 시간 관찰</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>4개국 법인에 같은 플랫폼을 배포해 운영했습니다.</p></div>
+</div>
+<div class="lesson"><b>배운 점</b><p>현지 환경을 국내 기준으로 가정하지 말고, 설계 단계에서 왕복 횟수와 화면 무게를 줄이는 것을 기본으로 삼아야 한다는 것을 배웠습니다.</p></div>
+<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+</article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>한 부서의 요구를 구현하는 일과 여러 조직이 함께 쓰는 시스템을 만드는 일은 다르다는 것을 배웠습니다. 인터페이스를 먼저 표준화해 두면 기능과 법인이 늘어도 구조가 버팁니다.</p><p>비용을 줄인 것보다 구조를 직접 쥐고 있었다는 점이 더 컸습니다. 그 덕분에 해외 법인 확장, SAP 연동, 그룹 표준 채택까지 이어 갈 수 있었습니다. 이후 모든 프로젝트에서 &quot;단순 구현이 아닌 구조 설계&quot;를 기준으로 삼게 됐습니다.</p><p>국가 간 차이는 기능이 아니라 설정 문제로 다뤄야 확장 비용이 줄어든다는 것을 배웠습니다.</p></section></div>
+<nav class="pager" aria-label="다른 프로젝트"><a href="payment-msa.html"><small>← 이전 프로젝트</small><b>제약사 이커머스 몰 결제 시스템 MSA 전환</b></a><a class="next" href="devops-observability.html"><small>다음 프로젝트 →</small><b>전사 CI/CD·SSO·통합 로그 관제 플랫폼</b></a></nav>
+<footer class="footer"><p>황병준 · 백엔드·데이터 엔지니어 · <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p><small>디자인 바탕: <a href="https://once-ui.com" target="_blank" rel="noopener">Once UI</a> Magic Portfolio · 도표는 직접 그린 개념도입니다</small></footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" defer></script>
+<script src="../assets/js/site.js?v=fdaea7ac" defer></script>
+</body>
+</html>

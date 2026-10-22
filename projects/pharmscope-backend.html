@@ -3,107 +3,529 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>멀티테넌트 데이터 분석 SaaS 백엔드 · 황병준</title>
-<meta name="description" content="pharmscope 백엔드: 인증·테넌트 격리·도메인 모듈 설계와 공개 전 보안 감사">
-<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<title>멀티테넌트 의약품 유통 데이터 분석 SaaS 백엔드 (pharmscope) — 황병준 포트폴리오</title>
+<meta name="description" content="여러 제약사와 사내 관리자가 한 백엔드·DB 를 함께 쓰는 의약품 유통 데이터 분석 SaaS pharmscope 의 백엔드를 Kotlin·Spring WebFlux 로 설계·구현했다. 자체 발급 JWT 인증·세션, 회사 단위 테넌트 격리, 배포 단위를 늘리지 않는 모듈러 모놀리스, SSE·Kafka 실시간 알림을 만들었다. 운영 공개 전 AI 멀티에이전트 감사로 고위험 2건 포함 10건의 결함을 고쳤고, 지금은 상용 서비스로 운영 중이다.">
+<meta name="theme-color" content="#15161a">
+<meta property="og:title" content="멀티테넌트 의약품 유통 데이터 분석 SaaS 백엔드 (pharmscope) — 황병준 포트폴리오">
+<meta property="og:description" content="여러 제약사와 사내 관리자가 한 백엔드·DB 를 함께 쓰는 의약품 유통 데이터 분석 SaaS pharmscope 의 백엔드를 Kotlin·Spring WebFlux 로 설계·구현했다. 자체 발급 JWT 인증·세션, 회사 단위 테넌트 격리, 배포 단위를 늘리지 않는 모듈러 모놀리스, SSE·Kafka 실시간 알림을 만들었다. 운영 공개 전 AI 멀티에이전트 감사로 고위험 2건 포함 10건의 결함을 고쳤고, 지금은 상용 서비스로 운영 중이다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/site.css?v=a01858cc">
 </head>
 <body>
-<header class="site-header">
-  <div class="wrap">
-    <a class="brand" href="../index.html">황병준<span>Byeongjun Hwang</span></a>
-    <nav class="nav" aria-label="주 메뉴">
-      <a href="../index.html">홈</a>
-      <a href="../about.html">소개</a>
-      <a href="../experience.html">경력</a>
-      <a href="../projects.html">프로젝트</a>
-      <a href="../ai.html">AI로 일하는 방식</a>
-      <a href="../skills.html">기술</a>
-    </nav>
-    <div>
-      <button class="theme-btn" type="button" aria-label="밝게/어둡게 전환">◐</button>
-      <button class="menu-btn" type="button" aria-expanded="false" aria-label="메뉴 열기">메뉴</button>
-    </div>
-  </div>
-</header>
+<a class="skip" href="#main">본문 바로가기</a>
+<nav class="nav" aria-label="주 메뉴"><a class="nav__item" href="../index.html" aria-label="홈"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.99778 19.3275V14.3275H13.9978V19.3275C13.9978 19.8775 14.4478 20.3275 14.9978 20.3275H17.9978C18.5478 20.3275 18.9978 19.8775 18.9978 19.3275V12.3275H20.6978C21.1578 12.3275 21.3778 11.7575 21.0278 11.4575L12.6678 3.9275C12.2878 3.5875 11.7078 3.5875 11.3278 3.9275L2.96778 11.4575C2.62778 11.7575 2.83778 12.3275 3.29778 12.3275H4.99778V19.3275C4.99778 19.8775 5.44778 20.3275 5.99778 20.3275H8.99778C9.54778 20.3275 9.99778 19.8775 9.99778 19.3275Z"/></svg><span class="nav__tip">홈</span></a><a class="nav__item" href="../about.html" aria-label="소개"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1c0 .55.45 1 1 1h14c.55 0 1-.45 1-1v-1c0-2.66-5.33-4-8-4z"/></svg><span class="nav__tip">소개</span></a><a class="nav__item" href="../experience.html" aria-label="경력"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg><span class="nav__tip">경력</span></a><a class="nav__item" href="../projects.html" aria-current="page" aria-label="프로젝트"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.0142 17.3073L17.3042 18.0173C17.1042 18.2173 16.7942 18.2173 16.5942 18.0173C16.3942 17.8173 16.3942 17.5073 16.5942 17.3073L17.3042 16.5973L15.3642 14.6573L14.6542 15.3673C14.4542 15.5673 14.1442 15.5673 13.9442 15.3673C13.7442 15.1673 13.7442 14.8573 13.9442 14.6573L14.6542 13.9473L12.7142 12.0073L12.0042 12.7173C11.8042 12.9173 11.4942 12.9173 11.2942 12.7173C11.0942 12.5173 11.0942 12.2073 11.2942 12.0073L12.0042 11.2973L10.0542 9.34731L9.34423 10.0573C9.14423 10.2573 8.83423 10.2573 8.63423 10.0573C8.43423 9.85731 8.43423 9.54731 8.63423 9.34731L9.34423 8.63731L7.40423 6.69731L6.69423 7.40731C6.49423 7.60731 6.18423 7.60731 5.98423 7.40731C5.78423 7.20731 5.78423 6.89731 5.98423 6.69731L6.69423 5.98731L5.20423 4.49731C4.89423 4.18731 4.35423 4.40731 4.35423 4.85731V17.6473C4.35423 18.7473 5.25423 19.6473 6.35423 19.6473H19.1442C19.5942 19.6473 19.8142 19.1073 19.4942 18.7973L18.0142 17.3073ZM7.35423 15.6473V10.8873L13.1142 16.6473H8.35423C7.80423 16.6473 7.35423 16.1973 7.35423 15.6473Z"/></svg><span class="nav__tip">프로젝트</span></a><a class="nav__item" href="../ai.html" aria-label="AI로 일하는 방식"><svg class="" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M14.2206 28C13.7539 28 13.3939 27.5867 13.4606 27.12L14.6606 18.6667H9.99395C8.82062 18.6667 9.55395 17.6667 9.58062 17.6267C11.2606 14.6533 13.7806 10.2533 17.114 4.38667C17.2473 4.14667 17.514 4 17.7806 4C18.2473 4 18.6073 4.41333 18.5406 4.88L17.3406 13.3333H22.0206C22.554 13.3333 22.8473 13.5867 22.554 14.2133C18.1673 21.8667 15.6206 26.3333 14.8873 27.6133C14.754 27.8533 14.5006 28 14.2206 28Z"/></svg><span class="nav__tip">AI로 일하는 방식</span></a><a class="nav__item" href="../skills.html" aria-label="기술"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.61 18.99l-9.08-9.08c.93-2.34.45-5.1-1.44-7C9.79.61 6.21.4 3.66 2.26L7.5 6.11 6.08 7.52 2.25 3.69C.39 6.23.6 9.82 2.9 12.11c1.86 1.86 4.57 2.35 6.89 1.48l9.11 9.11c.39.39 1.02.39 1.41 0l2.3-2.3c.4-.38.4-1.01 0-1.41z"/></svg><span class="nav__tip">기술</span></a><div class="nav__div" aria-hidden="true"><span></span></div><a class="nav__item" href="mailto:hbj3809@naver.com" aria-label="이메일 보내기"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg><span class="nav__tip">hbj3809@naver.com</span></a></nav>
+<main id="main" class="page">
+<header class="intro"><p class="intro__eyebrow">알스솔루션 프로젝트</p><h1>멀티테넌트 의약품 유통 데이터 분석 SaaS 백엔드 (pharmscope)</h1><div class="intro__text"><p>여러 제약사가 한 서비스·DB 를 함께 쓰는 분석 SaaS 의 인증·테넌트 격리·모듈 구조·실시간 알림 설계·구현</p></div><div class="intro__meta"><span><b>알스솔루션</b></span><span>2026.05 ~ 현재</span><span>제약사 고객 대상 상용 서비스 운영 중</span><span>백엔드</span></div></header>
+<div class="controls" role="tablist" aria-label="프로젝트 보기">
+<button class="ctl" type="button" role="tab" id="tab-detail" data-panel="detail" aria-controls="panel-detail" aria-selected="true"><span>상세</span></button>
+<button class="ctl" type="button" role="tab" id="tab-problems" data-panel="problems" aria-controls="panel-problems" aria-selected="false"><span>문제해결 <span class="count">4</span></span></button>
+<div class="controls__end"><a class="ctl" href="../projects.html?axis=backend"><span>백엔드 프로젝트 목록 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div>
+</div>
+<div class="card hero-card"><div class="card__media"><div class="cover cover--backend"><p class="cover__title">멀티테넌트 SaaS 백엔드</p><p class="cover__sub">여러 제약사가 한 서비스·DB 를 함께 쓰는 분석 SaaS 의 인증·테넌트 격리·모듈 구조·실시간 알림 설계·구현</p></div></div></div>
+<div class="panel" id="panel-detail" role="tabpanel" aria-labelledby="tab-detail"><div class="overview">
+<div class="overview__side"><div class="stat"><p class="stat__value">109개</p><p class="stat__label">HTTP 엔드포인트</p><p class="stat__note">신규 모듈 4개 기준, 2026-10 정적 계수(Deprecated 포함)</p></div><div class="stat"><p class="stat__value">52→1,039개</p><p class="stat__label">자동 테스트</p><p class="stat__note">2026.06→2026.09, 레포 전체(매출 모듈 포함)</p></div><div class="stat"><p class="stat__value">10건</p><p class="stat__label">공개 전 확정 결함 수정</p><p class="stat__note">고위험 2건 포함, 멀티에이전트 감사</p></div><div class="stat"><p class="stat__value">상용 운영</p><p class="stat__label">제약사 고객 대상 서비스</p><p class="stat__note">CBT 공개 뒤 상용 전환</p></div>
+<dl class="facts"><div><dt>회사</dt><dd>알스솔루션 · Engineering팀 · 선임연구원</dd></div><div><dt>기간</dt><dd>2026.05 ~ 현재</dd></div><div><dt>역할</dt><dd>백엔드 설계·구현 전담 (요구사항·화면 기획은 기획팀, 화면 구현은 FE)</dd></div><div><dt>팀</dt><dd>스타트업 개발팀 — 기획팀·FE 와 협업하며 백엔드 담당</dd></div><div><dt>상태</dt><dd>제약사 고객 대상 상용 서비스 운영 중</dd></div></dl></div>
+<div class="overview__body"><h2>프로젝트 개요<br><span class="dim">무엇을, 왜 만들었나</span></h2><p class="overview__lead">여러 제약사와 사내 관리자가 한 백엔드·DB 를 함께 쓰는 의약품 유통 데이터 분석 SaaS pharmscope 의 백엔드를 Kotlin·Spring WebFlux 로 설계·구현했다. 자체 발급 JWT 인증·세션, 회사 단위 테넌트 격리, 배포 단위를 늘리지 않는 모듈러 모놀리스, SSE·Kafka 실시간 알림을 만들었다. 운영 공개 전 AI 멀티에이전트 감사로 고위험 2건 포함 10건의 결함을 고쳤고, 지금은 상용 서비스로 운영 중이다.</p><p class="overview__more">백엔드 설계·구현 전담 (요구사항·화면 기획은 기획팀, 화면 구현은 FE) · 스타트업 개발팀 — 기획팀·FE 와 협업하며 백엔드 담당</p>
+<div><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 사례 4개 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div></div>
+</div><section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">개요</h2><div class="sec__lead"><p>pharmscope 는 국내 대형 의약품 유통사의 매출 데이터를 제약사가 자기 제품 기준으로 분석하는 SaaS 다. 여러 제약사와 사내 관리자가 한 백엔드·DB 를 함께 쓰기 때문에, 다른 회사의 데이터가 한 번이라도 보이면 서비스가 성립하지 않는다. 2026.05 에 인증·세션을 먼저 만들고, 그 위에 운영 공개 전까지 기능정의서의 계약사 관리·계정 관리·보안 로그·운영관리(공지·FAQ·1:1 문의)·실시간 알림을 갖춰야 했다.</p></div></div>
+<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>기간: 2026.05 인증 설계 착수 → 2026.06~09 기능 구축 → 2026.09 CBT 외부 공개 → 상용 운영</li><li>목표: 계약 상태·IP·세션을 서버에서 보장하는 인증, 회사 단위 데이터 격리, 배포 단위를 늘리지 않는 확장 구조</li><li>내 역할: 백엔드 설계·구현 전담(Claude Code 활용). 범위·모듈 구조·정책 선택지는 에이전트 질의에 답해 직접 확정</li><li>다른 사람 몫: 요구사항·화면 기획은 기획팀, 화면 구현은 FE. 쿠키 방식은 FE 와 합의, 역할 4종·로그인 잠금 시간·중복 로그인 최종 정책은 기획 확정</li><li>범위 밖: 기능정의서의 약품 승인 기능은 아직 착수 전</li><li>팀: 스타트업 개발팀(기획팀·FE 와 협업)</li><li>상태: 제약사 고객 대상 상용 서비스 운영 중</li></ul></div></div>
 
-<main class="wrap">
-  <p class="eyebrow"><a href="../projects.html">프로젝트</a> · 백엔드</p>
-  <h1>멀티테넌트 데이터 분석 SaaS 백엔드</h1>
-  <p class="lead">여러 제약사가 한 서비스와 DB 를 함께 쓰는 의약품 유통 데이터 분석 서비스 pharmscope 의 백엔드를 처음부터 설계·구현했습니다.</p>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">아키텍처<span class="dim">단일 배포 모듈러 모놀리스</span></h2><div class="sec__lead"><p>배포 단위는 하나로 두고 기능을 Gradle 모듈로 나눴다. 인증이 필요한 요청은 인증 필터에서 토큰 검증을 받고, 회사 식별자는 토큰 클레임으로만 서비스에 전달된다. 기능 모듈은 공통 모듈(응답 형식·에러 코드·보안 부품·OpenAPI)과 인증·식별 코어에만 기대고, 새 모듈은 의존 한 줄을 추가하면 자동 등록된다. 리액티브 런타임이라 실행 중에는 JDBC 를 쓰지 않고(Flyway 기동 1회만 예외), 비밀번호 해시·토큰 서명 같은 CPU 작업은 별도 스레드로 격리했다. 이후 매출 분석 모듈도 같은 인증·격리 위에 붙었다(분석 API·성능 튜닝은 별도 프로젝트에서 다룬다).</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph U[&quot;사용자 화면&quot;]
+    CSPA[&quot;고객사 화면&lt;br/&gt;SPA&quot;]
+    ASPA[&quot;관리자 화면&lt;br/&gt;SPA&quot;]
+  end
+  GW[&quot;API 게이트웨이&lt;br/&gt;경로 차단·HTTPS·요청 제한&quot;]
+  subgraph APP[&quot;pharmscope 백엔드 · 단일 배포 단위&quot;]
+    FIL[&quot;인증 필터&lt;br/&gt;토큰 검증·자동 회전·출처 확인&quot;]
+    CORE[&quot;인증·식별 코어&lt;br/&gt;로그인 체인·세션·감사 기록&quot;]
+    ADM[&quot;관리자 모듈&lt;br/&gt;계약사·계정·보안 로그&quot;]
+    CLI[&quot;고객사 모듈&lt;br/&gt;소속 계정 셀프 관리&quot;]
+    OPS[&quot;운영관리 모듈&lt;br/&gt;공지·FAQ·1:1 문의&quot;]
+    RT[&quot;실시간 알림 모듈&lt;br/&gt;SSE·알림함&quot;]
+    SAL[&quot;매출 분석 모듈&lt;br/&gt;분석 API&quot;]
+  end
+  PG[(&quot;서비스 DB&lt;br/&gt;PostgreSQL·Flyway&quot;)]
+  SDB[(&quot;매출 분석 DB&lt;br/&gt;PostgreSQL&quot;)]
+  RD[(&quot;Redis&lt;br/&gt;블랙리스트·세션·회전 락&quot;)]
+  KF[&quot;Kafka&lt;br/&gt;문의 이벤트·알림 전파&quot;]
+  OBJ[&quot;객체 저장소&lt;br/&gt;첨부 파일&quot;]
+  ML[&quot;메일 발송&lt;br/&gt;초대·답변 안내&quot;]
+  CSPA --&gt; GW
+  ASPA --&gt; GW
+  GW --&gt; FIL
+  FIL --&gt; RD
+  FIL --&gt; CORE
+  FIL --&gt; ADM
+  FIL --&gt; CLI
+  FIL --&gt; OPS
+  FIL --&gt; RT
+  FIL --&gt; SAL
+  CORE --&gt; RD
+  CORE --&gt; PG
+  CORE --&gt;|&quot;초대 메일&quot;| ML
+  ADM --&gt; PG
+  ADM --&gt; OBJ
+  CLI --&gt; PG
+  OPS --&gt;|&quot;문의 접수 이벤트&quot;| KF
+  KF --&gt;|&quot;멱등 저장&quot;| OPS
+  OPS --&gt;|&quot;답변 안내&quot;| ML
+  RT --&gt;|&quot;알림 발행&quot;| KF
+  KF --&gt;|&quot;인스턴스별 소비&quot;| RT
+  RT --&gt; PG
+  SAL --&gt; SDB">flowchart LR
+  subgraph U[&quot;사용자 화면&quot;]
+    CSPA[&quot;고객사 화면&lt;br/&gt;SPA&quot;]
+    ASPA[&quot;관리자 화면&lt;br/&gt;SPA&quot;]
+  end
+  GW[&quot;API 게이트웨이&lt;br/&gt;경로 차단·HTTPS·요청 제한&quot;]
+  subgraph APP[&quot;pharmscope 백엔드 · 단일 배포 단위&quot;]
+    FIL[&quot;인증 필터&lt;br/&gt;토큰 검증·자동 회전·출처 확인&quot;]
+    CORE[&quot;인증·식별 코어&lt;br/&gt;로그인 체인·세션·감사 기록&quot;]
+    ADM[&quot;관리자 모듈&lt;br/&gt;계약사·계정·보안 로그&quot;]
+    CLI[&quot;고객사 모듈&lt;br/&gt;소속 계정 셀프 관리&quot;]
+    OPS[&quot;운영관리 모듈&lt;br/&gt;공지·FAQ·1:1 문의&quot;]
+    RT[&quot;실시간 알림 모듈&lt;br/&gt;SSE·알림함&quot;]
+    SAL[&quot;매출 분석 모듈&lt;br/&gt;분석 API&quot;]
+  end
+  PG[(&quot;서비스 DB&lt;br/&gt;PostgreSQL·Flyway&quot;)]
+  SDB[(&quot;매출 분석 DB&lt;br/&gt;PostgreSQL&quot;)]
+  RD[(&quot;Redis&lt;br/&gt;블랙리스트·세션·회전 락&quot;)]
+  KF[&quot;Kafka&lt;br/&gt;문의 이벤트·알림 전파&quot;]
+  OBJ[&quot;객체 저장소&lt;br/&gt;첨부 파일&quot;]
+  ML[&quot;메일 발송&lt;br/&gt;초대·답변 안내&quot;]
+  CSPA --&gt; GW
+  ASPA --&gt; GW
+  GW --&gt; FIL
+  FIL --&gt; RD
+  FIL --&gt; CORE
+  FIL --&gt; ADM
+  FIL --&gt; CLI
+  FIL --&gt; OPS
+  FIL --&gt; RT
+  FIL --&gt; SAL
+  CORE --&gt; RD
+  CORE --&gt; PG
+  CORE --&gt;|&quot;초대 메일&quot;| ML
+  ADM --&gt; PG
+  ADM --&gt; OBJ
+  CLI --&gt; PG
+  OPS --&gt;|&quot;문의 접수 이벤트&quot;| KF
+  KF --&gt;|&quot;멱등 저장&quot;| OPS
+  OPS --&gt;|&quot;답변 안내&quot;| ML
+  RT --&gt;|&quot;알림 발행&quot;| KF
+  KF --&gt;|&quot;인스턴스별 소비&quot;| RT
+  RT --&gt; PG
+  SAL --&gt; SDB</pre></div><figcaption>직접 그린 개념도. 인스턴스 수·호스트 이름·토픽 이름은 생략</figcaption></figure></div>
 
-  <div class="case">
-    <div>
-      <section>
-        <h2>문제</h2>
-        <p>인증만 있던 상태에서 공개 전까지 계약사 관리·운영관리(공지·FAQ·문의)·보안 로그·계정 관리·실시간 알림을 갖춰야 했습니다. 고객사들이 한 인스턴스를 공유하므로 다른 회사의 데이터가 보이는 순간 서비스가 끝납니다(OWASP API 1위, 객체 수준 권한 우회).</p>
-      </section>
-      <section>
-        <h2>설계</h2>
-        <ul class="points">
-          <li><b>인증</b>: access 토큰은 메모리, refresh 는 HTTP-only 쿠키로 나눈 자체 JWT. 7단계 로그인 체인(역할·계약 상태·IP 허용 목록·실패 잠금), refresh 회전·재사용 탐지·블랙리스트·계정당 1세션.</li>
-          <li><b>테넌트 격리</b>: 회사 식별자는 요청 값이 아니라 토큰 클레임에서만 받는다. 리소스 API 마다 "다른 회사로 접근하면 403" 통합 시험을 넣도록 규칙화했다.</li>
-          <li><b>모듈러 모놀리스</b>: 배포 단위는 하나로 두고 도메인 모듈(어드민·고객·운영·실시간 알림)을 추가하는 구조. 이후 매출 분석 모듈도 같은 방식으로 붙었다.</li>
-          <li><b>실시간 알림</b>: 여러 파드에 흩어진 SSE 연결로 전하기 위해 DB inbox 에 먼저 저장하고 Kafka 로 발행, 파드마다 다른 consumer group 이 자기 연결에 push.</li>
-        </ul>
-        <div class="diagram" role="img" aria-label="요청이 게이트웨이와 인증 필터를 거쳐 도메인 모듈로 가고, 회사 식별자는 토큰에서만 읽는 구조">
-          <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg">
-            <defs><marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="label-soft"/></marker></defs>
-            <rect class="box" x="10" y="70" width="110" height="50" rx="10"/><text x="65" y="100" font-size="13" text-anchor="middle">고객사 SPA</text>
-            <path class="arrow" d="M122 95 L172 95" stroke-width="1.5" marker-end="url(#a1)"/>
-            <rect class="box" x="176" y="70" width="120" height="50" rx="10"/><text x="236" y="92" font-size="13" text-anchor="middle">게이트웨이</text><text x="236" y="110" font-size="11" text-anchor="middle" class="label-soft">same-origin /api</text>
-            <path class="arrow" d="M298 95 L348 95" stroke-width="1.5" marker-end="url(#a1)"/>
-            <rect class="box-accent" x="352" y="60" width="150" height="70" rx="10"/><text x="427" y="88" font-size="13" font-weight="700" text-anchor="middle">인증 필터</text><text x="427" y="108" font-size="11" text-anchor="middle" class="label-soft">회사 = 토큰 클레임</text>
-            <path class="arrow" d="M504 80 L554 40" stroke-width="1.5" marker-end="url(#a1)"/>
-            <path class="arrow" d="M504 95 L554 95" stroke-width="1.5" marker-end="url(#a1)"/>
-            <path class="arrow" d="M504 110 L554 150" stroke-width="1.5" marker-end="url(#a1)"/>
-            <rect class="box" x="558" y="18" width="150" height="40" rx="8"/><text x="633" y="43" font-size="12" text-anchor="middle">운영·계정 모듈</text>
-            <rect class="box" x="558" y="75" width="150" height="40" rx="8"/><text x="633" y="100" font-size="12" text-anchor="middle">매출 분석 모듈</text>
-            <rect class="box" x="558" y="132" width="150" height="40" rx="8"/><text x="633" y="157" font-size="12" text-anchor="middle">실시간 알림(SSE)</text>
-          </svg>
-        </div>
-      </section>
-      <section>
-        <h2>결함을 먼저 찾기</h2>
-        <p>공개 직전, AI 에이전트로 10개 축(테넌트 격리·인젝션·파일 업로드·토큰·세션 등)을 병렬로 찾고 발견마다 다른 에이전트가 반박하는 감사를 돌려, 살아남은 고위험 2건·중위험 8건만 시험과 함께 고쳤습니다. 서명키가 주입되지 않으면 기본값으로 조용히 뜨던 문제는 기동 실패로 바꿨고, 일반 관리자가 상위 관리자 계정을 건드릴 수 있던 경로를 막았습니다.</p>
-        <div class="callout">QA 재검증에서는 "삭제한 계정의 이메일 재사용"을 넣는 과정에서, 재발송 경로가 계정 번호로 찾은 뒤 이메일로 다시 해석하는 바람에 다른 회사 신규 계정의 비밀번호를 리셋할 수 있는 교차 오조작을 공개 전에 찾았습니다. 신원의 기준을 계정 번호로 고정하고 같은 유형을 전수 점검했습니다.</div>
-      </section>
-      <section>
-        <h2>장애 원인 규명</h2>
-        <p>자리를 비웠다 돌아오면 모든 탭이 로그아웃되던 문제는, 만료 직후 여러 요청이 같은 1회용 refresh 토큰으로 동시에 회전하다 재사용 공격으로 오판된 레이스였습니다. 사용자별 분산 락과 직전 토큰의 짧은 유예 재응답으로 풀고, 동시 갱신 4건이 같은 토큰으로 모이는 회귀 시험으로 고정했습니다. 새로고침 복원 기능을 넣을 때는 AI 적대 리뷰가 "이 기능이 토큰 발급 통로가 된다"는 치명 결함을 찾아 병합 전에 막았습니다.</p>
-      </section>
-      <section>
-        <h2>결과</h2>
-        <table class="before-after">
-          <thead><tr><th>지표</th><th>값</th></tr></thead>
-          <tbody>
-            <tr><td>서비스</td><td class="after">제약사 고객 대상 상용 운영</td></tr>
-            <tr><td>신규 도메인 모듈 · HTTP 엔드포인트</td><td>4개 · 109개</td></tr>
-            <tr><td>자동 테스트</td><td>52개(2026.06) → 1,039개(2026.09)</td></tr>
-            <tr><td>공개 전 확정 결함 수정</td><td>고위험 2 · 중위험 8</td></tr>
-          </tbody>
-        </table>
-      </section>
-    </div>
-    <aside class="case-aside card">
-      <dl>
-        <dt>기간</dt><dd>2026.05 ~ 현재</dd>
-        <dt>회사</dt><dd>알스솔루션</dd>
-        <dt>역할</dt><dd>백엔드 설계·구현 전담 (기획·화면은 기획팀·FE)</dd>
-        <dt>기술</dt><dd>Kotlin · Coroutines · Spring WebFlux · R2DBC · PostgreSQL · Redis · Kafka · SSE · Testcontainers</dd>
-        <dt>AI 활용</dt><dd>Claude Code 로 구현, 멀티에이전트 감사·적대 리뷰</dd>
-      </dl>
-    </aside>
-  </div>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">핵심 흐름 ① 로그인과 토큰 자동 회전</h2><div class="sec__lead"><p>로그인은 실패 잠금 확인 → 아이디·비밀번호와 역할 → 계정·회사·계약 상태 → IP 허용 목록(고객사 로그인) → 임시 비밀번호 재설정 강제를 차례로 통과해야 토큰을 받는다(토큰 발급까지 7단계 체인). 관리자와 고객사는 로그인 경로부터 나뉘고, 다른 쪽 계정으로 시도하면 계정 존재 여부를 드러내지 않는 같은 오류를 돌려준다. access 가 만료되면 인증 필터가 refresh 쿠키로 회전해 새 access 를 응답 헤더로 내려주므로, 프론트는 갱신 API 를 따로 부르지 않고 헤더의 토큰만 바꾼다. 회전할 때도 계정·계약 상태를 다시 확인해, 이미 발급된 토큰이라도 계약이 끝나면 다음 회전에서 막힌다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="sequenceDiagram
+  participant B as 브라우저 SPA
+  participant F as 인증 필터
+  participant L as 로그인 서비스
+  participant R as Redis
+  participant D as 서비스 DB
+  B-&gt;&gt;L: 로그인 요청
+  L-&gt;&gt;R: 실패 잠금 여부 확인
+  L-&gt;&gt;D: 계정·회사·계약 상태 조회
+  L-&gt;&gt;L: 역할·상태·IP 허용 목록·재설정 강제 검사
+  L-&gt;&gt;R: 계정당 1세션 키 기록
+  L--&gt;&gt;B: access 는 응답 본문, refresh 는 HTTP-only 쿠키
+  B-&gt;&gt;F: API 호출, access 만료
+  F-&gt;&gt;R: 블랙리스트 확인 후 사용자별 회전 락 획득
+  F-&gt;&gt;R: refresh 검증과 재사용 탐지
+  F-&gt;&gt;D: 계정·계약 상태 다시 확인
+  F-&gt;&gt;R: 직전 토큰 유예 기록 먼저, 새 토큰 저장은 나중
+  F--&gt;&gt;B: 응답과 함께 새 access 는 헤더, 새 refresh 는 쿠키
+  Note over B,F: 같은 쿠키로 동시에 들어온 요청은 유예 기록에서 같은 새 토큰을 받음">sequenceDiagram
+  participant B as 브라우저 SPA
+  participant F as 인증 필터
+  participant L as 로그인 서비스
+  participant R as Redis
+  participant D as 서비스 DB
+  B-&gt;&gt;L: 로그인 요청
+  L-&gt;&gt;R: 실패 잠금 여부 확인
+  L-&gt;&gt;D: 계정·회사·계약 상태 조회
+  L-&gt;&gt;L: 역할·상태·IP 허용 목록·재설정 강제 검사
+  L-&gt;&gt;R: 계정당 1세션 키 기록
+  L--&gt;&gt;B: access 는 응답 본문, refresh 는 HTTP-only 쿠키
+  B-&gt;&gt;F: API 호출, access 만료
+  F-&gt;&gt;R: 블랙리스트 확인 후 사용자별 회전 락 획득
+  F-&gt;&gt;R: refresh 검증과 재사용 탐지
+  F-&gt;&gt;D: 계정·계약 상태 다시 확인
+  F-&gt;&gt;R: 직전 토큰 유예 기록 먼저, 새 토큰 저장은 나중
+  F--&gt;&gt;B: 응답과 함께 새 access 는 헤더, 새 refresh 는 쿠키
+  Note over B,F: 같은 쿠키로 동시에 들어온 요청은 유예 기록에서 같은 새 토큰을 받음</pre></div><figcaption>회전 락과 유예 기록이 생긴 배경은 문제 해결 1 참고</figcaption></figure></div>
+
+</section>
+<section class="sec sec--glow sec--flip">
+<div class="sec__head"><h2 class="sec__title">핵심 흐름 ② 테넌트 격리</h2><div class="sec__lead"><p>고객사 영역 요청에는 회사 식별자를 받지 않는다. 회사는 토큰 클레임에서만 꺼내고, 리소스를 읽을 때는 회사 필터 쿼리나 동일 회사 검증을 거친다. 다른 회사 리소스는 403 으로 막고, 첨부처럼 존재 여부 자체를 숨겨야 하는 경로는 404 로 돌려준다. DB 의 부분 유니크 인덱스·FK·CHECK 제약을 마지막 안전망으로 깔았고, 리소스 CRUD 를 추가하는 변경에는 '타사 접근 403' 통합 시험을 넣도록 규칙화했다. 규칙은 프로젝트 작업 지침에도 넣어 AI 에이전트와 함께 개발할 때 같은 기준으로 점검한다. 다만 규칙은 지침일 뿐이라, 운영 공개 전 감사에서 회사 경계 결함을 추가로 찾아 고쳤다(문제 해결 4).</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TD
+  REQ[&quot;고객사 영역 요청&lt;br/&gt;본문·경로·쿼리에 회사 식별자 없음&quot;]
+  FIL[&quot;인증 필터&lt;br/&gt;서명·블랙리스트·계약 만료 확인&quot;]
+  PRN[&quot;인증 주체&lt;br/&gt;회사·사용자·역할 = 토큰 클레임&quot;]
+  MAT{&quot;경로별 권한 매처&lt;br/&gt;관리자 영역과 고객사 영역 분리&quot;}
+  SVC[&quot;서비스&lt;br/&gt;회사는 인증 주체에서만 꺼냄&quot;]
+  CHK{&quot;리소스의 회사가&lt;br/&gt;요청자 회사와 같은가&quot;}
+  OK1[&quot;정상 응답&quot;]
+  DENY[&quot;거부 403&lt;br/&gt;일부 경로는 404 로 존재 숨김&quot;]
+  DBS[(&quot;DB 안전망&lt;br/&gt;부분 유니크·FK·CHECK&quot;)]
+  TST[&quot;통합 시험 규칙&lt;br/&gt;리소스 CRUD 추가 시 타사 접근 403&quot;]
+  REQ --&gt; FIL --&gt; PRN --&gt; MAT
+  MAT --&gt;|&quot;역할 불일치&quot;| DENY
+  MAT --&gt;|&quot;허용&quot;| SVC
+  SVC --&gt;|&quot;회사 필터 쿼리·동일 회사 검증&quot;| CHK
+  CHK --&gt;|&quot;같음&quot;| OK1
+  CHK --&gt;|&quot;다름&quot;| DENY
+  SVC --&gt; DBS
+  TST -.-&gt; CHK">flowchart TD
+  REQ[&quot;고객사 영역 요청&lt;br/&gt;본문·경로·쿼리에 회사 식별자 없음&quot;]
+  FIL[&quot;인증 필터&lt;br/&gt;서명·블랙리스트·계약 만료 확인&quot;]
+  PRN[&quot;인증 주체&lt;br/&gt;회사·사용자·역할 = 토큰 클레임&quot;]
+  MAT{&quot;경로별 권한 매처&lt;br/&gt;관리자 영역과 고객사 영역 분리&quot;}
+  SVC[&quot;서비스&lt;br/&gt;회사는 인증 주체에서만 꺼냄&quot;]
+  CHK{&quot;리소스의 회사가&lt;br/&gt;요청자 회사와 같은가&quot;}
+  OK1[&quot;정상 응답&quot;]
+  DENY[&quot;거부 403&lt;br/&gt;일부 경로는 404 로 존재 숨김&quot;]
+  DBS[(&quot;DB 안전망&lt;br/&gt;부분 유니크·FK·CHECK&quot;)]
+  TST[&quot;통합 시험 규칙&lt;br/&gt;리소스 CRUD 추가 시 타사 접근 403&quot;]
+  REQ --&gt; FIL --&gt; PRN --&gt; MAT
+  MAT --&gt;|&quot;역할 불일치&quot;| DENY
+  MAT --&gt;|&quot;허용&quot;| SVC
+  SVC --&gt;|&quot;회사 필터 쿼리·동일 회사 검증&quot;| CHK
+  CHK --&gt;|&quot;같음&quot;| OK1
+  CHK --&gt;|&quot;다름&quot;| DENY
+  SVC --&gt; DBS
+  TST -.-&gt; CHK</pre></div><figcaption>OWASP API Security Top 10 의 1위 항목(객체 수준 권한 우회)을 구조로 막는 흐름</figcaption></figure></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">핵심 흐름 ③ 실시간 알림 fan-out</h2><div class="sec__lead"><p>SSE 연결은 여러 서버 인스턴스에 흩어질 수 있다. 한 인스턴스에서 생긴 알림을 모든 접속자에게 보내려면 모든 인스턴스가 모든 이벤트를 받아야 하므로, 공용 소비 그룹이 아니라 인스턴스마다 독립된 소비 그룹을 두었다. 알림을 발행한 인스턴스도 직접 밀지 않고 Kafka 로 받은 것만 밀어 중복 수신을 막는다. 알림은 DB 알림함에 먼저 저장해, 재시도·DLQ 없이도 접속하지 않은 사용자와 유실분을 조회로 보완한다. 트리거는 문의 등록(→관리자)·답변(→작성자)·중요 공지(→전체 고객사) 3종이고, 이후 다른 알림도 같은 알림함·SSE 경로를 재사용한다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  TRG[&quot;알림 트리거&lt;br/&gt;문의 등록·답변·중요 공지&quot;]
+  NSV[&quot;알림 서비스&lt;br/&gt;비동기 실행·발행 대기 상한&quot;]
+  INB[(&quot;알림함 DB&lt;br/&gt;먼저 저장&quot;)]
+  KF[&quot;Kafka 알림 토픽&quot;]
+  subgraph PA[&quot;서버 인스턴스 A&quot;]
+    CA[&quot;인스턴스 전용 소비 그룹&lt;br/&gt;최신부터 소비·재시도 없음&quot;]
+    HA[&quot;로컬 SSE 허브&lt;br/&gt;연결 상한 초과 시 429&quot;]
+  end
+  subgraph PB[&quot;서버 인스턴스 B&quot;]
+    CB[&quot;인스턴스 전용 소비 그룹&quot;]
+    HB[&quot;로컬 SSE 허브&quot;]
+  end
+  UON[&quot;접속 중 사용자&lt;br/&gt;관리자 전체·고객사 전체·개인&quot;]
+  UOFF[&quot;접속하지 않은 사용자&lt;br/&gt;알림함 조회로 보완&quot;]
+  TRG --&gt; NSV
+  NSV --&gt; INB
+  NSV --&gt; KF
+  KF --&gt; CA --&gt; HA --&gt; UON
+  KF --&gt; CB --&gt; HB --&gt; UON
+  INB --&gt; UOFF">flowchart LR
+  TRG[&quot;알림 트리거&lt;br/&gt;문의 등록·답변·중요 공지&quot;]
+  NSV[&quot;알림 서비스&lt;br/&gt;비동기 실행·발행 대기 상한&quot;]
+  INB[(&quot;알림함 DB&lt;br/&gt;먼저 저장&quot;)]
+  KF[&quot;Kafka 알림 토픽&quot;]
+  subgraph PA[&quot;서버 인스턴스 A&quot;]
+    CA[&quot;인스턴스 전용 소비 그룹&lt;br/&gt;최신부터 소비·재시도 없음&quot;]
+    HA[&quot;로컬 SSE 허브&lt;br/&gt;연결 상한 초과 시 429&quot;]
+  end
+  subgraph PB[&quot;서버 인스턴스 B&quot;]
+    CB[&quot;인스턴스 전용 소비 그룹&quot;]
+    HB[&quot;로컬 SSE 허브&quot;]
+  end
+  UON[&quot;접속 중 사용자&lt;br/&gt;관리자 전체·고객사 전체·개인&quot;]
+  UOFF[&quot;접속하지 않은 사용자&lt;br/&gt;알림함 조회로 보완&quot;]
+  TRG --&gt; NSV
+  NSV --&gt; INB
+  NSV --&gt; KF
+  KF --&gt; CA --&gt; HA --&gt; UON
+  KF --&gt; CB --&gt; HB --&gt; UON
+  INB --&gt; UOFF</pre></div><figcaption>인스턴스 2개로 그린 개념도. 실제 인스턴스 수와 무관하게 같은 구조</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>트리거는 비동기로 실행하고 발행 대기 시간에 상한을 둬, Kafka 가 느려져도 답변·공지 API 가 막히지 않음</li><li>사용자·인스턴스별 동시 연결 상한(초과 시 429), 세션이 무효화되면 열린 SSE 스트림도 종료</li><li>공용 알림의 읽음 상태를 사용자별 기록으로 바꿔 회사 사이에 읽음이 공유되지 않게 함</li><li>단계별 발행 성공·실패, 활성 연결, 거부, 연결 시간, 미읽음 지표 노출, 경보 규칙 2종·대시보드 패널 7개를 GitOps 저장소에 반영</li><li>EmbeddedKafka → 소비자 → SSE 를 잇는 종단 시험으로 발행부터 전달까지의 경로를 회귀 고정</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">개념 데이터 모델</h2><div class="sec__lead"><p>실제 테이블·컬럼 이름이 아닌 개념 모델이다. 계약사(테넌트)가 모든 고객 데이터의 경계이고, 매출 조회 범위는 계약사에 연결된 매입처로 정해진다. 활성 매입처 연결은 매입처당 하나만 허용하는 부분 유니크 인덱스를 둬, 한 매입처가 두 계약사에 동시에 묶여 데이터가 교차 노출되는 일을 DB 가 거부한다. 알림은 관리자 전체·고객사 전체·개인 세 가지 수신 범위를 갖고, 공용 알림의 읽음은 사용자별로 따로 기록한다. 문의는 비로그인 제출도 받으므로 계약사·작성자 연결이 선택적이다. 스키마는 Flyway 로 버전 관리한다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="erDiagram
+  TENANT ||--o{ ACCOUNT : &quot;소속&quot;
+  TENANT ||--o{ ACCESS_IP : &quot;접속 허용&quot;
+  TENANT ||--o{ SUPPLIER_SCOPE : &quot;조회 범위&quot;
+  TENANT ||--o{ ATTACHMENT : &quot;증빙 첨부&quot;
+  TENANT |o--o{ INQUIRY : &quot;문의 소속&quot;
+  ACCOUNT |o--o{ INQUIRY : &quot;작성&quot;
+  CATEGORY ||--o{ INQUIRY : &quot;분류&quot;
+  CATEGORY ||--o{ NOTICE : &quot;분류&quot;
+  ACCOUNT |o--o{ ALERT : &quot;개인 수신&quot;
+  ALERT ||--o{ ALERT_READ : &quot;읽음 기록&quot;
+  ACCOUNT ||--o{ ALERT_READ : &quot;읽음&quot;
+  TENANT {
+    string tenant_id PK
+    string service_status
+    string plan
+    date contract_end
+  }
+  ACCOUNT {
+    string account_id PK
+    string tenant_id FK
+    string role
+    string status
+  }
+  ACCESS_IP {
+    string tenant_id FK
+    string ip_range
+  }
+  SUPPLIER_SCOPE {
+    string tenant_id FK
+    string supplier_code
+    datetime released_at
+  }
+  ATTACHMENT {
+    string external_id PK
+    string tenant_id FK
+    string object_key
+  }
+  INQUIRY {
+    string inquiry_id PK
+    string author_id FK
+    string category_id FK
+    string status
+  }
+  CATEGORY {
+    string category_id PK
+    string scope
+    int display_order
+  }
+  NOTICE {
+    string notice_id PK
+    string category_id FK
+    boolean pinned
+    datetime visible_until
+  }
+  ALERT {
+    string alert_id PK
+    string audience
+    string kind
+    string ref_id
+  }
+  ALERT_READ {
+    string alert_id FK
+    string account_id FK
+    datetime read_at
+  }">erDiagram
+  TENANT ||--o{ ACCOUNT : &quot;소속&quot;
+  TENANT ||--o{ ACCESS_IP : &quot;접속 허용&quot;
+  TENANT ||--o{ SUPPLIER_SCOPE : &quot;조회 범위&quot;
+  TENANT ||--o{ ATTACHMENT : &quot;증빙 첨부&quot;
+  TENANT |o--o{ INQUIRY : &quot;문의 소속&quot;
+  ACCOUNT |o--o{ INQUIRY : &quot;작성&quot;
+  CATEGORY ||--o{ INQUIRY : &quot;분류&quot;
+  CATEGORY ||--o{ NOTICE : &quot;분류&quot;
+  ACCOUNT |o--o{ ALERT : &quot;개인 수신&quot;
+  ALERT ||--o{ ALERT_READ : &quot;읽음 기록&quot;
+  ACCOUNT ||--o{ ALERT_READ : &quot;읽음&quot;
+  TENANT {
+    string tenant_id PK
+    string service_status
+    string plan
+    date contract_end
+  }
+  ACCOUNT {
+    string account_id PK
+    string tenant_id FK
+    string role
+    string status
+  }
+  ACCESS_IP {
+    string tenant_id FK
+    string ip_range
+  }
+  SUPPLIER_SCOPE {
+    string tenant_id FK
+    string supplier_code
+    datetime released_at
+  }
+  ATTACHMENT {
+    string external_id PK
+    string tenant_id FK
+    string object_key
+  }
+  INQUIRY {
+    string inquiry_id PK
+    string author_id FK
+    string category_id FK
+    string status
+  }
+  CATEGORY {
+    string category_id PK
+    string scope
+    int display_order
+  }
+  NOTICE {
+    string notice_id PK
+    string category_id FK
+    boolean pinned
+    datetime visible_until
+  }
+  ALERT {
+    string alert_id PK
+    string audience
+    string kind
+    string ref_id
+  }
+  ALERT_READ {
+    string alert_id FK
+    string account_id FK
+    datetime read_at
+  }</pre></div><figcaption>개념 ERD — 엔티티·속성 이름은 일반화했고 실제 스키마와 다름</figcaption></figure></div>
+
+</section>
+<section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">계약사 서비스 상태 전이</h2><div class="sec__lead"><p>계약사는 상품·계약기간 없이 미계약으로 등록되고 대표 계정 초대가 함께 나간다. 관리자가 서비스 설정에서 상품·계약기간을 정하면 시작일에 따라 활성 또는 대기로 간다. 토큰은 활성 회사에만 발급하므로 미계약 회사와 시작일 전 대기 회사의 로그인은 '서비스 설정 미완료'로 막힌다. 계약 만료는 로그인·토큰 회전 때 상태를 바꾸는 지연 가드와, 요청마다 토큰의 계약 종료 클레임을 보는 즉시 가드 두 겹으로 막는다. 계정은 발급 직후 대기(임시 비밀번호)이고 비밀번호 재설정에 성공하면 활성으로 바뀌며, 운영자가 임시 비밀번호를 재발급하면 다시 대기로 돌아가고 세션이 즉시 무효화된다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="stateDiagram-v2
+  state &quot;미계약&quot; as UNCONTRACTED
+  state &quot;대기&quot; as SCHEDULED
+  state &quot;활성&quot; as ACTIVE
+  state &quot;만료&quot; as EXPIRED
+  state &quot;삭제(소프트)&quot; as WITHDRAWN
+  [*] --&gt; UNCONTRACTED : 계약사 등록, 대표 계정 초대
+  UNCONTRACTED --&gt; ACTIVE : 서비스 설정, 시작일이 오늘이거나 지남
+  UNCONTRACTED --&gt; SCHEDULED : 서비스 설정, 시작일이 미래
+  SCHEDULED --&gt; ACTIVE : 시작일 도래, 로그인 때 지연 전이
+  ACTIVE --&gt; EXPIRED : 계약 종료일 경과, 로그인·토큰 회전 때 전이
+  EXPIRED --&gt; ACTIVE : 서비스 재설정, 시작일이 오늘이거나 지남
+  UNCONTRACTED --&gt; WITHDRAWN : 삭제
+  SCHEDULED --&gt; WITHDRAWN : 삭제
+  ACTIVE --&gt; WITHDRAWN : 삭제
+  EXPIRED --&gt; WITHDRAWN : 삭제
+  note right of WITHDRAWN : 소속 계정 탈퇴와 매입처 연결 해제는 한 트랜잭션, 커밋 뒤 세션 즉시 폐기
+  WITHDRAWN --&gt; [*]">stateDiagram-v2
+  state &quot;미계약&quot; as UNCONTRACTED
+  state &quot;대기&quot; as SCHEDULED
+  state &quot;활성&quot; as ACTIVE
+  state &quot;만료&quot; as EXPIRED
+  state &quot;삭제(소프트)&quot; as WITHDRAWN
+  [*] --&gt; UNCONTRACTED : 계약사 등록, 대표 계정 초대
+  UNCONTRACTED --&gt; ACTIVE : 서비스 설정, 시작일이 오늘이거나 지남
+  UNCONTRACTED --&gt; SCHEDULED : 서비스 설정, 시작일이 미래
+  SCHEDULED --&gt; ACTIVE : 시작일 도래, 로그인 때 지연 전이
+  ACTIVE --&gt; EXPIRED : 계약 종료일 경과, 로그인·토큰 회전 때 전이
+  EXPIRED --&gt; ACTIVE : 서비스 재설정, 시작일이 오늘이거나 지남
+  UNCONTRACTED --&gt; WITHDRAWN : 삭제
+  SCHEDULED --&gt; WITHDRAWN : 삭제
+  ACTIVE --&gt; WITHDRAWN : 삭제
+  EXPIRED --&gt; WITHDRAWN : 삭제
+  note right of WITHDRAWN : 소속 계정 탈퇴와 매입처 연결 해제는 한 트랜잭션, 커밋 뒤 세션 즉시 폐기
+  WITHDRAWN --&gt; [*]</pre></div><figcaption>정지 상태 등 운영자 조치와 계약 중 상품 변경은 생략한 주요 전이</figcaption></figure></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">설계 결정<span class="dim">왜 이렇게 했나</span></h2><div class="sec__lead"><p>선택지를 비교해 고른 방식과 그 대가를 함께 적었다. 대가는 대부분 실제로 문제가 된 뒤 보완했다.</p></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>결정</th><th>고른 방식</th><th>왜</th><th>대가·보완</th></tr></thead><tbody><tr><td>배포 구조</td><td>단일 배포 + Gradle 모듈(모듈러 모놀리스)</td><td>기능이 늘어도 배포 단위·이미지·CI·게이트웨이 경로를 새로 만들지 않기 위해. 새 모듈은 의존 추가만으로 자동 등록</td><td>관리자·고객사가 함께 쓰는 공지·FAQ·문의가 인증 모듈에 쌓이자 운영관리 도메인 모듈로 추출(행위 변경 없이 기존 시험 통과). 공통 요소는 공통 모듈 한 곳에만</td></tr><tr><td>토큰 보관</td><td>access 는 프론트 메모리, refresh 는 HTTP-only 쿠키(FE 와 합의)</td><td>스크립트가 refresh 를 읽지 못하게(XSS 대비) 하고, 쿠키 자동 전송을 노린 요청(CSRF)은 Origin/Referer 허용 목록으로 한 번 더 막기 위해</td><td>허용 출처 목록을 CORS 와 CSRF 검사가 함께 읽는 단일 설정으로 묶고 기동 때 형식 검증</td></tr><tr><td>토큰 갱신</td><td>별도 갱신 API 없이 인증 필터가 만료 시 자동 회전, 새 access 는 응답 헤더</td><td>프론트는 헤더의 토큰만 바꾸면 되고, 1회용 refresh 의 회전·재사용 탐지를 서버 한곳에서 처리</td><td>병렬 요청의 동시 회전 문제가 생겨 사용자별 락과 직전 토큰 유예로 보완(문제 해결 1)</td></tr><tr><td>회사 식별</td><td>고객사 영역의 회사 식별자는 토큰 클레임에서만</td><td>요청 값을 바꿔 다른 회사 데이터에 접근하는 객체 수준 권한 우회를 구조로 막기 위해</td><td>규칙만으로는 빈틈이 남아 DB 제약·타사 403 통합 시험·감사로 보완</td></tr><tr><td>실시간 전달</td><td>SSE + DB 알림함 + 인스턴스별 Kafka 소비 그룹</td><td>SSE 연결이 여러 인스턴스에 흩어지면 모든 인스턴스가 모든 알림을 받아야 함(공용 그룹이면 한 인스턴스만 받음). DB 에 먼저 저장해 접속하지 않은 사용자도 조회로 받게</td><td>재시도·DLQ 없이 최신부터 소비하고 유실은 알림함 조회가 맡음. SSE 인증은 Bearer 헤더 전용</td></tr><tr><td>문의 접수</td><td>제출은 이벤트 발행, 소비자가 멱등 키로 저장 + DLQ</td><td>비로그인 문의까지 저장을 보장하고 중복 전달에도 한 건만 남기기 위해</td><td>입력 길이 초과로 DLQ 에 조용히 쌓이던 경로를 QA 재검증에서 찾아 입력 정규화로 정정</td></tr><tr><td>외부 호출</td><td>공통 빌더로 서킷브레이커·재시도·타임아웃 일괄 적용</td><td>외부 장애가 리액티브 IO 스레드를 묶어 전체 API 를 늦추지 않게</td><td>멱등하지 않은 호출은 재시도를 꺼 중복 저장을 막음</td></tr><tr><td>등록·수정 메타</td><td>수정일·수정자는 nullable, DB 기본값 없음</td><td>R2DBC 가 null 필드를 INSERT 에서 빼면 DB 기본값이 등록 시점에 수정일을 채우는 함정 때문</td><td>잘못 정의된 기존 테이블을 마이그레이션으로 정정하고 작업공간 공통 규칙으로 명문화</td></tr><tr><td>API 계약</td><td>모든 엔드포인트에 OpenAPI 설명과 에러 코드별 JSON 예시, 응답 스키마 자동 주입</td><td>프론트가 백엔드 코드를 보지 않고 에러 분기까지 구현할 수 있게</td><td>운영 환경에서는 API 문서 비활성</td></tr></tbody></table></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">주요 기능</h2></div>
+<div class="sec__body"><div class="tiles"><div class="tile"><h3>계약사 온보딩·관리</h3><p>미계약 상태로 등록하고 대표 계정을 초대한 뒤, 서비스 설정에서 상품·계약기간을 정하면 활성·대기로 전이. 대표 변경은 한 트랜잭션에서 강등·승격하고 두 계정의 세션을 즉시 무효화하며 사유를 화면에 전달. 첨부는 서버 프록시와 열거할 수 없는 외부 ID 로만 노출</p></div><div class="tile"><h3>계정·보안 로그</h3><p>관리자 계정 발급, 접속 이력·이상 접속(연속 실패·야간 접속)·변경 이력·첨부 열람 이력 조회와 CSV 내보내기(UTF-8 BOM·한글 헤더) 공통화</p></div><div class="tile"><h3>운영관리(공지·FAQ·1:1 문의)</h3><p>관리자·고객사·비로그인 세 경로가 함께 쓰는 도메인 모듈. 공용 카테고리, 상단 고정·노출 기간, 앞으로만 진행하는 문의 3단계 상태(접수·처리중·답변완료), 저장 시 HTML 정화</p></div><div class="tile"><h3>고객사 셀프 관리</h3><p>대표·사원이 소속 계정을 직접 관리(조회는 사원, 변경은 대표). 회사·사용자 식별자는 토큰에서만 받고, 타사 계정을 지정하면 403 이 나는 것을 회귀 시험으로 고정</p></div><div class="tile"><h3>비밀번호 찾기</h3><p>메일 토큰 링크로만 재설정, 토큰은 1회성·사용자당 1개. 찾기를 신청하면 활성 세션을 폐기하고, 재설정 전까지 메일 링크 외의 경로(기존 비밀번호·변경 페이지)로 우회하지 못하게 함</p></div><div class="tile"><h3>실시간 알림</h3><p>문의 등록→관리자, 답변→작성자, 중요 공지→전체 고객사 3종 트리거. 이후 추가된 알림도 같은 알림함·SSE 경로를 재사용</p></div><div class="tile"><h3>기획서 대조 개발 절차</h3><p>기획서의 화면 요소·검증 규칙·기능 설명을 항목별로 쪼개 DTO 검증·상태 전이·에러 코드·응답 필드·권한과 1:1 대조하고 구현됨/누락/불일치/프론트 소관으로 분류. Figma MCP 로 에이전트가 화면 주석을 직접 읽게 하고, 주요 변경마다 멀티에이전트 적대 리뷰와 전체 시험을 관문으로 둠</p></div></div></div>
+
+</section>
+<section class="sec sec--glow sec--flip">
+<div class="sec__head"><h2 class="sec__title">성과</h2><div class="sec__lead"><p>기능을 빠르게 늘리면서도 시험을 함께 쌓았고, 운영 공개 전에 결함을 찾아 고친 뒤 공개했다.</p></div></div>
+<div class="sec__body"><figure class="figure figure--soft"><div class="chart"><div class="chart__legend"><span><i style="background:#ca6821"></i>전</span><span><i style="background:#3d6bf4"></i>후</span></div><svg viewBox="0 0 720 16" role="img" aria-label="전후 비교 차트"></svg><details><summary>표로 보기</summary><div class="table-wrap"><table class="t"><thead><tr><th>항목</th><th>구분</th><th>값</th></tr></thead><tbody><tr><td>2026.06</td><td>전</td><td>52개</td></tr><tr><td>2026.09</td><td>후</td><td>1,039개</td></tr></tbody></table></div></details></div><figcaption style="padding:12px 0 0">레포 전체 자동 테스트 수(단위+통합, 매출 모듈 포함) — 실측, 각 시점 전체 시험 실행 기록 기준</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>제약사 고객 대상 상용 서비스로 운영 중</li><li>신규 모듈 4개(관리자·고객사·운영관리·실시간 알림), HTTP 엔드포인트 109개</li><li>자동 테스트 52개(2026.06) → 1,039개(2026.09), 레포 전체 기준</li><li>운영 공개 전 멀티에이전트 감사로 확정 결함 고위험 2건 포함 10건 수정</li><li>토큰 동시 갱신 4건이 같은 토큰으로 수렴하는 회귀 시험, AI 적대 리뷰 확정 10건(critical 1)을 병합 전 반영</li><li>QA 재검증 백엔드 티켓 6건 반영, 활성 계정 한정 조회 15곳·계정 생성 경로 4곳 정비</li><li>실시간 알림 트리거 3종, 경보 규칙 2종·대시보드 패널 7개 GitOps 저장소 반영</li></ul></div></div>
+
+</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>언어·프레임워크</h3><div class="card__tags"><span class="tag">Kotlin</span><span class="tag">Coroutines</span><span class="tag">Spring Boot 3.4 WebFlux</span><span class="tag">Spring Security(Reactive)</span><span class="tag">Gradle 멀티모듈</span></div></div><div class="stack__group"><h3>데이터·저장</h3><div class="card__tags"><span class="tag">PostgreSQL</span><span class="tag">R2DBC</span><span class="tag">Flyway</span><span class="tag">Redis</span><span class="tag">Amazon S3(첨부)</span></div></div><div class="stack__group"><h3>메시징·실시간</h3><div class="card__tags"><span class="tag">Kafka(Spring Cloud Stream)</span><span class="tag">SSE(Reactor Sinks)</span></div></div><div class="stack__group"><h3>인증·보안</h3><div class="card__tags"><span class="tag">JWT(자체 발급)</span><span class="tag">HTTP-only 쿠키</span><span class="tag">Origin/Referer 검증</span><span class="tag">HTML 정화(jsoup)</span></div></div><div class="stack__group"><h3>품질·문서</h3><div class="card__tags"><span class="tag">Testcontainers</span><span class="tag">embedded-redis</span><span class="tag">EmbeddedKafka</span><span class="tag">StepVerifier</span><span class="tag">springdoc-openapi</span></div></div><div class="stack__group"><h3>운영·관측</h3><div class="card__tags"><span class="tag">Resilience4j</span><span class="tag">Micrometer</span><span class="tag">Prometheus</span><span class="tag">Grafana</span><span class="tag">Loki</span><span class="tag">Envoy Gateway</span></div></div><div class="stack__group"><h3>AI 활용</h3><div class="card__tags"><span class="tag">Claude Code(구현·멀티에이전트 감사·적대 리뷰)</span><span class="tag">Figma MCP(기획서 대조)</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">토큰 동시 회전 경쟁으로 모든 탭이 로그아웃되던 문제 · 새로고침 세션 유실 진단과 세션 정책 재설계 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
+<div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 4개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 토큰 동시 회전 경쟁으로 모든 탭이 로그아웃되던 문제</span></a><a class="ctl" href="#case-2"><span>02 새로고침 세션 유실 진단과 세션 정책 재설계</span></a><a class="ctl" href="#case-3"><span>03 삭제 계정 이메일 재사용 도입과 교차 테넌트 오조작 선제 차단</span></a><a class="ctl" href="#case-4"><span>04 운영 공개 전 AI 멀티에이전트 보안 감사와 공개 범위 하드닝</span></a></div></section><article class="case sec--glow" id="case-1">
+<div class="case__head"><span class="case__no">CASE 01 · 동시성제어</span><h3 class="case__title">토큰 동시 회전 경쟁으로 모든 탭이 로그아웃되던 문제</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>운영 공개 전, 프론트와 개발 환경에서 연동 시험을 하던 중 자리를 비웠다 돌아오면 열려 있던 모든 탭이 로그아웃됐다. refresh 토큰을 오래 유지하도록 설계한 의미가 사라지는 문제였다. 같은 브라우저에서 관리자와 고객 계정을 함께 열면 고객 탭이 관리자 신원으로 바뀌는 문제도 함께 드러났다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>access 가 만료된 직후 SPA 의 병렬 요청들이 같은 1회용 refresh 쿠키로 동시에 회전을 시도했다. 첫 요청만 성공하고 나머지는 재사용 공격으로 판정됐고, 그 처분이 승자의 새 세션까지 지웠다. 본인이 만든 '1회용 회전 + 재사용 탐지' 설계가 정상 클라이언트의 동시 요청을 고려하지 못한 빈틈이었다. 신원이 바뀐 것은 refresh 쿠키가 브라우저당 하나라 마지막 로그인이 덮어쓰고, 필터가 만료된 access 의 주인과 쿠키 주인을 비교하지 않았기 때문이다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>개발 환경 로그로 물증 확보(승자 1건 성공, 나머지는 재사용 판정)</li><li>사용자별 Redis 분산 락(소유권 확인)으로 같은 사용자의 회전을 직렬화하고, 로그아웃·강제 무효화도 같은 락을 쓰게 해 무효화와 회전이 엇갈려 키가 되살아나는 경우를 막음</li><li>회전 성공 시 직전 토큰과 새 토큰 쌍을 짧게 보관해, 유예 시간 안에 직전 토큰이 다시 오면 같은 쌍을 멱등하게 재응답. 재사용 탐지는 유예 밖이거나 두 세대 이전 토큰일 때로 한정</li><li>요청 취소·인스턴스 종료로 쓰기가 중간에 끊겨도 다시 시도하면 복구되도록 취소 불가 구간과 쓰기 순서(유예 기록 먼저, 새 토큰 저장 나중)를 정함</li><li>만료 access 주인과 쿠키 주인을 비교하는 가드와 계정별 쿠키 슬롯을 넣고, AI 적대 리뷰가 찾은 락 취소 경쟁 상태와 쿠키 이름 변경으로 CSRF 2차 방어가 꺼지던 회귀를 함께 수정</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>동시 갱신 4건이 모두 같은 새 토큰으로 수렴하는 것을 회귀 시험으로 고정했고, 프론트 코드는 바꾸지 않았다. 계정별 쿠키 슬롯으로 서로 다른 계정이 한 브라우저에서 서로 영향 없이 갱신된다.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">동시 갱신 회귀 시험(4건)</div><div class="delta__val"><span class="from">1건만 성공, 나머지는 재사용 판정·전 탭 로그아웃</span><span class="arrow">→</span><span class="to">4건 모두 같은 새 토큰으로 수렴</span></div><div class="delta__note">4건은 시험 설계값</div></div><div class="delta"><div class="delta__label">프론트 코드 변경</div><div class="delta__val"><span class="to">없음(서버만 수정)</span></div></div></div><p class="sub-h">회전 흐름 전/후 개념도</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph BEFORE[&quot;전: 같은 refresh 로 동시 회전&quot;]
+    A1[&quot;병렬 요청 여러 건&lt;br/&gt;같은 1회용 refresh 제출&quot;]
+    A2[&quot;첫 요청만 회전 성공&quot;]
+    A3[&quot;나머지는&lt;br/&gt;재사용 공격으로 판정&quot;]
+    A4[&quot;세션 전체 폐기&lt;br/&gt;모든 탭 로그아웃&quot;]
+    A1 --&gt; A2
+    A1 --&gt; A3 --&gt; A4
+  end
+  subgraph AFTER[&quot;후: 사용자별 락 + 직전 토큰 유예&quot;]
+    B1[&quot;병렬 요청 여러 건&lt;br/&gt;같은 1회용 refresh 제출&quot;]
+    B2[&quot;사용자별 Redis 락&lt;br/&gt;한 번에 하나씩 회전&quot;]
+    B3[&quot;첫 요청: 유예 기록 먼저&lt;br/&gt;새 토큰 저장은 나중&quot;]
+    B4[&quot;뒤 요청: 유예 기록에서&lt;br/&gt;같은 새 토큰 재응답&quot;]
+    B5[&quot;모든 탭이&lt;br/&gt;같은 토큰으로 수렴&quot;]
+    B1 --&gt; B2
+    B2 --&gt; B3 --&gt; B5
+    B2 --&gt; B4 --&gt; B5
+  end">flowchart LR
+  subgraph BEFORE[&quot;전: 같은 refresh 로 동시 회전&quot;]
+    A1[&quot;병렬 요청 여러 건&lt;br/&gt;같은 1회용 refresh 제출&quot;]
+    A2[&quot;첫 요청만 회전 성공&quot;]
+    A3[&quot;나머지는&lt;br/&gt;재사용 공격으로 판정&quot;]
+    A4[&quot;세션 전체 폐기&lt;br/&gt;모든 탭 로그아웃&quot;]
+    A1 --&gt; A2
+    A1 --&gt; A3 --&gt; A4
+  end
+  subgraph AFTER[&quot;후: 사용자별 락 + 직전 토큰 유예&quot;]
+    B1[&quot;병렬 요청 여러 건&lt;br/&gt;같은 1회용 refresh 제출&quot;]
+    B2[&quot;사용자별 Redis 락&lt;br/&gt;한 번에 하나씩 회전&quot;]
+    B3[&quot;첫 요청: 유예 기록 먼저&lt;br/&gt;새 토큰 저장은 나중&quot;]
+    B4[&quot;뒤 요청: 유예 기록에서&lt;br/&gt;같은 새 토큰 재응답&quot;]
+    B5[&quot;모든 탭이&lt;br/&gt;같은 토큰으로 수렴&quot;]
+    B1 --&gt; B2
+    B2 --&gt; B3 --&gt; B5
+    B2 --&gt; B4 --&gt; B5
+  end</pre></div></figure><div class="lesson"><b>배운 점</b><p>보안 규칙을 만들 때 정상 클라이언트의 동시 요청을 먼저 시험 시나리오로 넣는다. 쓰기 순서는 '중간에 끊겨도 다시 시도하면 복구되는 순서'로 설계한다.</p></div>
+
+</article>
+<article class="case" id="case-2">
+<div class="case__head"><span class="case__no">CASE 02 · 인증설계</span><h3 class="case__title">새로고침 세션 유실 진단과 세션 정책 재설계</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>운영 공개 전 프론트 연동 시험 중 분석 API 가 모두 401 이 되고, 다시 로그인하면 '이미 로그인됨'으로 막혔다. 이후 QA 에서도 브라우저 쿠키를 지운 사용자가 기존 세션이 끝날 때까지 재로그인하지 못하는 문제가 최우선 이슈로 올라왔다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>프론트 연동 문서는 '새로고침하면 쿠키로 세션을 복원한다'고 약속했지만, 구현은 만료된 access 토큰이 왔을 때만 갱신했다. 새로고침으로 메모리의 access 가 사라진 요청은 바로 401 이 됐다. 재로그인이 막힌 것은 '먼저 로그인한 세션 우선' 정책 때문이었다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>요청 로그(Loki)와 회전 지표로 가설을 하나씩 지우고 명세·구현 불일치를 원인으로 확정</li><li>토큰 없는 요청도 refresh 쿠키로 인증을 복원하는 부트스트랩 구현: 실패하면 401 대신 익명으로 진행하고, 계정 쿠키가 여럿이면 추측하지 않음</li><li>AI 적대 리뷰가 '복원 기능이 토큰 발급 통로로 악용될 수 있다'는 critical 결함을 찾음 → 판정 후 실제 서비스 화면에서 온 요청만 복원하는 게이트로 병합 전 차단, 회전 때 IP 허용 목록 재검사를 포함해 확정 10건 반영</li><li>이후 관리자 신원이 고객 화면으로 이어지는 결함을 본인 관리자 계정에서 발견 → 회전 전에 계정의 영역(관리자·고객)을 조회하고 영역별 출처를 결합해 차단, 개발 환경 실경로로 검증한 뒤 시험 흔적 정리</li><li>'먼저 로그인한 세션 우선'은 쿠키를 잃은 정당 사용자만 가두고 비밀번호를 가진 사람은 막지 못한다는 근거로 기존 세션 인계로 전환(밀려난 세션은 즉시 차단), 기획 후속안에 맞춰 '중복 로그인 알림 후 확인 시 인계'로 조정</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>프론트 코드 변경 없이 새로고침 복원이 동작했고, 복원 기능의 critical 결함을 포함한 AI 적대 리뷰 확정 10건을 병합 전에 반영했다. 사건·게이트·인계 규칙은 보안 정책 문서에 정본으로 남겼다.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">AI 적대 리뷰 확정 결함</div><div class="delta__val"><span class="to">10건 반영(critical 1, 병합 전)</span></div></div><div class="delta"><div class="delta__label">새로고침 세션 복원</div><div class="delta__val"><span class="from">토큰 없는 요청은 즉시 401</span><span class="arrow">→</span><span class="to">refresh 쿠키로 복원, 프론트 변경 없음</span></div></div></div><p class="sub-h">가설을 하나씩 버린 과정</p><ol class="funnel"><li class=""><span class="n">1</span><div><b>갱신 로직 장애?</b><span>회전 지표에 그 시간대 회전 시도 기록이 없음</span></div><span class="out">기각</span></li><li class=""><span class="n">2</span><div><b>Redis·백엔드 장애?</b><span>요청 로그에서 401 응답이 저장소를 거치지 않을 만큼 짧음</span></div><span class="out">기각</span></li><li class=""><span class="n">3</span><div><b>서버 전체 장애?</b><span>같은 시각 다른 계정의 요청은 정상</span></div><span class="out">기각</span></li><li class="is-adopted"><span class="n">4</span><div><b>명세와 구현 불일치</b><span>문서는 새로고침 복원을 약속, 구현은 만료 토큰이 올 때만 갱신 — 토큰 없는 요청은 바로 401</span></div><span class="out">원인 확정</span></li></ol><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">2026.07</div><div class="tl__what"><b>새로고침 세션 복원</b><span>토큰 없는 요청도 refresh 쿠키로 인증 복원, 실패 시 익명 진행</span></div></li><li><div class="tl__when">2026.07</div><div class="tl__what"><b>AI 적대 리뷰로 critical 차단</b><span>복원 기능이 토큰 발급 통로로 악용될 수 있다는 지적 → 서비스 화면 출처 게이트로 병합 전 차단</span></div></li><li><div class="tl__when">2026.08</div><div class="tl__what"><b>관리자·고객 영역 결합</b><span>관리자 신원이 고객 화면으로 이어지던 결함을 영역별 출처 결합으로 차단</span></div></li><li><div class="tl__when">2026.08</div><div class="tl__what"><b>중복 로그인 정책 전환</b><span>먼저 로그인한 세션 우선 → 기존 세션 인계 → 기획 후속안의 '알림 후 확인 시 인계'</span></div></li></ol><div class="lesson"><b>배운 점</b><p>명세와 구현이 갈라졌을 때는 재현보다 대조가 빠르다. 세션을 이어 주는 편의 기능은 새 자격 경로라서 보안 리뷰 대상이고, 세션 정책은 '누구를 막고 누구를 가두는가'로 평가한다.</p></div>
+
+</article>
+<article class="case sec--glow sec--flip" id="case-3">
+<div class="case__head"><span class="case__no">CASE 03 · 보안설계</span><h3 class="case__title">삭제 계정 이메일 재사용 도입과 교차 테넌트 오조작 선제 차단</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>운영 공개 전 QA 요청으로 삭제된 계정의 이메일을 다시 쓸 수 있게 해야 했다(정책은 기획 확정). 그동안 '이메일은 하나뿐'이라는 가정에 기댄 조회·생성 경로가 여러 곳에 있었다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>계정 유일성을 이메일 전체 유니크에 맡기고 있었고, 일부 경로는 계정 번호로 찾은 계정을 이메일로 다시 해석했다. 재사용을 허용하자 한 회사의 삭제 계정 처리가 같은 이메일을 쓰는 다른 회사 신규 계정에 영향을 줄 수 있는 교차 오조작이 생겼다. 개발·QA 재검증 단계에서 찾았고 고객에게 노출되지 않았다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>이메일 전체 유니크를 삭제 계정을 뺀 부분 유니크 인덱스로 바꾸고, 이메일 기반 조회 15곳을 활성 계정 한정으로 전환</li><li>계정 생성 경로 4곳에 사전 중복 검사·중복 시 409·공백 정규화 적용</li><li>재검증에서 교차 오조작을 찾아 조회한 계정 행을 그대로 넘기도록 분리하고, 계정 번호로 지정하는 경로는 삭제 계정이면 404 로 통일</li><li>같은 유형이 다른 경로에 남았을 가능성을 멀티에이전트 전수조사와 반증 검증으로 점검해 확정 건을 수정(문제 해결 4의 감사 결과에 합산)</li><li>앞서 개발 환경에서 문의 답변 알림이 다른 계정으로 가던 문제를 고치며 세운 '이메일은 신원 기준이 아니다' 원칙을 이번 점검 목록으로 사용</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>QA 백엔드 티켓 6건을 반영하고 활성 계정 한정 조회 15곳·계정 생성 경로 4곳을 정비해, 교차 오조작을 운영 공개 전에 막고 회귀 시험으로 고정했다.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">QA 백엔드 티켓</div><div class="delta__val"><span class="to">6건 반영</span></div></div><div class="delta"><div class="delta__label">활성 계정 한정 조회 전환</div><div class="delta__val"><span class="to">15곳</span></div></div><div class="delta"><div class="delta__label">계정 생성 경로 사전 검사</div><div class="delta__val"><span class="to">4곳</span></div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">2026.08</div><div class="tl__what"><b>신원 기준 교정(개발 환경)</b><span>문의 작성자 신원을 바뀔 수 있는 로그인 ID 대신 제출 시점의 내부 식별자로 고정, '이메일은 신원 기준이 아니다' 원칙</span></div></li><li><div class="tl__when">2026.08</div><div class="tl__what"><b>삭제 계정 이메일 재사용 허용</b><span>부분 유니크 인덱스, 활성 계정 한정 조회, 생성 경로 사전 검사</span></div></li><li><div class="tl__when">2026.08</div><div class="tl__what"><b>재검증에서 교차 오조작 발견</b><span>조회한 행을 그대로 전달하도록 분리, 삭제 계정 지정 시 404</span></div></li><li><div class="tl__when">2026.08</div><div class="tl__what"><b>같은 유형 전수 점검</b><span>멀티에이전트 전수조사와 반증 검증으로 확정 건 수정</span></div></li><li><div class="tl__when">2026.09</div><div class="tl__what"><b>운영 공개</b><span>공개 전 반영 완료, 회귀 시험으로 고정</span></div></li></ol><div class="lesson"><b>배운 점</b><p>이메일처럼 바뀌거나 다시 쓰일 수 있는 값은 신원 기준이 될 수 없다. 신원은 변하지 않는 내부 식별자로 고정하고, 앞선 결함에서 얻은 원칙을 다음 정책 변경의 점검 목록으로 쓴다.</p></div>
+
+</article>
+<article class="case" id="case-4">
+<div class="case__head"><span class="case__no">CASE 04 · 보안점검</span><h3 class="case__title">운영 공개 전 AI 멀티에이전트 보안 감사와 공개 범위 하드닝</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>운영 공개(CBT) 직전, 짧은 기간에 인증·권한·입력·설정 전반의 결함을 찾아야 했다. 기능이 빠르게 늘어난 뒤라 변경 단위 리뷰만으로는 범위를 다 덮기 어려웠고, 에이전트 한 개의 리뷰 결과는 오탐이 섞여 그대로 반영할 수 없었다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>결함은 이미 개발 환경에 배포된 코드에 있었다. 기동 시 설정 검증, 관리자 등급 사이의 권한 경계, 클라이언트 IP 판정, 입력 정화처럼 여러 모듈에 걸친 축은 기능별 시험이 잘 잡지 못했다. 외부 공개를 앞두고 게이트웨이 경로 구성에도 공개 범위를 좁혀야 할 곳이 있었다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>Claude Code 멀티에이전트로 10개 축(테넌트 격리·인젝션·파일 업로드·토큰·세션 등)을 병렬 탐지하고, 발견마다 별도 에이전트가 반증·재현하게 해 통과한 확정 건만 판정·수정</li><li>필수 비밀 설정이 없으면 기동을 실패시키고(fail-fast), 관리자 등급 사이의 권한 경계를 보강</li><li>클라이언트 IP 판정 강화, 비로그인 문의 요청 제한, 저장형 XSS 겹 방어(저장 시 HTML 정화), 세션 무효화 시 열린 SSE 스트림 종료</li><li>게이트웨이 구성도 따로 감사해 공개 범위 밖 경로를 차단하고, HTTPS 강제·HSTS·크롤링 차단·무인증 요청 제한을 GitOps 로 적용한 뒤 고객 도메인만 공개</li><li>인프라·제품 결정이 필요한 항목은 백로그로 문서화하고, 관리 콘솔은 사내망 잠금을 유지한 채 커밋 하나로 다시 잠글 수 있게 구성</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>확정 결함 고위험 2건 포함 10건(중위험 8건)을 시험과 함께 고친 뒤 고객 도메인만 외부에 공개했다. 같은 '탐지 + 반증' 리뷰는 보안 외의 일반 기능 변경에도 검증 관문으로 썼다.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">확정 결함 수정</div><div class="delta__val"><span class="to">고위험 2·중위험 8</span></div></div><div class="delta"><div class="delta__label">감사 범위</div><div class="delta__val"><span class="to">10개 축 병렬 탐지 + 발견별 반증 검증</span></div></div></div><p class="sub-h">가설을 하나씩 버린 과정</p><ol class="funnel"><li class=""><span class="n">1</span><div><b>병렬 탐지</b><span>멀티에이전트가 10개 축을 나눠 후보 결함 수집</span></div><span class="out">후보 수집</span></li><li class=""><span class="n">2</span><div><b>발견별 반증 검증</b><span>별도 에이전트가 각 후보를 반박·재현, 통과하지 못한 후보는 버림</span></div><span class="out">오탐 제거</span></li><li class="is-adopted"><span class="n">3</span><div><b>사람 판정·수정</b><span>확정 건만 시험과 함께 수정 — 기동 fail-fast, 관리자 권한 경계, IP 판정, 요청 제한, XSS 겹 방어</span></div><span class="out">고위험 2건 포함 10건 수정</span></li><li class="is-adopted"><span class="n">4</span><div><b>엣지 감사</b><span>게이트웨이 경로 차단, HTTPS 강제·HSTS·크롤링 차단·요청 제한</span></div><span class="out">고객 도메인만 공개</span></li><li class=""><span class="n">5</span><div><b>결정이 필요한 항목</b><span>인프라·제품 결정이 필요한 항목은 바로 고치지 않고 문서화</span></div><span class="out">백로그로 관리</span></li></ol><div class="lesson"><b>배운 점</b><p>에이전트 하나의 자기 검증을 믿지 않고 탐지와 반증을 나눈다. 고치지 못한 위험은 숨기지 않고 문서로 남기고, 공개 범위는 되돌리기 쉬운 형태로 연다.</p></div>
+
+</article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>보안 규칙을 만들 때 정상 클라이언트의 동시 요청을 먼저 시험 시나리오로 넣는다. 쓰기 순서는 '중간에 끊겨도 다시 시도하면 복구되는 순서'로 설계한다.</p><p>명세와 구현이 갈라졌을 때는 재현보다 대조가 빠르다. 세션을 이어 주는 편의 기능은 새 자격 경로라서 보안 리뷰 대상이고, 세션 정책은 '누구를 막고 누구를 가두는가'로 평가한다.</p><p>이메일처럼 바뀌거나 다시 쓰일 수 있는 값은 신원 기준이 될 수 없다. 신원은 변하지 않는 내부 식별자로 고정하고, 앞선 결함에서 얻은 원칙을 다음 정책 변경의 점검 목록으로 쓴다.</p></section></div>
+<nav class="pager" aria-label="다른 프로젝트"><span></span><a class="next" href="sales-data-pipeline.html"><small>다음 프로젝트 →</small><b>의약품 유통 매출 데이터 파이프라인</b></a></nav>
+<footer class="footer"><p>황병준 · 백엔드·데이터 엔지니어 · <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p><small>디자인 바탕: <a href="https://once-ui.com" target="_blank" rel="noopener">Once UI</a> Magic Portfolio · 도표는 직접 그린 개념도입니다</small></footer>
 </main>
-
-<footer class="site-footer">
-  <div class="wrap">
-    <span>© 2026 황병준</span>
-    <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a>
-  </div>
-</footer>
-<script src="../assets/js/site.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" defer></script>
+<script src="../assets/js/site.js?v=fdaea7ac" defer></script>
 </body>
 </html>

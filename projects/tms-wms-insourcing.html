@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>외주 물류 시스템 내재화 — 자체 TMS/WMS·MES·전자계약 — 황병준 포트폴리오</title>
+<meta name="description" content="식품·축산 그룹 계열사에서 외주 솔루션으로 운영되던 운송·창고 관리 시스템(TMS/WMS)을 Spring Boot·TreeGrid 로 직접 구축했습니다. 유지보수는 SI 협력사와 외주 40%·자체 60% 로 나눠 맡는 병행 체계로 바꿔 연간 4,800만원을 줄였습니다. 같은 기간 MES 와 전자계약도 자체 개발했고, 전자계약은 외주 구축비 3,000만원을 자체 API 개발로 대신했습니다. 입출고·배차·재고 흐름을 직접 구조화한 경험은 이후 LOGION 설계의 바탕이 됐습니다.">
+<meta name="theme-color" content="#15161a">
+<meta property="og:title" content="외주 물류 시스템 내재화 — 자체 TMS/WMS·MES·전자계약 — 황병준 포트폴리오">
+<meta property="og:description" content="식품·축산 그룹 계열사에서 외주 솔루션으로 운영되던 운송·창고 관리 시스템(TMS/WMS)을 Spring Boot·TreeGrid 로 직접 구축했습니다. 유지보수는 SI 협력사와 외주 40%·자체 60% 로 나눠 맡는 병행 체계로 바꿔 연간 4,800만원을 줄였습니다. 같은 기간 MES 와 전자계약도 자체 개발했고, 전자계약은 외주 구축비 3,000만원을 자체 API 개발로 대신했습니다. 입출고·배차·재고 흐름을 직접 구조화한 경험은 이후 LOGION 설계의 바탕이 됐습니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../assets/css/site.css?v=a01858cc">
+</head>
+<body>
+<a class="skip" href="#main">본문 바로가기</a>
+<nav class="nav" aria-label="주 메뉴"><a class="nav__item" href="../index.html" aria-label="홈"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.99778 19.3275V14.3275H13.9978V19.3275C13.9978 19.8775 14.4478 20.3275 14.9978 20.3275H17.9978C18.5478 20.3275 18.9978 19.8775 18.9978 19.3275V12.3275H20.6978C21.1578 12.3275 21.3778 11.7575 21.0278 11.4575L12.6678 3.9275C12.2878 3.5875 11.7078 3.5875 11.3278 3.9275L2.96778 11.4575C2.62778 11.7575 2.83778 12.3275 3.29778 12.3275H4.99778V19.3275C4.99778 19.8775 5.44778 20.3275 5.99778 20.3275H8.99778C9.54778 20.3275 9.99778 19.8775 9.99778 19.3275Z"/></svg><span class="nav__tip">홈</span></a><a class="nav__item" href="../about.html" aria-label="소개"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1c0 .55.45 1 1 1h14c.55 0 1-.45 1-1v-1c0-2.66-5.33-4-8-4z"/></svg><span class="nav__tip">소개</span></a><a class="nav__item" href="../experience.html" aria-label="경력"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg><span class="nav__tip">경력</span></a><a class="nav__item" href="../projects.html" aria-current="page" aria-label="프로젝트"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.0142 17.3073L17.3042 18.0173C17.1042 18.2173 16.7942 18.2173 16.5942 18.0173C16.3942 17.8173 16.3942 17.5073 16.5942 17.3073L17.3042 16.5973L15.3642 14.6573L14.6542 15.3673C14.4542 15.5673 14.1442 15.5673 13.9442 15.3673C13.7442 15.1673 13.7442 14.8573 13.9442 14.6573L14.6542 13.9473L12.7142 12.0073L12.0042 12.7173C11.8042 12.9173 11.4942 12.9173 11.2942 12.7173C11.0942 12.5173 11.0942 12.2073 11.2942 12.0073L12.0042 11.2973L10.0542 9.34731L9.34423 10.0573C9.14423 10.2573 8.83423 10.2573 8.63423 10.0573C8.43423 9.85731 8.43423 9.54731 8.63423 9.34731L9.34423 8.63731L7.40423 6.69731L6.69423 7.40731C6.49423 7.60731 6.18423 7.60731 5.98423 7.40731C5.78423 7.20731 5.78423 6.89731 5.98423 6.69731L6.69423 5.98731L5.20423 4.49731C4.89423 4.18731 4.35423 4.40731 4.35423 4.85731V17.6473C4.35423 18.7473 5.25423 19.6473 6.35423 19.6473H19.1442C19.5942 19.6473 19.8142 19.1073 19.4942 18.7973L18.0142 17.3073ZM7.35423 15.6473V10.8873L13.1142 16.6473H8.35423C7.80423 16.6473 7.35423 16.1973 7.35423 15.6473Z"/></svg><span class="nav__tip">프로젝트</span></a><a class="nav__item" href="../ai.html" aria-label="AI로 일하는 방식"><svg class="" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M14.2206 28C13.7539 28 13.3939 27.5867 13.4606 27.12L14.6606 18.6667H9.99395C8.82062 18.6667 9.55395 17.6667 9.58062 17.6267C11.2606 14.6533 13.7806 10.2533 17.114 4.38667C17.2473 4.14667 17.514 4 17.7806 4C18.2473 4 18.6073 4.41333 18.5406 4.88L17.3406 13.3333H22.0206C22.554 13.3333 22.8473 13.5867 22.554 14.2133C18.1673 21.8667 15.6206 26.3333 14.8873 27.6133C14.754 27.8533 14.5006 28 14.2206 28Z"/></svg><span class="nav__tip">AI로 일하는 방식</span></a><a class="nav__item" href="../skills.html" aria-label="기술"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.61 18.99l-9.08-9.08c.93-2.34.45-5.1-1.44-7C9.79.61 6.21.4 3.66 2.26L7.5 6.11 6.08 7.52 2.25 3.69C.39 6.23.6 9.82 2.9 12.11c1.86 1.86 4.57 2.35 6.89 1.48l9.11 9.11c.39.39 1.02.39 1.41 0l2.3-2.3c.4-.38.4-1.01 0-1.41z"/></svg><span class="nav__tip">기술</span></a><div class="nav__div" aria-hidden="true"><span></span></div><a class="nav__item" href="mailto:hbj3809@naver.com" aria-label="이메일 보내기"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg><span class="nav__tip">hbj3809@naver.com</span></a></nav>
+<main id="main" class="page">
+<header class="intro"><p class="intro__eyebrow">선진 프로젝트</p><h1>외주 물류 시스템 내재화 — 자체 TMS/WMS·MES·전자계약</h1><div class="intro__text"><p>외주 솔루션에 묶여 있던 운송·창고 시스템을 직접 구축하고, 유지보수를 SI 협력사와 나눠 맡는 체계로 전환</p></div><div class="intro__meta"><span><b>선진</b></span><span>2023.03 ~ 2024.04</span><span>자체 구축 · 유지보수 병행 체계 전환</span><span>백엔드</span></div></header>
+<div class="controls" role="tablist" aria-label="프로젝트 보기">
+<button class="ctl" type="button" role="tab" id="tab-detail" data-panel="detail" aria-controls="panel-detail" aria-selected="true"><span>상세</span></button>
+<button class="ctl" type="button" role="tab" id="tab-problems" data-panel="problems" aria-controls="panel-problems" aria-selected="false"><span>문제해결 <span class="count">3</span></span></button>
+<div class="controls__end"><a class="ctl" href="../projects.html?axis=backend"><span>백엔드 프로젝트 목록 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div>
+</div>
+<div class="card hero-card"><div class="card__media"><div class="cover cover--backend"><p class="cover__title">TMS/WMS 내재화</p><p class="cover__sub">외주 솔루션에 묶여 있던 운송·창고 시스템을 직접 구축하고, 유지보수를 SI 협력사와 나눠 맡는 체계로 전환</p></div></div></div>
+<div class="panel" id="panel-detail" role="tabpanel" aria-labelledby="tab-detail"><div class="overview">
+<div class="overview__side"><div class="stat"><p class="stat__value">4,800만원</p><p class="stat__label">연간 유지보수 비용 절감</p><p class="stat__note">외주 40%·자체 60% 병행 전환</p></div><div class="stat"><p class="stat__value">3,000만원</p><p class="stat__label">전자계약 외주 구축비 절감</p><p class="stat__note">자체 API 개발, 일회성</p></div><div class="stat"><p class="stat__value">7,800만원</p><p class="stat__label">이 프로젝트의 외주 비용 절감 합</p><p class="stat__note">연간 4,800만원 + 일회성 3,000만원(성격이 다른 금액의 합)</p></div><div class="stat"><p class="stat__value">90%</p><p class="stat__label">TMS/WMS 기여도</p><p class="stat__note">SAP 영역 제외 설계·개발, 유지보수 일부는 SI 협력사</p></div>
+<dl class="facts"><div><dt>회사</dt><dd>선진 · 기술연구소 디지털혁신센터 · 대리</dd></div><div><dt>기간</dt><dd>2023.03 ~ 2024.04</dd></div><div><dt>역할</dt><dd>TMS/WMS·MES·전자계약 설계·개발 (SAP 영역 제외 단독, TMS/WMS 기여도 90%·전자계약 기여도 100%)</dd></div><div><dt>팀</dt><dd>기술연구소 디지털혁신센터 · 대리</dd></div><div><dt>상태</dt><dd>자체 구축 · 유지보수 병행 체계 전환</dd></div></dl></div>
+<div class="overview__body"><h2>프로젝트 개요<br><span class="dim">무엇을, 왜 만들었나</span></h2><p class="overview__lead">식품·축산 그룹 계열사에서 외주 솔루션으로 운영되던 운송·창고 관리 시스템(TMS/WMS)을 Spring Boot·TreeGrid 로 직접 구축했습니다. 유지보수는 SI 협력사와 외주 40%·자체 60% 로 나눠 맡는 병행 체계로 바꿔 연간 4,800만원을 줄였습니다. 같은 기간 MES 와 전자계약도 자체 개발했고, 전자계약은 외주 구축비 3,000만원을 자체 API 개발로 대신했습니다. 입출고·배차·재고 흐름을 직접 구조화한 경험은 이후 LOGION 설계의 바탕이 됐습니다.</p><p class="overview__more">TMS/WMS·MES·전자계약 설계·개발 (SAP 영역 제외 단독, TMS/WMS 기여도 90%·전자계약 기여도 100%) · 기술연구소 디지털혁신센터 · 대리</p>
+<div><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 사례 3개 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div></div>
+</div><section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">개요<span class="dim">외주에 묶인 물류 시스템을 안으로</span></h2><div class="sec__lead"><p>식품·축산 그룹 계열사인 선진의 운송 관리(TMS)·창고 관리(WMS) 시스템은 외주 솔루션으로 운영되고 있었습니다. 유지보수 비용이 해마다 나가고, 현업이 요청한 커스터마이징은 외주를 거치느라 늦게 반영됐습니다. 전자계약 역시 외주로 구축하면 3,000만원이 드는 일이었습니다. 그래서 TMS/WMS·MES·전자계약을 자체 기술로 구축하고, 유지보수는 SI 협력사와 나눠 맡는 병행 체계로 바꿨습니다.</p></div></div>
+<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>기간: 2023.03 ~ 2024.04 (같은 기간 전사 CI/CD·SSO·로그 관제 구축 병행)</li><li>소속: 기술연구소 디지털혁신센터 · 대리</li><li>역할: SAP 영역을 제외한 TMS/WMS·MES·전자계약 설계·개발 단독 수행</li><li>기여도: TMS/WMS 90%(유지보수 일부 SI 협력사 병행), 전자계약 100%</li><li>목표: 외주 유지보수 비용 절감 + 커스터마이징 대응 지연 해소</li><li>다른 사람 몫: SAP 측 개발(SAP 담당), 유지보수 40%(SI 협력사)</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">전체 구성 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>업무 시스템을 같은 백엔드 스택으로 만들고, SAP·SFA/CRM·외부 전자서명 서비스와의 연동은 인터페이스 공통 모듈 한곳으로 모았습니다. 로그인은 같은 시기 구축한 전사 SSO 를, 배포·로그는 같은 시기 구축한 CI/CD·ELK 관제를 함께 썼습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph USR[&quot;사용자&quot;]
+    U1[&quot;배차·물류 담당&quot;]
+    U2[&quot;생산 현장 담당&quot;]
+    U3[&quot;영업 담당&quot;]
+  end
+  subgraph BASE[&quot;공통 기반 · 같은 시기 구축&quot;]
+    SSO[&quot;전사 SSO&lt;br/&gt;OAuth2·JWT&quot;]
+    CICD[&quot;Jenkins·Docker&lt;br/&gt;무중단 배포&quot;]
+    OBS[&quot;ELK 로그 관제&lt;br/&gt;Slack 장애 알림&quot;]
+  end
+  subgraph APPS[&quot;자체 구축 업무 시스템&quot;]
+    TMS[&quot;TMS&lt;br/&gt;운송 주문·배차·차량&quot;]
+    WMS[&quot;WMS&lt;br/&gt;입고·출고·재고&quot;]
+    MES[&quot;MES&lt;br/&gt;작업 지시·생산 실적&quot;]
+    ECON[&quot;전자계약&lt;br/&gt;계약 생성·서명 상태&quot;]
+    IFM[&quot;인터페이스 공통 모듈&lt;br/&gt;연동 표준·이력·재전송&quot;]
+  end
+  DB[(&quot;업무 DB&quot;)]
+  SAP[&quot;SAP ERP&lt;br/&gt;SAP 측 개발은 SAP 담당&quot;]
+  SFA[&quot;SFA/CRM&lt;br/&gt;주문·거래처&quot;]
+  ESIGN[&quot;외부 전자서명 서비스&quot;]
+  U1 --&gt; SSO
+  U2 --&gt; SSO
+  U3 --&gt; SSO
+  SSO --&gt; TMS
+  SSO --&gt; WMS
+  SSO --&gt; MES
+  SSO --&gt; ECON
+  SFA --&gt;|&quot;주문&quot;| IFM
+  IFM &lt;--&gt; SAP
+  IFM --&gt;|&quot;출하 지시&quot;| TMS
+  TMS --&gt;|&quot;출고 지시&quot;| WMS
+  TMS --&gt;|&quot;출고·배송 결과&quot;| IFM
+  WMS --&gt; IFM
+  MES --&gt; IFM
+  ECON --&gt;|&quot;서명 요청&quot;| ESIGN
+  TMS --&gt; DB
+  WMS --&gt; DB
+  MES --&gt; DB
+  ECON --&gt; DB
+  CICD -.-&gt; APPS
+  APPS -.-&gt; OBS">flowchart LR
+  subgraph USR[&quot;사용자&quot;]
+    U1[&quot;배차·물류 담당&quot;]
+    U2[&quot;생산 현장 담당&quot;]
+    U3[&quot;영업 담당&quot;]
+  end
+  subgraph BASE[&quot;공통 기반 · 같은 시기 구축&quot;]
+    SSO[&quot;전사 SSO&lt;br/&gt;OAuth2·JWT&quot;]
+    CICD[&quot;Jenkins·Docker&lt;br/&gt;무중단 배포&quot;]
+    OBS[&quot;ELK 로그 관제&lt;br/&gt;Slack 장애 알림&quot;]
+  end
+  subgraph APPS[&quot;자체 구축 업무 시스템&quot;]
+    TMS[&quot;TMS&lt;br/&gt;운송 주문·배차·차량&quot;]
+    WMS[&quot;WMS&lt;br/&gt;입고·출고·재고&quot;]
+    MES[&quot;MES&lt;br/&gt;작업 지시·생산 실적&quot;]
+    ECON[&quot;전자계약&lt;br/&gt;계약 생성·서명 상태&quot;]
+    IFM[&quot;인터페이스 공통 모듈&lt;br/&gt;연동 표준·이력·재전송&quot;]
+  end
+  DB[(&quot;업무 DB&quot;)]
+  SAP[&quot;SAP ERP&lt;br/&gt;SAP 측 개발은 SAP 담당&quot;]
+  SFA[&quot;SFA/CRM&lt;br/&gt;주문·거래처&quot;]
+  ESIGN[&quot;외부 전자서명 서비스&quot;]
+  U1 --&gt; SSO
+  U2 --&gt; SSO
+  U3 --&gt; SSO
+  SSO --&gt; TMS
+  SSO --&gt; WMS
+  SSO --&gt; MES
+  SSO --&gt; ECON
+  SFA --&gt;|&quot;주문&quot;| IFM
+  IFM &lt;--&gt; SAP
+  IFM --&gt;|&quot;출하 지시&quot;| TMS
+  TMS --&gt;|&quot;출고 지시&quot;| WMS
+  TMS --&gt;|&quot;출고·배송 결과&quot;| IFM
+  WMS --&gt; IFM
+  MES --&gt; IFM
+  ECON --&gt;|&quot;서명 요청&quot;| ESIGN
+  TMS --&gt; DB
+  WMS --&gt; DB
+  MES --&gt; DB
+  ECON --&gt; DB
+  CICD -.-&gt; APPS
+  APPS -.-&gt; OBS</pre></div><figcaption>직접 그린 개념도(초안). 시스템 분리 방식·DB 구성·연동 경로는 확인 후 확정. 실제 화면·내부 주소·저장소 이름은 넣지 않았습니다.</figcaption></figure></div>
+<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">배차·운송·입출고 흐름 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>주문이 확정되면 출하 지시 → 운송 주문 → 배차 → 출고 → 도착 확인 → ERP 반영 순서로 흐릅니다. 모든 외부 연동은 인터페이스 모듈을 거치고, 연동이 실패해도 출고 데이터는 남긴 채 실패 이력을 근거로 다시 보냅니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="sequenceDiagram
+  participant SFA as 영업 주문 SFA
+  participant IFM as 인터페이스 모듈
+  participant ERP as SAP ERP
+  participant TMS as TMS
+  participant WMS as WMS
+  participant CAR as 운송 차량
+  SFA-&gt;&gt;IFM: 주문 확정
+  IFM-&gt;&gt;ERP: 주문 전달
+  ERP-&gt;&gt;IFM: 출하 지시
+  IFM-&gt;&gt;TMS: 운송 주문 생성
+  TMS-&gt;&gt;TMS: 차량·도착지 기준 배차
+  TMS-&gt;&gt;WMS: 출고 지시
+  WMS-&gt;&gt;WMS: 피킹·상차 후 출고 확정
+  WMS-&gt;&gt;CAR: 출고 전표 출력·인계
+  CAR-&gt;&gt;TMS: 도착 확인
+  TMS-&gt;&gt;IFM: 출고·배송 결과
+  IFM-&gt;&gt;ERP: 결과 반영
+  alt 연동 실패
+    IFM-&gt;&gt;IFM: 실패 이력 저장
+    IFM-&gt;&gt;ERP: 재전송
+  end">sequenceDiagram
+  participant SFA as 영업 주문 SFA
+  participant IFM as 인터페이스 모듈
+  participant ERP as SAP ERP
+  participant TMS as TMS
+  participant WMS as WMS
+  participant CAR as 운송 차량
+  SFA-&gt;&gt;IFM: 주문 확정
+  IFM-&gt;&gt;ERP: 주문 전달
+  ERP-&gt;&gt;IFM: 출하 지시
+  IFM-&gt;&gt;TMS: 운송 주문 생성
+  TMS-&gt;&gt;TMS: 차량·도착지 기준 배차
+  TMS-&gt;&gt;WMS: 출고 지시
+  WMS-&gt;&gt;WMS: 피킹·상차 후 출고 확정
+  WMS-&gt;&gt;CAR: 출고 전표 출력·인계
+  CAR-&gt;&gt;TMS: 도착 확인
+  TMS-&gt;&gt;IFM: 출고·배송 결과
+  IFM-&gt;&gt;ERP: 결과 반영
+  alt 연동 실패
+    IFM-&gt;&gt;IFM: 실패 이력 저장
+    IFM-&gt;&gt;ERP: 재전송
+  end</pre></div><figcaption>기술 스택과 업무 범위(입출고·배차·재고)를 바탕으로 정리한 초안 흐름. 실제 단계·연동 모듈은 확인 필요</figcaption></figure></div>
+<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+</section>
+<section class="sec sec--glow sec--flip">
+<div class="sec__head"><h2 class="sec__title">출고 상태 전이 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>출고 상태는 출고(루트) 한 곳에서만 바뀌도록 했습니다. 연동 결과나 관리자 결정도 출고를 거쳐 상태와 이력을 함께 남깁니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="stateDiagram-v2
+  state &quot;출고 생성&quot; as CREATED
+  state &quot;배차 확정&quot; as DISPATCHED
+  state &quot;상차·출고 확정&quot; as LOADED
+  state &quot;운송 중&quot; as MOVING
+  state &quot;도착 확인&quot; as ARRIVED
+  state &quot;ERP 반영 완료&quot; as SYNCED
+  state &quot;연동 실패&quot; as FAILED
+  state &quot;출고 취소&quot; as CANCELED
+  [*] --&gt; CREATED
+  CREATED --&gt; DISPATCHED : 차량 배정
+  CREATED --&gt; CANCELED : 관리자 취소
+  DISPATCHED --&gt; CREATED : 배차 해제
+  DISPATCHED --&gt; LOADED : 상차·전표 출력
+  LOADED --&gt; MOVING : 출발
+  MOVING --&gt; ARRIVED : 도착 확인
+  ARRIVED --&gt; SYNCED : 연동 성공
+  ARRIVED --&gt; FAILED : 연동 실패
+  FAILED --&gt; SYNCED : 재전송 성공
+  SYNCED --&gt; [*]
+  CANCELED --&gt; [*]">stateDiagram-v2
+  state &quot;출고 생성&quot; as CREATED
+  state &quot;배차 확정&quot; as DISPATCHED
+  state &quot;상차·출고 확정&quot; as LOADED
+  state &quot;운송 중&quot; as MOVING
+  state &quot;도착 확인&quot; as ARRIVED
+  state &quot;ERP 반영 완료&quot; as SYNCED
+  state &quot;연동 실패&quot; as FAILED
+  state &quot;출고 취소&quot; as CANCELED
+  [*] --&gt; CREATED
+  CREATED --&gt; DISPATCHED : 차량 배정
+  CREATED --&gt; CANCELED : 관리자 취소
+  DISPATCHED --&gt; CREATED : 배차 해제
+  DISPATCHED --&gt; LOADED : 상차·전표 출력
+  LOADED --&gt; MOVING : 출발
+  MOVING --&gt; ARRIVED : 도착 확인
+  ARRIVED --&gt; SYNCED : 연동 성공
+  ARRIVED --&gt; FAILED : 연동 실패
+  FAILED --&gt; SYNCED : 재전송 성공
+  SYNCED --&gt; [*]
+  CANCELED --&gt; [*]</pre></div><figcaption>상태 이름과 전이는 초안. '상태 변경은 출고를 거쳐 하위 데이터와 함께 처리'한다는 원칙만 실제 설계 기준</figcaption></figure></div>
+<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">개념 데이터 모델 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>운송 주문·배차·차량과 창고·입고·재고를 나누고, 출고는 품목·상태 이력·연동 기록을 거느리는 묶음(애그리거트)으로 잡았습니다. 실제 테이블 이름이 아닌 개념 이름입니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="erDiagram
+  TRANSPORT_ORDER ||--o{ DISPATCH : &quot;배차&quot;
+  VEHICLE ||--o{ DISPATCH : &quot;배정&quot;
+  DISPATCH ||--|{ DELIVERY : &quot;출고 묶음&quot;
+  WAREHOUSE ||--o{ DELIVERY : &quot;출고 창고&quot;
+  DELIVERY ||--|{ DELIVERY_ITEM : &quot;품목&quot;
+  DELIVERY ||--o{ DELIVERY_HIST : &quot;상태 이력&quot;
+  DELIVERY ||--o{ INTERFACE_LOG : &quot;외부 연동&quot;
+  WAREHOUSE ||--o{ INBOUND : &quot;입고&quot;
+  WAREHOUSE ||--o{ STOCK : &quot;보관&quot;
+  TRANSPORT_ORDER {
+    string transport_no PK
+    string order_ref
+    date due_date
+  }
+  DISPATCH {
+    string dispatch_no PK
+    string transport_no FK
+    string vehicle_no FK
+    date dispatch_date
+  }
+  VEHICLE {
+    string vehicle_no PK
+    string carrier
+    int capacity
+  }
+  DELIVERY {
+    string delivery_no PK
+    string dispatch_no FK
+    string warehouse_code FK
+    string status
+  }
+  DELIVERY_ITEM {
+    string delivery_no FK
+    string item_code
+    int quantity
+  }
+  DELIVERY_HIST {
+    string delivery_no FK
+    string status
+    datetime changed_at
+  }
+  INTERFACE_LOG {
+    string log_id PK
+    string delivery_no FK
+    string result
+    int retry_count
+  }
+  WAREHOUSE {
+    string warehouse_code PK
+    string name
+  }
+  INBOUND {
+    string inbound_no PK
+    string warehouse_code FK
+    string item_code
+    int quantity
+  }
+  STOCK {
+    string warehouse_code FK
+    string item_code
+    int quantity
+  }">erDiagram
+  TRANSPORT_ORDER ||--o{ DISPATCH : &quot;배차&quot;
+  VEHICLE ||--o{ DISPATCH : &quot;배정&quot;
+  DISPATCH ||--|{ DELIVERY : &quot;출고 묶음&quot;
+  WAREHOUSE ||--o{ DELIVERY : &quot;출고 창고&quot;
+  DELIVERY ||--|{ DELIVERY_ITEM : &quot;품목&quot;
+  DELIVERY ||--o{ DELIVERY_HIST : &quot;상태 이력&quot;
+  DELIVERY ||--o{ INTERFACE_LOG : &quot;외부 연동&quot;
+  WAREHOUSE ||--o{ INBOUND : &quot;입고&quot;
+  WAREHOUSE ||--o{ STOCK : &quot;보관&quot;
+  TRANSPORT_ORDER {
+    string transport_no PK
+    string order_ref
+    date due_date
+  }
+  DISPATCH {
+    string dispatch_no PK
+    string transport_no FK
+    string vehicle_no FK
+    date dispatch_date
+  }
+  VEHICLE {
+    string vehicle_no PK
+    string carrier
+    int capacity
+  }
+  DELIVERY {
+    string delivery_no PK
+    string dispatch_no FK
+    string warehouse_code FK
+    string status
+  }
+  DELIVERY_ITEM {
+    string delivery_no FK
+    string item_code
+    int quantity
+  }
+  DELIVERY_HIST {
+    string delivery_no FK
+    string status
+    datetime changed_at
+  }
+  INTERFACE_LOG {
+    string log_id PK
+    string delivery_no FK
+    string result
+    int retry_count
+  }
+  WAREHOUSE {
+    string warehouse_code PK
+    string name
+  }
+  INBOUND {
+    string inbound_no PK
+    string warehouse_code FK
+    string item_code
+    int quantity
+  }
+  STOCK {
+    string warehouse_code FK
+    string item_code
+    int quantity
+  }</pre></div><figcaption>개념 ERD(초안). 출고 루트 아래 품목·이력·연동을 두는 구조는 실제 설계 기준이며, 실제 설계에는 출력물·상태 하위도 있었으나 그림에서는 생략. 나머지 엔티티는 일반 개념 이름</figcaption></figure></div>
+<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">설계 결정<span class="dim">왜 이렇게 만들었나</span></h2><div class="sec__lead"><p>기술을 고르기 전에 업무 경계와 데이터의 주인을 먼저 정했습니다.</p></div></div>
+<div class="sec__body"><div class="tiles"><div class="tile"><h3>업무 성격별로 도메인부터 분리</h3><p>출고·입고·재고는 같은 물류 시스템 안에 있어도 업무 맥락이 다릅니다. 기능을 만들기 전에 경계를 먼저 나눠, 기능이 늘어도 어디에 무엇을 둘지 흔들리지 않게 했습니다.</p></div><div class="tile"><h3>출고를 하나의 묶음(애그리거트)으로</h3><p>출고 품목은 출고 없이 생기지 않고, 이력·출력물도 출고 한 건을 기준으로 관리됩니다. 연동 결과나 관리자 결정으로 상태가 바뀔 때도 하위 데이터를 함께 처리해 출고 업무의 무결성을 지켰습니다.</p></div><div class="tile"><h3>연동은 공통 모듈 한곳으로</h3><p>SAP 모듈과 외부 인터페이스가 기능마다 흩어지지 않도록, 어떤 데이터든 같은 형식으로 주고받는 연동 공통 모듈을 만들었습니다.</p></div><div class="tile"><h3>유지보수는 SI 협력사와 병행</h3><p>유지보수를 외주에 모두 맡기지 않고 SI 협력사 40%·자체 60% 로 나눠 맡았습니다. 커스터마이징 요청을 내부에서 직접 처리할 수 있게 됐고, 연간 유지보수 비용 4,800만원을 줄였습니다.</p></div><div class="tile"><h3>외주 구축 대신 자체 API</h3><p>전자계약은 외주 구축비 3,000만원을 들이는 대신 계약 API 를 직접 개발해 외주비를 전액 절감했습니다.</p></div></div></div>
+
+</section>
+<section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">전자계약 서명 흐름 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>전자계약은 사내 계약 데이터와 외부 전자서명 서비스를 잇는 계약 API 를 직접 만들었습니다. 서명이 끝나면 완료 알림을 받아 계약 상태와 서명본 보관을 함께 갱신합니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="sequenceDiagram
+  participant SALES as 영업 담당
+  participant WEB as 전자계약 화면
+  participant API as 자체 계약 API
+  participant SIGN as 외부 전자서명 서비스
+  participant PARTY as 계약 상대방
+  SALES-&gt;&gt;WEB: 거래처·계약 조건 입력
+  WEB-&gt;&gt;API: 계약서 생성 요청
+  API-&gt;&gt;API: 서식에 계약 정보 채움, 상태 작성 중
+  API-&gt;&gt;SIGN: 서명 요청 등록
+  SIGN-&gt;&gt;PARTY: 서명 요청 알림
+  PARTY-&gt;&gt;SIGN: 본인 확인 후 서명
+  SIGN--&gt;&gt;API: 서명 완료 알림
+  API-&gt;&gt;API: 상태 체결 완료, 서명본 보관
+  API--&gt;&gt;WEB: 체결 결과 표시">sequenceDiagram
+  participant SALES as 영업 담당
+  participant WEB as 전자계약 화면
+  participant API as 자체 계약 API
+  participant SIGN as 외부 전자서명 서비스
+  participant PARTY as 계약 상대방
+  SALES-&gt;&gt;WEB: 거래처·계약 조건 입력
+  WEB-&gt;&gt;API: 계약서 생성 요청
+  API-&gt;&gt;API: 서식에 계약 정보 채움, 상태 작성 중
+  API-&gt;&gt;SIGN: 서명 요청 등록
+  SIGN-&gt;&gt;PARTY: 서명 요청 알림
+  PARTY-&gt;&gt;SIGN: 본인 확인 후 서명
+  SIGN--&gt;&gt;API: 서명 완료 알림
+  API-&gt;&gt;API: 상태 체결 완료, 서명본 보관
+  API--&gt;&gt;WEB: 체결 결과 표시</pre></div><figcaption>기술 스택을 바탕으로 정리한 초안. 확정된 사실은 '외주 구축 대신 자체 API 개발, 외주비 3,000만원 절감, 기여도 100%'</figcaption></figure></div>
+<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">MES 생산 흐름 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>MES 는 SFA 와 함께 현업 업무를 자동화하고 한곳으로 모은 시스템으로 꼽힙니다. 아래는 ERP 생산계획을 받아 작업 지시를 만들고, 현장 실적을 모아 다시 ERP 와 현업 현황 화면으로 보내는 일반적인 흐름으로 그린 초안입니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  ORD[&quot;SFA 주문&quot;] --&gt; PLAN[&quot;SAP PP&lt;br/&gt;생산계획&quot;]
+  PLAN --&gt; WO[&quot;MES 작업 지시&quot;]
+  WO --&gt; LINE[&quot;현장 실적 입력&lt;br/&gt;TreeGrid 화면&quot;]
+  LINE --&gt; AGG[&quot;생산 실적 집계&quot;]
+  AGG --&gt; BACK[&quot;ERP 실적 반영&quot;]
+  AGG --&gt; DASH[&quot;현업 현황 조회&quot;]">flowchart LR
+  ORD[&quot;SFA 주문&quot;] --&gt; PLAN[&quot;SAP PP&lt;br/&gt;생산계획&quot;]
+  PLAN --&gt; WO[&quot;MES 작업 지시&quot;]
+  WO --&gt; LINE[&quot;현장 실적 입력&lt;br/&gt;TreeGrid 화면&quot;]
+  LINE --&gt; AGG[&quot;생산 실적 집계&quot;]
+  AGG --&gt; BACK[&quot;ERP 실적 반영&quot;]
+  AGG --&gt; DASH[&quot;현업 현황 조회&quot;]</pre></div><figcaption>초안 흐름. 다룬 공정·기능 범위·SAP 연동 여부는 확인 후 확정</figcaption></figure></div>
+<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">성과<span class="dim">외주에서 자체 구축으로 바꾼 비용</span></h2><div class="sec__lead"><p>이 프로젝트에서 줄인 외주 비용은 연간 유지보수 4,800만원과 전자계약 구축비 3,000만원(일회성)으로 합계 7,800만원입니다. 선진 재직 중 외주→자체 전환으로 줄인 비용을 모두 더하면 2억 2,800만원이며, 견적 기준·연간·일회성 금액이 섞인 합입니다.</p></div></div>
+<div class="sec__body"><figure class="figure figure--soft"><div class="chart"><svg viewBox="0 0 720 320" role="img" aria-label="막대 차트"><line x1="16" x2="704" y1="256" y2="256" stroke="#3f424d" stroke-width="1"/><path class="mark" tabindex="0" data-tip="디자인 템플릿 자체 구축: 9,000만원" d="M90,256V62Q90,58 94,58H110Q114,58 114,62V256Z" fill="#3d6bf4"/><text x="102" y="48" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">9,000만원</text><text x="102" y="278" text-anchor="middle" font-size="13" fill="#9196a5">디자인 템플릿 자체</text><text x="102" y="295" text-anchor="middle" font-size="13" fill="#9196a5">구축</text><path class="mark" tabindex="0" data-tip="해외 SFA 구축: 6,000만원" d="M262,256V128Q262,124 266,124H282Q286,124 286,128V256Z" fill="#3d6bf4"/><text x="274" y="114" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">6,000만원</text><text x="274" y="278" text-anchor="middle" font-size="13" fill="#9196a5">해외 SFA 구축</text><path class="mark" tabindex="0" data-tip="TMS/WMS 유지보수(연간): 4,800만원" d="M434,256V154.4Q434,150.4 438,150.4H454Q458,150.4 458,154.4V256Z" fill="#3d6bf4"/><text x="446" y="140.4" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">4,800만원</text><text x="446" y="278" text-anchor="middle" font-size="13" fill="#9196a5">TMS/WMS</text><text x="446" y="295" text-anchor="middle" font-size="13" fill="#9196a5">유지보수(연간)</text><path class="mark" tabindex="0" data-tip="전자계약 구축(일회성): 3,000만원" d="M606,256V194Q606,190 610,190H626Q630,190 630,194V256Z" fill="#3d6bf4"/><text x="618" y="180" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">3,000만원</text><text x="618" y="278" text-anchor="middle" font-size="13" fill="#9196a5">전자계약 구축(일회성)</text></svg><details><summary>표로 보기</summary><div class="table-wrap"><table class="t"><thead><tr><th>항목</th><th>구분</th><th>값</th></tr></thead><tbody><tr><td>디자인 템플릿 자체 구축</td><td>SFA/CRM 프로젝트</td><td>9,000만원</td></tr><tr><td>해외 SFA 구축</td><td>SFA/CRM 프로젝트</td><td>6,000만원</td></tr><tr><td>TMS/WMS 유지보수(연간)</td><td>이 프로젝트</td><td>4,800만원</td></tr><tr><td>전자계약 구축(일회성)</td><td>이 프로젝트</td><td>3,000만원</td></tr></tbody></table></div></details></div><figcaption style="padding:12px 0 0">본인 확인 값(견적 기준·연간·일회성 혼합). 이 프로젝트 몫 7,800만원, 선진 재직 중 합계 2억 2,800만원</figcaption></figure></div>
+
+</section>
+<section class="sec sec--glow sec--flip">
+<div class="sec__head"><h2 class="sec__title">기술 스택과 고른 이유 <span class="badge-draft">초안</span></h2><div class="sec__lead"><p>새 기술을 들이기보다, 사내에서 이미 쓰던 스택과 같은 시기 구축한 공통 기반 위에 올렸습니다.</p></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>기술</th><th>쓴 곳</th><th>고른 이유</th></tr></thead><tbody><tr><td>Spring Boot</td><td>TMS/WMS 업무 서버</td><td>SFA/CRM 과 같은 스택이라 인증·연동 공통 모듈을 그대로 재사용</td></tr><tr><td>TreeGrid</td><td>배차표·입출고 목록 등 많은 행을 다루는 화면</td><td>많은 행을 한 화면에서 고치고 묶어 보는 물류 업무에 맞는 그리드</td></tr><tr><td>Spring Security · OAuth2 · JWT</td><td>전사 SSO 로그인</td><td>시스템마다 따로 로그인하지 않도록 같은 시기 구축한 전사 SSO 에 연결</td></tr><tr><td>SAP 모듈 연동</td><td>ERP 주문·출하·생산 연동</td><td>같은 회사 SFA/CRM 의 RFC 연동 방식에 맞춤(추정, SAP 측 개발은 SAP 담당)</td></tr><tr><td>Jenkins · Docker</td><td>빌드·배포</td><td>같은 시기 구축한 무중단 배포 파이프라인 사용</td></tr><tr><td>ELK Stack · Slack Webhook</td><td>로그 관제·장애 알림</td><td>시스템별로 흩어진 로그를 한곳에서 보고 장애를 바로 알림</td></tr></tbody></table></div></div>
+<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>백엔드</h3><div class="card__tags"><span class="tag">Java</span><span class="tag">Spring Boot</span><span class="tag">Spring Security</span></div></div><div class="stack__group"><h3>화면</h3><div class="card__tags"><span class="tag">TreeGrid</span><span class="tag">JSP</span><span class="tag">JavaScript</span></div></div><div class="stack__group"><h3>인증</h3><div class="card__tags"><span class="tag">OAuth2</span><span class="tag">JWT</span><span class="tag">전사 SSO</span></div></div><div class="stack__group"><h3>연동</h3><div class="card__tags"><span class="tag">SAP 모듈 연동</span><span class="tag">인터페이스 공통 모듈</span><span class="tag">외부 전자서명 API</span></div></div><div class="stack__group"><h3>운영</h3><div class="card__tags"><span class="tag">Jenkins</span><span class="tag">Docker</span><span class="tag">ELK Stack</span><span class="tag">Slack Webhook</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">외주 TMS/WMS 의 유지보수 비용과 느린 커스터마이징 · 출고 한 건에 얽힌 품목·이력·출력물·연동·상태의 무결성 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
+<div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 3개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 외주 TMS/WMS 의 유지보수 비용과 느린 커스터마이징</span></a><a class="ctl" href="#case-2"><span>02 출고 한 건에 얽힌 품목·이력·출력물·연동·상태의 무결성</span></a><a class="ctl" href="#case-3"><span>03 전자계약 외주 구축비 3,000만원</span></a></div></section><article class="case sec--glow" id="case-1">
+<div class="case__head"><span class="case__no">CASE 01 · 내재화</span><h3 class="case__title">외주 TMS/WMS 의 유지보수 비용과 느린 커스터마이징</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>운송·창고 관리 시스템이 외주 솔루션이라 유지보수 비용이 해마다 나가고, 현업의 화면·업무 변경 요청은 외주를 거쳐 늦게 반영됐습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>시스템이 외주 솔루션이어서 작은 변경과 유지보수까지 모두 외주 일정과 비용에 묶여 있었습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>출고·입고·재고 등 업무 성격별로 도메인을 먼저 나누고 출고를 루트 애그리거트로 설계</li><li>Spring Boot·TreeGrid 기반으로 TMS/WMS 를 직접 구축(SAP 영역 제외)</li><li>SAP·외부 인터페이스는 연동 공통 모듈로 표준화</li><li>유지보수를 SI 협력사 40%·자체 60% 로 나누는 병행 체계로 전환</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>연간 유지보수 비용 4,800만원 절감, TMS/WMS 기여도 90%. 입출고·배차·재고 흐름을 직접 구조화한 경험이 이후 LOGION 설계의 바탕이 됨</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">연간 유지보수 비용</div><div class="delta__val"><span class="to">4,800만원 절감</span></div><div class="delta__note">본인 확인 값</div></div><div class="delta"><div class="delta__label">유지보수 분담</div><div class="delta__val"><span class="from">외주 솔루션 유지보수</span><span class="arrow">→</span><span class="to">외주 40% · 자체 60%</span></div></div></div><p class="sub-h">유지보수 구조 전/후(개념도)</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph BEFORE[&quot;전: 외주 솔루션&quot;]
+    B1[&quot;현업 변경 요청&quot;] --&gt; B2[&quot;외주 요청·일정 조율&quot;]
+    B2 --&gt; B3[&quot;외주 개발·반영&quot;]
+  end
+  subgraph AFTER[&quot;후: 자체 구축 + SI 협력사 병행&quot;]
+    A1[&quot;현업 변경 요청&quot;] --&gt; A2[&quot;내부 직접 수정&lt;br/&gt;자체 60%&quot;]
+    A1 --&gt; A3[&quot;SI 협력사 유지보수&lt;br/&gt;외주 40%&quot;]
+    A2 --&gt; A4[&quot;자체 TMS/WMS 반영&quot;]
+    A3 --&gt; A4
+  end">flowchart LR
+  subgraph BEFORE[&quot;전: 외주 솔루션&quot;]
+    B1[&quot;현업 변경 요청&quot;] --&gt; B2[&quot;외주 요청·일정 조율&quot;]
+    B2 --&gt; B3[&quot;외주 개발·반영&quot;]
+  end
+  subgraph AFTER[&quot;후: 자체 구축 + SI 협력사 병행&quot;]
+    A1[&quot;현업 변경 요청&quot;] --&gt; A2[&quot;내부 직접 수정&lt;br/&gt;자체 60%&quot;]
+    A1 --&gt; A3[&quot;SI 협력사 유지보수&lt;br/&gt;외주 40%&quot;]
+    A2 --&gt; A4[&quot;자체 TMS/WMS 반영&quot;]
+    A3 --&gt; A4
+  end</pre></div></figure><div class="lesson"><b>배운 점</b><p>내재화는 모든 것을 혼자 떠안는 일이 아니라, 현업 요구에 바로 답할 수 있는 통제권을 안으로 가져오는 일이라는 것을 배웠습니다.</p></div>
+
+</article>
+<article class="case" id="case-2">
+<div class="case__head"><span class="case__no">CASE 02 · 도메인모델링</span><h3 class="case__title">출고 한 건에 얽힌 품목·이력·출력물·연동·상태의 무결성</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>출고 한 건에는 품목, 이력, 출력물, 내부·외부 연동, 상태가 함께 얽혀 있습니다. 연동 결과나 관리자 결정으로 상태가 바뀔 때 일부만 바뀌면 출고 데이터가 서로 어긋날 수 있었습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>하위 데이터를 각자 따로 만들고 바꿀 수 있으면 상태 변경 규칙이 여러 곳에 흩어집니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>출고를 루트 애그리거트로 정의</li><li>출고 품목·이력·출력물·내부 연동·외부 연동·상태를 하위로 묶음</li><li>출고 품목은 출고 없이 단독으로 생성할 수 없게 제한</li><li>상태 변경은 루트를 거쳐 하위 데이터와 일괄 처리</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>출고 업무 규칙이 한곳에 모여 무결성 확보. 같은 원칙을 이후 LOGION 출고 설계에도 적용(수치 지표는 없음)</p></div>
+</div>
+<p class="sub-h">출고 애그리거트 구조(개념도)</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
+  CMD[&quot;연동 결과·관리자 결정&quot;] --&gt;|&quot;루트를 거쳐서만 변경&quot;| ROOT[&quot;출고&lt;br/&gt;루트 애그리거트&quot;]
+  ROOT --&gt; ITEM[&quot;출고 품목&quot;]
+  ROOT --&gt; HIST[&quot;출고 이력&quot;]
+  ROOT --&gt; PRT[&quot;출력물&quot;]
+  ROOT --&gt; INTF[&quot;내부 연동&quot;]
+  ROOT --&gt; EXTF[&quot;외부 연동&quot;]
+  ROOT --&gt; STAT[&quot;출고 상태&quot;]">flowchart TB
+  CMD[&quot;연동 결과·관리자 결정&quot;] --&gt;|&quot;루트를 거쳐서만 변경&quot;| ROOT[&quot;출고&lt;br/&gt;루트 애그리거트&quot;]
+  ROOT --&gt; ITEM[&quot;출고 품목&quot;]
+  ROOT --&gt; HIST[&quot;출고 이력&quot;]
+  ROOT --&gt; PRT[&quot;출력물&quot;]
+  ROOT --&gt; INTF[&quot;내부 연동&quot;]
+  ROOT --&gt; EXTF[&quot;외부 연동&quot;]
+  ROOT --&gt; STAT[&quot;출고 상태&quot;]</pre></div></figure><div class="lesson"><b>배운 점</b><p>애그리거트 경계를 먼저 정하면 '누가 상태를 바꿀 수 있는가'가 코드 구조로 드러난다는 것을 배웠습니다.</p></div>
+
+</article>
+<article class="case sec--glow sec--flip" id="case-3">
+<div class="case__head"><span class="case__no">CASE 03 · 비용절감</span><h3 class="case__title">전자계약 외주 구축비 3,000만원 <span class="badge-draft">초안</span></h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>계약 업무를 전자계약으로 바꾸려 했으나 외주로 구축하면 3,000만원이 드는 상황이었습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>실제로 필요한 것은 사내 계약 데이터와 외부 전자서명 서비스를 잇는 연동이었는데, 이를 통째로 외주 구축 범위로 맡기는 구조였습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>계약 생성·서명 요청·완료 알림 수신·상태 관리 API 를 직접 설계</li><li>거래처·계약 정보는 사내 데이터에서 채워 넣도록 구성</li><li>서명 완료 알림을 받으면 계약 상태와 서명본 보관을 함께 갱신</li><li>사내 사용자 접근은 전사 SSO 로 통제</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>외주 구축비 3,000만원 전액 절감(일회성), 기여도 100%</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">전자계약 구축 외주비</div><div class="delta__val"><span class="from">3,000만원</span><span class="arrow">→</span><span class="to">전액 절감</span></div><div class="delta__note">일회성</div></div></div><p class="sub-h">외주 구축안과 자체 개발 구조(초안)</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph OUTS[&quot;외주 구축안&quot;]
+    O1[&quot;전자계약 외주 구축&lt;br/&gt;3,000만원&quot;]
+  end
+  subgraph OWN[&quot;자체 개발&quot;]
+    N1[&quot;사내 계약 데이터&quot;] --&gt; N2[&quot;자체 계약 API&quot;]
+    N2 --&gt; N3[&quot;외부 전자서명 서비스&quot;]
+    N3 --&gt;|&quot;서명 완료 알림&quot;| N2
+    N2 --&gt; N4[&quot;계약 상태·서명본 보관&quot;]
+  end">flowchart LR
+  subgraph OUTS[&quot;외주 구축안&quot;]
+    O1[&quot;전자계약 외주 구축&lt;br/&gt;3,000만원&quot;]
+  end
+  subgraph OWN[&quot;자체 개발&quot;]
+    N1[&quot;사내 계약 데이터&quot;] --&gt; N2[&quot;자체 계약 API&quot;]
+    N2 --&gt; N3[&quot;외부 전자서명 서비스&quot;]
+    N3 --&gt;|&quot;서명 완료 알림&quot;| N2
+    N2 --&gt; N4[&quot;계약 상태·서명본 보관&quot;]
+  end</pre></div></figure><div class="lesson"><b>배운 점</b><p>외주 범위를 그대로 받기 전에 실제로 만들어야 하는 부분을 나눠 보면, 내부에서 감당할 수 있는 일이 보인다는 것을 배웠습니다.</p></div>
+<p class="draft-note">이 부분은 근거 자료가 적어 기술 스택과 당시 환경을 바탕으로 쓴 <b>초안</b>입니다. 게시 전에 사실과 다른 곳이 없는지 확인해 주세요.</p>
+</article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>내재화는 모든 것을 혼자 떠안는 일이 아니라, 현업 요구에 바로 답할 수 있는 통제권을 안으로 가져오는 일이라는 것을 배웠습니다.</p><p>애그리거트 경계를 먼저 정하면 '누가 상태를 바꿀 수 있는가'가 코드 구조로 드러난다는 것을 배웠습니다.</p><p>외주 범위를 그대로 받기 전에 실제로 만들어야 하는 부분을 나눠 보면, 내부에서 감당할 수 있는 일이 보인다는 것을 배웠습니다.</p></section></div>
+<nav class="pager" aria-label="다른 프로젝트"><a href="devops-observability.html"><small>← 이전 프로젝트</small><b>전사 CI/CD·SSO·통합 로그 관제 플랫폼</b></a><a class="next" href="cattle-grade-ml.html"><small>다음 프로젝트 →</small><b>축우·고객 등급 예측 ML 모델 개발 및 현업 적용</b></a></nav>
+<footer class="footer"><p>황병준 · 백엔드·데이터 엔지니어 · <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p><small>디자인 바탕: <a href="https://once-ui.com" target="_blank" rel="noopener">Once UI</a> Magic Portfolio · 도표는 직접 그린 개념도입니다</small></footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" defer></script>
+<script src="../assets/js/site.js?v=fdaea7ac" defer></script>
+</body>
+</html>

@@ -3,90 +3,574 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>데이터 보정·검수 백오피스 · 황병준</title>
-<meta name="description" content="익일 반영이던 매출 데이터 보정을 접수 당일 반영으로 바꾼 사내 백오피스 재설계와 1차 실패 회고">
-<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<title>사내 데이터 보정·검수 백오피스 — 황병준 포트폴리오</title>
+<meta name="description" content="국내 대형 의약품 유통사의 매출 데이터를 제약사 고객(pharmscope)에게 보여 주기 전에 현업 데이터 운영팀이 검수·보정합니다. 이 백오피스는 그 보정 루프를 화면·API·처리 큐로 옮긴 사내 도구입니다. 1차로 만든 새 계산 엔진은 운영 전환에서 실패해 약 4시간 만에 되돌렸습니다. 그 뒤 기존 보정 표를 유일한 정본으로 두고, 영향받은 달만 한 트랜잭션으로 재처리하는 가벼운 구조로 다시 설계했습니다. 33개월을 실측해 차이 0을 확인한 금액 항등식 '원천 = 정상 + 반려'를 자동 롤백 가드로 두고, 접수 당일 반영을 운영에 올렸습니다. 공급사 매출 다시 받기, 반영 알림, 경보까지 서버와 배치 쪽을 설계·구현했습니다.">
+<meta name="theme-color" content="#15161a">
+<meta property="og:title" content="사내 데이터 보정·검수 백오피스 — 황병준 포트폴리오">
+<meta property="og:description" content="국내 대형 의약품 유통사의 매출 데이터를 제약사 고객(pharmscope)에게 보여 주기 전에 현업 데이터 운영팀이 검수·보정합니다. 이 백오피스는 그 보정 루프를 화면·API·처리 큐로 옮긴 사내 도구입니다. 1차로 만든 새 계산 엔진은 운영 전환에서 실패해 약 4시간 만에 되돌렸습니다. 그 뒤 기존 보정 표를 유일한 정본으로 두고, 영향받은 달만 한 트랜잭션으로 재처리하는 가벼운 구조로 다시 설계했습니다. 33개월을 실측해 차이 0을 확인한 금액 항등식 '원천 = 정상 + 반려'를 자동 롤백 가드로 두고, 접수 당일 반영을 운영에 올렸습니다. 공급사 매출 다시 받기, 반영 알림, 경보까지 서버와 배치 쪽을 설계·구현했습니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/site.css?v=a01858cc">
 </head>
 <body>
-<header class="site-header">
-  <div class="wrap">
-    <a class="brand" href="../index.html">황병준<span>Byeongjun Hwang</span></a>
-    <nav class="nav" aria-label="주 메뉴">
-      <a href="../index.html">홈</a>
-      <a href="../about.html">소개</a>
-      <a href="../experience.html">경력</a>
-      <a href="../projects.html">프로젝트</a>
-      <a href="../ai.html">AI로 일하는 방식</a>
-      <a href="../skills.html">기술</a>
-    </nav>
-    <div>
-      <button class="theme-btn" type="button" aria-label="밝게/어둡게 전환">◐</button>
-      <button class="menu-btn" type="button" aria-expanded="false" aria-label="메뉴 열기">메뉴</button>
-    </div>
-  </div>
-</header>
+<a class="skip" href="#main">본문 바로가기</a>
+<nav class="nav" aria-label="주 메뉴"><a class="nav__item" href="../index.html" aria-label="홈"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.99778 19.3275V14.3275H13.9978V19.3275C13.9978 19.8775 14.4478 20.3275 14.9978 20.3275H17.9978C18.5478 20.3275 18.9978 19.8775 18.9978 19.3275V12.3275H20.6978C21.1578 12.3275 21.3778 11.7575 21.0278 11.4575L12.6678 3.9275C12.2878 3.5875 11.7078 3.5875 11.3278 3.9275L2.96778 11.4575C2.62778 11.7575 2.83778 12.3275 3.29778 12.3275H4.99778V19.3275C4.99778 19.8775 5.44778 20.3275 5.99778 20.3275H8.99778C9.54778 20.3275 9.99778 19.8775 9.99778 19.3275Z"/></svg><span class="nav__tip">홈</span></a><a class="nav__item" href="../about.html" aria-label="소개"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1c0 .55.45 1 1 1h14c.55 0 1-.45 1-1v-1c0-2.66-5.33-4-8-4z"/></svg><span class="nav__tip">소개</span></a><a class="nav__item" href="../experience.html" aria-label="경력"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg><span class="nav__tip">경력</span></a><a class="nav__item" href="../projects.html" aria-current="page" aria-label="프로젝트"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.0142 17.3073L17.3042 18.0173C17.1042 18.2173 16.7942 18.2173 16.5942 18.0173C16.3942 17.8173 16.3942 17.5073 16.5942 17.3073L17.3042 16.5973L15.3642 14.6573L14.6542 15.3673C14.4542 15.5673 14.1442 15.5673 13.9442 15.3673C13.7442 15.1673 13.7442 14.8573 13.9442 14.6573L14.6542 13.9473L12.7142 12.0073L12.0042 12.7173C11.8042 12.9173 11.4942 12.9173 11.2942 12.7173C11.0942 12.5173 11.0942 12.2073 11.2942 12.0073L12.0042 11.2973L10.0542 9.34731L9.34423 10.0573C9.14423 10.2573 8.83423 10.2573 8.63423 10.0573C8.43423 9.85731 8.43423 9.54731 8.63423 9.34731L9.34423 8.63731L7.40423 6.69731L6.69423 7.40731C6.49423 7.60731 6.18423 7.60731 5.98423 7.40731C5.78423 7.20731 5.78423 6.89731 5.98423 6.69731L6.69423 5.98731L5.20423 4.49731C4.89423 4.18731 4.35423 4.40731 4.35423 4.85731V17.6473C4.35423 18.7473 5.25423 19.6473 6.35423 19.6473H19.1442C19.5942 19.6473 19.8142 19.1073 19.4942 18.7973L18.0142 17.3073ZM7.35423 15.6473V10.8873L13.1142 16.6473H8.35423C7.80423 16.6473 7.35423 16.1973 7.35423 15.6473Z"/></svg><span class="nav__tip">프로젝트</span></a><a class="nav__item" href="../ai.html" aria-label="AI로 일하는 방식"><svg class="" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M14.2206 28C13.7539 28 13.3939 27.5867 13.4606 27.12L14.6606 18.6667H9.99395C8.82062 18.6667 9.55395 17.6667 9.58062 17.6267C11.2606 14.6533 13.7806 10.2533 17.114 4.38667C17.2473 4.14667 17.514 4 17.7806 4C18.2473 4 18.6073 4.41333 18.5406 4.88L17.3406 13.3333H22.0206C22.554 13.3333 22.8473 13.5867 22.554 14.2133C18.1673 21.8667 15.6206 26.3333 14.8873 27.6133C14.754 27.8533 14.5006 28 14.2206 28Z"/></svg><span class="nav__tip">AI로 일하는 방식</span></a><a class="nav__item" href="../skills.html" aria-label="기술"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.61 18.99l-9.08-9.08c.93-2.34.45-5.1-1.44-7C9.79.61 6.21.4 3.66 2.26L7.5 6.11 6.08 7.52 2.25 3.69C.39 6.23.6 9.82 2.9 12.11c1.86 1.86 4.57 2.35 6.89 1.48l9.11 9.11c.39.39 1.02.39 1.41 0l2.3-2.3c.4-.38.4-1.01 0-1.41z"/></svg><span class="nav__tip">기술</span></a><div class="nav__div" aria-hidden="true"><span></span></div><a class="nav__item" href="mailto:hbj3809@naver.com" aria-label="이메일 보내기"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg><span class="nav__tip">hbj3809@naver.com</span></a></nav>
+<main id="main" class="page">
+<header class="intro"><p class="intro__eyebrow">알스솔루션 프로젝트</p><h1>사내 데이터 보정·검수 백오피스</h1><div class="intro__text"><p>의약품 유통 매출 데이터의 보정을 엑셀 왕복·익일 재처리에서 접수 당일 반영으로 바꾼 사내 control plane</p></div><div class="intro__meta"><span><b>알스솔루션</b></span><span>2026.09 ~ 현재</span><span>운영 상시</span><span>백엔드 · 데이터</span></div></header>
+<div class="controls" role="tablist" aria-label="프로젝트 보기">
+<button class="ctl" type="button" role="tab" id="tab-detail" data-panel="detail" aria-controls="panel-detail" aria-selected="true"><span>상세</span></button>
+<button class="ctl" type="button" role="tab" id="tab-problems" data-panel="problems" aria-controls="panel-problems" aria-selected="false"><span>문제해결 <span class="count">4</span></span></button>
+<div class="controls__end"><a class="ctl" href="../projects.html?axis=backend"><span>백엔드 프로젝트 목록 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div>
+</div>
+<div class="card hero-card"><div class="card__media"><div class="cover cover--backend"><p class="cover__title">보정·검수 백오피스</p><p class="cover__sub">의약품 유통 매출 데이터의 보정을 엑셀 왕복·익일 재처리에서 접수 당일 반영으로 바꾼 사내 control plane</p></div></div></div>
+<div class="panel" id="panel-detail" role="tabpanel" aria-labelledby="tab-detail"><div class="overview">
+<div class="overview__side"><div class="stat"><p class="stat__value">접수 당일</p><p class="stat__label">보정 반영</p><p class="stat__note">다음 날 새벽 재처리 → 당일(낮 예약 묶음·즉시 실행)</p></div><div class="stat"><p class="stat__value">91초</p><p class="stat__label">1개월분 보정 묶음 처리 시작 → 공개</p><p class="stat__note">파일럿 실측, 4개월분 328초</p></div><div class="stat"><p class="stat__value">차이 0</p><p class="stat__label">금액 항등식 33개월 실측</p><p class="stat__note">낮 재처리 자동 롤백 가드로 채택</p></div><div class="stat"><p class="stat__value">4일</p><p class="stat__label">다시 받기 설계 착수 → 운영 켜기</p><p class="stat__note">3개 저장소 전체 시험 실패 0</p></div>
+<dl class="facts"><div><dt>회사</dt><dd>알스솔루션 · Engineering팀 · 선임연구원</dd></div><div><dt>기간</dt><dd>2026.09 ~ 현재</dd></div><div><dt>역할</dt><dd>설계·구현 주도 (관리자 API·배치 처리·DB 마이그레이션·화면과의 API 계약)</dd></div><div><dt>팀</dt><dd>스타트업 개발팀 — 백엔드·데이터 담당 (화면은 FE 개발자, 검수 기준·입력은 현업 데이터 운영팀)</dd></div><div><dt>상태</dt><dd>운영 상시</dd></div></dl></div>
+<div class="overview__body"><h2>프로젝트 개요<br><span class="dim">무엇을, 왜 만들었나</span></h2><p class="overview__lead">국내 대형 의약품 유통사의 매출 데이터를 제약사 고객(pharmscope)에게 보여 주기 전에 현업 데이터 운영팀이 검수·보정합니다. 이 백오피스는 그 보정 루프를 화면·API·처리 큐로 옮긴 사내 도구입니다. 1차로 만든 새 계산 엔진은 운영 전환에서 실패해 약 4시간 만에 되돌렸습니다. 그 뒤 기존 보정 표를 유일한 정본으로 두고, 영향받은 달만 한 트랜잭션으로 재처리하는 가벼운 구조로 다시 설계했습니다. 33개월을 실측해 차이 0을 확인한 금액 항등식 '원천 = 정상 + 반려'를 자동 롤백 가드로 두고, 접수 당일 반영을 운영에 올렸습니다. 공급사 매출 다시 받기, 반영 알림, 경보까지 서버와 배치 쪽을 설계·구현했습니다.</p><p class="overview__more">설계·구현 주도 (관리자 API·배치 처리·DB 마이그레이션·화면과의 API 계약) · 스타트업 개발팀 — 백엔드·데이터 담당 (화면은 FE 개발자, 검수 기준·입력은 현업 데이터 운영팀)</p>
+<div><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 사례 4개 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div></div>
+</div><section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">개요</h2><div class="sec__lead"><p>pharmscope 는 국내 대형 의약품 유통사의 매출 데이터를 제약사 고객에게 분석 화면으로 제공하는 서비스입니다. 원천 데이터에는 표준코드·주소·채널이 비거나 틀린 행이 섞여 있어 현업 데이터 운영팀이 검수하고 보정합니다. 이 보정은 엑셀 회신 → 개발자 수기 DB 입력 → 다음 날 새벽 재처리에 기대고 있었습니다. 지난 달 데이터에 대한 보정은 새벽 재처리에 다시 반영되지 않는 결함도 있었습니다. 이 루프를 화면·API·처리 큐로 옮겨, 접수한 보정이 그날 고객 화면에 반영되는 사내 control plane 을 만들었습니다.</p></div></div>
+<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>목표: 보정 접수 당일 반영, 틀린 금액이 공개되지 않게 자동 차단, 사람이 DB 를 직접 고치는 일 없애기</li><li>내 역할: 설계·구현 주도. 관리자 API, 배치 처리·DB 마이그레이션, 고객 API 쪽 반영 알림, 경보, 화면과의 API 계약</li><li>다른 사람 몫: 화면 구현은 FE 개발자, 검수 기준과 검수 입력은 현업 데이터 운영팀. 기존 전처리 구조는 다른 사람이 만든 것이고, 그 위에서 재설계</li><li>팀: 스타트업 개발팀(백엔드·데이터 담당)</li><li>개발 방식: Claude Code 멀티 에이전트 워크플로(조사·설계안·심사·반박 검토). 코드·PR·읽기 확인은 에이전트, 병합·운영 SQL·되돌릴 수 없는 단계 실행·결정은 본인</li><li>기간: 2026.09 ~ 현재, 운영 상시</li></ul></div></div>
 
-<main class="wrap">
-  <p class="eyebrow"><a href="../projects.html">프로젝트</a> · 데이터 · 백엔드</p>
-  <h1>데이터 보정·검수 백오피스</h1>
-  <p class="lead">현업 데이터 운영팀이 매출 데이터를 검수하고 보정하는 루프를 엑셀 왕복에서 화면·API 로 옮기고, 보정이 접수 당일 고객 화면에 반영되게 했습니다. 한 번 실패한 뒤 다시 설계했습니다.</p>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">아키텍처</h2><div class="sec__lead"><p>화면·관리자 API·배치 작업·고객 API 의 책임을 나눴습니다. 관리자 API 는 접수·묶음·설정과 실행 요청까지만 맡습니다. 실제 반영(보정 표 쓰기와 재처리)은 배치 작업이 매출 DB 안에서 한 트랜잭션으로 합니다. 고객 API 는 조회 SQL·인덱스·캐시 키를 그대로 두고, '공개 시각'이 바뀌면 다음 조회부터 새 값을 읽습니다. 중앙 DB(프로젝트·역할·감사)는 특정 사업에 묶지 않아, 다른 사업도 같은 기반에 얹을 수 있습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph USERS[&quot;사용자&quot;]
+    OPS[&quot;현업 데이터 운영팀&lt;br/&gt;검수·보정 접수&quot;]
+    DEVT[&quot;개발팀&lt;br/&gt;다시 받기·야간 처리&quot;]
+  end
+  subgraph BOF[&quot;사내 데이터 보정·검수 백오피스&quot;]
+    WEB[&quot;백오피스 화면&lt;br/&gt;React · FE 담당&quot;]
+    API[&quot;관리자 API&lt;br/&gt;FastAPI · 서버 세션&quot;]
+  end
+  IDP[&quot;사내 SSO&lt;br/&gt;Keycloak OIDC PKCE&quot;]
+  CDB[(&quot;중앙 DB&lt;br/&gt;프로젝트·역할·감사&quot;)]
+  subgraph PIPE[&quot;매출 데이터 처리&quot;]
+    SDB[(&quot;매출 DB&lt;br/&gt;검수 항목·보정 표·묶음 큐&quot;)]
+    TICK[&quot;점검 작업&lt;br/&gt;예약 묶음 시작·마무리&quot;]
+    RUN[&quot;보정 실행 작업&lt;br/&gt;영향월 재처리·공개 표시&quot;]
+    REF[&quot;다시 받기 작업&lt;br/&gt;빈 날 재수집&quot;]
+  end
+  SRC[&quot;유통사 매출 API&quot;]
+  subgraph SVC[&quot;pharmscope&quot;]
+    PAPI[&quot;고객 API&lt;br/&gt;공개 시각 기준 캐시&quot;]
+    NOTI[&quot;반영 알림 작업&quot;]
+  end
+  CUST[&quot;제약사 고객 화면&quot;]
+  MON[&quot;Prometheus · Alertmanager&lt;br/&gt;경보 → 팀 메신저&quot;]
+  OPS --&gt; WEB
+  DEVT --&gt; WEB
+  WEB --&gt;|&quot;세션 쿠키 · CSRF&quot;| API
+  API --&gt;|&quot;로그인 위임&quot;| IDP
+  API --&gt; CDB
+  API --&gt;|&quot;접수 · 묶음 · 설정&quot;| SDB
+  API --&gt;|&quot;즉시 실행 요청&quot;| RUN
+  API --&gt;|&quot;다시 받기 요청&quot;| REF
+  TICK --&gt;|&quot;정해진 시각&quot;| RUN
+  RUN --&gt;|&quot;한 트랜잭션 반영&quot;| SDB
+  REF --&gt;|&quot;빈 날만 받기&quot;| SRC
+  REF --&gt;|&quot;삭제 없이 적재&quot;| SDB
+  SDB --&gt;|&quot;공개 시각&quot;| PAPI
+  PAPI --&gt; CUST
+  NOTI --&gt;|&quot;끝난 묶음 읽기&quot;| SDB
+  NOTI --&gt;|&quot;영향 계약사 알림&quot;| CUST
+  MON -.-&gt;|&quot;감시&quot;| API
+  MON -.-&gt;|&quot;감시&quot;| RUN">flowchart LR
+  subgraph USERS[&quot;사용자&quot;]
+    OPS[&quot;현업 데이터 운영팀&lt;br/&gt;검수·보정 접수&quot;]
+    DEVT[&quot;개발팀&lt;br/&gt;다시 받기·야간 처리&quot;]
+  end
+  subgraph BOF[&quot;사내 데이터 보정·검수 백오피스&quot;]
+    WEB[&quot;백오피스 화면&lt;br/&gt;React · FE 담당&quot;]
+    API[&quot;관리자 API&lt;br/&gt;FastAPI · 서버 세션&quot;]
+  end
+  IDP[&quot;사내 SSO&lt;br/&gt;Keycloak OIDC PKCE&quot;]
+  CDB[(&quot;중앙 DB&lt;br/&gt;프로젝트·역할·감사&quot;)]
+  subgraph PIPE[&quot;매출 데이터 처리&quot;]
+    SDB[(&quot;매출 DB&lt;br/&gt;검수 항목·보정 표·묶음 큐&quot;)]
+    TICK[&quot;점검 작업&lt;br/&gt;예약 묶음 시작·마무리&quot;]
+    RUN[&quot;보정 실행 작업&lt;br/&gt;영향월 재처리·공개 표시&quot;]
+    REF[&quot;다시 받기 작업&lt;br/&gt;빈 날 재수집&quot;]
+  end
+  SRC[&quot;유통사 매출 API&quot;]
+  subgraph SVC[&quot;pharmscope&quot;]
+    PAPI[&quot;고객 API&lt;br/&gt;공개 시각 기준 캐시&quot;]
+    NOTI[&quot;반영 알림 작업&quot;]
+  end
+  CUST[&quot;제약사 고객 화면&quot;]
+  MON[&quot;Prometheus · Alertmanager&lt;br/&gt;경보 → 팀 메신저&quot;]
+  OPS --&gt; WEB
+  DEVT --&gt; WEB
+  WEB --&gt;|&quot;세션 쿠키 · CSRF&quot;| API
+  API --&gt;|&quot;로그인 위임&quot;| IDP
+  API --&gt; CDB
+  API --&gt;|&quot;접수 · 묶음 · 설정&quot;| SDB
+  API --&gt;|&quot;즉시 실행 요청&quot;| RUN
+  API --&gt;|&quot;다시 받기 요청&quot;| REF
+  TICK --&gt;|&quot;정해진 시각&quot;| RUN
+  RUN --&gt;|&quot;한 트랜잭션 반영&quot;| SDB
+  REF --&gt;|&quot;빈 날만 받기&quot;| SRC
+  REF --&gt;|&quot;삭제 없이 적재&quot;| SDB
+  SDB --&gt;|&quot;공개 시각&quot;| PAPI
+  PAPI --&gt; CUST
+  NOTI --&gt;|&quot;끝난 묶음 읽기&quot;| SDB
+  NOTI --&gt;|&quot;영향 계약사 알림&quot;| CUST
+  MON -.-&gt;|&quot;감시&quot;| API
+  MON -.-&gt;|&quot;감시&quot;| RUN</pre></div><figcaption>직접 그린 개념도입니다. 실제 호스트·저장소·작업 이름은 일반화했습니다.</figcaption></figure></div>
 
-  <div class="case">
-    <div>
-      <section>
-        <h2>문제</h2>
-        <p>보정은 엑셀 회신 → 수기 DB 입력 → 다음 날 새벽 재처리에 기대고 있었습니다. 게다가 지난 달 데이터에 대한 보정은 새벽 재처리에 다시 반영되지 않는 결함도 있었습니다.</p>
-      </section>
-      <section>
-        <h2>1차 시도와 되돌림</h2>
-        <p>처음에는 새 계산 엔진과 공개본을 따로 만드는 큰 구조로 갔고, 고객 조회를 새 공개본으로 전환한 날 보정 계산이 실패했습니다. 약 4시간 만에 기존 경로로 되돌리고 같은 밤 정상 운행을 확인했습니다. 원인은 "좁은 시험 성공을 운영 성능 완료로 일반화한 것"이었습니다. 전환 전 개발 환경 시험에서 이미 일부 조회가 30초 가까이 걸렸는데 그 신호를 가볍게 봤습니다.</p>
-      </section>
-      <section>
-        <h2>다시 설계</h2>
-        <ul class="points">
-          <li><b>정본은 하나</b>: 기존 보정 표 4종을 유일한 정본으로 두고, "보정 쓰기 + 영향받은 달만 재전처리 + 공개 표시"를 한 트랜잭션으로 묶는 경량 구조. 새 표 5개, 함수·트리거 0, 고객 조회 SQL·인덱스·캐시 키는 그대로.</li>
-          <li><b>금액 항등식 가드</b>: "원천 = 정상 + 반려" 금액 항등식을 33개월 전 기간 실측(차이 0)해, 낮 재처리가 이 식을 깨면 자동으로 되돌리게 했습니다.</li>
-          <li><b>8단계 전환</b>: 4개 저장소에 걸친 변경을 단계마다 통과 조건·되돌리기·보관본을 둔 8단계로 나눴고, 실제 DB 를 띄운 시험으로 마이그레이션 순서와 옛 이미지 기동까지 확인해 되돌리기를 "이미지 태그 교체"로 단순화했습니다.</li>
-          <li><b>역할 분리</b>: 코드·PR·읽기 확인은 AI 에이전트가, 병합·운영 SQL·되돌릴 수 없는 단계 실행·결정은 제가 했습니다.</li>
-        </ul>
-      </section>
-      <section>
-        <h2>운영에 연 뒤</h2>
-        <p>현업에 연 첫날 들어온 불편·누락 18항목을 당일 판정해 17항목을 그날 저녁 배포했습니다. 수집이 실패한 날 매출을 그날 다시 받는 기능은 설계 착수 4일 만에 켰습니다. 서비스가 멈춰도 알림이 없던 공백은 경보 규칙 14종(가상 시계 시험 41개)으로 메웠고, 보정할 때마다 울리던 "측정 실패" 오경보는 지표가 첫 요청 때에야 생긴다는 원인을 찾아 없앴습니다.</p>
-      </section>
-      <section>
-        <h2>결과</h2>
-        <table class="before-after">
-          <thead><tr><th>지표</th><th>전</th><th>후</th></tr></thead>
-          <tbody>
-            <tr><td>보정 반영</td><td>다음 날 새벽</td><td class="after">접수 당일</td></tr>
-            <tr><td>재계산 범위</td><td>전 기간 약 3.5시간(1차 엔진안)</td><td class="after">영향받은 달만, 1개월분 91초</td></tr>
-            <tr><td>금액 항등식(33개월)</td><td>—</td><td class="after">차이 0, 자동 롤백 가드</td></tr>
-            <tr><td>측정 오경보(과거 18개 구간 재생)</td><td>8건</td><td class="after">0건</td></tr>
-          </tbody>
-        </table>
-      </section>
-    </div>
-    <aside class="case-aside card">
-      <dl>
-        <dt>기간</dt><dd>2026.09 ~ 현재</dd>
-        <dt>회사</dt><dd>알스솔루션</dd>
-        <dt>역할</dt><dd>설계·구현 주도 (검수 기준은 현업, 화면은 FE)</dd>
-        <dt>기술</dt><dd>Python · FastAPI · Keycloak(OIDC PKCE·BFF) · PostgreSQL · Airflow · Kotlin · Prometheus · Alertmanager · Testcontainers</dd>
-        <dt>AI 활용</dt><dd>멀티 에이전트 조사·설계 심사·반증 검토, 3개 저장소 병행 구현</dd>
-      </dl>
-    </aside>
-  </div>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">보정 반영 흐름<span class="dim">접수 → 묶음 → 반영</span></h2><div class="sec__lead"><p>보정 한 건이 고객 화면에 닿는 길입니다. 접수한 보정은 그날 낮 예약 묶음에 들어가거나, 운영자가 즉시 실행을 요청합니다. 여러 달에 걸친 접수는 업무 외 시간으로 미룹니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="sequenceDiagram
+  participant O as 현업 운영자 화면
+  participant A as 관리자 API
+  participant D as 매출 DB
+  participant T as 점검 작업
+  participant R as 보정 실행 작업
+  participant P as pharmscope API
+  participant N as 반영 알림 작업
+  O-&gt;&gt;A: 검수 항목 선택과 보정 미리보기 요청
+  A-&gt;&gt;D: 영향 행과 금액 미리 계산
+  A--&gt;&gt;O: 미리보기 결과
+  O-&gt;&gt;A: 보정 접수
+  A-&gt;&gt;D: 접수 저장과 오늘 묶음 배정
+  alt 즉시 실행
+    O-&gt;&gt;A: 즉시 실행 요청
+    A-&gt;&gt;R: 실행 요청
+  else 예약 묶음
+    T-&gt;&gt;D: 정해진 시각에 묶음 선점
+    T-&gt;&gt;R: 실행 요청
+  end
+  R-&gt;&gt;D: 원문 키 관측 달 색인으로 영향받은 달 계산
+  R-&gt;&gt;D: 한 트랜잭션으로 보정 표 쓰기와 영향월 재처리
+  alt 금액 항등식 불일치
+    R-&gt;&gt;D: 전체 롤백 후 실패로 닫기
+  else 일치
+    R-&gt;&gt;D: 확정 후 표 정리와 미리 데우기
+    R-&gt;&gt;D: 공개 시각 기록
+  end
+  P-&gt;&gt;D: 새 공개 시각 감지 후 캐시 키 전진
+  N-&gt;&gt;D: 끝난 묶음과 영향 계약사 확인
+  Note over N: 어드민과 영향 계약사에 반영 알림 생성">sequenceDiagram
+  participant O as 현업 운영자 화면
+  participant A as 관리자 API
+  participant D as 매출 DB
+  participant T as 점검 작업
+  participant R as 보정 실행 작업
+  participant P as pharmscope API
+  participant N as 반영 알림 작업
+  O-&gt;&gt;A: 검수 항목 선택과 보정 미리보기 요청
+  A-&gt;&gt;D: 영향 행과 금액 미리 계산
+  A--&gt;&gt;O: 미리보기 결과
+  O-&gt;&gt;A: 보정 접수
+  A-&gt;&gt;D: 접수 저장과 오늘 묶음 배정
+  alt 즉시 실행
+    O-&gt;&gt;A: 즉시 실행 요청
+    A-&gt;&gt;R: 실행 요청
+  else 예약 묶음
+    T-&gt;&gt;D: 정해진 시각에 묶음 선점
+    T-&gt;&gt;R: 실행 요청
+  end
+  R-&gt;&gt;D: 원문 키 관측 달 색인으로 영향받은 달 계산
+  R-&gt;&gt;D: 한 트랜잭션으로 보정 표 쓰기와 영향월 재처리
+  alt 금액 항등식 불일치
+    R-&gt;&gt;D: 전체 롤백 후 실패로 닫기
+  else 일치
+    R-&gt;&gt;D: 확정 후 표 정리와 미리 데우기
+    R-&gt;&gt;D: 공개 시각 기록
+  end
+  P-&gt;&gt;D: 새 공개 시각 감지 후 캐시 키 전진
+  N-&gt;&gt;D: 끝난 묶음과 영향 계약사 확인
+  Note over N: 어드민과 영향 계약사에 반영 알림 생성</pre></div><figcaption>운영 문서의 '접수 시각에서 고객 반영 시각까지' 장을 바탕으로 그린 흐름입니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>영향받은 달: 원문 키(제품·배송처)가 관측된 달 색인으로 계산 — 전 기간을 다시 계산하지 않음</li><li>안전장치: 금액 항등식 '원천 = 정상 + 반려'가 깨지면 트랜잭션 전체를 되돌리고 실패로 닫음</li><li>자동 중지: 보정이 도는 동안 고객 조회에 시간 초과가 생기면 예약 처리를 멈추고, 관리자가 재개할 때까지 대기</li><li>확정과 공개 표시 분리: 확정 뒤 멈춘 묶음은 다음 점검 작업이 이어 받아 공개까지 마무리</li><li>반영 알림: 고객 조회 경로 밖의 작업이 끝난 묶음을 읽어 어드민·영향 계약사 알림 생성</li></ul></div></div>
+
+</section>
+<section class="sec sec--glow sec--flip">
+<div class="sec__head"><h2 class="sec__title">보정 묶음 상태</h2><div class="sec__lead"><p>묶음은 상태 기계로 관리합니다. 서버가 상태를 판정해 화면 상단 띠에 '오늘 실패', '확정 뒤 공개 대기', '즉시 실행이 오래 대기'를 급한 순서로 보여 줍니다. 운영자는 화면만 보고 지금 손댈 곳을 압니다. 여러 달에 걸친 접수는 처음부터 야간 대기로 저장되고, 그날 시작하지 못한 즉시 묶음은 실패로 닫혀 재시도를 기다립니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="stateDiagram-v2
+  state &quot;접수 대기&quot; as Queued
+  state &quot;야간 대기&quot; as Deferred
+  state &quot;선점&quot; as Claimed
+  state &quot;처리 중&quot; as Running
+  state &quot;확정&quot; as Committed
+  state &quot;반영 완료&quot; as Applied
+  state &quot;재처리 없이 완료&quot; as NoReprocess
+  state &quot;보정 표만 반영&quot; as TableApplied
+  state &quot;실패&quot; as Failed
+  state &quot;취소&quot; as Cancelled
+  [*] --&gt; Queued: 접수
+  [*] --&gt; Deferred: 여러 달에 걸친 접수
+  Queued --&gt; Cancelled: 반영 전 취소
+  Queued --&gt; Claimed: 점검 작업 또는 즉시 실행
+  Queued --&gt; Failed: 그날 시작하지 못한 즉시 묶음
+  Deferred --&gt; Claimed: 업무 외 시간 시작
+  Deferred --&gt; TableApplied: 아주 큰 접수는 두 단계
+  TableApplied --&gt; Applied: 일일 전처리로 재처리
+  Claimed --&gt; Running
+  Running --&gt; NoReprocess: 값 변화 없는 검토 완료
+  Running --&gt; Committed: 보정 표 쓰기와 재처리 확정
+  Running --&gt; Failed: 오류 또는 금액 항등식 불일치
+  Committed --&gt; Applied: 공개 시각 기록
+  Failed --&gt; Queued: 화면에서 재시도
+  Applied --&gt; [*]
+  NoReprocess --&gt; [*]
+  Cancelled --&gt; [*]">stateDiagram-v2
+  state &quot;접수 대기&quot; as Queued
+  state &quot;야간 대기&quot; as Deferred
+  state &quot;선점&quot; as Claimed
+  state &quot;처리 중&quot; as Running
+  state &quot;확정&quot; as Committed
+  state &quot;반영 완료&quot; as Applied
+  state &quot;재처리 없이 완료&quot; as NoReprocess
+  state &quot;보정 표만 반영&quot; as TableApplied
+  state &quot;실패&quot; as Failed
+  state &quot;취소&quot; as Cancelled
+  [*] --&gt; Queued: 접수
+  [*] --&gt; Deferred: 여러 달에 걸친 접수
+  Queued --&gt; Cancelled: 반영 전 취소
+  Queued --&gt; Claimed: 점검 작업 또는 즉시 실행
+  Queued --&gt; Failed: 그날 시작하지 못한 즉시 묶음
+  Deferred --&gt; Claimed: 업무 외 시간 시작
+  Deferred --&gt; TableApplied: 아주 큰 접수는 두 단계
+  TableApplied --&gt; Applied: 일일 전처리로 재처리
+  Claimed --&gt; Running
+  Running --&gt; NoReprocess: 값 변화 없는 검토 완료
+  Running --&gt; Committed: 보정 표 쓰기와 재처리 확정
+  Running --&gt; Failed: 오류 또는 금액 항등식 불일치
+  Committed --&gt; Applied: 공개 시각 기록
+  Failed --&gt; Queued: 화면에서 재시도
+  Applied --&gt; [*]
+  NoReprocess --&gt; [*]
+  Cancelled --&gt; [*]</pre></div><figcaption>실패는 확정 전에만 생기므로, 화면의 실패 문구 '데이터는 반영 전 상태'가 모든 실패에 맞습니다. 확정 뒤 멈춘 묶음은 실패로 치지 않고, 다음 점검 작업이 공개까지 이어 받습니다.</figcaption></figure></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">개념 데이터 모델</h2><div class="sec__lead"><p>실제 테이블 이름 대신 개념 이름으로 그린 데이터 모델입니다. 보정의 정본은 기존 보정 표 하나뿐입니다. 보정 표의 행마다 마지막으로 적용한 묶음을 남겨, 화면에 그 행이 어디서 왔는지(보정 접수·이관·기록 없음)를 보여 줍니다. 예전 수기 보정 이력도 묶음 이력으로 옮겼습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="erDiagram
+  PROJECT ||--o{ ROLE_GRANT : &quot;역할 부여&quot;
+  STAFF ||--o{ ROLE_GRANT : &quot;소속&quot;
+  STAFF ||--o{ AUDIT_LOG : &quot;행위 기록&quot;
+  PROJECT ||--o{ REVIEW_ITEM : &quot;검수 대상&quot;
+  REVIEW_ITEM ||--o{ CORRECTION_REQUEST : &quot;근거&quot;
+  STAFF ||--o{ CORRECTION_REQUEST : &quot;접수&quot;
+  APPLY_BATCH ||--o{ CORRECTION_REQUEST : &quot;묶음 포함&quot;
+  APPLY_BATCH ||--o{ CORRECTION_ENTRY : &quot;마지막 적용&quot;
+  CORRECTION_ENTRY }o--o{ KEY_SEEN_MONTH : &quot;같은 원문 키&quot;
+  APPLY_BATCH ||--o{ REFETCH_JOB : &quot;함께 반영&quot;
+  PROJECT {
+    string project_id PK
+    string name
+  }
+  STAFF {
+    string staff_id PK
+    string sso_subject
+    string status
+  }
+  ROLE_GRANT {
+    string project_id FK
+    string staff_id FK
+    string role
+    string sync_status
+  }
+  AUDIT_LOG {
+    string log_id PK
+    string actor_id FK
+    string action
+    datetime occurred_at
+  }
+  REVIEW_ITEM {
+    string item_id PK
+    string project_id FK
+    string issue_key
+    string status
+  }
+  CORRECTION_REQUEST {
+    string request_id PK
+    string item_id FK
+    string batch_id FK
+    datetime submitted_at
+  }
+  APPLY_BATCH {
+    string batch_id PK
+    string trigger_type
+    string status
+    datetime published_at
+  }
+  CORRECTION_ENTRY {
+    string entry_id PK
+    string category
+    string source_key
+    string last_batch_id FK
+  }
+  KEY_SEEN_MONTH {
+    string source_key PK
+    date seen_month PK
+  }
+  REFETCH_JOB {
+    string job_id PK
+    date sales_date
+    string status
+    string batch_id FK
+  }">erDiagram
+  PROJECT ||--o{ ROLE_GRANT : &quot;역할 부여&quot;
+  STAFF ||--o{ ROLE_GRANT : &quot;소속&quot;
+  STAFF ||--o{ AUDIT_LOG : &quot;행위 기록&quot;
+  PROJECT ||--o{ REVIEW_ITEM : &quot;검수 대상&quot;
+  REVIEW_ITEM ||--o{ CORRECTION_REQUEST : &quot;근거&quot;
+  STAFF ||--o{ CORRECTION_REQUEST : &quot;접수&quot;
+  APPLY_BATCH ||--o{ CORRECTION_REQUEST : &quot;묶음 포함&quot;
+  APPLY_BATCH ||--o{ CORRECTION_ENTRY : &quot;마지막 적용&quot;
+  CORRECTION_ENTRY }o--o{ KEY_SEEN_MONTH : &quot;같은 원문 키&quot;
+  APPLY_BATCH ||--o{ REFETCH_JOB : &quot;함께 반영&quot;
+  PROJECT {
+    string project_id PK
+    string name
+  }
+  STAFF {
+    string staff_id PK
+    string sso_subject
+    string status
+  }
+  ROLE_GRANT {
+    string project_id FK
+    string staff_id FK
+    string role
+    string sync_status
+  }
+  AUDIT_LOG {
+    string log_id PK
+    string actor_id FK
+    string action
+    datetime occurred_at
+  }
+  REVIEW_ITEM {
+    string item_id PK
+    string project_id FK
+    string issue_key
+    string status
+  }
+  CORRECTION_REQUEST {
+    string request_id PK
+    string item_id FK
+    string batch_id FK
+    datetime submitted_at
+  }
+  APPLY_BATCH {
+    string batch_id PK
+    string trigger_type
+    string status
+    datetime published_at
+  }
+  CORRECTION_ENTRY {
+    string entry_id PK
+    string category
+    string source_key
+    string last_batch_id FK
+  }
+  KEY_SEEN_MONTH {
+    string source_key PK
+    date seen_month PK
+  }
+  REFETCH_JOB {
+    string job_id PK
+    date sales_date
+    string status
+    string batch_id FK
+  }</pre></div><figcaption>개념 ERD 입니다. 실제 스키마의 테이블·컬럼 이름이 아닙니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>직원·역할·감사: 중앙 DB, 특정 사업에 묶지 않음</li><li>검수 항목·접수·묶음·보정 표·키 관측 달 색인·다시 받기: 매출 DB</li><li>보정 표 범주: 표준코드·주소·채널·검토 완료 목록</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">설계 결정과 이유</h2><div class="sec__lead"><p>1차 실패에서 배운 것을 기준으로, 움직이는 부품을 줄이고 되돌리기 쉬운 쪽을 골랐습니다.</p></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>결정</th><th>고른 안</th><th>버린 안</th><th>이유</th></tr></thead><tbody><tr><td>보정의 정본</td><td>기존 보정 표 하나를 유일한 정본으로</td><td>새 계산 엔진·별도 공개본</td><td>새 엔진은 접수가 엔진 내부에만 있어 기존 전처리와 공존할 수 없었음. 원천보다 훨씬 큰 공개본을 전 기간 다시 계산하는 데 약 3.5시간이 걸렸음</td></tr><tr><td>재계산 범위</td><td>원문 키가 관측된 달 색인으로 영향받은 달만</td><td>전 기간 재계산</td><td>낮에 돌려야 하므로 짧아야 함 — 파일럿 1개월분 91초</td></tr><tr><td>낮 재처리 안전장치</td><td>33개월 실측으로 성립을 확인한 금액 항등식을 자동 롤백 가드로</td><td>가드 없이 낮 재처리 공개</td><td>실측으로 성립이 확인된 식만 가드로 삼아, 정상 반영이 가드에 걸려 멈추는 일을 막음</td></tr><tr><td>처리 큐 위치</td><td>매출 DB 안 단일 큐 + 점검 작업</td><td>중앙 DB 다단 왕복·worker·메시지 결과 통보</td><td>움직이는 부품을 줄여 실패 지점을 줄임</td></tr><tr><td>즉시 실행 경로</td><td>배치 작업 REST 호출, 서비스 계정 권한은 그 작업 하나로 한정</td><td>권한이 넓은 공용 계정</td><td>백오피스가 다른 배치를 건드릴 수 없게</td></tr><tr><td>고객 서빙 경로</td><td>조회 SQL·인덱스·캐시 키 그대로</td><td>새 공개본 조회로 교체</td><td>1차 전환에서 서빙 경로를 바꾸며 떠안은 성능 위험을 되풀이하지 않으려고</td></tr><tr><td>전환 방식</td><td>4개 저장소 8단계, 단계마다 통과 조건·되돌리기·보관본</td><td>한 번에 전환</td><td>Testcontainers 로 마이그레이션 순서와 옛 이미지 기동을 실증해 되돌리기를 '이미지 태그 교체'로 단순화</td></tr><tr><td>사람의 DB 직접 수정</td><td>사람 계정의 보정 표 쓰기 권한 회수</td><td>수기 입력 병행</td><td>모든 변경이 묶음 이력과 영향월 재처리를 거치게</td></tr><tr><td>반영 알림</td><td>고객 조회 경로 밖 확인 작업, 꺼짐 → 로그만 → 어드민만 → 전체 순서로 켜기</td><td>반영 작업 안에서 바로 발송</td><td>알림 생성이 고객 조회 성능에 영향을 주지 않게. 한 번 나간 알림은 회수할 수 없어서 단계적으로</td></tr></tbody></table></div></div>
+
+</section>
+<section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">8단계 전환</h2><div class="sec__lead"><p>4개 저장소(고객 API·DB 마이그레이션, 배치, 관리자 API, 배포 매니페스트)에 걸친 전환을 8단계로 나눴습니다. 단계마다 통과 조건, 되돌리는 방법, 보관본을 먼저 정한 뒤 진행했습니다.</p></div></div>
+<div class="sec__body"><ol class="tl"><li><div class="tl__when">1단계</div><div class="tl__what"><b>기준선 측정과 되돌리기 실증</b><span>기준선 측정 도구를 먼저 만들고, Testcontainers 로 마이그레이션 순서와 옛 이미지 기동을 실증해 되돌리기를 '이미지 태그 교체'로 단순화</span></div></li><li><div class="tl__when">2단계</div><div class="tl__what"><b>고객 API 요청 경로 정리</b><span>요청마다 되풀이되던 동의 철회 접근 확인 조회를 줄임. 처음 설계한 필터 제거안은 대조 실험에서 유일한 차단 장치로 드러나 철회하고, 중복 조회 제거와 짧은 메모로 대체</span></div></li><li><div class="tl__when">3단계</div><div class="tl__what"><b>폐기 공개본 정리</b><span>되돌린 1차 엔진의 공개본 파티션을 업무 외 시간에 나눠 지우며 회차마다 잠금 대기를 감시</span></div></li><li><div class="tl__when">4단계</div><div class="tl__what"><b>배치 정비</b><span>전처리 판정 조각을 공유 모듈로 글자 그대로 옮기고 동등성 하네스로 동작이 같음을 확인. 원문 키 관측 달 색인 갱신, 검수 항목 생산, 점검·보정 실행 작업 추가</span></div></li><li><div class="tl__when">5단계</div><div class="tl__what"><b>관리자 API 재배선</b><span>접수·묶음·즉시 실행·예약 설정·키워드 사전을 새 구조에 연결하고, 옛 경로는 '없어진 기능' 응답(410)으로 닫음</span></div></li><li><div class="tl__when">6단계</div><div class="tl__what"><b>운영 파일럿</b><span>묶음 처리 시작 → 공개 1개월분 91초·4개월분 328초. 읽기 전용 대조로 의도하지 않은 데이터 변동이 없는지 확인</span></div></li><li><div class="tl__when">7단계</div><div class="tl__what"><b>사람 계정의 보정 표 쓰기 권한 회수</b><span>모든 변경이 묶음 이력과 영향월 재처리를 거치게 함</span></div></li><li><div class="tl__when">8단계</div><div class="tl__what"><b>폐기 엔진 객체 삭제</b><span>표 73개·함수 154개 삭제. 운영 스키마 덤프로 격리 DB 리허설, 되돌릴 수 없는 단계마다 보관본 해시 대조. 확정 뒤 첫 평일 새벽 처리와 월마감 통과</span></div></li></ol></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">권한·감사</h2><div class="sec__lead"><p>직원 비밀번호와 인증은 사내 SSO 가 소유하고, 백오피스는 서버 세션만 가집니다(BFF). 브라우저에는 토큰 원문을 주지 않습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="sequenceDiagram
+  participant B as 직원 브라우저
+  participant A as 관리자 API
+  participant K as 사내 SSO
+  participant C as 중앙 DB
+  participant S as 권한 동기화 도구
+  B-&gt;&gt;A: 로그인 시작
+  A--&gt;&gt;B: SSO 로 이동(PKCE 와 state, nonce)
+  B-&gt;&gt;K: 직원 인증
+  K--&gt;&gt;B: 인가 코드와 함께 콜백으로 이동
+  B-&gt;&gt;A: 콜백
+  A-&gt;&gt;K: 인가 코드를 토큰으로 교환
+  A-&gt;&gt;A: 서명과 state, nonce 검증
+  A-&gt;&gt;C: 서버 세션 저장(식별자는 해시, 토큰은 암호화)
+  A--&gt;&gt;B: 세션 쿠키만 전달(토큰 원문 없음)
+  B-&gt;&gt;A: 업무 요청(세션 쿠키와 CSRF 토큰)
+  A-&gt;&gt;C: 토큰 역할과 현재 부여의 교집합 확인
+  A-&gt;&gt;C: 변경 요청 감사 기록
+  A--&gt;&gt;B: 응답
+  Note over S,K: 권한 부여와 회수는 접수 후 운영자 도구가 SSO 역할과 맞춘다">sequenceDiagram
+  participant B as 직원 브라우저
+  participant A as 관리자 API
+  participant K as 사내 SSO
+  participant C as 중앙 DB
+  participant S as 권한 동기화 도구
+  B-&gt;&gt;A: 로그인 시작
+  A--&gt;&gt;B: SSO 로 이동(PKCE 와 state, nonce)
+  B-&gt;&gt;K: 직원 인증
+  K--&gt;&gt;B: 인가 코드와 함께 콜백으로 이동
+  B-&gt;&gt;A: 콜백
+  A-&gt;&gt;K: 인가 코드를 토큰으로 교환
+  A-&gt;&gt;A: 서명과 state, nonce 검증
+  A-&gt;&gt;C: 서버 세션 저장(식별자는 해시, 토큰은 암호화)
+  A--&gt;&gt;B: 세션 쿠키만 전달(토큰 원문 없음)
+  B-&gt;&gt;A: 업무 요청(세션 쿠키와 CSRF 토큰)
+  A-&gt;&gt;C: 토큰 역할과 현재 부여의 교집합 확인
+  A-&gt;&gt;C: 변경 요청 감사 기록
+  A--&gt;&gt;B: 응답
+  Note over S,K: 권한 부여와 회수는 접수 후 운영자 도구가 SSO 역할과 맞춘다</pre></div><figcaption>인증 원장은 SSO 가, 권한 연결과 감사는 중앙 DB 가 맡습니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>권한 판정: 검증된 토큰 역할과 중앙 DB 의 현재 부여가 둘 다 있을 때만 통과 — 한쪽에만 남은 권한은 거절</li><li>권한 부여·회수: 접수 후 운영자 동기화 도구가 SSO 역할과 맞춤. 서비스 프로세스에는 SSO 관리자 자격 없음</li><li>감사: 인증된 변경 요청은 실패까지 감사 기록. 감사 조회는 범위 밖 기록의 존재 여부를 숨김</li><li>동기화 도구가 수명이 짧은 관리자 토큰을 갱신하지 않아 중간에 멈춘 일을 겪은 뒤, 실행 중 재인증 래퍼와 멈춘 지점별 복구 절차 추가</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">매출 다시 받기</h2><div class="sec__lead"><p>새벽 수집이 실패하거나 오류 없이 0건으로 끝난 날의 매출을, 다음 새벽 자동 보충을 기다리지 않고 그날 다시 받는 기능입니다. 낮 재수집에는 위험이 셋 있었습니다. 멈춘 작업이 보정을 막을 수 있고, 대량 삭제가 고객 캐시를 밀어낼 수 있으며, 고객 알림에 재수집분이 섞일 수 있었습니다. 이 위험을 먼저 정리하고 설계했습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TD
+  REQ[&quot;개발팀 다시 받기 요청&lt;br/&gt;최근 매출이 빈 날만&quot;] --&gt; GUARD{&quot;하루 상한·&lt;br/&gt;새벽 차단 시간&quot;}
+  GUARD --&gt;|&quot;넘음&quot;| REJ[&quot;접수 거절&quot;]
+  GUARD --&gt;|&quot;통과&quot;| PROVE{&quot;그날 원천 행이 없음을&lt;br/&gt;두 번 증명했나&quot;}
+  PROVE --&gt;|&quot;증명 안 됨&quot;| SKIP[&quot;원천에 손대지 않고 종료&lt;br/&gt;수동 수집으로 처리&quot;]
+  PROVE --&gt;|&quot;증명됨&quot;| FETCH[&quot;유통사 API 에서 받기&lt;br/&gt;한 트랜잭션 적재 · 삭제 없음&quot;]
+  FETCH --&gt;|&quot;0건&quot;| ZERO[&quot;다음 새벽에 다시 확인&quot;]
+  FETCH --&gt;|&quot;받음&quot;| XLS[&quot;엑셀 다운로드는 바로 새 행&quot;]
+  FETCH --&gt;|&quot;받음&quot;| PATH{&quot;그날 반영 조건&lt;br/&gt;오전 접수 · 설정 켜짐 · 금액 이상 행 없음&quot;}
+  PATH --&gt;|&quot;충족&quot;| SLOT[&quot;낮 보정 묶음에 합류&lt;br/&gt;공개 표시 뒤 화면 반영&quot;]
+  PATH --&gt;|&quot;불충족&quot;| DAWN[&quot;다음 새벽 일일 처리에서 반영&quot;]
+  FETCH --&gt;|&quot;받기 실패가 이틀 연속&quot;| OFF[&quot;자동 꺼짐 · 긴급 경보&lt;br/&gt;원인 메모 후 다시 켜기&quot;]
+  SLOT --&gt;|&quot;반영 중 고객 화면 오류&quot;| OFF">flowchart TD
+  REQ[&quot;개발팀 다시 받기 요청&lt;br/&gt;최근 매출이 빈 날만&quot;] --&gt; GUARD{&quot;하루 상한·&lt;br/&gt;새벽 차단 시간&quot;}
+  GUARD --&gt;|&quot;넘음&quot;| REJ[&quot;접수 거절&quot;]
+  GUARD --&gt;|&quot;통과&quot;| PROVE{&quot;그날 원천 행이 없음을&lt;br/&gt;두 번 증명했나&quot;}
+  PROVE --&gt;|&quot;증명 안 됨&quot;| SKIP[&quot;원천에 손대지 않고 종료&lt;br/&gt;수동 수집으로 처리&quot;]
+  PROVE --&gt;|&quot;증명됨&quot;| FETCH[&quot;유통사 API 에서 받기&lt;br/&gt;한 트랜잭션 적재 · 삭제 없음&quot;]
+  FETCH --&gt;|&quot;0건&quot;| ZERO[&quot;다음 새벽에 다시 확인&quot;]
+  FETCH --&gt;|&quot;받음&quot;| XLS[&quot;엑셀 다운로드는 바로 새 행&quot;]
+  FETCH --&gt;|&quot;받음&quot;| PATH{&quot;그날 반영 조건&lt;br/&gt;오전 접수 · 설정 켜짐 · 금액 이상 행 없음&quot;}
+  PATH --&gt;|&quot;충족&quot;| SLOT[&quot;낮 보정 묶음에 합류&lt;br/&gt;공개 표시 뒤 화면 반영&quot;]
+  PATH --&gt;|&quot;불충족&quot;| DAWN[&quot;다음 새벽 일일 처리에서 반영&quot;]
+  FETCH --&gt;|&quot;받기 실패가 이틀 연속&quot;| OFF[&quot;자동 꺼짐 · 긴급 경보&lt;br/&gt;원인 메모 후 다시 켜기&quot;]
+  SLOT --&gt;|&quot;반영 중 고객 화면 오류&quot;| OFF</pre></div><figcaption>운영 문서의 '다운로드가 먼저, 화면은 나중' 장을 바탕으로 그린 판정 흐름입니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>'그날 원천 행이 없음'을 두 번 증명한 날만 적재 → 낮에 삭제 없음</li><li>두 개의 시각: 엑셀 다운로드는 원천을 바로 읽어 받은 직후 바뀌고, 화면은 공개 표시 뒤 바뀜 — 화면 상태 문구와 운영 문서로 안내</li><li>멱등 재전송·하루 상한·연속 실패 시 자동 꺼짐. 원인 메모를 남겨야 다시 켜짐</li><li>재수집 날짜는 고객 영향 계산·알림에서 제외</li><li>고객 API·관리자 API·배치 세 저장소 병행 구현, 저장소별 전체 시험 통과를 배포 관문으로 — 설계 착수 4일 만에 운영 켜기, 스모크 요청 → 완료 약 32초</li><li>버튼 화면은 FE 개발자. 기능 제안과 정책 결정은 본인</li></ul></div></div>
+
+</section>
+<section class="sec sec--glow sec--flip">
+<div class="sec__head"><h2 class="sec__title">오픈 대응과 감시</h2><div class="sec__lead"><p>현업에 연 뒤에는 요청을 빨리 처리하는 것과 '조용한 실패'를 줄이는 데 집중했습니다.</p></div></div>
+<div class="sec__body"><div class="tiles"><div class="tile"><h3>오픈 첫날 현업 요청 18항목</h3><p>현업에 연 첫날 불편·누락 18항목(질문 1건 포함)이 들어왔습니다. 항목마다 누락·불일치·설계상 정상으로 당일 판정하고, 17항목을 그날 운영 배포했습니다. 스키마·권한 변경 없이 새 조회 경로와 보류 해제 동작을 더했고, 느려지면 끌 수 있는 기능 스위치를 두었습니다.</p></div><div class="tile"><h3>FE 화면 개선 계약</h3><p>프론트엔드의 개선 요청을 코드 근거로 대조해 결정안 16개로 정리했습니다. 실수를 고치려면 여러 검수자가 함께 쓰는 예약 묶음을 통째로 취소해야 하는 구조였습니다. 이 부분은 '이 접수만 취소'를 두고, 앞 값이 아직 반영되지 않았으면 409로 거절하는 규칙으로 원안과 다르게 합의했습니다. 서버·배치 변경은 3일 만에 운영에 반영했습니다. 스테이징이 없어 시험 자료 요청은 운영 스키마 단계 통합 시험으로 대신했고, 세부 2건은 합의대로 보류했습니다.</p></div><div class="tile"><h3>보정 반영 알림</h3><p>보정이 고객 데이터에 반영되면 어드민과 영향받은 계약사에 알림을 만듭니다. 고객 조회 경로 밖의 확인 작업이 끝난 묶음을 읽고, 조회 연결에 대기가 있으면 그 회차를 건너뜁니다. 꺼짐 → 로그만 → 어드민만 → 전체 순서로 켰습니다.</p></div><div class="tile"><h3>경보와 처리 상태 점검</h3><p>경보 규칙 14종(가상 시계 시험 41개)과 알림 라우팅 안전 적용 도구를 만들었습니다. 보정마다 울리던 측정 오경보는 원인을 찾아, 과거 18개 창 재생 기준 8건 → 0건으로 줄였습니다(1단계 수정 기준). 감시는 처리 상태 점검·작업별 실패 알림·지표 경보의 세 층으로 정리했습니다. 경보 없이 지나갈 수 있는 실패는 목록으로 만들어 매일 확인 항목으로 두었습니다.</p></div><div class="tile"><h3>분석 제외 키워드 사전</h3><p>현업이 의약외품을 분석에서 빼 달라고 요청했습니다. 읽기 전용 실측으로 대상 대부분이 이미 검토 완료 목록에 있음을 확인하고, 데이터를 바꾸지 않는 축소안을 택했습니다. 등록·해제는 재처리 없이 바로 반영됩니다. 검토 중에는 NOT (A OR K) 형태의 실행 계획 회귀를 병합 전에 잡았습니다.</p></div><div class="tile"><h3>한국어 문서화 게이트</h3><p>1차 구축 때 docstring·DB 주석·OpenAPI 설명을 한국어로 강제하는 AST 기반 CI 게이트를 넣었습니다. 지금도 전체 시험이 문서화 누락과 DB 주석·모델 설명의 불일치를 함께 검사합니다.</p></div><div class="tile"><h3>폐기 엔진 정리</h3><p>되돌린 1차 엔진의 표 73개·함수 154개를 마이그레이션으로 지웠습니다. 운영 스키마 덤프를 격리 DB 에 넣어 리허설하고, 되돌릴 수 없는 단계마다 보관본을 해시로 대조했습니다.</p></div><div class="tile"><h3>CI 시간 원인 계측</h3><p>백엔드 빌드가 오래 걸리는 원인을 계측해, 시험 DB 가 CPU 상한에 걸려 느려지는 것과 문서 시험이 명세를 반복 생성하는 것을 찾았습니다. 시험을 빼는 대신 운영 스키마 단계 통합 시험을 더하고, 시험 단계를 우회하는 파이프라인 변경을 막는 계약 시험을 붙였습니다.</p></div></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">성과</h2><div class="sec__lead"><p>보정 반영을 다음 날 새벽에서 접수 당일로 옮겼고, 낮 재처리는 영향받은 달만 짧게 돌게 만들었습니다.</p></div></div>
+<div class="sec__body"><figure class="figure figure--soft"><div class="chart"><svg viewBox="0 0 720 320" role="img" aria-label="막대 차트"><line x1="16" x2="704" y1="256" y2="256" stroke="#3f424d" stroke-width="1"/><path class="mark" tabindex="0" data-tip="1개월분 보정 묶음: 91초" d="M176,256V219.96Q176,215.96 180,215.96H196Q200,215.96 200,219.96V256Z" fill="#3d6bf4"/><text x="188" y="205.96" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">91초</text><text x="188" y="278" text-anchor="middle" font-size="13" fill="#9196a5">1개월분 보정 묶음</text><path class="mark" tabindex="0" data-tip="4개월분 보정 묶음: 328초" d="M520,256V115.68Q520,111.68 524,111.68H540Q544,111.68 544,115.68V256Z" fill="#3d6bf4"/><text x="532" y="101.68" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">328초</text><text x="532" y="278" text-anchor="middle" font-size="13" fill="#9196a5">4개월분 보정 묶음</text></svg><details><summary>표로 보기</summary><div class="table-wrap"><table class="t"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>1개월분 보정 묶음</td><td>91초</td></tr><tr><td>4개월분 보정 묶음</td><td>328초</td></tr></tbody></table></div></details></div><figcaption style="padding:12px 0 0">파일럿 실측입니다. 보정 묶음 처리 시작부터 고객 공개 표시까지 잰 값이고, 접수 시각부터 세면 대기 시간이 더해집니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>보정 반영: 다음 날 새벽 재처리 → 접수 당일(낮 예약 묶음·즉시 실행)</li><li>재계산 범위: 1차 엔진안 전 기간 약 3.5시간 → 영향받은 달만(1개월분 91초). 설계안별 범위를 비교한 값이며, 같은 작업의 전후가 아님</li><li>금액 항등식 '원천 = 정상 + 반려' 33개월 실측 차이 0 → 낮 재처리 자동 롤백 가드</li><li>폐기 엔진 표 73개·함수 154개 삭제</li><li>다시 받기: 설계 착수 4일 만에 운영 켜기, 스모크 요청 → 완료 약 32초, 3개 저장소 전체 시험 실패 0</li><li>오픈 첫날 현업 요청 18항목 당일 판정·17항목 당일 운영 배포, FE 요청은 결정안 16개·3일 만에 서버 반영</li><li>경보 규칙 14종(가상 시계 시험 41개), 측정 오경보 8건 → 0건(과거 18개 창 재생, 1단계 수정 기준)</li></ul></div></div>
+
+</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>서버</h3><div class="card__tags"><span class="tag">Python 3.13</span><span class="tag">FastAPI</span><span class="tag">Kotlin</span><span class="tag">Spring WebFlux</span></div></div><div class="stack__group"><h3>데이터 처리</h3><div class="card__tags"><span class="tag">PostgreSQL 16/17</span><span class="tag">Apache Airflow 3</span><span class="tag">Alembic</span><span class="tag">Flyway</span></div></div><div class="stack__group"><h3>인증·권한</h3><div class="card__tags"><span class="tag">Keycloak (OIDC Code + PKCE)</span><span class="tag">BFF 서버 세션</span></div></div><div class="stack__group"><h3>운영·감시</h3><div class="card__tags"><span class="tag">Kubernetes</span><span class="tag">Argo CD</span><span class="tag">Jenkins</span><span class="tag">Prometheus</span><span class="tag">Alertmanager</span><span class="tag">promtool</span><span class="tag">Micrometer</span></div></div><div class="stack__group"><h3>시험</h3><div class="card__tags"><span class="tag">pytest</span><span class="tag">Testcontainers</span></div></div><div class="stack__group"><h3>AI 도구</h3><div class="card__tags"><span class="tag">Claude Code (멀티 에이전트 워크플로)</span><span class="tag">Codex</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">1차 신규 엔진 전환 실패 → 되돌림 → 가벼운 구조로 재설계 · 지난 달 보정이 반영되지 않던 결함 → 영향월 재처리 + 금액 항등식 가드 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
+<div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 4개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 1차 신규 엔진 전환 실패 → 되돌림 → 가벼운 구조로 재설계</span></a><a class="ctl" href="#case-2"><span>02 지난 달 보정이 반영되지 않던 결함 → 영향월 재처리 + 금액 항등식 가드</span></a><a class="ctl" href="#case-3"><span>03 보정할 때마다 울리던 '측정 실패' 오경보 → 원인 규명·전용 카운터</span></a><a class="ctl" href="#case-4"><span>04 서비스가 멈춰도 알림이 없던 공백 → 경보 규칙 14종과 안전 적용 도구</span></a></div></section><article class="case sec--glow" id="case-1">
+<div class="case__head"><span class="case__no">CASE 01 · 아키텍처 회고</span><h3 class="case__title">1차 신규 엔진 전환 실패 → 되돌림 → 가벼운 구조로 재설계</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>보정 루프를 바꾸려고 처음에는 새 계산 엔진과 별도 공개본을 만드는 큰 구조로 갔습니다(관리자 API 133개·스키마 292개 규모, 주로 Codex 로 구현). 고객 조회를 새 공개본으로 전환한 날 보정 계산이 실패했습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>좁은 시험의 성공을 운영 성능 완료로 일반화했습니다. 전환 전 개발 환경 시험에서 이미 느린 조회 신호가 있었는데 가볍게 봤습니다. 구조 문제도 있었습니다. 새 엔진은 접수가 엔진 내부에만 있어 기존 전처리와 공존할 수 없었고, 원천보다 훨씬 큰 공개본을 전 기간(약 3.5시간) 다시 계산해야 했습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>약 4시간 만에 고객 조회를 기존 경로로 되돌리고, 같은 밤 정상 운행 확인</li><li>현행 코드를 근거로 '왜 지난 달 보정이 빠지는가'를 여러 관점에서 검증해 원인 확정</li><li>기존 보정 표를 유일한 정본으로 두는 가벼운 구조로 재설계. 고객 조회 SQL·인덱스·캐시 키는 그대로</li><li>기준선 측정 도구부터 만들고, 8단계 전환마다 통과 조건·되돌리기·보관본 정의</li><li>인증·권한·감사·검수 기록 기반은 재사용하고, 폐기 엔진 객체는 마지막 단계에서 삭제</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>접수 당일 반영 체계 운영화(파일럿 1개월분 91초), 폐기 엔진 표 73개·함수 154개 삭제, 확정 뒤 첫 평일 새벽 처리와 월마감 통과</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">고객 조회 복귀</div><div class="delta__val"><span class="to">약 4시간 만에 기존 경로</span></div><div class="delta__note">같은 밤 정상 운행 확인</div></div><div class="delta"><div class="delta__label">재계산 범위</div><div class="delta__val"><span class="from">전 기간 약 3.5시간(1차 엔진안)</span><span class="arrow">→</span><span class="to">영향받은 달만, 1개월분 91초</span></div><div class="delta__note">설계안별 범위 비교, 같은 작업의 전후가 아님</div></div><div class="delta"><div class="delta__label">폐기 엔진 정리</div><div class="delta__val"><span class="to">표 73개·함수 154개 삭제</span></div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">1차 구축</div><div class="tl__what"><b>새 계산 엔진·별도 공개본 구조</b><span>관리자 API 133개·스키마 292개 규모(주로 Codex). 인증·권한·감사 기반 포함</span></div></li><li><div class="tl__when">전환 전</div><div class="tl__what"><b>개발 환경 시험에서 느린 조회 신호</b><span>좁은 시험 통과를 운영 성능 완료로 일반화해 신호를 가볍게 봄</span></div></li><li><div class="tl__when">전환 당일</div><div class="tl__what"><b>고객 조회를 새 공개본으로 전환 → 보정 계산 실패</b></div></li><li><div class="tl__when">약 4시간 뒤</div><div class="tl__what"><b>기존 경로로 되돌림</b><span>같은 밤 정상 운행 확인</span></div></li><li><div class="tl__when">재설계</div><div class="tl__what"><b>현행 코드 근거 분석 → 가벼운 구조</b><span>기존 보정 표를 유일한 정본으로, 고객 조회 경로는 그대로</span></div></li><li><div class="tl__when">전환</div><div class="tl__what"><b>4개 저장소 8단계 전환</b><span>기준선 측정 도구부터, 단계마다 통과 조건·되돌리기·보관본</span></div></li><li><div class="tl__when">확정</div><div class="tl__what"><b>폐기 엔진 표 73개·함수 154개 삭제</b><span>확정 뒤 첫 평일 새벽 처리와 월마감 통과</span></div></li></ol><div class="lesson"><b>배운 점</b><p>작은 시험의 통과는 운영 성능 완료가 아닙니다. 전환 전에 기준선을 재고, 단계마다 통과 조건과 되돌리는 방법을 먼저 정합니다.</p></div>
+
+</article>
+<article class="case" id="case-2">
+<div class="case__head"><span class="case__no">CASE 02 · 데이터 정합성</span><h3 class="case__title">지난 달 보정이 반영되지 않던 결함 → 영향월 재처리 + 금액 항등식 가드</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>현업이 지난 달 데이터에 대한 보정을 회신해도 고객 화면에 반영되지 않는 경우가 있었습니다. 반영은 다음 날 새벽 재처리에 기대고 있었습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>새벽 전처리는 대상일이 속한 달만 다시 만들고, 보정 표는 실행 시점에 조인됩니다. 그래서 지난 달은 다시 전처리되지 않아 보정이 반영될 기회가 없었습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>원문 키(제품·배송처)가 관측된 달을 담는 색인을 월 전처리 트랜잭션 안에서 갱신해, 보정 키로 영향받은 달을 정확히 계산</li><li>보정 표 쓰기와 영향받은 달 재처리를 한 트랜잭션으로 묶고, 떨어진 달도 한 번에 처리</li><li>전 기간 금액 항등식 '원천 = 정상 + 반려'를 읽기 전용으로 실측해 33개월 차이 0 확인</li><li>이 항등식을 낮 재처리의 자동 롤백 가드로 채택</li><li>파일럿에서 읽기 전용 대조로 의도하지 않은 변동이 없는지 확인한 뒤 운영 전환</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>보정 접수 당일 반영(낮 예약 묶음·즉시 실행), 파일럿 묶음 처리 시작 → 공개 1개월분 91초·4개월분 328초, 금액 항등식 33개월 실측 차이 0</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">보정 반영</div><div class="delta__val"><span class="from">다음 날 새벽 재처리</span><span class="arrow">→</span><span class="to">접수 당일</span></div></div><div class="delta"><div class="delta__label">금액 항등식</div><div class="delta__val"><span class="to">33개월 실측 차이 0</span></div><div class="delta__note">낮 재처리 자동 롤백 가드</div></div><div class="delta"><div class="delta__label">보정 묶음 처리 시작 → 공개</div><div class="delta__val"><span class="to">1개월분 91초·4개월분 328초</span></div><div class="delta__note">파일럿 실측</div></div></div><p class="sub-h">전: 지난 달 보정은 새벽 재처리 대상에서 빠졌습니다. 후: 영향받은 달을 계산해 한 트랜잭션으로 재처리하고, 금액 항등식이 깨지면 되돌립니다.</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph BEFORE[&quot;전: 엑셀 왕복과 익일 재처리&quot;]
+    B1[&quot;현업 검수&quot;] --&gt; B2[&quot;엑셀 회신&quot;]
+    B2 --&gt; B3[&quot;개발자 수기 DB 입력&quot;]
+    B3 --&gt; B4[&quot;다음 날 새벽 재처리&lt;br/&gt;대상일이 속한 달만&quot;]
+    B4 --&gt; B5[&quot;지난 달 보정은&lt;br/&gt;다시 반영되지 않음&quot;]
+  end
+  subgraph AFTER[&quot;후: 접수 당일 반영&quot;]
+    A1[&quot;화면에서 검수·접수&quot;] --&gt; A2[&quot;보정 묶음&quot;]
+    A2 --&gt; A3[&quot;원문 키 관측 달 색인으로&lt;br/&gt;영향받은 달 계산&quot;]
+    A3 --&gt; A4[&quot;한 트랜잭션&lt;br/&gt;보정 표 쓰기 + 영향월 재처리&quot;]
+    A4 --&gt; A5{&quot;금액 항등식&lt;br/&gt;원천 = 정상 + 반려&quot;}
+    A5 --&gt;|&quot;일치&quot;| A6[&quot;공개 표시 → 당일 화면 반영&quot;]
+    A5 --&gt;|&quot;불일치&quot;| A7[&quot;자동 롤백&quot;]
+  end">flowchart LR
+  subgraph BEFORE[&quot;전: 엑셀 왕복과 익일 재처리&quot;]
+    B1[&quot;현업 검수&quot;] --&gt; B2[&quot;엑셀 회신&quot;]
+    B2 --&gt; B3[&quot;개발자 수기 DB 입력&quot;]
+    B3 --&gt; B4[&quot;다음 날 새벽 재처리&lt;br/&gt;대상일이 속한 달만&quot;]
+    B4 --&gt; B5[&quot;지난 달 보정은&lt;br/&gt;다시 반영되지 않음&quot;]
+  end
+  subgraph AFTER[&quot;후: 접수 당일 반영&quot;]
+    A1[&quot;화면에서 검수·접수&quot;] --&gt; A2[&quot;보정 묶음&quot;]
+    A2 --&gt; A3[&quot;원문 키 관측 달 색인으로&lt;br/&gt;영향받은 달 계산&quot;]
+    A3 --&gt; A4[&quot;한 트랜잭션&lt;br/&gt;보정 표 쓰기 + 영향월 재처리&quot;]
+    A4 --&gt; A5{&quot;금액 항등식&lt;br/&gt;원천 = 정상 + 반려&quot;}
+    A5 --&gt;|&quot;일치&quot;| A6[&quot;공개 표시 → 당일 화면 반영&quot;]
+    A5 --&gt;|&quot;불일치&quot;| A7[&quot;자동 롤백&quot;]
+  end</pre></div></figure><div class="lesson"><b>배운 점</b><p>보정의 핵심은 '어느 달이 영향받는가'를 정확히 아는 것입니다. 측정으로 성립을 확인한 불변식이 있으면, 사람이 지켜보지 않아도 틀린 공개를 막을 수 있습니다.</p></div>
+
+</article>
+<article class="case sec--glow sec--flip" id="case-3">
+<div class="case__head"><span class="case__no">CASE 03 · 오경보</span><h3 class="case__title">보정할 때마다 울리던 '측정 실패' 오경보 → 원인 규명·전용 카운터</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>보정이 도는 동안 고객 조회에 시간 초과가 생기는지 재서, 문제가 있으면 예약 처리를 자동으로 멈추는 장치가 있습니다. 그런데 보정 묶음을 실행할 때마다 이 장치가 '측정 실패, 자동 중지 판단 불가' 경고를 팀 메신저로 보냈습니다. 고객 트래픽이 적은 시기라 소음이었지만, 경고를 끄면 진짜 고장도 숨습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>요청 지표(Micrometer)에서 고객 경로 계열은 첫 요청 때에야 만들어집니다. 파드가 다시 뜬 뒤 고객 요청이 0건이면 계열 자체가 없어 빈 결과가 나오는데, 이를 측정 실패로 읽고 있었습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>경고를 끄거나 측정 경고 등급을 낮추는 안은 배제</li><li>고객 요청이 없는 구간에서는 지표 계열이 아예 없다는 원인 규명</li><li>1단계: 표본이 비면 같은 영역의 기준 지표로 한 번 더 질의해 '측정 성공·표본 0'으로 기록</li><li>운영 지표를 읽기 전용으로 재생해, 정상 측정 창은 값이 그대로인지 확인</li><li>2단계: 고객 API 가 기동 때 0으로 등록하는 전용 카운터를 두고, 롤링 교체 중인 파드는 파드 라벨로 짝지어 배포 순서와 무관하게 동작</li><li>새 시험이 수정 전 코드에서 먼저 실패하는지 확인</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>측정 오경보 8건 → 0건(과거 18개 창 재생, 1단계 수정 기준). 자동 중지 판단 로직은 그대로 두고, 전용 카운터로 근본 원인을 없앰</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">측정 오경보</div><div class="delta__val"><span class="from">8건</span><span class="arrow">→</span><span class="to">0건</span></div><div class="delta__note">과거 18개 창 재생, 1단계 수정 기준</div></div></div><p class="sub-h">가설을 하나씩 버린 과정</p><ol class="funnel"><li class=""><span class="n">1</span><div><b>경고 끄기</b></div><span class="out">배제 — 진짜 고장도 숨는다</span></li><li class=""><span class="n">2</span><div><b>측정 경고 등급 낮추기</b></div><span class="out">배제 — 같은 이유</span></li><li class="is-adopted"><span class="n">3</span><div><b>1단계: 표본이 비면 기준 지표로 다시 질의</b><span>기준 계열이 있으면 '측정 성공·표본 0'으로 기록</span></div><span class="out">과거 18개 창 재생에서 오경보 8건 → 0건</span></li><li class="is-adopted"><span class="n">4</span><div><b>2단계: 기동 때 0으로 등록하는 고객 요청 전용 카운터</b><span>롤링 교체 중인 파드는 파드 라벨로 짝짓기</span></div><span class="out">근본 원인 제거(이 기준으로 잰 운영 기록은 아직 없음)</span></li></ol><div class="lesson"><b>배운 점</b><p>경고를 끄는 것은 수정이 아닙니다. 경고가 비어 있는 이유(지표가 언제 생기는가)를 알아야 소음과 고장을 가를 수 있습니다.</p></div>
+
+</article>
+<article class="case" id="case-4">
+<div class="case__head"><span class="case__no">CASE 04 · 경보 공백</span><h3 class="case__title">서비스가 멈춰도 알림이 없던 공백 → 경보 규칙 14종과 안전 적용 도구</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>백오피스 파드가 재시작하거나 멈춰도 팀 메신저로 알림이 오지 않았습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>백오피스 전용 경보 규칙이 없었고, 알림 라우터는 등록되지 않은 경보를 수신자 없이 버리고 있었습니다. 라우팅 설정은 Git 밖에 있어, 손으로 고치는 경로 자체가 위험했습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>운영 Prometheus 에 실제로 있는 지표만 골라 경보 규칙 14종 작성(멈춤·재시작 반복·시작 불가·5xx·응답 지연·메모리 과다 등)</li><li>경보 요약에 '무슨 일·영향·할 일·확인할 곳'을 적음</li><li>promtool 가상 시계 시험 41개 — 재시작 간격이 문턱을 조금 넘으면 해소 알림이 끼어드는 깜빡임을 재현해 막고, 그 장치를 빼면 시험이 실패함을 확인</li><li>라우트 적용 도구: 기본은 미리 보기(바뀔 줄과 지문). 지문이 맞을 때만 설정 키 하나를 바꾸고, 원문 백업·되돌리기 제공</li><li>지난 운영 지표를 재생해 예상 알림량을 미리 확인</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>백오피스 경보 규칙 14종 배포(가상 시계 시험 41개). 로컬 라우팅 비교로 백오피스 경보는 팀 메신저 수신자로 가고, 기존 경보의 수신자는 그대로임을 확인</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">백오피스 전용 경보 규칙</div><div class="delta__val"><span class="from">없음</span><span class="arrow">→</span><span class="to">14종</span></div></div><div class="delta"><div class="delta__label">가상 시계 시험</div><div class="delta__val"><span class="to">41개</span></div></div></div><p class="sub-h">규칙이 없는 문제와 경보가 버려지는 문제를 함께 고쳤습니다. Git 밖 설정은 지문 확인 도구로만 바꾸게 했습니다.</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph BEFORE[&quot;전&quot;]
+    X1[&quot;백오피스 파드&lt;br/&gt;멈춤·재시작&quot;] --&gt; X2[&quot;전용 경보 규칙 없음&quot;]
+    X2 --&gt; X3[&quot;등록 안 된 경보는&lt;br/&gt;수신자 없이 버려짐&quot;]
+    X3 --&gt; X4[&quot;아무도 모름&quot;]
+  end
+  subgraph AFTER[&quot;후&quot;]
+    Y1[&quot;실제 수집 지표만으로&lt;br/&gt;경보 규칙 14종&quot;] --&gt; Y2[&quot;가상 시계 시험 41개&lt;br/&gt;깜빡임 재현·차단&quot;]
+    Y2 --&gt; Y3[&quot;라우트 적용 도구&lt;br/&gt;미리 보기 → 지문 일치 시 키 하나 변경&quot;]
+    Y3 --&gt; Y4[&quot;원문 백업 · 되돌리기&quot;]
+    Y4 --&gt; Y5[&quot;팀 메신저 수신자로 라우팅&lt;br/&gt;로컬 비교로 확인&quot;]
+  end">flowchart LR
+  subgraph BEFORE[&quot;전&quot;]
+    X1[&quot;백오피스 파드&lt;br/&gt;멈춤·재시작&quot;] --&gt; X2[&quot;전용 경보 규칙 없음&quot;]
+    X2 --&gt; X3[&quot;등록 안 된 경보는&lt;br/&gt;수신자 없이 버려짐&quot;]
+    X3 --&gt; X4[&quot;아무도 모름&quot;]
+  end
+  subgraph AFTER[&quot;후&quot;]
+    Y1[&quot;실제 수집 지표만으로&lt;br/&gt;경보 규칙 14종&quot;] --&gt; Y2[&quot;가상 시계 시험 41개&lt;br/&gt;깜빡임 재현·차단&quot;]
+    Y2 --&gt; Y3[&quot;라우트 적용 도구&lt;br/&gt;미리 보기 → 지문 일치 시 키 하나 변경&quot;]
+    Y3 --&gt; Y4[&quot;원문 백업 · 되돌리기&quot;]
+    Y4 --&gt; Y5[&quot;팀 메신저 수신자로 라우팅&lt;br/&gt;로컬 비교로 확인&quot;]
+  end</pre></div></figure><div class="lesson"><b>배운 점</b><p>경보는 '규칙이 있다'로 끝나지 않습니다. 시험으로 울려 보고, 받는 곳까지 가는지 확인해야 합니다. Git 밖 설정은 사람 손 대신 미리 보기·지문 확인을 거치는 도구로만 바꿉니다.</p></div>
+
+</article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>작은 시험의 통과는 운영 성능 완료가 아닙니다. 전환 전에 기준선을 재고, 단계마다 통과 조건과 되돌리는 방법을 먼저 정합니다.</p><p>보정의 핵심은 '어느 달이 영향받는가'를 정확히 아는 것입니다. 측정으로 성립을 확인한 불변식이 있으면, 사람이 지켜보지 않아도 틀린 공개를 막을 수 있습니다.</p><p>경고를 끄는 것은 수정이 아닙니다. 경고가 비어 있는 이유(지표가 언제 생기는가)를 알아야 소음과 고장을 가를 수 있습니다.</p></section></div>
+<nav class="pager" aria-label="다른 프로젝트"><a href="serving-api-performance.html"><small>← 이전 프로젝트</small><b>pharmscope 매출 분석 API·PostgreSQL 성능 튜닝</b></a><a class="next" href="eks-migration.html"><small>다음 프로젝트 →</small><b>온프레미스 k3s → AWS EKS 플랫폼 이관·재구축</b></a></nav>
+<footer class="footer"><p>황병준 · 백엔드·데이터 엔지니어 · <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p><small>디자인 바탕: <a href="https://once-ui.com" target="_blank" rel="noopener">Once UI</a> Magic Portfolio · 도표는 직접 그린 개념도입니다</small></footer>
 </main>
-
-<footer class="site-footer">
-  <div class="wrap">
-    <span>© 2026 황병준</span>
-    <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a>
-  </div>
-</footer>
-<script src="../assets/js/site.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" defer></script>
+<script src="../assets/js/site.js?v=fdaea7ac" defer></script>
 </body>
 </html>

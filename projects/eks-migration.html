@@ -3,92 +3,474 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>온프렘 쿠버네티스 → AWS EKS 이관 · 황병준</title>
-<meta name="description" content="Terraform·GitOps 기반 AWS EKS 재구축, 게이트웨이 교체, DB 시점 복구와 노드 상실 훈련">
-<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<title>온프레미스 k3s → AWS EKS 플랫폼 이관·재구축 — 황병준 포트폴리오</title>
+<meta name="description" content="컨트롤 플레인이 1대뿐인 온프레미스 k3s 의 구조 한계를 실사용 기반 사이징으로 검토하고, Terraform root 8개와 GitOps 로 AWS EKS 플랫폼을 새로 지어 구축 당일 플랫폼 앱 14개를 가동했습니다. 서비스 전용 운영 환경을 먼저 신축한 뒤 기존 서비스 호스트 11개를 같은 이름으로 순차 이관했고(정지창 서비스별 5~40분), 분석 DB 는 증설 없이 단일 writer + 시점 복구 구조로 바꿔 PITR 리허설 RPO 130초·노드 강제 종료 시 DB 159초 복귀로 복구 경로를 실증했습니다.">
+<meta name="theme-color" content="#15161a">
+<meta property="og:title" content="온프레미스 k3s → AWS EKS 플랫폼 이관·재구축 — 황병준 포트폴리오">
+<meta property="og:description" content="컨트롤 플레인이 1대뿐인 온프레미스 k3s 의 구조 한계를 실사용 기반 사이징으로 검토하고, Terraform root 8개와 GitOps 로 AWS EKS 플랫폼을 새로 지어 구축 당일 플랫폼 앱 14개를 가동했습니다. 서비스 전용 운영 환경을 먼저 신축한 뒤 기존 서비스 호스트 11개를 같은 이름으로 순차 이관했고(정지창 서비스별 5~40분), 분석 DB 는 증설 없이 단일 writer + 시점 복구 구조로 바꿔 PITR 리허설 RPO 130초·노드 강제 종료 시 DB 159초 복귀로 복구 경로를 실증했습니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/site.css?v=a01858cc">
 </head>
 <body>
-<header class="site-header">
-  <div class="wrap">
-    <a class="brand" href="../index.html">황병준<span>Byeongjun Hwang</span></a>
-    <nav class="nav" aria-label="주 메뉴">
-      <a href="../index.html">홈</a>
-      <a href="../about.html">소개</a>
-      <a href="../experience.html">경력</a>
-      <a href="../projects.html">프로젝트</a>
-      <a href="../ai.html">AI로 일하는 방식</a>
-      <a href="../skills.html">기술</a>
-    </nav>
-    <div>
-      <button class="theme-btn" type="button" aria-label="밝게/어둡게 전환">◐</button>
-      <button class="menu-btn" type="button" aria-expanded="false" aria-label="메뉴 열기">메뉴</button>
-    </div>
-  </div>
-</header>
+<a class="skip" href="#main">본문 바로가기</a>
+<nav class="nav" aria-label="주 메뉴"><a class="nav__item" href="../index.html" aria-label="홈"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.99778 19.3275V14.3275H13.9978V19.3275C13.9978 19.8775 14.4478 20.3275 14.9978 20.3275H17.9978C18.5478 20.3275 18.9978 19.8775 18.9978 19.3275V12.3275H20.6978C21.1578 12.3275 21.3778 11.7575 21.0278 11.4575L12.6678 3.9275C12.2878 3.5875 11.7078 3.5875 11.3278 3.9275L2.96778 11.4575C2.62778 11.7575 2.83778 12.3275 3.29778 12.3275H4.99778V19.3275C4.99778 19.8775 5.44778 20.3275 5.99778 20.3275H8.99778C9.54778 20.3275 9.99778 19.8775 9.99778 19.3275Z"/></svg><span class="nav__tip">홈</span></a><a class="nav__item" href="../about.html" aria-label="소개"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1c0 .55.45 1 1 1h14c.55 0 1-.45 1-1v-1c0-2.66-5.33-4-8-4z"/></svg><span class="nav__tip">소개</span></a><a class="nav__item" href="../experience.html" aria-label="경력"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg><span class="nav__tip">경력</span></a><a class="nav__item" href="../projects.html" aria-current="page" aria-label="프로젝트"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.0142 17.3073L17.3042 18.0173C17.1042 18.2173 16.7942 18.2173 16.5942 18.0173C16.3942 17.8173 16.3942 17.5073 16.5942 17.3073L17.3042 16.5973L15.3642 14.6573L14.6542 15.3673C14.4542 15.5673 14.1442 15.5673 13.9442 15.3673C13.7442 15.1673 13.7442 14.8573 13.9442 14.6573L14.6542 13.9473L12.7142 12.0073L12.0042 12.7173C11.8042 12.9173 11.4942 12.9173 11.2942 12.7173C11.0942 12.5173 11.0942 12.2073 11.2942 12.0073L12.0042 11.2973L10.0542 9.34731L9.34423 10.0573C9.14423 10.2573 8.83423 10.2573 8.63423 10.0573C8.43423 9.85731 8.43423 9.54731 8.63423 9.34731L9.34423 8.63731L7.40423 6.69731L6.69423 7.40731C6.49423 7.60731 6.18423 7.60731 5.98423 7.40731C5.78423 7.20731 5.78423 6.89731 5.98423 6.69731L6.69423 5.98731L5.20423 4.49731C4.89423 4.18731 4.35423 4.40731 4.35423 4.85731V17.6473C4.35423 18.7473 5.25423 19.6473 6.35423 19.6473H19.1442C19.5942 19.6473 19.8142 19.1073 19.4942 18.7973L18.0142 17.3073ZM7.35423 15.6473V10.8873L13.1142 16.6473H8.35423C7.80423 16.6473 7.35423 16.1973 7.35423 15.6473Z"/></svg><span class="nav__tip">프로젝트</span></a><a class="nav__item" href="../ai.html" aria-label="AI로 일하는 방식"><svg class="" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M14.2206 28C13.7539 28 13.3939 27.5867 13.4606 27.12L14.6606 18.6667H9.99395C8.82062 18.6667 9.55395 17.6667 9.58062 17.6267C11.2606 14.6533 13.7806 10.2533 17.114 4.38667C17.2473 4.14667 17.514 4 17.7806 4C18.2473 4 18.6073 4.41333 18.5406 4.88L17.3406 13.3333H22.0206C22.554 13.3333 22.8473 13.5867 22.554 14.2133C18.1673 21.8667 15.6206 26.3333 14.8873 27.6133C14.754 27.8533 14.5006 28 14.2206 28Z"/></svg><span class="nav__tip">AI로 일하는 방식</span></a><a class="nav__item" href="../skills.html" aria-label="기술"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.61 18.99l-9.08-9.08c.93-2.34.45-5.1-1.44-7C9.79.61 6.21.4 3.66 2.26L7.5 6.11 6.08 7.52 2.25 3.69C.39 6.23.6 9.82 2.9 12.11c1.86 1.86 4.57 2.35 6.89 1.48l9.11 9.11c.39.39 1.02.39 1.41 0l2.3-2.3c.4-.38.4-1.01 0-1.41z"/></svg><span class="nav__tip">기술</span></a><div class="nav__div" aria-hidden="true"><span></span></div><a class="nav__item" href="mailto:hbj3809@naver.com" aria-label="이메일 보내기"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg><span class="nav__tip">hbj3809@naver.com</span></a></nav>
+<main id="main" class="page">
+<header class="intro"><p class="intro__eyebrow">알스솔루션 프로젝트</p><h1>온프레미스 k3s → AWS EKS 플랫폼 이관·재구축</h1><div class="intro__text"><p>Terraform·GitOps 로 새로 짓고, 검증 관문을 통과한 순서대로 옮기고, 복구는 실제로 해 보고 확인한 플랫폼 이관</p></div><div class="intro__meta"><span><b>알스솔루션</b></span><span>2026.08 ~ 2026.09</span><span>운영 중</span><span>DevOps·플랫폼</span></div></header>
+<div class="controls" role="tablist" aria-label="프로젝트 보기">
+<button class="ctl" type="button" role="tab" id="tab-detail" data-panel="detail" aria-controls="panel-detail" aria-selected="true"><span>상세</span></button>
+<button class="ctl" type="button" role="tab" id="tab-problems" data-panel="problems" aria-controls="panel-problems" aria-selected="false"><span>문제해결 <span class="count">4</span></span></button>
+<div class="controls__end"><a class="ctl" href="../projects.html?axis=devops"><span>DevOps 프로젝트 목록 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div>
+</div>
+<div class="card hero-card"><div class="card__media"><div class="cover cover--devops"><p class="cover__title">k3s → AWS EKS</p><p class="cover__sub">Terraform·GitOps 로 새로 짓고, 검증 관문을 통과한 순서대로 옮기고, 복구는 실제로 해 보고 확인한 플랫폼 이관</p></div></div></div>
+<div class="panel" id="panel-detail" role="tabpanel" aria-labelledby="tab-detail"><div class="overview">
+<div class="overview__side"><div class="stat"><p class="stat__value">14개</p><p class="stat__label">구축 당일 정상 가동한 플랫폼 앱</p><p class="stat__note">Terraform root 8개 · GitOps</p></div><div class="stat"><p class="stat__value">11개</p><p class="stat__label">같은 호스트 이름으로 옮긴 기존 서비스 호스트</p><p class="stat__note">정지창 서비스별 5~40분</p></div><div class="stat"><p class="stat__value">RPO 130초</p><p class="stat__label">분석 DB 시점 복구(PITR) 리허설</p><p class="stat__note">두 번 실패 후 3차 통과</p></div><div class="stat"><p class="stat__value">159초</p><p class="stat__label">DB 노드 강제 종료 후 DB 복귀</p><p class="stat__note">기존 디스크 7개 자동 재부착</p></div>
+<dl class="facts"><div><dt>회사</dt><dd>알스솔루션 · Engineering팀 · 선임연구원</dd></div><div><dt>기간</dt><dd>2026.08 ~ 2026.09</dd></div><div><dt>역할</dt><dd>검토·설계·구축 주도 (구성안·예산은 팀장 승인, 분석 DB 구조·비용 결정은 회사)</dd></div><div><dt>팀</dt><dd>스타트업 개발팀 — 인프라 전담 인력 없이 백엔드 개발자인 본인이 주도, Claude Code·Codex 에이전트 협업</dd></div><div><dt>상태</dt><dd>운영 중</dd></div></dl></div>
+<div class="overview__body"><h2>프로젝트 개요<br><span class="dim">무엇을, 왜 만들었나</span></h2><p class="overview__lead">컨트롤 플레인이 1대뿐인 온프레미스 k3s 의 구조 한계를 실사용 기반 사이징으로 검토하고, Terraform root 8개와 GitOps 로 AWS EKS 플랫폼을 새로 지어 구축 당일 플랫폼 앱 14개를 가동했습니다. 서비스 전용 운영 환경을 먼저 신축한 뒤 기존 서비스 호스트 11개를 같은 이름으로 순차 이관했고(정지창 서비스별 5~40분), 분석 DB 는 증설 없이 단일 writer + 시점 복구 구조로 바꿔 PITR 리허설 RPO 130초·노드 강제 종료 시 DB 159초 복귀로 복구 경로를 실증했습니다.</p><p class="overview__more">검토·설계·구축 주도 (구성안·예산은 팀장 승인, 분석 DB 구조·비용 결정은 회사) · 스타트업 개발팀 — 인프라 전담 인력 없이 백엔드 개발자인 본인이 주도, Claude Code·Codex 에이전트 협업</p>
+<div><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 사례 4개 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div></div>
+</div><section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">개요<span class="dim">배경·목표·내 역할</span></h2><div class="sec__lead"><p>온프레미스 임대 서버 위의 쿠버네티스(k3s)는 컨트롤 플레인이 1대뿐이었고, 볼륨이 노드 디스크에 묶여 노드를 비울(drain) 수 없었으며, 백업은 DB 일일 덤프가 전부였습니다. 회사가 AWS EKS 이관 방향을 논의하던 시점에 기술 검토와 사이징을 맡았고, 승인된 구성안대로 새 플랫폼을 코드로 짓고 사내 서비스를 같은 이름으로 옮겼습니다. 이관 뒤에는 분석 DB 의 복구 경로를 리허설과 노드 강제 종료 훈련으로 실증했습니다.</p></div></div>
+<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>목표: 서버 1대 장애가 전 서비스 정지로 번지지 않는 기반 · 모든 변경은 코드와 PR 로만 · 기존 서비스는 같은 호스트 이름으로 순차 이관</li><li>내 역할: 기술 검토·실사용 기반 사이징·로드맵 → Terraform·GitOps 설계·구축 → 서비스 전용 운영 환경 신축 → 순차 이관 → DB 복구 실증</li><li>결정 주체: 구성안·예산은 팀장 승인, 분석 DB 의 비용·구조 제약은 회사 결정</li><li>팀: 스타트업 개발팀, 인프라 전담 인력 없음 · Claude Code·Codex 에이전트와 협업, 위험 작업은 본인 승인</li><li>기간: 2026.08 ~ 2026.09 — 검토·승인 → 기반 구축 하루 → 운영 환경 신축·서비스 이관 나흘 → 3노드 안정화</li><li>범위 밖: 온프레미스 게이트웨이 교체·클러스터 보안 하드닝(별도 사례), 프론트엔드 코드</li></ul></div></div>
 
-<main class="wrap">
-  <p class="eyebrow"><a href="../projects.html">프로젝트</a> · DevOps · 플랫폼</p>
-  <h1>온프렘 쿠버네티스 → AWS EKS 이관</h1>
-  <p class="lead">단일 컨트롤 플레인 온프렘 클러스터를 AWS EKS 로 옮기면서, 그 전후로 게이트웨이 교체·보안 하드닝·복구 훈련까지 이어서 했습니다. 인프라 전담 인력 없이 AI 에이전트와 함께 진행했습니다.</p>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">왜 옮겼나<span class="dim">구 환경의 구조 한계 6가지</span></h2><div class="sec__lead"><p>기존 개선 과제(컨트롤 플레인 이중화, 스토리지 교체, 버전 잠금 해소, 오프사이트 백업)가 관리형 서비스로 흡수되는지 하나씩 대조해 '조건부 찬성'으로 결론 냈습니다. 같은 검토서에 '관리형은 클러스터 아래만 가져가고, 그 위의 앱 운영·버전 주기·비용 통제는 여전히 우리 몫'이라는 목록도 함께 적었습니다.</p></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>구 환경 한계</th><th>무엇이 문제였나</th><th>EKS 에서의 대응</th><th>확인한 것</th></tr></thead><tbody><tr><td>단일 서버가 곧 클러스터</td><td>컨트롤 플레인 1대에 SSO·공유 DB 까지 동거, 서버 장애 = 전 서비스 정지</td><td>관리형 컨트롤 플레인(다중 AZ) + 노드 3대 AZ 분산</td><td>컨트롤 플레인 운영·etcd 백업은 AWS 책임</td></tr><tr><td>노드에 박힌 스토리지</td><td>볼륨이 특정 노드 디스크에 고정돼 drain·노드 교체 불가, 용량 제한도 강제되지 않음</td><td>EBS 동적 프로비저닝(PVC), 온라인 확장, 삭제 보호 정책</td><td>노드 강제 종료 훈련에서 디스크 자동 재부착</td></tr><tr><td>버전 잠금·지원 종료</td><td>k3s 와 Argo CD 버전이 서로 묶여 업그레이드 불가, 인그레스 컨트롤러 지원 종료</td><td>최신 안정 버전으로 신설, Envoy Gateway(Gateway API) + NLB</td><td>단계 관문(타임아웃 경계·클라이언트 IP 보존) 통과</td></tr><tr><td>백업·재해복구 부재</td><td>DB 일일 덤프 수준, 시점 복구·복원 리허설·클러스터 백업 없음</td><td>DB 물리 백업 + WAL 을 S3 로(PITR), Velero 클러스터 백업</td><td>PITR 리허설 RPO 130초, 백업 후 삭제·복원 데이터 일치</td></tr><tr><td>수동 운영 드리프트</td><td>정본 파일과 실제 클러스터가 어긋나는 일 반복, 짧게 만료되는 레지스트리 토큰을 CronJob 으로 연명</td><td>Terraform + GitOps 전면, 노드 역할·Pod Identity</td><td>구축 당일 플랫폼 앱 14개 동기화·정상</td></tr><tr><td>진입·출구 단일 IP</td><td>모든 호스트가 와일드카드 DNS·공인 IP 하나에 묶임, 회선 장애 = 전면 중단</td><td>NLB 3개 AZ 분산 + 아웃바운드 NAT 고정 IP 1개</td><td>외부기관 화이트리스트를 새 고정 IP 로 재등록</td></tr></tbody></table></div></div>
 
-  <div class="case">
-    <div>
-      <section>
-        <h2>왜 옮겼나</h2>
-        <p>컨트롤 플레인이 하나라 노드를 비울(drain) 수 없었고, 쿠버네티스와 GitOps 도구 버전이 서로 묶여 올릴 수 없었으며, 오프사이트 백업이 없었습니다. 기존 개선 과제가 관리형 서비스로 해결되는지 하나씩 대조하고, 실사용(CPU·메모리·스토리지·트래픽)을 재서 노드 1대를 잃어도 버티는 기준으로 사이징·월 비용 모델을 만들어 "운영 환경 신축 → 개발 환경 이관 → 구 환경 정리" 순서를 제안했고 승인받았습니다.</p>
-      </section>
-      <section>
-        <h2>먼저 한 일: 게이트웨이 교체</h2>
-        <p>보안 지원이 끝난 ingress-nginx 가 포트를 독점하고 DNS 가 와일드카드라 조금씩 옮길 수 없었습니다. 타임아웃의 의미가 다른 점(유휴 기준 60초 vs 요청 전체 15초)을 로그와 설정 덤프로 실측해 정책을 설계했고, 호스트 33개를 Envoy Gateway 로 옮겼습니다. 같은 날 1·2차 시도는 실패해 자동 롤백됐습니다. 1차는 라이브만 고치고 생성기를 고치지 않은 제 실수, 2차는 "오브젝트가 사라지면 포트도 풀린다"는 오판이었습니다. 사전 게이트와 단계별 타임아웃, 소켓 해제 기준 판정으로 고친 3차에서 <b>중단 23.2초</b>로 성공했습니다.</p>
-      </section>
-      <section>
-        <h2>새 플랫폼</h2>
-        <ul class="points">
-          <li><b>코드로만 바꾸기</b>: Terraform root 8개(상태·예산·네트워크·EKS·접근·스토리지·GitOps·DNS 전환)를 root 별 상태 분리·잠금·KMS 로 나누고, 앱은 Terraform 이 소유한 Argo CD 위에 올려 모든 변경을 PR 로만 하게 했습니다.</li>
-          <li><b>정적 키 없이</b>: 이미지 풀·DNS 인증서 발급·백업에 쓰던 장기 AWS 키를 노드 역할과 EKS Pod Identity 로 바꿨습니다.</li>
-          <li><b>단계별 관문</b>: 타임아웃 경계(290초 200 / 320초 504), 장시간 무데이터 연결 유지, 실제 클라이언트 IP 보존, 클러스터 내부 재진입, 백업 후 네임스페이스 삭제 → 복원 리허설을 통과해야 다음 단계로 넘어갔습니다.</li>
-          <li><b>전용 운영 환경</b>: 다른 서비스와 공유하던 캐시·DB·메시지 브로커를 끊고 Valkey Sentinel·PostgreSQL·Kafka KRaft 3노드로 새로 구성, 장애 시험에서 Sentinel 승격 6.5초를 확인했습니다.</li>
-          <li><b>서비스 이관</b>: 호스트별 DNS 레코드 추가 = 전환, 삭제 = 롤백 구조로 기존 서비스 11개를 같은 이름으로 옮겼습니다. 사내 SSO 는 개발 모드에서 이중화된 운영 모드로 재구성하며 토큰 발급자·서명 키를 보존해 연동 앱을 고치지 않았습니다.</li>
-        </ul>
-      </section>
-      <section>
-        <h2>복구를 실제로 해 보기</h2>
-        <p>증설 없이 분석 DB 를 단일 writer + 객체 저장소 기반 시점 복구(PITR) 구조로 바꿨기 때문에, 복구가 실제로 되는지 확인해야 했습니다. 운영 DB 를 건드리지 않는 격리 리허설은 두 번 실패했고(시간 형식 파서, 검증 SQL 결함), 고친 세 번째에서 <b>RPO 130초·복원 검증 27분</b>으로 목표를 통과했습니다. DB 노드 EC2 를 실제로 강제 종료한 훈련에서는 대체 노드가 뜨고 기존 디스크 7개가 자동으로 다시 붙어 <b>DB 가 159초 만에</b> 돌아왔습니다.</p>
-      </section>
-      <section>
-        <h2>결과</h2>
-        <table class="before-after">
-          <thead><tr><th>지표</th><th>값</th></tr></thead>
-          <tbody>
-            <tr><td>구축 당일 정상 가동 플랫폼 앱</td><td class="after">14개</td></tr>
-            <tr><td>서비스 이관 정지창</td><td>API 5분 · SSO 약 7분 · CI 약 40분</td></tr>
-            <tr><td>수십 GB 분석 DB 복원 리허설</td><td>약 13.7분 (당일 컷오버)</td></tr>
-            <tr><td>게이트웨이 교체 중단</td><td class="after">23.2초, 전환 후 40시간 게이트웨이 기인 5xx 0건</td></tr>
-            <tr><td>시점 복구 · 노드 상실</td><td class="after">RPO 130초 · DB 159초 복귀</td></tr>
-          </tbody>
-        </table>
-      </section>
-    </div>
-    <aside class="case-aside card">
-      <dl>
-        <dt>기간</dt><dd>2026.08 ~ 2026.09</dd>
-        <dt>회사</dt><dd>알스솔루션</dd>
-        <dt>역할</dt><dd>검토·설계·구축 주도 (구성안·예산은 팀장 승인)</dd>
-        <dt>기술</dt><dd>Terraform · AWS EKS · Pod Identity · Argo CD · Helm · Kustomize · Envoy Gateway · cert-manager · Sealed Secrets · Velero · Valkey · Kafka KRaft · PostgreSQL PITR · Keycloak · Jenkins kaniko</dd>
-        <dt>AI 활용</dt><dd>적용 전 적대 리뷰로 구성 결함 4건 사전 차단, 일부 복구 훈련은 Codex 로 실행하고 파괴 작업은 직접 승인</dd>
-      </dl>
-    </aside>
-  </div>
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">전체 구조</h2><div class="sec__lead"><p>사용자 요청은 DNS → NLB → Envoy Gateway 를 거쳐 프라이빗 서브넷의 앱으로 들어갑니다. 컨트롤 플레인은 AWS 관리형이고, 노드 3대는 AZ 마다 1대씩 둡니다. 플랫폼 앱(Argo CD·cert-manager·Sealed Secrets·LB Controller·Envoy Gateway·모니터링·Velero 등)은 전부 GitOps 로만 배포합니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
+  U[&quot;사용자 · 사내 · 외부 기관&quot;]
+  DNS[&quot;DNS&lt;br/&gt;호스트별 레코드 = 전환 단위&quot;]
+  NLB[&quot;NLB · TCP 443/80&lt;br/&gt;3개 AZ 분산 · 클라이언트 IP 보존&quot;]
+  subgraph VPC[&quot;VPC · 서울 리전 3개 AZ&quot;]
+    subgraph PRIV[&quot;프라이빗 서브넷 · 노드 3대 · AZ마다 1대&quot;]
+      GW[&quot;Envoy Gateway&lt;br/&gt;TLS 종료 · 호스트별 L7 라우팅&quot;]
+      APP[&quot;업무 앱&lt;br/&gt;API · SPA · 워크플로 · SSO&quot;]
+      DATA[&quot;데이터 계층&lt;br/&gt;PostgreSQL · Valkey · Kafka KRaft&quot;]
+      PLAT[&quot;플랫폼 앱&lt;br/&gt;Argo CD · cert-manager · 모니터링 · Velero&quot;]
+    end
+  end
+  CP[&quot;EKS 컨트롤 플레인&lt;br/&gt;AWS 관리형 · 다중 AZ&quot;]
+  S3[&quot;S3&lt;br/&gt;DB 백업 · 로그 · 클러스터 백업 · 첨부&quot;]
+  EXT[&quot;외부 기관 API&quot;]
+  ECR[&quot;ECR&lt;br/&gt;컨테이너 이미지&quot;]
+  GIT[&quot;Git 저장소 2개&lt;br/&gt;Terraform · GitOps&quot;]
+  U --&gt; DNS --&gt; NLB --&gt; GW --&gt; APP --&gt; DATA
+  CP -.-&gt; PRIV
+  APP --&gt;|&quot;S3 게이트웨이 엔드포인트 · NAT 미경유&quot;| S3
+  DATA --&gt;|&quot;WAL · 베이스 백업&quot;| S3
+  APP --&gt;|&quot;NAT 고정 IP 1개&quot;| EXT
+  ECR --&gt;|&quot;노드 역할로 pull&quot;| PRIV
+  GIT --&gt;|&quot;Argo CD 동기화&quot;| PLAT
+  PLAT -.-&gt;|&quot;배포&quot;| APP">flowchart TB
+  U[&quot;사용자 · 사내 · 외부 기관&quot;]
+  DNS[&quot;DNS&lt;br/&gt;호스트별 레코드 = 전환 단위&quot;]
+  NLB[&quot;NLB · TCP 443/80&lt;br/&gt;3개 AZ 분산 · 클라이언트 IP 보존&quot;]
+  subgraph VPC[&quot;VPC · 서울 리전 3개 AZ&quot;]
+    subgraph PRIV[&quot;프라이빗 서브넷 · 노드 3대 · AZ마다 1대&quot;]
+      GW[&quot;Envoy Gateway&lt;br/&gt;TLS 종료 · 호스트별 L7 라우팅&quot;]
+      APP[&quot;업무 앱&lt;br/&gt;API · SPA · 워크플로 · SSO&quot;]
+      DATA[&quot;데이터 계층&lt;br/&gt;PostgreSQL · Valkey · Kafka KRaft&quot;]
+      PLAT[&quot;플랫폼 앱&lt;br/&gt;Argo CD · cert-manager · 모니터링 · Velero&quot;]
+    end
+  end
+  CP[&quot;EKS 컨트롤 플레인&lt;br/&gt;AWS 관리형 · 다중 AZ&quot;]
+  S3[&quot;S3&lt;br/&gt;DB 백업 · 로그 · 클러스터 백업 · 첨부&quot;]
+  EXT[&quot;외부 기관 API&quot;]
+  ECR[&quot;ECR&lt;br/&gt;컨테이너 이미지&quot;]
+  GIT[&quot;Git 저장소 2개&lt;br/&gt;Terraform · GitOps&quot;]
+  U --&gt; DNS --&gt; NLB --&gt; GW --&gt; APP --&gt; DATA
+  CP -.-&gt; PRIV
+  APP --&gt;|&quot;S3 게이트웨이 엔드포인트 · NAT 미경유&quot;| S3
+  DATA --&gt;|&quot;WAL · 베이스 백업&quot;| S3
+  APP --&gt;|&quot;NAT 고정 IP 1개&quot;| EXT
+  ECR --&gt;|&quot;노드 역할로 pull&quot;| PRIV
+  GIT --&gt;|&quot;Argo CD 동기화&quot;| PLAT
+  PLAT -.-&gt;|&quot;배포&quot;| APP</pre></div><figcaption>직접 그린 개념도. 호스트·주소·계정 정보는 뺐습니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>NLB 는 ip 타깃으로 Envoy 파드에 직결해 실제 클라이언트 IP 를 보존(실트래픽으로 확인)</li><li>Envoy Gateway 는 AZ 마다 1개씩 두고 최소 가용 수를 지정해 노드 1대를 잃어도 진입점 유지</li><li>컨트롤 플레인 감사 로그는 CloudWatch 로 보관</li><li>레지스트리 인증은 노드 역할로 바꿔 토큰을 주기적으로 갱신하던 CronJob 폐기</li></ul></div></div>
+
+</section>
+<section class="sec sec--glow sec--flip">
+<div class="sec__head"><h2 class="sec__title">네트워크<span class="dim">서브넷 3계층과 들어오고 나가는 관문</span></h2><div class="sec__lead"><p>VPC 하나에 성격이 다른 서브넷 3종을 AZ 마다 두었습니다. '무엇이 어디에 놓이는가'가 곧 보안 경계라서, 열린 문은 NLB 의 443/80 하나로 좁혔습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  INET[&quot;인터넷&quot;]
+  EXT2[&quot;외부 기관 API&quot;]
+  S3B[&quot;S3&quot;]
+  subgraph VPCN[&quot;VPC · AZ마다 서브넷 3계층&quot;]
+    subgraph PUB[&quot;퍼블릭 서브넷 · 서버 없음&quot;]
+      NLB2[&quot;NLB&lt;br/&gt;443 · 80 만 개방&quot;]
+      NAT[&quot;NAT Gateway&lt;br/&gt;고정 IP 1개&quot;]
+    end
+    subgraph PRI[&quot;프라이빗 서브넷 · 퍼블릭 IP 없음&quot;]
+      ENV[&quot;Envoy Gateway&lt;br/&gt;TLS 종료 · IP 화이트리스트&quot;]
+      POD[&quot;앱 파드&lt;br/&gt;자체 JWT 인증&quot;]
+      DBP[&quot;DB · Kafka 파드&lt;br/&gt;NetworkPolicy 허용 목록&quot;]
+    end
+    subgraph CLU[&quot;클러스터 서브넷 · 초소형&quot;]
+      ENI[&quot;컨트롤 플레인 접점&lt;br/&gt;노드 배치 금지&quot;]
+    end
+    S3EP[&quot;S3 게이트웨이 엔드포인트&quot;]
+  end
+  INET --&gt;|&quot;인바운드&quot;| NLB2
+  NLB2 --&gt; ENV
+  ENV --&gt; POD
+  POD --&gt; DBP
+  POD --&gt;|&quot;아웃바운드&quot;| NAT
+  NAT --&gt; EXT2
+  DBP --&gt;|&quot;백업 · 로그&quot;| S3EP
+  S3EP --&gt; S3B
+  ENI -.-&gt;|&quot;관리 트래픽&quot;| PRI">flowchart LR
+  INET[&quot;인터넷&quot;]
+  EXT2[&quot;외부 기관 API&quot;]
+  S3B[&quot;S3&quot;]
+  subgraph VPCN[&quot;VPC · AZ마다 서브넷 3계층&quot;]
+    subgraph PUB[&quot;퍼블릭 서브넷 · 서버 없음&quot;]
+      NLB2[&quot;NLB&lt;br/&gt;443 · 80 만 개방&quot;]
+      NAT[&quot;NAT Gateway&lt;br/&gt;고정 IP 1개&quot;]
+    end
+    subgraph PRI[&quot;프라이빗 서브넷 · 퍼블릭 IP 없음&quot;]
+      ENV[&quot;Envoy Gateway&lt;br/&gt;TLS 종료 · IP 화이트리스트&quot;]
+      POD[&quot;앱 파드&lt;br/&gt;자체 JWT 인증&quot;]
+      DBP[&quot;DB · Kafka 파드&lt;br/&gt;NetworkPolicy 허용 목록&quot;]
+    end
+    subgraph CLU[&quot;클러스터 서브넷 · 초소형&quot;]
+      ENI[&quot;컨트롤 플레인 접점&lt;br/&gt;노드 배치 금지&quot;]
+    end
+    S3EP[&quot;S3 게이트웨이 엔드포인트&quot;]
+  end
+  INET --&gt;|&quot;인바운드&quot;| NLB2
+  NLB2 --&gt; ENV
+  ENV --&gt; POD
+  POD --&gt; DBP
+  POD --&gt;|&quot;아웃바운드&quot;| NAT
+  NAT --&gt; EXT2
+  DBP --&gt;|&quot;백업 · 로그&quot;| S3EP
+  S3EP --&gt; S3B
+  ENI -.-&gt;|&quot;관리 트래픽&quot;| PRI</pre></div></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>퍼블릭: NLB·NAT 만 두고 서버는 두지 않음</li><li>프라이빗: 노드와 모든 파드. 파드가 VPC IP 를 직접 받으므로 가장 큰 대역을 배정하고, 프리픽스 위임으로 노드당 파드 수용량 확보</li><li>클러스터 서브넷: 컨트롤 플레인이 VPC 에 꽂는 접점 전용, 노드 배치 금지</li><li>인바운드: NLB → Envoy Gateway(TLS 종료·호스트별 라우팅·IP 화이트리스트 기본 거부) → 앱(자체 JWT 인증)</li><li>아웃바운드: S3 트래픽은 게이트웨이 엔드포인트로 NAT 를 거치지 않고, 그 외 외부 API 는 NAT 고정 IP 하나로 수렴해 외부기관 화이트리스트를 IP 하나로 관리</li><li>내부: NetworkPolicy 로 DB·Kafka 접근을 허용 목록 기반으로 제한</li><li>계정·노드: S3 계정 단위 공개 차단, 이미지 push 시 취약점 스캔, 노드 메타데이터 서비스는 IMDSv2 강제·홉 제한으로 파드가 노드 자격 증명에 닿지 못하게</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">코드 정본 두 개<span class="dim">Terraform 과 GitOps 의 역할 분담</span></h2><div class="sec__lead"><p>클러스터 밖(AWS)은 Terraform, 클러스터 안(앱·설정)은 GitOps 저장소와 Argo CD 가 정본입니다. 두 저장소만 있으면 인프라 전체를 다시 만들 수 있게 하는 것이 목표였습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  CHG[&quot;코드 수정&quot;] --&gt; PR[&quot;PR · 리뷰&quot;]
+  PR --&gt; SPLIT{&quot;무엇을 바꾸나&quot;}
+  SPLIT --&gt;|&quot;클러스터 밖 · AWS&quot;| TF[&quot;Terraform root 8개&lt;br/&gt;state · 예산 · 네트워크 · EKS&lt;br/&gt;접근 · 스토리지 · Argo CD · DNS 전환&quot;]
+  TF --&gt; PLAN[&quot;plan 파일 저장&lt;br/&gt;추가 · 변경 · 삭제 개수 검토&quot;]
+  PLAN --&gt; APPLY[&quot;검토한 plan 만 적용&quot;]
+  APPLY --&gt; AWS[&quot;AWS 리소스&lt;br/&gt;VPC · EKS · IAM · S3 · DNS&quot;]
+  SPLIT --&gt;|&quot;클러스터 안 · 앱과 설정&quot;| GOPS[&quot;GitOps 저장소&lt;br/&gt;Helm · Kustomize&quot;]
+  GOPS --&gt; ARGO[&quot;Argo CD 자동 동기화&lt;br/&gt;코드에 없는 변경은 되돌림&quot;]
+  ARGO --&gt; K8S[&quot;클러스터 워크로드&quot;]
+  APPLY -.-&gt;|&quot;Argo CD 설치도 Terraform 소유&quot;| ARGO
+  STATE[&quot;state 저장소&lt;br/&gt;root 별 분리 · S3 잠금 · KMS&quot;] -.-&gt; TF">flowchart LR
+  CHG[&quot;코드 수정&quot;] --&gt; PR[&quot;PR · 리뷰&quot;]
+  PR --&gt; SPLIT{&quot;무엇을 바꾸나&quot;}
+  SPLIT --&gt;|&quot;클러스터 밖 · AWS&quot;| TF[&quot;Terraform root 8개&lt;br/&gt;state · 예산 · 네트워크 · EKS&lt;br/&gt;접근 · 스토리지 · Argo CD · DNS 전환&quot;]
+  TF --&gt; PLAN[&quot;plan 파일 저장&lt;br/&gt;추가 · 변경 · 삭제 개수 검토&quot;]
+  PLAN --&gt; APPLY[&quot;검토한 plan 만 적용&quot;]
+  APPLY --&gt; AWS[&quot;AWS 리소스&lt;br/&gt;VPC · EKS · IAM · S3 · DNS&quot;]
+  SPLIT --&gt;|&quot;클러스터 안 · 앱과 설정&quot;| GOPS[&quot;GitOps 저장소&lt;br/&gt;Helm · Kustomize&quot;]
+  GOPS --&gt; ARGO[&quot;Argo CD 자동 동기화&lt;br/&gt;코드에 없는 변경은 되돌림&quot;]
+  ARGO --&gt; K8S[&quot;클러스터 워크로드&quot;]
+  APPLY -.-&gt;|&quot;Argo CD 설치도 Terraform 소유&quot;| ARGO
+  STATE[&quot;state 저장소&lt;br/&gt;root 별 분리 · S3 잠금 · KMS&quot;] -.-&gt; TF</pre></div></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>root 를 8개로 나누고 state 를 root 별로 분리·잠금·암호화해 실수 하나가 번지는 범위를 줄임</li><li>Argo CD 설치 자체도 Terraform 이 소유 — 앱 레이어의 시작점까지 코드</li><li>콘솔 수동 변경 금지: 손으로 바꾼 것은 코드와 어긋나는 순간 드리프트가 된다는 온프렘 시절 교훈</li><li>사람 권한도 코드: 클러스터 접근 명부(관리자·네임스페이스 한정 개발자·감사자 + SSO 와 독립된 비상 경로)에 한 줄 추가 후 적용</li><li>plan 을 파일로 저장해 검토한 뒤 그 파일만 적용 — 처음부터 설계한 통제가 아니라, AI 에이전트의 자동 승인 적용이 도구의 권한 분류기에 막히면서 정착한 방식</li><li>월 예산 알림도 코드로 함께 관리</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">핵심 흐름<span class="dim">호스트 하나씩 옮기고, 레코드 삭제 한 번으로 되돌리기</span></h2><div class="sec__lead"><p>구 클러스터의 호스트 전부가 와일드카드 DNS 레코드 하나에 묶여 있었습니다. 구체 레코드가 와일드카드보다 우선한다는 규칙을 이용해 '호스트 하나 = 레코드 하나'로 만들었고, 전환은 레코드 추가, 되돌리기는 삭제 한 번이 되도록 했습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="sequenceDiagram
+  participant OP as 운영자 본인
+  participant TF as Terraform DNS 전환
+  participant DNS as DNS 존
+  participant USER as 사용자
+  participant NEW as 새 EKS 클러스터
+  participant OLD as 구 클러스터
+  OP-&gt;&gt;NEW: 같은 호스트 이름의 라우트와 앱 배포
+  OP-&gt;&gt;NEW: 스모크 확인과 데이터 복원 리허설
+  OP-&gt;&gt;OLD: 정지창 시작 후 구 인스턴스 정지
+  OP-&gt;&gt;NEW: 데이터 복원과 동기화
+  OP-&gt;&gt;TF: 호스트 레코드 1개 추가 PR
+  TF-&gt;&gt;DNS: 구체 레코드 생성
+  USER-&gt;&gt;DNS: 호스트 이름 조회
+  DNS--&gt;&gt;USER: 구체 레코드가 와일드카드보다 우선
+  USER-&gt;&gt;NEW: 요청
+  alt 문제 발생 시
+    OP-&gt;&gt;TF: 레코드 삭제 PR
+    TF-&gt;&gt;DNS: 구체 레코드 삭제
+    DNS--&gt;&gt;USER: 와일드카드로 복귀
+    USER-&gt;&gt;OLD: 기존 경로로 요청
+  end">sequenceDiagram
+  participant OP as 운영자 본인
+  participant TF as Terraform DNS 전환
+  participant DNS as DNS 존
+  participant USER as 사용자
+  participant NEW as 새 EKS 클러스터
+  participant OLD as 구 클러스터
+  OP-&gt;&gt;NEW: 같은 호스트 이름의 라우트와 앱 배포
+  OP-&gt;&gt;NEW: 스모크 확인과 데이터 복원 리허설
+  OP-&gt;&gt;OLD: 정지창 시작 후 구 인스턴스 정지
+  OP-&gt;&gt;NEW: 데이터 복원과 동기화
+  OP-&gt;&gt;TF: 호스트 레코드 1개 추가 PR
+  TF-&gt;&gt;DNS: 구체 레코드 생성
+  USER-&gt;&gt;DNS: 호스트 이름 조회
+  DNS--&gt;&gt;USER: 구체 레코드가 와일드카드보다 우선
+  USER-&gt;&gt;NEW: 요청
+  alt 문제 발생 시
+    OP-&gt;&gt;TF: 레코드 삭제 PR
+    TF-&gt;&gt;DNS: 구체 레코드 삭제
+    DNS--&gt;&gt;USER: 와일드카드로 복귀
+    USER-&gt;&gt;OLD: 기존 경로로 요청
+  end</pre></div></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>순서: 클러스터 조회 도구 → 모니터링 → 메시지 조회 도구·사내 업무 도구 → SSO → 개발 API → 분석 DB·워크플로·BI → 개발 SPA → CI → 대시보드·GitOps 본 호스트</li><li>구 버전을 그대로 옮기지 않고 각 컴포넌트를 최신 안정 버전으로 올리며 이관</li><li>개발 API 는 설정 파일 대신 환경변수로만 배선해 같은 이미지가 구·신 양쪽에서 뜨게 함 → 되돌리기 안전</li><li>SSO 는 핫카피 리허설 후 정지창 컷오버, 토큰 발급자·서명 키를 보존해 연동 앱 무수정</li><li>협력사 소관 호스트는 이관 대상에서 빼고 구 클러스터에 남겨 와일드카드로 계속 서빙</li></ul></div></div>
+
+</section>
+<section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">스토리지<span class="dim">EBS·PVC 와 AZ 경계</span></h2><div class="sec__lead"><p>EBS 는 실제 블록 디스크라 한 번에 한 노드, 그것도 같은 AZ 의 노드에만 붙습니다. 이 제약 하나가 노드그룹을 AZ 별로 나눈 이유이자 분석 DB 의 복구 방식을 정한 출발점이 됐습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  DBPOD[&quot;DB 파드&lt;br/&gt;필요 용량 선언&quot;] --&gt; PVC1[&quot;PVC&lt;br/&gt;디스크 요청서&quot;]
+  PVC1 --&gt; SC[&quot;StorageClass gp3&lt;br/&gt;암호화 · 온라인 확장 허용 · Retain&quot;]
+  SC --&gt; VOL[&quot;EBS 볼륨&lt;br/&gt;자동 생성 · 한 AZ 에 귀속&quot;]
+  subgraph SAMEAZ[&quot;같은 AZ · AZ별 관리형 노드그룹&quot;]
+    N1[&quot;기존 노드&quot;]
+    N2[&quot;교체 노드&lt;br/&gt;같은 AZ 에 자동 생성&quot;]
+  end
+  VOL --&gt;|&quot;평시 부착&quot;| N1
+  N1 -.-&gt;|&quot;노드 상실&quot;| N2
+  VOL -.-&gt;|&quot;자동 재부착&quot;| N2
+  VOL -.-&gt;|&quot;사용률 경보 후 사람이 증설&quot;| GROW[&quot;온라인 확장&lt;br/&gt;서비스 무중단&quot;]">flowchart LR
+  DBPOD[&quot;DB 파드&lt;br/&gt;필요 용량 선언&quot;] --&gt; PVC1[&quot;PVC&lt;br/&gt;디스크 요청서&quot;]
+  PVC1 --&gt; SC[&quot;StorageClass gp3&lt;br/&gt;암호화 · 온라인 확장 허용 · Retain&quot;]
+  SC --&gt; VOL[&quot;EBS 볼륨&lt;br/&gt;자동 생성 · 한 AZ 에 귀속&quot;]
+  subgraph SAMEAZ[&quot;같은 AZ · AZ별 관리형 노드그룹&quot;]
+    N1[&quot;기존 노드&quot;]
+    N2[&quot;교체 노드&lt;br/&gt;같은 AZ 에 자동 생성&quot;]
+  end
+  VOL --&gt;|&quot;평시 부착&quot;| N1
+  N1 -.-&gt;|&quot;노드 상실&quot;| N2
+  VOL -.-&gt;|&quot;자동 재부착&quot;| N2
+  VOL -.-&gt;|&quot;사용률 경보 후 사람이 증설&quot;| GROW[&quot;온라인 확장&lt;br/&gt;서비스 무중단&quot;]</pre></div><figcaption>직접 그린 개념도. 첨부 이관 오리엔테이션 자료의 스토리지 구조를 옮겼습니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>동적 프로비저닝: 파드가 용량을 선언하면 디스크가 자동 생성되고, 파드와 디스크의 수명이 분리됨</li><li>Retain 표준: PVC 를 지워도 디스크는 바로 지워지지 않아 실수에 한 번 더 안전</li><li>확장은 '허용'이지 '자동'이 아님 — 사용률 경보가 울리면 사람이 숫자를 올리는 구조</li><li>구 환경의 노드 디스크 볼륨은 용량이 장부상 숫자였지만 EBS 는 실제 상한 — 이관 직후 WAL 보관 볼륨이 가득 차는 일을 처음 겪고 확장·보존 기간 정비로 해결</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">파드의 AWS 권한<span class="dim">저장된 키에서 Pod Identity 로</span></h2><div class="sec__lead"><p>구 환경에서는 파드가 AWS 를 쓰려면 액세스 키를 시크릿으로 저장해야 했고, 회전은 사람이 챙겼습니다. 새 클러스터에서는 '이 서비스어카운트 = 이 IAM 롤' 연결만 코드로 선언합니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph PIB[&quot;전 · 저장된 액세스 키&quot;]
+    K1[&quot;액세스 키 발급&quot;] --&gt; K2[&quot;시크릿으로 저장&quot;]
+    K2 --&gt; K3[&quot;파드가 키로 AWS 호출&quot;]
+    K3 -.-&gt; K4[&quot;회전은 수동&lt;br/&gt;유출되면 권한도 함께 노출&quot;]
+  end
+  subgraph PIA[&quot;후 · EKS Pod Identity&quot;]
+    I1[&quot;서비스어카운트 = IAM 롤&lt;br/&gt;연결만 코드로 선언&quot;] --&gt; I2[&quot;파드가 임시 자격 증명을&lt;br/&gt;자동으로 받음 · 자동 만료&quot;]
+    I2 --&gt; I3[&quot;롤 단위 최소권한&lt;br/&gt;백업 파드는 백업 버킷만&quot;]
+  end
+  PIB ==&gt;|&quot;전환&quot;| PIA">flowchart LR
+  subgraph PIB[&quot;전 · 저장된 액세스 키&quot;]
+    K1[&quot;액세스 키 발급&quot;] --&gt; K2[&quot;시크릿으로 저장&quot;]
+    K2 --&gt; K3[&quot;파드가 키로 AWS 호출&quot;]
+    K3 -.-&gt; K4[&quot;회전은 수동&lt;br/&gt;유출되면 권한도 함께 노출&quot;]
+  end
+  subgraph PIA[&quot;후 · EKS Pod Identity&quot;]
+    I1[&quot;서비스어카운트 = IAM 롤&lt;br/&gt;연결만 코드로 선언&quot;] --&gt; I2[&quot;파드가 임시 자격 증명을&lt;br/&gt;자동으로 받음 · 자동 만료&quot;]
+    I2 --&gt; I3[&quot;롤 단위 최소권한&lt;br/&gt;백업 파드는 백업 버킷만&quot;]
+  end
+  PIB ==&gt;|&quot;전환&quot;| PIA</pre></div></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>사용처: DB 백업→S3, 로그·클러스터 백업, 인증서 DNS 검증, 빌드 이미지 push, API 첨부 저장 — AWS 를 쓰는 워크로드 전부</li><li>새 클러스터는 정적 AWS 키 없이 노드 역할·워크로드 신원으로 운영(구 클러스터 쪽 키 정리는 별도)</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">구성요소별 As-Is → To-Be</h2><div class="sec__lead"><p>단순히 옮기지 않고, 공유하던 것은 끊고 수명이 다한 것은 후계로 바꾸며 옮겼습니다.</p></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>구성요소</th><th>As-Is (온프레미스)</th><th>To-Be (EKS)</th><th>왜</th></tr></thead><tbody><tr><td>메시징</td><td>다른 시스템과 공용 Kafka, ZooKeeper 세대, 서버 1대 위</td><td>전용 Kafka KRaft 3노드(AZ마다 브로커 1대, 복제 계수 3·최소 동기 복제 2, 토픽 자동 생성 금지)</td><td>브로커 1대를 잃어도 쓰기를 이어 가는 구성(자원 조정 롤링 재시작에서 확인). 토픽 정본이 DB 에 있어 메시지 이관 없이 컨슈머 전환만으로 완결(합성 트래픽 검증)</td></tr><tr><td>캐시·세션</td><td>공용 Redis 의 DB 번호 하나를 나눠 씀, 페일오버 없음</td><td>전용 Valkey(Redis 호환 오픈소스 포크) Sentinel 3 + 복제, AOF 영속화, 이미지 digest 고정</td><td>장애 PoC 승격 6.5초(쓰기 정지 7.3초), AOF 복원 키 5,002/5,002 일치. Redis 라이선스 전환 문제도 함께 정리</td></tr><tr><td>모니터링</td><td>지원 종료된 수집기(Promtail), 로그를 노드 디스크에 적재</td><td>Grafana Alloy 수집, 로그 정본은 S3, 메트릭은 보관 기간·용량 이중 상한</td><td>'차면 장애로 발견'되던 구조 해소. 기존 라벨·가공 규칙과 경보를 이식해 대시보드·경보 호환 유지</td></tr><tr><td>빌드</td><td>호스트의 루트 권한 Docker 데몬을 빌드 잡이 공유, 레지스트리 토큰 연명 CronJob</td><td>kaniko 일회용 파드 빌드(자사 잡 6종), Jenkins 설정은 JCasC 로 코드화, push 는 Pod Identity</td><td>자사 빌드에서 루트 데몬 공유 제거, 빌드 에이전트에 저장된 AWS 키 없음</td></tr><tr><td>사내 SSO</td><td>개발 모드·단일 인스턴스로 공개 운영</td><td>운영 모드 이중화(Keycloak 26.4 → 26.7.2), 관리 콘솔 접근 제한, 시크릿 재발급</td><td>토큰 발급자·서명 키 보존으로 연동 앱 무수정 전환</td></tr><tr><td>파드의 AWS 권한</td><td>액세스 키를 시크릿으로 저장, 수동 회전</td><td>Pod Identity — '이 서비스어카운트 = 이 IAM 롤' 선언만 코드로</td><td>저장된 키 없이 임시 자격 증명 자동 수급, 롤 단위 최소권한(백업 파드는 백업 버킷만)</td></tr><tr><td>인증서</td><td>발급·갱신을 사람이 챙기고 DNS 검증은 정적 IAM 키에 의존</td><td>cert-manager 가 DNS 검증 레코드를 워크로드 신원으로 직접 기록, 만료 전 자동 갱신</td><td>사람 개입과 정적 키 제거</td></tr><tr><td>백업</td><td>DB 일일 덤프, 클러스터 백업 없음</td><td>DB 베이스 백업 + WAL 을 S3 로(PITR), Velero 로 리소스·볼륨 백업</td><td>백업 → 네임스페이스·PVC 삭제 → 복원 리허설로 데이터 일치 확인</td></tr></tbody></table></div></div>
+
+</section>
+<section class="sec sec--glow sec--flip">
+<div class="sec__head"><h2 class="sec__title">분석 DB 복구 모델<span class="dim">단일 writer 의 장애 경로</span></h2><div class="sec__lead"><p>추가 노드·관리형 DB 없이 3노드를 유지하기로 한 회사 결정에 맞춰, 분석 DB 는 단일 writer + 객체 저장소 시점 복구(PITR) 구조로 정했습니다. 자동 failover 가 없는 DR 구조라서, 장애 경로마다 어떻게 돌아오는지를 정하고 실제로 해 봤습니다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="stateDiagram-v2
+  state &quot;정상 운영 · 단일 writer&quot; as Normal
+  state &quot;DB 파드 재시작&quot; as PodRestart
+  state &quot;DB 노드 상실&quot; as NodeLost
+  state &quot;같은 AZ 에 대체 노드 생성&quot; as NewNode
+  state &quot;기존 EBS 자동 재부착&quot; as Reattach
+  state &quot;디스크 또는 AZ 상실&quot; as DiskLost
+  state &quot;실수 삭제 · 논리 오류&quot; as LogicalErr
+  state &quot;S3 베이스 백업과 WAL 로 새 볼륨에 시점 복구&quot; as Pitr
+  state &quot;데이터 검증 후 연결 전환&quot; as Verify
+  [*] --&gt; Normal
+  Normal --&gt; PodRestart: 프로세스 장애
+  PodRestart --&gt; Normal: 같은 볼륨으로 재기동
+  Normal --&gt; NodeLost: EC2 장애
+  NodeLost --&gt; NewNode: AZ별 관리형 노드그룹
+  NewNode --&gt; Reattach: 볼륨이 AZ 에 묶여 같은 AZ 로
+  Reattach --&gt; Normal: 훈련 실측 DB 159초 복귀
+  Normal --&gt; DiskLost: 볼륨 손상 또는 AZ 장애
+  Normal --&gt; LogicalErr: 잘못된 쓰기
+  DiskLost --&gt; Pitr: 런북 실행
+  LogicalErr --&gt; Pitr: 목표 시각 지정
+  Pitr --&gt; Verify: 리허설 실측 RPO 130초
+  Verify --&gt; Normal: 서비스 연결">stateDiagram-v2
+  state &quot;정상 운영 · 단일 writer&quot; as Normal
+  state &quot;DB 파드 재시작&quot; as PodRestart
+  state &quot;DB 노드 상실&quot; as NodeLost
+  state &quot;같은 AZ 에 대체 노드 생성&quot; as NewNode
+  state &quot;기존 EBS 자동 재부착&quot; as Reattach
+  state &quot;디스크 또는 AZ 상실&quot; as DiskLost
+  state &quot;실수 삭제 · 논리 오류&quot; as LogicalErr
+  state &quot;S3 베이스 백업과 WAL 로 새 볼륨에 시점 복구&quot; as Pitr
+  state &quot;데이터 검증 후 연결 전환&quot; as Verify
+  [*] --&gt; Normal
+  Normal --&gt; PodRestart: 프로세스 장애
+  PodRestart --&gt; Normal: 같은 볼륨으로 재기동
+  Normal --&gt; NodeLost: EC2 장애
+  NodeLost --&gt; NewNode: AZ별 관리형 노드그룹
+  NewNode --&gt; Reattach: 볼륨이 AZ 에 묶여 같은 AZ 로
+  Reattach --&gt; Normal: 훈련 실측 DB 159초 복귀
+  Normal --&gt; DiskLost: 볼륨 손상 또는 AZ 장애
+  Normal --&gt; LogicalErr: 잘못된 쓰기
+  DiskLost --&gt; Pitr: 런북 실행
+  LogicalErr --&gt; Pitr: 목표 시각 지정
+  Pitr --&gt; Verify: 리허설 실측 RPO 130초
+  Verify --&gt; Normal: 서비스 연결</pre></div><figcaption>실측값은 운영 writer 를 건드리지 않는 격리 리허설과, 승인된 정지창에서 writer 를 동결하고 한 훈련의 결과입니다(무중단 아님).</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>DB 노드 EC2 강제 종료: 대체 노드 자동 생성 → 기존 디스크 7개 자동 재부착 → DB 159초 복귀(앱 재가동 완료는 약 28분 뒤)</li><li>격리 PITR 리허설: 1·2차 실패 후 3차에서 RPO 130초, 복원 생성→검증 27분 18초(탐지·판단·전환 제외 기술 구간)</li><li>실수 삭제는 복제본도 함께 지워지므로, 복구 축은 처음부터 백업·PITR 이 맡도록 분리</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">설계 결정<span class="dim">왜 이렇게 골랐나</span></h2></div>
+<div class="sec__body"><div class="tiles"><div class="tile"><h3>운영 환경을 먼저 새로 짓는다</h3><p>옮길 데이터·사용자가 없는 서비스 운영 환경을 첫 워크로드로 신축해 IaC·배포 라인·모니터링·보안을 위험 없이 검증했습니다. 그러면 이관은 '검증된 클러스터로의 두 번째 배포'가 됩니다. 순서는 운영 환경 신축 → 개발 환경 이관 → 구 환경 정리로 제안해 승인받았습니다.</p></div><div class="tile"><h3>실사용으로 사이징, 기준은 N-1</h3><p>이관 대상의 실사용 CPU·메모리·스토리지·사용자향 트래픽을 재서, 노드 1대를 잃어도 버티는 기준(N-1)으로 노드 수·크기와 월 비용 모델을 만들었습니다. 비용은 온프렘보다 늘 수 있다는 점을 숨기지 않고, 대신 얻는 가용성·백업·관리형 운영을 함께 제시했습니다.</p></div><div class="tile"><h3>AZ 마다 노드그룹 하나</h3><p>EBS 볼륨은 AZ 에 묶여 같은 AZ 노드에만 붙습니다. 노드그룹을 하나로 합치면 교체 노드가 다른 AZ 에 떠 DB 볼륨이 붙을 곳을 잃습니다. AZ 별로 나눠 교체 노드가 같은 AZ 에 뜨도록 보장했고, 노드 강제 종료 훈련에서 디스크 7개 자동 재부착으로 확인했습니다.</p></div><div class="tile"><h3>단일 대용량 볼륨 대신 PVC 동적 생성</h3><p>EBS 는 한 번에 한 노드에만 붙기 때문에 노드들이 나눠 쓰는 대용량 볼륨안은 구조적으로 맞지 않았습니다. 앱마다 PVC 로 디스크를 자동 생성하고, 온라인 확장 허용·삭제 시 디스크 보존 정책을 표준으로 정했습니다.</p></div><div class="tile"><h3>게이트웨이 자산 재사용 — Envoy Gateway + NLB</h3><p>온프렘에서 먼저 Gateway API 기반 Envoy Gateway 로 교체해 둔 라우트·정책을 토폴로지만 바꿔 그대로 이식했습니다. 클라우드 전용 어노테이션으로 다시 쓰지 않아도 됐고, NLB 를 ip 타깃으로 붙여 클라이언트 IP 를 보존했습니다.</p></div><div class="tile"><h3>관문을 통과해야 다음 단계로</h3><p>단계마다 게이트 스모크를 두었습니다. 백엔드 타임아웃 경계(경계 안 요청은 성공, 넘긴 요청은 504), 장시간 무데이터 연결 유지, 실제 클라이언트 IP 보존, 클러스터 내부에서 공개 호스트로 재진입, 백업 후 네임스페이스·PVC 삭제 → 복원까지 확인한 뒤에야 넘어갔습니다.</p></div><div class="tile"><h3>메시지는 옮기지 않는다</h3><p>모든 토픽의 정본이 DB 에 있다는 점을 확인해, 메시지를 복사하지 않고 컨슈머만 새 KRaft 클러스터로 돌렸습니다. '무엇을 옮기지 않아도 되는가'를 먼저 찾은 것이 이관 위험을 크게 줄였습니다.</p></div><div class="tile"><h3>AI 에이전트와 함께, 위험 작업은 사람이</h3><p>적용 전 적대적 리뷰로 확장 지원 등급이 암묵적으로 선택돼 컨트롤 플레인 요금이 크게 오를 수 있던 위험 등 구성 결함 4건을 미리 막았습니다. 부분 적용이 의존성까지 끌어와 3개 AZ 노드가 동시에 교체된 일은 피해 없이 기록하고 절차를 고쳤습니다. 복구 훈련 실행은 대부분 Codex 가 했고, 단계 통과와 파괴 작업은 제가 승인했습니다.</p></div><div class="tile"><h3>EBS 는 진짜 상한이다</h3><p>온프렘 볼륨은 용량이 장부상 숫자였지만 EBS 는 실제 하드 리밋입니다. 이관 직후 제가 하루 전 구성한 개발 DB 의 WAL 보관 볼륨이 가득 찼고, 원인(하트비트가 주기적 WAL 전환을 계속 일으킴)을 찾아 온라인 확장·보존 단축으로 풀었습니다. 온프렘 감각의 사이징은 다시 검증해야 한다는 교훈입니다.</p></div></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">성과<span class="dim">서비스별 정지창</span></h2><div class="sec__lead"><p>기존 호스트 11개를 같은 이름으로 옮기면서, 서비스마다 정지창을 따로 잡아 짧게 끊었습니다.</p></div></div>
+<div class="sec__body"><figure class="figure figure--soft"><div class="chart"><svg viewBox="0 0 720 154" role="img" aria-label="가로 막대 차트"><line x1="220" x2="220" y1="4" y2="150" stroke="#3f424d" stroke-width="1"/><text x="206" y="35" text-anchor="end" font-size="13" fill="#9196a5">개발 API</text><path class="mark" tabindex="0" data-tip="개발 API: 5분" d="M220,21H256.4Q260.4,21 260.4,25V37Q260.4,41 256.4,41H220Z" fill="#3d6bf4"/><text x="270.4" y="36" font-size="14" font-weight="600" fill="#d7d8de">5분</text><text x="206" y="81" text-anchor="end" font-size="13" fill="#9196a5">사내 SSO(약)</text><path class="mark" tabindex="0" data-tip="사내 SSO(약): 7분" d="M220,67H272.56Q276.56,67 276.56,71V83Q276.56,87 272.56,87H220Z" fill="#3d6bf4"/><text x="286.56" y="82" font-size="14" font-weight="600" fill="#d7d8de">7분</text><text x="206" y="127" text-anchor="end" font-size="13" fill="#9196a5">CI(약)</text><path class="mark" tabindex="0" data-tip="CI(약): 40분" d="M220,113H539.2Q543.2,113 543.2,117V129Q543.2,133 539.2,133H220Z" fill="#3d6bf4"/><text x="553.2" y="128" font-size="14" font-weight="600" fill="#d7d8de">40분</text></svg><details><summary>표로 보기</summary><div class="table-wrap"><table class="t"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>개발 API</td><td>5분</td></tr><tr><td>사내 SSO(약)</td><td>7분</td></tr><tr><td>CI(약)</td><td>40분</td></tr></tbody></table></div></details></div><figcaption style="padding:12px 0 0">실측. 서비스별 컷오버 정지창이며 SSO·CI 는 약값입니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>구축 당일 플랫폼 앱 14개 정상 가동 · 네트워크 리소스 38개 적용·라이브 대조</li><li>적용 전 적대적 리뷰로 구성 결함 4건 사전 차단</li><li>기존 서비스 호스트 11개를 같은 호스트 이름으로 이관, SSO 연동 앱 수정 없음</li><li>자사 빌드 잡 6종 kaniko 전환 — 새 클러스터는 정적 AWS 키 없이 노드 역할·워크로드 신원으로 운영</li></ul></div></div>
+
+</section>
+<section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">성과<span class="dim">복구·전환 실측</span></h2><div class="sec__lead"><p>새 플랫폼이 '돌아간다'에서 끝내지 않고, 장애가 났을 때 실제로 얼마 만에 돌아오는지를 쟀습니다.</p></div></div>
+<div class="sec__body"><figure class="figure figure--soft"><div class="chart"><svg viewBox="0 0 720 246" role="img" aria-label="가로 막대 차트"><line x1="220" x2="220" y1="4" y2="242" stroke="#3f424d" stroke-width="1"/><text x="206" y="35" text-anchor="end" font-size="13" fill="#9196a5">캐시 Sentinel 승격</text><path class="mark" tabindex="0" data-tip="캐시 Sentinel 승격: 6.5초" d="M220,21H220Q222.6,21 222.6,23.6V38.3Q222.6,41 220,41H220Z" fill="#3d6bf4"/><text x="232.6" y="36" font-size="14" font-weight="600" fill="#d7d8de">6.5초</text><text x="206" y="81" text-anchor="end" font-size="13" fill="#9196a5">캐시 쓰기 정지</text><path class="mark" tabindex="0" data-tip="캐시 쓰기 정지: 7.3초" d="M220,67H220Q222.9,67 222.9,69.9V84.0Q222.9,87 220,87H220Z" fill="#3d6bf4"/><text x="232.9" y="82" font-size="14" font-weight="600" fill="#d7d8de">7.3초</text><text x="206" y="127" text-anchor="end" font-size="13" fill="#9196a5">분석 DB 시점 복구 RPO</text><path class="mark" tabindex="0" data-tip="분석 DB 시점 복구 RPO: 130초" d="M220,113H268.52Q272.52,113 272.52,117V129Q272.52,133 268.52,133H220Z" fill="#3d6bf4"/><text x="282.52" y="128" font-size="14" font-weight="600" fill="#d7d8de">130초</text><text x="206" y="165" text-anchor="end" font-size="13" fill="#9196a5">DB 노드 강제 종료 후 DB</text><text x="206" y="181" text-anchor="end" font-size="13" fill="#9196a5">복귀</text><path class="mark" tabindex="0" data-tip="DB 노드 강제 종료 후 DB 복귀: 159초" d="M220,159H280.2Q284.2,159 284.2,163V175Q284.2,179 280.2,179H220Z" fill="#3d6bf4"/><text x="294.2" y="174" font-size="14" font-weight="600" fill="#d7d8de">159초</text><text x="206" y="211" text-anchor="end" font-size="13" fill="#9196a5">분석 DB 이관 실제 복원</text><text x="206" y="227" text-anchor="end" font-size="13" fill="#9196a5">단계</text><path class="mark" tabindex="0" data-tip="분석 DB 이관 실제 복원 단계: 846초" d="M220,205H557.7Q561.7,205 561.7,209V221Q561.7,225 557.7,225H220Z" fill="#3d6bf4"/><text x="571.7" y="220" font-size="14" font-weight="600" fill="#d7d8de">846초</text></svg><details><summary>표로 보기</summary><div class="table-wrap"><table class="t"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>캐시 Sentinel 승격</td><td>6.5초</td></tr><tr><td>캐시 쓰기 정지</td><td>7.3초</td></tr><tr><td>분석 DB 시점 복구 RPO</td><td>130초</td></tr><tr><td>DB 노드 강제 종료 후 DB 복귀</td><td>159초</td></tr><tr><td>분석 DB 이관 실제 복원 단계</td><td>846초</td></tr></tbody></table></div></details></div><figcaption style="padding:12px 0 0">실측. 서로 다른 시험의 결과라 막대끼리 우열을 비교하는 값이 아닙니다. 캐시는 장애 PoC, RPO 는 격리 PITR 리허설 3차, DB 복귀는 노드 강제 종료 훈련의 DB 접속 기준(앱 재가동 완료는 약 28분 뒤), 846초는 분석 DB 이관 때 복원 파드의 처리 시간(전체 정지창 아님)입니다.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>수십 GB 분석 DB 복원 리허설 약 13.7분 → 착수 당일 컷오버(실제 복원 단계 846초)</li><li>전용 캐시 장애 PoC: Sentinel 승격 6.5초(쓰기 정지 7.3초), AOF 복원 키 5,002/5,002 일치</li><li>PITR 리허설 3차 RPO 130초·생성→검증 27분 18초, DB 노드 강제 종료 시 DB 159초 복귀·디스크 7개 자동 재부착</li></ul></div></div>
+
+</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>클라우드·IaC</h3><div class="card__tags"><span class="tag">Terraform</span><span class="tag">AWS EKS</span><span class="tag">Amazon VPC</span><span class="tag">NLB</span><span class="tag">NAT Gateway</span><span class="tag">Route53</span><span class="tag">Amazon S3</span><span class="tag">AWS KMS</span><span class="tag">IAM</span><span class="tag">EBS gp3(CSI)</span><span class="tag">Amazon EFS</span><span class="tag">Amazon ECR</span><span class="tag">AWS Budgets</span></div></div><div class="stack__group"><h3>신원·권한·시크릿</h3><div class="card__tags"><span class="tag">EKS Pod Identity</span><span class="tag">EKS Access Entry</span><span class="tag">Keycloak 26.7(OIDC)</span><span class="tag">Sealed Secrets</span></div></div><div class="stack__group"><h3>GitOps·배포</h3><div class="card__tags"><span class="tag">Argo CD</span><span class="tag">Helm</span><span class="tag">Kustomize</span><span class="tag">Jenkins(JCasC)</span><span class="tag">kaniko</span></div></div><div class="stack__group"><h3>트래픽·인증서</h3><div class="card__tags"><span class="tag">Envoy Gateway(Gateway API)</span><span class="tag">AWS Load Balancer Controller</span><span class="tag">cert-manager(Let's Encrypt DNS-01)</span></div></div><div class="stack__group"><h3>데이터·메시징</h3><div class="card__tags"><span class="tag">PostgreSQL 17(베이스 백업·WAL·PITR)</span><span class="tag">Valkey Sentinel</span><span class="tag">Strimzi Kafka KRaft</span><span class="tag">Apache Airflow 3</span></div></div><div class="stack__group"><h3>관측·백업</h3><div class="card__tags"><span class="tag">kube-prometheus-stack</span><span class="tag">Loki(S3)</span><span class="tag">Grafana Alloy</span><span class="tag">Velero</span></div></div><div class="stack__group"><h3>AI 협업</h3><div class="card__tags"><span class="tag">Claude Code</span><span class="tag">Codex</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">컨트롤 플레인 1대의 한계 — '옮기기' 대신 '새로 짓고 검증한 뒤 옮기기' · 수십 GB 분석 DB 를 하루에 옮기기 — 정지창을 추정 대신 복원 리허설로 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
+<div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 4개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 컨트롤 플레인 1대의 한계 — '옮기기' 대신 '새로 짓고 검증한 뒤 옮기기'</span></a><a class="ctl" href="#case-2"><span>02 수십 GB 분석 DB 를 하루에 옮기기 — 정지창을 추정 대신 복원 리허설로</span></a><a class="ctl" href="#case-3"><span>03 DB 하나가 노드 하나를 잠식 — 스탠바이에서 단일 writer DR 까지</span></a><a class="ctl" href="#case-4"><span>04 와일드카드 DNS 하나에 묶인 서비스를 하나씩 옮기기</span></a></div></section><article class="case sec--glow" id="case-1">
+<div class="case__head"><span class="case__no">CASE 01 · 기술검토·플랫폼설계</span><h3 class="case__title">컨트롤 플레인 1대의 한계 — '옮기기' 대신 '새로 짓고 검증한 뒤 옮기기'</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>온프레미스 임대 서버 위의 k3s 는 컨트롤 플레인이 1대였고 SSO·공유 DB 까지 같은 서버에 있었습니다. 볼륨이 노드 디스크에 묶여 drain 이 불가능했고, k3s 와 Argo CD 버전이 서로 묶여 올릴 수 없었으며, 오프사이트 백업이 없었습니다. 회사는 EKS 이관 방향을 논의 중이었지만 비용·사이징·순서·공유 컴포넌트 경계가 정해지지 않은 상태였습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>구조 문제가 두 종류로 섞여 있었습니다. 컨트롤 플레인 이중화·스토리지·etcd 백업처럼 관리형이 흡수하는 문제와, 앱 운영·버전 주기·비용 통제처럼 관리형으로 가도 여전히 우리 몫인 문제입니다. 기존 클러스터 위에서 하나씩 고치면 나중에 또 옮겨야 하는 이중 공사가 됩니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>기존 개선 과제를 '관리형이 흡수하는가'로 하나씩 대조해 조건부 찬성 결론, 관리형이 해결해 주지 않는 목록도 함께 작성</li><li>이관 대상 실사용(CPU·메모리·스토리지·사용자향 트래픽)을 재서 노드 1대 상실 기준(N-1) 사이징·월 비용 모델 작성</li><li>순서를 '운영 환경 신축 → 개발 환경 이관 → 구 환경 정리'로 뒤집자고 제안해 팀장 승인</li><li>Terraform root 8개(state·예산·네트워크·EKS·접근·스토리지·Argo CD·DNS 전환)와 Terraform 이 소유한 Argo CD 로 하루 만에 기반 구축</li><li>단계 관문(타임아웃 경계·무데이터 연결 유지·클라이언트 IP 보존·내부 재진입·백업 후 삭제·복원)을 통과해야 다음 단계로</li><li>AI 에이전트 작업에 적용 전 적대적 리뷰를 걸어 구성 결함을 적용 전에 차단</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>구축 당일 플랫폼 앱 14개가 모두 동기화·정상 상태로 가동됐고, 네트워크 리소스 38개를 적용해 라이브와 대조했습니다. 적대적 리뷰로 컨트롤 플레인 요금이 크게 오를 수 있던 지원 등급 암묵 선택을 포함한 구성 결함 4건을 적용 전에 막았고, 새 클러스터는 정적 AWS 키 없이 구성했습니다.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">구축 당일 정상 가동 플랫폼 앱</div><div class="delta__val"><span class="to">14개</span></div></div><div class="delta"><div class="delta__label">적용 전 적대적 리뷰로 막은 구성 결함</div><div class="delta__val"><span class="to">4건</span></div></div><div class="delta"><div class="delta__label">네트워크 리소스 적용·라이브 대조</div><div class="delta__val"><span class="to">38개</span></div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">2026.08 초</div><div class="tl__what"><b>온프렘에서 게이트웨이 먼저 교체</b><span>ingress-nginx → Envoy Gateway(1·2차 실패 원인 수정 후 3차 시도 중단 23.2초, 별도 사례). Gateway API 라우트·정책이 이후 EKS 로 그대로 이식됨</span></div></li><li><div class="tl__when">2026.08 중순</div><div class="tl__what"><b>기술 검토·사이징·로드맵</b><span>관리형 흡수 여부 대조, N-1 사이징·비용 모델, 운영 환경 신축 우선 순서 제안 → 팀장 승인</span></div></li><li><div class="tl__when">2026.08.21</div><div class="tl__what"><b>기반 구축</b><span>Terraform root 8개·Argo CD, 플랫폼 앱 14개 가동, 단계 관문 통과</span></div></li><li><div class="tl__when">2026.08.21 ~ 24</div><div class="tl__what"><b>서비스 전용 운영 환경 신축</b><span>전용 캐시·DB·Kafka·배포 라인, 장애 PoC·복원 리허설</span></div></li><li><div class="tl__when">2026.08.22 ~ 24</div><div class="tl__what"><b>사내 서비스 순차 이관</b><span>기존 호스트 11개를 같은 이름으로, SSO·분석 DB·CI 포함</span></div></li><li><div class="tl__when">2026.08.28 ~ 30</div><div class="tl__what"><b>3노드 안정화</b><span>분석 DB 단일 writer 전환, PITR 리허설·노드 강제 종료 훈련, 예약 자원 보정</span></div></li><li><div class="tl__when">2026.09.08</div><div class="tl__what"><b>고객 서비스 공개</b><span>pharmscope 가 이 플랫폼 위에서 외부 공개</span></div></li></ol><p class="sub-h">구조 한계 4가지가 각각 어떤 구성으로 바뀌었는지</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph ASIS[&quot;As-Is · 온프레미스 k3s&quot;]
+    A1[&quot;컨트롤 플레인 1대&lt;br/&gt;SSO · 공유 DB 동거&quot;]
+    A2[&quot;노드 디스크 고정 볼륨&lt;br/&gt;drain 불가&quot;]
+    A3[&quot;와일드카드 DNS&lt;br/&gt;공인 IP 1개&quot;]
+    A4[&quot;수동 변경&lt;br/&gt;파일과 라이브 불일치&quot;]
+  end
+  subgraph TOBE[&quot;To-Be · AWS EKS&quot;]
+    B1[&quot;관리형 컨트롤 플레인&lt;br/&gt;다중 AZ&quot;]
+    B2[&quot;EBS 동적 볼륨&lt;br/&gt;노드와 수명 분리&quot;]
+    B3[&quot;NLB 3개 AZ&lt;br/&gt;호스트별 레코드&quot;]
+    B4[&quot;Terraform + GitOps&lt;br/&gt;PR 로만 변경&quot;]
+  end
+  A1 --&gt; B1
+  A2 --&gt; B2
+  A3 --&gt; B3
+  A4 --&gt; B4">flowchart LR
+  subgraph ASIS[&quot;As-Is · 온프레미스 k3s&quot;]
+    A1[&quot;컨트롤 플레인 1대&lt;br/&gt;SSO · 공유 DB 동거&quot;]
+    A2[&quot;노드 디스크 고정 볼륨&lt;br/&gt;drain 불가&quot;]
+    A3[&quot;와일드카드 DNS&lt;br/&gt;공인 IP 1개&quot;]
+    A4[&quot;수동 변경&lt;br/&gt;파일과 라이브 불일치&quot;]
+  end
+  subgraph TOBE[&quot;To-Be · AWS EKS&quot;]
+    B1[&quot;관리형 컨트롤 플레인&lt;br/&gt;다중 AZ&quot;]
+    B2[&quot;EBS 동적 볼륨&lt;br/&gt;노드와 수명 분리&quot;]
+    B3[&quot;NLB 3개 AZ&lt;br/&gt;호스트별 레코드&quot;]
+    B4[&quot;Terraform + GitOps&lt;br/&gt;PR 로만 변경&quot;]
+  end
+  A1 --&gt; B1
+  A2 --&gt; B2
+  A3 --&gt; B3
+  A4 --&gt; B4</pre></div></figure><div class="lesson"><b>배운 점</b><p>관리형은 클러스터 아래만 가져갑니다. 그 위는 그대로 우리 몫이라 코드화와 관문으로 메워야 했습니다. 첫 워크로드를 신축으로 시작하니, 이후 이관은 '검증된 클러스터로의 두 번째 배포'가 됐습니다.</p></div>
+
+</article>
+<article class="case" id="case-2">
+<div class="case__head"><span class="case__no">CASE 02 · 마이그레이션</span><h3 class="case__title">수십 GB 분석 DB 를 하루에 옮기기 — 정지창을 추정 대신 복원 리허설로</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>매출 파이프라인 DB·워크플로 메타DB·BI 가 구 클러스터의 단일 PostgreSQL 인스턴스에 함께 있었고, 규모는 수십 GB 였습니다. 정지창을 감으로 잡을 수는 없었고, 다른 libc 기반 이미지로 물리 복원하면 정렬(collation) 인덱스가 깨질 위험이 있었습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>물리 복원은 OS 의 정렬 규칙(libc)에 묶이는데, 구 이미지가 musl(alpine) 계열이었습니다. 또 정지창 길이는 사실상 복원 시간이 결정하는데, 그 시간을 잰 적이 없었습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>구 이미지와 같은 digest 로 새 StatefulSet 을 만들고 기존 튜닝을 그대로 유지해 인덱스 손상 위험 제거</li><li>서비스 이름을 구와 똑같이 둬 소비자 재배선 없이 전환되게 설계</li><li>WAL 동기화·일일 베이스 백업 리그를 워크로드 신원으로 S3 에 연결</li><li>S3 의 베이스 백업과 WAL 만으로 복원 리허설 — 내려받기·압축 해제·WAL 재생을 단계별로 측정하고 핵심 테이블 행 수·BI 카드 수를 원본과 대조</li><li>컷오버: 구 인스턴스 정지 → WAL 스위치·S3 동기화 → 복원(최종 WAL 반영 확인) → 소비자 3종 실접속</li><li>워크플로 스케줄러는 새 버전으로 올리며 S3 원격 로깅을 붙이고, 워커가 API 서버를 경유한다는 점을 확인해 NetworkPolicy 보정</li><li>구 객체 저장소의 리포트·수집 파일을 S3 로 옮기고 바이트 일치 확인</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>복원 리허설은 약 13.7분이었고 검증 항목이 전부 일치했습니다. 이 숫자로 정지창을 정해 이관을 시작한 날 컷오버를 마쳤고, 실제 복원 단계는 846초였습니다(전체 정지창 길이가 아님).</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">수십 GB 분석 DB 복원 리허설</div><div class="delta__val"><span class="to">약 13.7분</span></div></div><div class="delta"><div class="delta__label">실제 컷오버 복원 단계</div><div class="delta__val"><span class="to">846초</span></div><div class="delta__note">전체 정지창 길이가 아님</div></div><div class="delta"><div class="delta__label">복원 검증</div><div class="delta__val"><span class="to">핵심 테이블 행 수·BI 카드 수 전 항목 일치</span></div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">준비</div><div class="tl__what"><b>같은 이미지 계열로 새 DB 를 띄움</b><span>구와 같은 digest, 기존 튜닝 유지, 서비스 이름 동일</span></div></li><li><div class="tl__when">리허설</div><div class="tl__what"><b>S3 베이스 백업·WAL 만으로 복원</b><span>단계별 측정 약 13.7분, 행 수·카드 수 전 항목 일치</span></div></li><li><div class="tl__when">컷오버 1</div><div class="tl__what"><b>구 인스턴스 정지</b><span>WAL 스위치 후 S3 동기화 확인</span></div></li><li><div class="tl__when">컷오버 2</div><div class="tl__what"><b>복원</b><span>복원 단계 846초, 최종 WAL 반영 확인</span></div></li><li><div class="tl__when">컷오버 3</div><div class="tl__what"><b>소비자 실접속 확인</b><span>매출 파이프라인·워크플로 스케줄러·BI 정상 접속, 착수 당일 완료</span></div></li></ol><p class="sub-h">객체 저장소를 경유한 물리 복원 컷오버 — 소비자는 주소를 바꾸지 않음</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  OLD[&quot;구 클러스터 PostgreSQL&lt;br/&gt;인스턴스 정지&quot;] --&gt;|&quot;WAL 스위치 · 동기화&quot;| S3[&quot;S3&lt;br/&gt;베이스 백업 + WAL&quot;]
+  S3 --&gt;|&quot;내려받기 · 압축 해제 · WAL 재생&quot;| NEW[&quot;EKS PostgreSQL&lt;br/&gt;같은 이미지 계열 · 같은 서비스 이름&quot;]
+  NEW --&gt; C1[&quot;매출 파이프라인&quot;]
+  NEW --&gt; C2[&quot;워크플로 스케줄러&quot;]
+  NEW --&gt; C3[&quot;BI&quot;]">flowchart LR
+  OLD[&quot;구 클러스터 PostgreSQL&lt;br/&gt;인스턴스 정지&quot;] --&gt;|&quot;WAL 스위치 · 동기화&quot;| S3[&quot;S3&lt;br/&gt;베이스 백업 + WAL&quot;]
+  S3 --&gt;|&quot;내려받기 · 압축 해제 · WAL 재생&quot;| NEW[&quot;EKS PostgreSQL&lt;br/&gt;같은 이미지 계열 · 같은 서비스 이름&quot;]
+  NEW --&gt; C1[&quot;매출 파이프라인&quot;]
+  NEW --&gt; C2[&quot;워크플로 스케줄러&quot;]
+  NEW --&gt; C3[&quot;BI&quot;]</pre></div></figure><div class="lesson"><b>배운 점</b><p>정지창은 '얼마나 걸릴까'가 아니라 '재 보니 얼마였다'로 정해야 합의가 빠릅니다. 단계별로 재니 압축 해제가 가장 긴 구간이라는 것도 보였습니다. 같은 이미지 계열, 같은 서비스 이름처럼 '바꾸지 않을 것'을 먼저 정한 것이 위험을 크게 줄였습니다.</p></div>
+
+</article>
+<article class="case sec--glow sec--flip" id="case-3">
+<div class="case__head"><span class="case__no">CASE 03 · 복구설계·복구검증</span><h3 class="case__title">DB 하나가 노드 하나를 잠식 — 스탠바이에서 단일 writer DR 까지</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>이관 직후 분석 DB 하나가 한 노드 예약 자원의 큰 몫을 차지했고, 주기적인 전처리 피크 때는 그 노드 CPU 를 거의 다 썼습니다. 노드 예약이 꽉 차 빌드 에이전트가 뜰 자리가 없던 일도 실제로 있었습니다. 볼륨이 AZ 에 묶여 있어 노드가 죽으면 DB 는 노드가 돌아올 때까지 멈추는 구조였습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>EBS 볼륨의 AZ 종속, 복제본 없는 단일 인스턴스, 배치 피크와 서빙이 같은 노드에 동거한 것이 겹쳤습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>먼저 이미 확보한 노드 여유분으로 다른 AZ 에 스트리밍 스탠바이를 가동하고, 노드 역할 정비·DB CPU 예약 우측화를 병행</li><li>노드 상향·DB 전용 노드·관리형 DB 3안을 '장애 때 누가 대응하는가'와 비용 기준으로 비교한 검토 자료 작성</li><li>회사가 추가 노드·관리형 DB 없이 3노드 유지를 결정 → 구조를 'HA 가 아닌 DR'로 재정의하고 'PITR 리허설 → 노드 복구 훈련 → 스탠바이 철거' 관문 순서 설계</li><li>운영 writer 를 건드리지 않는 격리 PITR 리허설 구현(서비스 연결 없음·아카이브 끔·임시 볼륨)</li><li>1차(시간 형식 파서 거부·복원 시간 초과)와 2차(검증 SQL 결함) 실패의 원인을 고쳐 3차 통과</li><li>승인된 정지창에서 writer 를 동결하고 DB 노드 EC2 를 실제로 강제 종료 — 수동 drain·강제 분리 없이 전체 워크로드 복구 확인</li><li>두 관문 통과 뒤 스탠바이 워크로드·복제 슬롯·전용 디스크를 잔재 없이 철거</li><li>노드 1대 상실에 대비해 장기 사용량 근거로 예약 자원을 컴포넌트 하나씩 나눠 보정하고, 매번 수용 시험으로 확인</li><li>계획·런북·실행은 대부분 Codex 에이전트, 단계 통과와 파괴 작업(EC2 종료·디스크 삭제) 승인은 본인</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>PITR 리허설 3차에서 RPO 130초, 복원 생성→검증 27분 18초로 승인한 복구 목표를 통과했습니다. DB 노드 강제 종료 훈련에서는 대체 노드가 뜨고 기존 디스크 7개가 자동으로 다시 붙어 DB 가 159초 만에 돌아왔습니다(앱 재가동 완료는 약 28분 뒤). 노드 1대 상실 시 CPU 재배치 장부는 부족에서 소폭 여유로 바뀌었지만, 목표로 잡은 여유에는 못 미쳤습니다.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">시점 복구 RPO(PITR 리허설 3차)</div><div class="delta__val"><span class="to">130초</span></div></div><div class="delta"><div class="delta__label">노드 상실 시 DB 복귀</div><div class="delta__val"><span class="to">159초</span></div><div class="delta__note">앱 재가동 완료는 약 28분 뒤</div></div><div class="delta"><div class="delta__label">복원 생성→검증</div><div class="delta__val"><span class="to">27분 18초</span></div><div class="delta__note">탐지·판단·전환 제외 기술 구간</div></div><div class="delta"><div class="delta__label">대체 노드에 자동 재부착된 기존 디스크</div><div class="delta__val"><span class="to">7개</span></div></div></div><p class="sub-h">가설을 하나씩 버린 과정</p><ol class="funnel"><li class=""><span class="n">1</span><div><b>관리형 DB 로 이전</b><span>백업·패치·failover 를 AWS 에 맡기는 안. 배선 전수와 마이그레이션 축까지 조사</span></div><span class="out">비용 협의로 보류</span></li><li class=""><span class="n">2</span><div><b>다른 AZ 에 스트리밍 스탠바이</b><span>이미 확보한 노드 여유분을 써서 추가 컴퓨트 없이 복제본 가동, 노드 역할 정비 병행</span></div><span class="out">가동했으나 이후 회사 결정에 따라 관문 통과 뒤 철거</span></li><li class=""><span class="n">3</span><div><b>노드 상향·DB 전용 노드·관리형 DB 3안 비교</b><span>장애 대응 주체와 비용을 같은 표에 놓고 비교</span></div><span class="out">회사 결정으로 반려 — 추가 상시 비용 없이 3노드 유지</span></li><li class="is-adopted"><span class="n">4</span><div><b>단일 writer + 객체 저장소 시점 복구(DR)</b><span>자동 failover 없음을 명시하고 PITR 리허설·노드 강제 종료 훈련으로 복구 경로 실증</span></div><span class="out">채택 · RPO 130초, DB 159초 복귀</span></li></ol><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">2026.08.24</div><div class="tl__what"><b>다른 AZ 스탠바이 가동</b><span>노드 역할 정비·DB CPU 예약 우측화 병행</span></div></li><li><div class="tl__when">2026.08.27</div><div class="tl__what"><b>3안 비교 검토 자료</b><span>노드 상향·DB 전용 노드·관리형 DB 를 대응 주체·비용 기준으로 비교</span></div></li><li><div class="tl__when">2026.08.28</div><div class="tl__what"><b>회사 결정</b><span>추가 노드·관리형 DB 없이 3노드 유지, 분석 DB 는 단일 writer + PITR</span></div></li><li><div class="tl__when">2026.08.29</div><div class="tl__what"><b>PITR 리허설 3회</b><span>1·2차 실패 원인 수정 후 3차 통과(RPO 130초)</span></div></li><li><div class="tl__when">2026.08.29</div><div class="tl__what"><b>노드 강제 종료 훈련·스탠바이 철거</b><span>DB 159초 복귀 확인 뒤 스탠바이·복제 슬롯·전용 디스크 철거</span></div></li><li><div class="tl__when">2026.08.29 ~ 30</div><div class="tl__what"><b>예약 자원 보정</b><span>컴포넌트별로 나눠 적용하고 매번 수용 시험</span></div></li></ol><p class="sub-h">가용성 축(스탠바이)을 내려놓고 복구 축(재부착·PITR)을 실측으로 보강한 구조 변화</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph BEFORE[&quot;전 · 다른 AZ 스탠바이&quot;]
+    PR1[&quot;프라이머리&lt;br/&gt;노드 B&quot;] --&gt;|&quot;WAL 실시간 스트리밍&quot;| SB[&quot;스탠바이&lt;br/&gt;다른 AZ 노드 C&quot;]
+    SB -.-&gt;|&quot;장애 시 격리 후 수동 승격&quot;| NP[&quot;새 프라이머리&quot;]
+  end
+  subgraph AFTER[&quot;후 · 단일 writer DR&quot;]
+    W[&quot;단일 writer&lt;br/&gt;AZ별 노드그룹&quot;] --&gt;|&quot;WAL · 베이스 백업&quot;| OBJ[&quot;S3&quot;]
+    W -.-&gt;|&quot;노드 상실 시&quot;| RE[&quot;같은 AZ 대체 노드에&lt;br/&gt;기존 디스크 재부착&quot;]
+    OBJ -.-&gt;|&quot;디스크 · AZ 상실 시&quot;| PT[&quot;새 볼륨에 시점 복구&quot;]
+  end">flowchart LR
+  subgraph BEFORE[&quot;전 · 다른 AZ 스탠바이&quot;]
+    PR1[&quot;프라이머리&lt;br/&gt;노드 B&quot;] --&gt;|&quot;WAL 실시간 스트리밍&quot;| SB[&quot;스탠바이&lt;br/&gt;다른 AZ 노드 C&quot;]
+    SB -.-&gt;|&quot;장애 시 격리 후 수동 승격&quot;| NP[&quot;새 프라이머리&quot;]
+  end
+  subgraph AFTER[&quot;후 · 단일 writer DR&quot;]
+    W[&quot;단일 writer&lt;br/&gt;AZ별 노드그룹&quot;] --&gt;|&quot;WAL · 베이스 백업&quot;| OBJ[&quot;S3&quot;]
+    W -.-&gt;|&quot;노드 상실 시&quot;| RE[&quot;같은 AZ 대체 노드에&lt;br/&gt;기존 디스크 재부착&quot;]
+    OBJ -.-&gt;|&quot;디스크 · AZ 상실 시&quot;| PT[&quot;새 볼륨에 시점 복구&quot;]
+  end</pre></div></figure><div class="lesson"><b>배운 점</b><p>백업이 도는 것과 복구가 되는 것은 다른 문제였습니다. 비용 제약으로 자동 failover 를 포기한 구조라면 그 사실을 숨기지 않고, 복구 경로를 숫자로 증명해 두는 것이 다음 결정(고객 SLA 요구가 생길 때)의 근거가 된다고 봤습니다.</p></div>
+
+</article>
+<article class="case" id="case-4">
+<div class="case__head"><span class="case__no">CASE 04 · 이관설계</span><h3 class="case__title">와일드카드 DNS 하나에 묶인 서비스를 하나씩 옮기기</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>구 클러스터의 호스트 33개가 와일드카드 DNS 레코드 하나에 의존했고, 그중에는 여러 시스템이 함께 쓰는 사내 SSO 같은 공유 컴포넌트가 섞여 있었습니다. 한꺼번에 전환하면 장애 범위가 전체로 커지고, SSO 는 개발 모드로 공개 운영되고 있었습니다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>와일드카드 레코드는 '전부 아니면 전무'로만 바꿀 수 있습니다. 반면 DNS 에서는 구체 레코드가 와일드카드보다 우선하므로, 호스트 단위로 쪼갤 여지가 있었습니다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>DNS 존을 전수 조사해 구체 레코드 우선 규칙을 확인하고, 'Terraform 으로 호스트 레코드 추가 = 전환, 삭제 = 롤백' 구조 설계</li><li>각 컴포넌트를 최신 안정 버전으로 올리며 한 번에 하나씩 이관</li><li>개발 API 는 설정 파일 대신 환경변수로만 배선해 같은 이미지가 구·신 양쪽에서 뜨게 함</li><li>SSO 는 핫카피 리허설로 스키마 자동 마이그레이션을 확인한 뒤 정지창 컷오버, 이중화된 운영 모드로 재구성하고 토큰 발급자·서명 키 보존</li><li>CI 는 Docker 소켓 의존을 kaniko 로 바꾸고(자사 잡 6종) 레지스트리 push 를 워크로드 신원으로, 설정은 JCasC 로 코드화</li><li>새 CI 로그인 무한 리다이렉트 — 제가 새 OIDC 클라이언트에 기본 스코프를 명시하면서 사용자 식별 클레임이 빠진 것이 원인, 규명 후 수정</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>기존 호스트 11개를 같은 호스트 이름 그대로 옮겼고, 정지창은 개발 API 5분·SSO 약 7분·CI 약 40분이었습니다. SSO 는 연동 앱을 하나도 고치지 않고 전환됐습니다.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">같은 이름으로 옮긴 기존 호스트</div><div class="delta__val"><span class="to">11개</span></div></div><div class="delta"><div class="delta__label">서비스별 정지창</div><div class="delta__val"><span class="to">개발 API 5분 · SSO 약 7분 · CI 약 40분</span></div></div><div class="delta"><div class="delta__label">SSO 연동 앱 수정</div><div class="delta__val"><span class="to">없음</span></div><div class="delta__note">토큰 발급자·서명 키 보존</div></div></div><p class="sub-h">전환 단위를 '와일드카드 전체'에서 '호스트 하나'로 줄인 구조</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+  subgraph BEFORE[&quot;전 · 와일드카드 하나&quot;]
+    WC[&quot;와일드카드 레코드 1개&quot;] --&gt; OLDC[&quot;구 클러스터&lt;br/&gt;호스트 33개&quot;]
+  end
+  subgraph AFTER[&quot;후 · 호스트별 레코드&quot;]
+    REC[&quot;구체 레코드 추가&lt;br/&gt;= 전환&quot;] --&gt; EKS[&quot;EKS&lt;br/&gt;같은 호스트 이름&quot;]
+    WC2[&quot;와일드카드&lt;br/&gt;남은 호스트&quot;] --&gt; OLDR[&quot;구 클러스터&lt;br/&gt;협력사 소관 호스트&quot;]
+    DEL[&quot;구체 레코드 삭제&lt;br/&gt;= 롤백&quot;] -.-&gt; WC2
+  end">flowchart LR
+  subgraph BEFORE[&quot;전 · 와일드카드 하나&quot;]
+    WC[&quot;와일드카드 레코드 1개&quot;] --&gt; OLDC[&quot;구 클러스터&lt;br/&gt;호스트 33개&quot;]
+  end
+  subgraph AFTER[&quot;후 · 호스트별 레코드&quot;]
+    REC[&quot;구체 레코드 추가&lt;br/&gt;= 전환&quot;] --&gt; EKS[&quot;EKS&lt;br/&gt;같은 호스트 이름&quot;]
+    WC2[&quot;와일드카드&lt;br/&gt;남은 호스트&quot;] --&gt; OLDR[&quot;구 클러스터&lt;br/&gt;협력사 소관 호스트&quot;]
+    DEL[&quot;구체 레코드 삭제&lt;br/&gt;= 롤백&quot;] -.-&gt; WC2
+  end</pre></div></figure><div class="lesson"><b>배운 점</b><p>전환 단위를 작게 만들면 되돌리기가 '삭제 한 번'이 됩니다. 그리고 내가 만든 설정도 원인 후보에 넣어야 합니다. 무한 리다이렉트는 제 설정 실수였고, 기본값을 덮어쓰는 설정은 무엇이 함께 빠지는지 확인해야 한다는 점을 배웠습니다.</p></div>
+
+</article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>관리형은 클러스터 아래만 가져갑니다. 그 위는 그대로 우리 몫이라 코드화와 관문으로 메워야 했습니다. 첫 워크로드를 신축으로 시작하니, 이후 이관은 '검증된 클러스터로의 두 번째 배포'가 됐습니다.</p><p>정지창은 '얼마나 걸릴까'가 아니라 '재 보니 얼마였다'로 정해야 합의가 빠릅니다. 단계별로 재니 압축 해제가 가장 긴 구간이라는 것도 보였습니다. 같은 이미지 계열, 같은 서비스 이름처럼 '바꾸지 않을 것'을 먼저 정한 것이 위험을 크게 줄였습니다.</p><p>백업이 도는 것과 복구가 되는 것은 다른 문제였습니다. 비용 제약으로 자동 failover 를 포기한 구조라면 그 사실을 숨기지 않고, 복구 경로를 숫자로 증명해 두는 것이 다음 결정(고객 SLA 요구가 생길 때)의 근거가 된다고 봤습니다.</p></section></div>
+<nav class="pager" aria-label="다른 프로젝트"><a href="correction-backoffice.html"><small>← 이전 프로젝트</small><b>사내 데이터 보정·검수 백오피스</b></a><a class="next" href="platform-ops-security.html"><small>다음 프로젝트 →</small><b>사내 쿠버네티스 플랫폼 운영·보안 하드닝</b></a></nav>
+<footer class="footer"><p>황병준 · 백엔드·데이터 엔지니어 · <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p><small>디자인 바탕: <a href="https://once-ui.com" target="_blank" rel="noopener">Once UI</a> Magic Portfolio · 도표는 직접 그린 개념도입니다</small></footer>
 </main>
-
-<footer class="site-footer">
-  <div class="wrap">
-    <span>© 2026 황병준</span>
-    <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a>
-  </div>
-</footer>
-<script src="../assets/js/site.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" defer></script>
+<script src="../assets/js/site.js?v=fdaea7ac" defer></script>
 </body>
 </html>

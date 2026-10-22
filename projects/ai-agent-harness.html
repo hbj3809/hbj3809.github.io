@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 코딩 에이전트 하네스 엔지니어링 — 황병준 포트폴리오</title>
+<meta name="description" content="스타트업 개발팀에서 백엔드·데이터·인프라를 넓게 맡으며, AI 코딩 에이전트(Claude Code·Codex)가 저장소 관례·보안 규칙·지난 교훈을 지키며 일하도록 작업 규칙 3단·찾기→반박 다중 에이전트 검증·모듈 전체 시험 관문·권한 분리·기억 노트를 설계·운영했다. 2026년 6~10월 다중 에이전트 워크플로를 324회(에이전트 약 4,900개) 돌렸고 약 70%에 독립 반박 검증 단계를 넣었으며, 데이터 파이프라인·API 주요 변경 5건에서는 확정 결함 62건을 배포 전에 고쳤다. 병합과 운영 반영은 사람만 한다.">
+<meta name="theme-color" content="#15161a">
+<meta property="og:title" content="AI 코딩 에이전트 하네스 엔지니어링 — 황병준 포트폴리오">
+<meta property="og:description" content="스타트업 개발팀에서 백엔드·데이터·인프라를 넓게 맡으며, AI 코딩 에이전트(Claude Code·Codex)가 저장소 관례·보안 규칙·지난 교훈을 지키며 일하도록 작업 규칙 3단·찾기→반박 다중 에이전트 검증·모듈 전체 시험 관문·권한 분리·기억 노트를 설계·운영했다. 2026년 6~10월 다중 에이전트 워크플로를 324회(에이전트 약 4,900개) 돌렸고 약 70%에 독립 반박 검증 단계를 넣었으며, 데이터 파이프라인·API 주요 변경 5건에서는 확정 결함 62건을 배포 전에 고쳤다. 병합과 운영 반영은 사람만 한다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../assets/css/site.css?v=a01858cc">
+</head>
+<body>
+<a class="skip" href="#main">본문 바로가기</a>
+<nav class="nav" aria-label="주 메뉴"><a class="nav__item" href="../index.html" aria-label="홈"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.99778 19.3275V14.3275H13.9978V19.3275C13.9978 19.8775 14.4478 20.3275 14.9978 20.3275H17.9978C18.5478 20.3275 18.9978 19.8775 18.9978 19.3275V12.3275H20.6978C21.1578 12.3275 21.3778 11.7575 21.0278 11.4575L12.6678 3.9275C12.2878 3.5875 11.7078 3.5875 11.3278 3.9275L2.96778 11.4575C2.62778 11.7575 2.83778 12.3275 3.29778 12.3275H4.99778V19.3275C4.99778 19.8775 5.44778 20.3275 5.99778 20.3275H8.99778C9.54778 20.3275 9.99778 19.8775 9.99778 19.3275Z"/></svg><span class="nav__tip">홈</span></a><a class="nav__item" href="../about.html" aria-label="소개"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v1c0 .55.45 1 1 1h14c.55 0 1-.45 1-1v-1c0-2.66-5.33-4-8-4z"/></svg><span class="nav__tip">소개</span></a><a class="nav__item" href="../experience.html" aria-label="경력"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg><span class="nav__tip">경력</span></a><a class="nav__item" href="../projects.html" aria-current="page" aria-label="프로젝트"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.0142 17.3073L17.3042 18.0173C17.1042 18.2173 16.7942 18.2173 16.5942 18.0173C16.3942 17.8173 16.3942 17.5073 16.5942 17.3073L17.3042 16.5973L15.3642 14.6573L14.6542 15.3673C14.4542 15.5673 14.1442 15.5673 13.9442 15.3673C13.7442 15.1673 13.7442 14.8573 13.9442 14.6573L14.6542 13.9473L12.7142 12.0073L12.0042 12.7173C11.8042 12.9173 11.4942 12.9173 11.2942 12.7173C11.0942 12.5173 11.0942 12.2073 11.2942 12.0073L12.0042 11.2973L10.0542 9.34731L9.34423 10.0573C9.14423 10.2573 8.83423 10.2573 8.63423 10.0573C8.43423 9.85731 8.43423 9.54731 8.63423 9.34731L9.34423 8.63731L7.40423 6.69731L6.69423 7.40731C6.49423 7.60731 6.18423 7.60731 5.98423 7.40731C5.78423 7.20731 5.78423 6.89731 5.98423 6.69731L6.69423 5.98731L5.20423 4.49731C4.89423 4.18731 4.35423 4.40731 4.35423 4.85731V17.6473C4.35423 18.7473 5.25423 19.6473 6.35423 19.6473H19.1442C19.5942 19.6473 19.8142 19.1073 19.4942 18.7973L18.0142 17.3073ZM7.35423 15.6473V10.8873L13.1142 16.6473H8.35423C7.80423 16.6473 7.35423 16.1973 7.35423 15.6473Z"/></svg><span class="nav__tip">프로젝트</span></a><a class="nav__item" href="../ai.html" aria-label="AI로 일하는 방식"><svg class="" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M14.2206 28C13.7539 28 13.3939 27.5867 13.4606 27.12L14.6606 18.6667H9.99395C8.82062 18.6667 9.55395 17.6667 9.58062 17.6267C11.2606 14.6533 13.7806 10.2533 17.114 4.38667C17.2473 4.14667 17.514 4 17.7806 4C18.2473 4 18.6073 4.41333 18.5406 4.88L17.3406 13.3333H22.0206C22.554 13.3333 22.8473 13.5867 22.554 14.2133C18.1673 21.8667 15.6206 26.3333 14.8873 27.6133C14.754 27.8533 14.5006 28 14.2206 28Z"/></svg><span class="nav__tip">AI로 일하는 방식</span></a><a class="nav__item" href="../skills.html" aria-label="기술"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.61 18.99l-9.08-9.08c.93-2.34.45-5.1-1.44-7C9.79.61 6.21.4 3.66 2.26L7.5 6.11 6.08 7.52 2.25 3.69C.39 6.23.6 9.82 2.9 12.11c1.86 1.86 4.57 2.35 6.89 1.48l9.11 9.11c.39.39 1.02.39 1.41 0l2.3-2.3c.4-.38.4-1.01 0-1.41z"/></svg><span class="nav__tip">기술</span></a><div class="nav__div" aria-hidden="true"><span></span></div><a class="nav__item" href="mailto:hbj3809@naver.com" aria-label="이메일 보내기"><svg class="" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg><span class="nav__tip">hbj3809@naver.com</span></a></nav>
+<main id="main" class="page">
+<header class="intro"><p class="intro__eyebrow">알스솔루션 프로젝트</p><h1>AI 코딩 에이전트 하네스 엔지니어링</h1><div class="intro__text"><p>작업 규칙 3단·찾기→반박 다중 에이전트 검증·시험 관문·권한 분리로, 에이전트의 결과가 검증을 거쳐서만 운영에 닿게 만든 개발 방식</p></div><div class="intro__meta"><span><b>알스솔루션</b></span><span>2026.04 ~ 현재</span><span>운영 중</span><span>AI·ML</span></div></header>
+<div class="controls" role="tablist" aria-label="프로젝트 보기">
+<button class="ctl" type="button" role="tab" id="tab-detail" data-panel="detail" aria-controls="panel-detail" aria-selected="true"><span>상세</span></button>
+<button class="ctl" type="button" role="tab" id="tab-problems" data-panel="problems" aria-controls="panel-problems" aria-selected="false"><span>문제해결 <span class="count">4</span></span></button>
+<div class="controls__end"><a class="ctl" href="../projects.html?axis=ai"><span>AI·ML 프로젝트 목록 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div>
+</div>
+<div class="card hero-card"><div class="card__media"><div class="cover cover--ai"><p class="cover__title">AI 에이전트 하네스</p><p class="cover__sub">작업 규칙 3단·찾기→반박 다중 에이전트 검증·시험 관문·권한 분리로, 에이전트의 결과가 검증을 거쳐서만 운영에 닿게 만든 개발 방식</p></div></div></div>
+<div class="panel" id="panel-detail" role="tabpanel" aria-labelledby="tab-detail"><div class="overview">
+<div class="overview__side"><div class="stat"><p class="stat__value">324회</p><p class="stat__label">다중 에이전트 워크플로</p><p class="stat__note">2026.06~10, 에이전트 약 4,900개</p></div><div class="stat"><p class="stat__value">약 70%</p><p class="stat__label">반박 검증 단계 포함</p><p class="stat__note">반박 판정의 약 27% 기각(판정 기록 기준)</p></div><div class="stat"><p class="stat__value">62건</p><p class="stat__label">배포 전 반영한 확정 결함</p><p class="stat__note">데이터 파이프라인·API 주요 변경 5건</p></div><div class="stat"><p class="stat__value">57.6%</p><p class="stat__label">AI 공동 작성 표기 커밋</p><p class="stat__note">본인 커밋 1,806건 중, 도구 기본 표기 기준 하한</p></div>
+<dl class="facts"><div><dt>회사</dt><dd>알스솔루션 · Engineering팀 · 선임연구원</dd></div><div><dt>기간</dt><dd>2026.04 ~ 현재</dd></div><div><dt>역할</dt><dd>설계·운영 주도 — 규칙 내용·워크플로 구성·발견 판정·반영과 병합 결정(규칙 문서 본문·워크플로 스크립트 작성과 하위 에이전트 실행은 AI 에이전트)</dd></div><div><dt>팀</dt><dd>스타트업 개발팀 · 본인 작업 환경의 하네스</dd></div><div><dt>상태</dt><dd>운영 중</dd></div></dl></div>
+<div class="overview__body"><h2>프로젝트 개요<br><span class="dim">무엇을, 왜 만들었나</span></h2><p class="overview__lead">스타트업 개발팀에서 백엔드·데이터·인프라를 넓게 맡으며, AI 코딩 에이전트(Claude Code·Codex)가 저장소 관례·보안 규칙·지난 교훈을 지키며 일하도록 작업 규칙 3단·찾기→반박 다중 에이전트 검증·모듈 전체 시험 관문·권한 분리·기억 노트를 설계·운영했다. 2026년 6~10월 다중 에이전트 워크플로를 324회(에이전트 약 4,900개) 돌렸고 약 70%에 독립 반박 검증 단계를 넣었으며, 데이터 파이프라인·API 주요 변경 5건에서는 확정 결함 62건을 배포 전에 고쳤다. 병합과 운영 반영은 사람만 한다.</p><p class="overview__more">설계·운영 주도 — 규칙 내용·워크플로 구성·발견 판정·반영과 병합 결정(규칙 문서 본문·워크플로 스크립트 작성과 하위 에이전트 실행은 AI 에이전트) · 스타트업 개발팀 · 본인 작업 환경의 하네스</p>
+<div><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 사례 4개 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div></div>
+</div><section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">개요<span class="dim">왜 하네스가 필요했나</span></h2><div class="sec__lead"><p>스타트업 개발팀에서 백엔드·데이터 파이프라인·인프라를 넓게 맡으며 AI 코딩 에이전트(Claude Code·Codex)를 매일 썼다. 에이전트는 빠르지만 저장소의 관례도, 지난 사고도 모른 채 같은 실수를 되풀이할 수 있고, 결과의 질은 요청을 얼마나 자세하고 명확하게 쓰느냐에 따라 크게 갈린다.</p><p>그래서 매번 설명하지 않아도 에이전트가 같은 기준으로 일하고, 에이전트의 결론은 다른 에이전트·시험·사람이 다시 확인한 뒤에만 운영에 닿도록 작업 규칙·반박 검증·시험 관문·권한 분리·기억을 먼저 설계했다. 이 묶음을 하네스(harness)라고 부른다.</p></div></div>
+<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>기간: 2026.04 ~ 현재(다중 에이전트 워크플로는 2026.06부터)</li><li>목표: 에이전트가 저장소 관례·보안 규칙·지난 교훈을 기본값으로 지키는 작업 환경, 사람에게는 검증을 통과한 결론만 올라오는 구조</li><li>내 역할: 규칙 내용·워크플로 구성·발견 판정·반영 여부·병합 결정. 규칙 문서 본문·워크플로 스크립트·하위 에이전트 실행·기억 노트 기록은 에이전트 몫</li><li>팀: 스타트업 개발팀. 기획·프론트엔드·우선순위 결정은 다른 구성원 몫이고, 하네스는 본인 작업 방식</li><li>범위: 모델 학습·서빙이 아닌 LLM 에이전트를 활용한 개발·검증 방식 설계</li><li>출발점: 이전 직장에서는 대화형 AI를 실패 케이스 시험용 목업 데이터 생성·로그 분석 보조로 주로 썼고, 에이전트에게 구현을 맡기면서 요청의 질이 결과를 가른다는 것을 체감</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">하네스 구성<span class="dim">규칙·기억·실행·관문·사람</span></h2><div class="sec__lead"><p>에이전트가 일을 시작할 때 읽는 규칙과 기억, 일을 나눠 맡는 실행 단위, 결과가 지나가야 하는 관문, 마지막 결정을 내리는 사람으로 나눴다. 규칙은 위층에서 아래층으로 갈수록 구체적이다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
+  subgraph RULES[&quot;작업 규칙 3단&quot;]
+    direction LR
+    G1[&quot;도구 전역&lt;br/&gt;역할·안전 수칙·비밀값 취급&quot;]
+    G2[&quot;작업공간 공통&lt;br/&gt;기획서 대조·시험 의무&lt;br/&gt;시험 약화 금지·API 문서화&quot;]
+    G3[&quot;저장소별&lt;br/&gt;단일 시험 관문·테넌트 격리&lt;br/&gt;운영 함정&quot;]
+    G1 --&gt; G2 --&gt; G3
+  end
+  MEM[&quot;기억 노트 90여 개&lt;br/&gt;규약·교훈·사고 기록·색인&quot;]
+  HUMAN[&quot;사람&lt;br/&gt;범위·정책 결정·판정·병합&quot;]
+  subgraph RUN[&quot;에이전트 실행&quot;]
+    direction LR
+    MAIN[&quot;메인 에이전트&lt;br/&gt;Claude Code·Codex&quot;]
+    WF[&quot;다중 에이전트 워크플로&lt;br/&gt;찾기·반박·종합&quot;]
+    CRON[&quot;예약 점검 에이전트&lt;br/&gt;읽기 전용&quot;]
+  end
+  subgraph GATE[&quot;관문&quot;]
+    direction LR
+    TEST[&quot;모듈 전체 시험&lt;br/&gt;실제 DB·Redis 통합 시험&quot;]
+    PRQ[&quot;PR&lt;br/&gt;시험 결과 원문 기록&quot;]
+  end
+  PROD[&quot;운영 반영&quot;]
+  RULES --&gt; MAIN
+  MEM --&gt; MAIN
+  HUMAN --&gt;|&quot;지시·확인 질문 답변&quot;| MAIN
+  MAIN --&gt; WF
+  WF --&gt;|&quot;반박을 통과한 발견&quot;| HUMAN
+  MAIN --&gt; TEST --&gt; PRQ --&gt;|&quot;병합 요청&quot;| HUMAN
+  HUMAN --&gt;|&quot;병합·배포&quot;| PROD
+  CRON --&gt;|&quot;판정 보고서&quot;| HUMAN
+  MAIN -.-&gt;|&quot;교훈 기록&quot;| MEM">flowchart TB
+  subgraph RULES[&quot;작업 규칙 3단&quot;]
+    direction LR
+    G1[&quot;도구 전역&lt;br/&gt;역할·안전 수칙·비밀값 취급&quot;]
+    G2[&quot;작업공간 공통&lt;br/&gt;기획서 대조·시험 의무&lt;br/&gt;시험 약화 금지·API 문서화&quot;]
+    G3[&quot;저장소별&lt;br/&gt;단일 시험 관문·테넌트 격리&lt;br/&gt;운영 함정&quot;]
+    G1 --&gt; G2 --&gt; G3
+  end
+  MEM[&quot;기억 노트 90여 개&lt;br/&gt;규약·교훈·사고 기록·색인&quot;]
+  HUMAN[&quot;사람&lt;br/&gt;범위·정책 결정·판정·병합&quot;]
+  subgraph RUN[&quot;에이전트 실행&quot;]
+    direction LR
+    MAIN[&quot;메인 에이전트&lt;br/&gt;Claude Code·Codex&quot;]
+    WF[&quot;다중 에이전트 워크플로&lt;br/&gt;찾기·반박·종합&quot;]
+    CRON[&quot;예약 점검 에이전트&lt;br/&gt;읽기 전용&quot;]
+  end
+  subgraph GATE[&quot;관문&quot;]
+    direction LR
+    TEST[&quot;모듈 전체 시험&lt;br/&gt;실제 DB·Redis 통합 시험&quot;]
+    PRQ[&quot;PR&lt;br/&gt;시험 결과 원문 기록&quot;]
+  end
+  PROD[&quot;운영 반영&quot;]
+  RULES --&gt; MAIN
+  MEM --&gt; MAIN
+  HUMAN --&gt;|&quot;지시·확인 질문 답변&quot;| MAIN
+  MAIN --&gt; WF
+  WF --&gt;|&quot;반박을 통과한 발견&quot;| HUMAN
+  MAIN --&gt; TEST --&gt; PRQ --&gt;|&quot;병합 요청&quot;| HUMAN
+  HUMAN --&gt;|&quot;병합·배포&quot;| PROD
+  CRON --&gt;|&quot;판정 보고서&quot;| HUMAN
+  MAIN -.-&gt;|&quot;교훈 기록&quot;| MEM</pre></div><figcaption>직접 그린 개념도. 저장소·호스트 이름은 일반화</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>도구 전역: 역할·안전 수칙·비밀값 취급·응답 언어</li><li>작업공간 공통: 기획서 대조 검증·시험 추가 의무·실제 DB·Redis 를 띄운 통합 시험 우선(목 위주 단위 시험보다)·시험 약화 금지·공통 모듈 승격·API 문서화(OpenAPI) 의무·등록/수정 메타 규칙. Claude Code용과 Codex용 파일을 같은 내용으로 두어 두 도구가 같은 규칙을 읽음</li><li>저장소별: 모듈 전체 시험 단일 관문·테넌트 격리 체크리스트·외부 호출 서킷브레이커 의무·API 오류 응답 예시 의무·운영 함정 목록. 저장소 안에서 git 으로 관리(주력 저장소 224줄·46회 개정)</li><li>기억: 작업 직후 남기는 주제별 노트 90여 개와 색인. 낡은 내용은 표시하고 정정 이력을 남김</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">핵심 흐름<span class="dim">찾기 → 반박 → 종합</span></h2><div class="sec__lead"><p>에이전트 하나에게 찾기와 검증을 함께 맡기면 그럴듯한 오답과 놓친 것을 거를 수 없다. 관점별 '찾기' 에이전트가 병렬로 발견을 내면, 처음부터 의심하는 독립 '반박' 에이전트가 코드를 다시 읽고 하나씩 판정한다. 살아남은 발견만 사람이 판정한다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TD
+  SRC[&quot;검토 대상&lt;br/&gt;코드·설계안·장애 기록&quot;]
+  subgraph FIND[&quot;찾기: 관점별 병렬&quot;]
+    F1[&quot;관점 1&lt;br/&gt;보안&quot;]
+    F2[&quot;관점 2&lt;br/&gt;정합성&quot;]
+    F3[&quot;관점 N&lt;br/&gt;운영·성능&quot;]
+  end
+  LIST[&quot;발견 목록&lt;br/&gt;정해진 JSON 형식&quot;]
+  REF[&quot;독립 반박 에이전트&lt;br/&gt;처음부터 의심하는 입장&lt;br/&gt;코드를 다시 읽고 판정&quot;]
+  DROP[&quot;기각&lt;br/&gt;사람에게 가지 않음&quot;]
+  MORE[&quot;근거 부족&lt;br/&gt;보류로 표시&quot;]
+  CONF[&quot;확정&quot;]
+  SYN[&quot;종합·비판&lt;br/&gt;필요한 작업에만&quot;]
+  JUDGE[&quot;사람 판정&lt;br/&gt;반영 범위 결정&quot;]
+  FIX[&quot;시험과 함께 수정&lt;br/&gt;PR&quot;]
+  SRC --&gt; F1 &amp; F2 &amp; F3
+  F1 &amp; F2 &amp; F3 --&gt; LIST
+  LIST --&gt; REF
+  REF --&gt;|&quot;기각&quot;| DROP
+  REF --&gt;|&quot;근거 부족&quot;| MORE
+  REF --&gt;|&quot;확정&quot;| CONF
+  CONF --&gt; SYN --&gt; JUDGE --&gt; FIX
+  MORE -.-&gt; JUDGE">flowchart TD
+  SRC[&quot;검토 대상&lt;br/&gt;코드·설계안·장애 기록&quot;]
+  subgraph FIND[&quot;찾기: 관점별 병렬&quot;]
+    F1[&quot;관점 1&lt;br/&gt;보안&quot;]
+    F2[&quot;관점 2&lt;br/&gt;정합성&quot;]
+    F3[&quot;관점 N&lt;br/&gt;운영·성능&quot;]
+  end
+  LIST[&quot;발견 목록&lt;br/&gt;정해진 JSON 형식&quot;]
+  REF[&quot;독립 반박 에이전트&lt;br/&gt;처음부터 의심하는 입장&lt;br/&gt;코드를 다시 읽고 판정&quot;]
+  DROP[&quot;기각&lt;br/&gt;사람에게 가지 않음&quot;]
+  MORE[&quot;근거 부족&lt;br/&gt;보류로 표시&quot;]
+  CONF[&quot;확정&quot;]
+  SYN[&quot;종합·비판&lt;br/&gt;필요한 작업에만&quot;]
+  JUDGE[&quot;사람 판정&lt;br/&gt;반영 범위 결정&quot;]
+  FIX[&quot;시험과 함께 수정&lt;br/&gt;PR&quot;]
+  SRC --&gt; F1 &amp; F2 &amp; F3
+  F1 &amp; F2 &amp; F3 --&gt; LIST
+  LIST --&gt; REF
+  REF --&gt;|&quot;기각&quot;| DROP
+  REF --&gt;|&quot;근거 부족&quot;| MORE
+  REF --&gt;|&quot;확정&quot;| CONF
+  CONF --&gt; SYN --&gt; JUDGE --&gt; FIX
+  MORE -.-&gt; JUDGE</pre></div><figcaption>관점의 수와 이름은 작업마다 다름(보안 점검은 10개 축)</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>발견 형식 고정: 찾기 에이전트는 정해진 JSON 형식으로만 보고해 판정·중복 정리가 쉬움</li><li>판정: 주로 확정·기각·근거 부족(작업에 따라 '일부 성립'을 더함)</li><li>종합·비판은 필요한 작업에만(모든 워크플로에 있는 단계는 아님)</li><li>설계 작업 형식: 조사 3 → 설계안 3 → 심사 3 → 종합 → 비판</li><li>구현 작업 형식: 구현 → 반박 검토 → 고침·PR. PR 단위 작업 폴더(git worktree)로 병렬 구현하고 앞 PR 위에 다음 PR 을 쌓음(stacked PR)</li><li>적용 범위: 보안 점검·삭제 가드 사각 전수조사·장애 원인 조사·설계 심사</li></ul></div></div>
+
+</section>
+<section class="sec sec--glow sec--flip">
+<div class="sec__head"><h2 class="sec__title">발견 하나가 거치는 상태</h2><div class="sec__lead"><p>발견은 반박을 거쳐 확정·기각·근거 부족 중 하나가 되고, 확정된 것만 사람의 판정으로 넘어간다. 고칠지 미룰지는 사람이 정하고, 인프라·제품 결정이 필요한 항목은 따로 기록해 둔다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="stateDiagram-v2
+  state &quot;발견&quot; as FOUND
+  state &quot;확정&quot; as CONFIRMED
+  state &quot;기각&quot; as REFUTED
+  state &quot;근거 부족&quot; as UNSURE
+  state &quot;사람 판정&quot; as JUDGED
+  state &quot;시험과 함께 수정&quot; as FIXED
+  state &quot;보류·백로그 기록&quot; as DEFERRED
+  [*] --&gt; FOUND : 찾기 에이전트가 정해진 형식으로 보고
+  FOUND --&gt; CONFIRMED : 반박 뒤에도 코드에서 성립
+  FOUND --&gt; REFUTED : 반증됨
+  FOUND --&gt; UNSURE : 판단할 근거가 모자람
+  REFUTED --&gt; [*]
+  CONFIRMED --&gt; JUDGED
+  UNSURE --&gt; JUDGED : 필요할 때 사람이 다시 확인
+  JUDGED --&gt; FIXED : 이번 변경에서 고침
+  JUDGED --&gt; DEFERRED : 인프라·제품 결정이 필요해 미룸
+  FIXED --&gt; [*]
+  DEFERRED --&gt; [*]">stateDiagram-v2
+  state &quot;발견&quot; as FOUND
+  state &quot;확정&quot; as CONFIRMED
+  state &quot;기각&quot; as REFUTED
+  state &quot;근거 부족&quot; as UNSURE
+  state &quot;사람 판정&quot; as JUDGED
+  state &quot;시험과 함께 수정&quot; as FIXED
+  state &quot;보류·백로그 기록&quot; as DEFERRED
+  [*] --&gt; FOUND : 찾기 에이전트가 정해진 형식으로 보고
+  FOUND --&gt; CONFIRMED : 반박 뒤에도 코드에서 성립
+  FOUND --&gt; REFUTED : 반증됨
+  FOUND --&gt; UNSURE : 판단할 근거가 모자람
+  REFUTED --&gt; [*]
+  CONFIRMED --&gt; JUDGED
+  UNSURE --&gt; JUDGED : 필요할 때 사람이 다시 확인
+  JUDGED --&gt; FIXED : 이번 변경에서 고침
+  JUDGED --&gt; DEFERRED : 인프라·제품 결정이 필요해 미룸
+  FIXED --&gt; [*]
+  DEFERRED --&gt; [*]</pre></div><figcaption>직접 그린 개념도. 판정 이름은 작업마다 조금씩 다름</figcaption></figure></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">변경 한 건이 운영에 닿기까지<span class="dim">시험 관문과 병합</span></h2><div class="sec__lead"><p>에이전트가 만드는 변경이 빠르게 늘면 일부 시험만 돌리거나 요약된 결과를 믿고 넘어갈 위험이 커진다. 그래서 변경이 같은 관문을 같은 순서로 지나도록 고정했다.</p></div></div>
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="sequenceDiagram
+  participant H as 사람 본인
+  participant A as 메인 에이전트
+  participant W as 검토 워크플로
+  participant T as 모듈 전체 시험
+  participant G as 저장소 PR
+  H-&gt;&gt;A: 범위·정책 지시
+  A-&gt;&gt;H: 모호한 점 확인 질문
+  H-&gt;&gt;A: 결정 답변
+  A-&gt;&gt;A: 작업 규칙·기억 노트 읽기
+  A-&gt;&gt;A: 구현·시험 작성
+  opt 주요 변경일 때
+    A-&gt;&gt;W: 찾기·반박 검토 요청
+    W--&gt;&gt;A: 반박을 통과한 결함만 반환
+    A-&gt;&gt;A: 확정 결함 수정
+  end
+  loop 실패 0건이 될 때까지 코드 수정
+    A-&gt;&gt;T: 실제 DB·Redis 통합 시험 전체 실행
+    T--&gt;&gt;A: 통과·실패 수 원문
+  end
+  A-&gt;&gt;G: 바뀐 파일만 골라 커밋·PR 작성
+  G--&gt;&gt;H: 병합 대기
+  H-&gt;&gt;G: 병합
+  H-&gt;&gt;H: 운영 반영·되돌릴 수 없는 단계 실행">sequenceDiagram
+  participant H as 사람 본인
+  participant A as 메인 에이전트
+  participant W as 검토 워크플로
+  participant T as 모듈 전체 시험
+  participant G as 저장소 PR
+  H-&gt;&gt;A: 범위·정책 지시
+  A-&gt;&gt;H: 모호한 점 확인 질문
+  H-&gt;&gt;A: 결정 답변
+  A-&gt;&gt;A: 작업 규칙·기억 노트 읽기
+  A-&gt;&gt;A: 구현·시험 작성
+  opt 주요 변경일 때
+    A-&gt;&gt;W: 찾기·반박 검토 요청
+    W--&gt;&gt;A: 반박을 통과한 결함만 반환
+    A-&gt;&gt;A: 확정 결함 수정
+  end
+  loop 실패 0건이 될 때까지 코드 수정
+    A-&gt;&gt;T: 실제 DB·Redis 통합 시험 전체 실행
+    T--&gt;&gt;A: 통과·실패 수 원문
+  end
+  A-&gt;&gt;G: 바뀐 파일만 골라 커밋·PR 작성
+  G--&gt;&gt;H: 병합 대기
+  H-&gt;&gt;G: 병합
+  H-&gt;&gt;H: 운영 반영·되돌릴 수 없는 단계 실행</pre></div><figcaption>검토 워크플로는 주요 변경일 때만 거침</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>모호한 점은 에이전트가 먼저 묻기: 사람 확인 질문 215회(남은 세션 기록 기준 하한)</li><li>PR 전 모듈 전체 시험: 실제 PostgreSQL·Redis 를 띄운 통합 시험(Testcontainers·embedded-redis) 통과, 통과·실패 수를 원문 그대로 남기도록 규칙화</li><li>개별 커밋에서 관련 시험만 돌렸으면 그 사유와 결과를 커밋 메시지에 기록</li><li>시험 약화 금지: 단언 완화·케이스 삭제·비활성화로 빨간 빌드를 넘기지 않음</li><li>바뀐 파일만 골라 스테이징: 추적하지 않는 파일이 배포 산출물에 섞이는 것 방지</li><li>2026.09부터 주력 저장소는 에이전트가 브랜치·커밋·푸시·PR 작성, 병합은 사람만. 병합 권한 검사는 우회하지 않음</li></ul></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">사람과 에이전트의 역할 분리</h2><div class="sec__lead"><p>에이전트의 실수가 그대로 운영에 반영되지 않도록, 되돌릴 수 있는 일과 되돌리기 어려운 일을 기준으로 역할을 나눴다.</p></div></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>영역</th><th>에이전트가 한다</th><th>사람(본인)이 한다</th></tr></thead><tbody><tr><td>조사·설계</td><td>코드 조사, 설계안 초안, 구현·시험 작성</td><td>범위·정책·설계 판단</td></tr><tr><td>검증</td><td>찾기·반박 판정, 모듈 전체 시험 실행</td><td>반박 결과의 최종 판정, 반영 여부 결정</td></tr><tr><td>저장소</td><td>브랜치·커밋·푸시·PR 작성(주력 저장소는 2026.09부터)</td><td>PR 병합(본인 작성 PR 316건·병합 314건, 10개 저장소)</td></tr><tr><td>운영</td><td>읽기 전용 조회·측정</td><td>운영 SQL·되돌릴 수 없는 단계·배포 실행</td></tr><tr><td>예약 점검</td><td>읽기 전용 점검과 판정 보고서(쓰기·배포 금지)</td><td>보고서를 보고 다음 단계 진행 결정</td></tr><tr><td>기록</td><td>작업 직후 기억 노트·교훈 기록</td><td>무엇을 규칙으로 올릴지 결정</td></tr></tbody></table></div><div style="margin-top:32px"><ul class="sec__bullets"><li>운영 대상 명령은 자동 승인에서 제외</li><li>하위 에이전트의 일탈(작업 파일 덮어쓰기·저장소 설정 파일 접근·금지된 계산)은 즉시 복구·보고하고, 이후 고유 파일명 사용·하위 에이전트의 저장소 복제 금지 규칙을 추가</li></ul></div></div>
+
+</section>
+<section class="sec sec--glow">
+<div class="sec__head"><h2 class="sec__title">왜 이렇게 설계했나</h2></div>
+<div class="sec__body"><div class="tiles"><div class="tile"><h3>규칙을 3단으로 나눈 이유</h3><p>규칙이 한 파일에 몰리면 묻히고, 저장소마다 따로 쓰면 서로 어긋난다. 위층에는 어디서나 지킬 안전·비밀값 규칙을, 아래층에는 그 저장소만의 관례와 운영 함정을 두어 에이전트가 필요한 만큼 구체적인 규칙을 읽게 했다.</p></div><div class="tile"><h3>버그를 규칙으로 올린 이유</h3><p>다음 세션의 에이전트가 같은 실수를 다시 밟지 않게 하려면 기억보다 규칙이 필요했다. 등록만 했는데 수정일이 채워지던 버그는 '등록 API 는 등록일·등록자만 쓴다'는 작업공간 공통 규칙이 됐고, CSV 한글 깨짐은 UTF-8 BOM 규약이 됐다. 주력 저장소 규칙(46회 개정)의 운영 함정 목록도 같은 방식으로 쌓였다.</p></div><div class="tile"><h3>반박 에이전트를 따로 둔 이유</h3><p>평소 '안 되는 경우'부터 생각하며 실패 케이스 시험을 먼저 쓰던 방식과 같은 발상이다. 찾은 에이전트가 자기 발견을 다시 검증하면 의심하는 주체가 없으므로, 판정만 하는 에이전트를 따로 두고 처음부터 의심하게 했다. 반박 판정 2,335건 중 약 27%가 사람에게 오기 전에 기각됐다(판정 기록 기준).</p></div><div class="tile"><h3>시험을 단일 관문으로 묶은 이유</h3><p>에이전트는 '통과했다'는 요약을 쉽게 만든다. 요약 대신 모듈 전체 시험의 실제 출력과 통과·실패 수를 남기게 하고, 시험을 느슨하게 고쳐 통과시키는 길은 규칙으로 막았다. 목 위주 단위 시험보다 실제 DB·Redis 를 띄운 통합 시험을 우선한 것도 같은 이유다.</p></div><div class="tile"><h3>병합을 사람에게 남긴 이유</h3><p>커밋·PR 작성은 되돌릴 수 있지만 병합과 운영 반영은 영향이 바로 퍼진다. 손이 많이 가는 일은 에이전트에게, 되돌리기 어려운 결정은 사람에게 두었고 병합 권한 검사는 우회하지 않는다.</p></div><div class="tile"><h3>예약 점검을 읽기 전용으로 둔 이유</h3><p>새벽 배치 확인을 사람 대신 맡기되, 점검 에이전트가 무언가를 고치기 시작하면 확인과 변경의 경계가 무너진다. 쓰기·배포·비밀값 출력을 금지하고 판정 보고서까지만 쓰게 했다.</p></div></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">주요 구현</h2></div>
+<div class="sec__body"><div class="tiles"><div class="tile"><h3>기획서 대조 검증 절차</h3><p>디자인 도구(Figma) 연동으로 기획 화면의 요소·유효성·동작 설명을 읽어 요청 검증·상태 전이·오류 코드·응답 필드·권한 규칙에 1:1로 대응시키고 구현됨·누락·불일치·프론트 소관으로 분류. 첫 적용에서 빠져 있던 기능을 반박 검증으로 확정하고 회귀 시험과 함께 구현.</p></div><div class="tile"><h3>읽기 전용 예약 점검 에이전트</h3><p>단계별 운영 반영 기간에 전날 반영분의 기대값(배치 성공·마이그레이션 버전·파드 재시작·오류 로그·발화 경보)을 아침에 읽기 전용으로 확인하고 '기대 / 실측 / 판정' 표와 다음 단계 진행 가능 여부로 보고. 읽기 전용 트랜잭션·쿼리 시간 제한·비밀값 출력 금지·DB 시각 기준 판정이 절대 규칙. 예약 점검 에이전트 4개, 판정 보고서 6건. 한 판정에서는 미리 넣어 둔 대량 삭제 가드가 작동해 데이터가 보존된 것을 확인.</p></div><div class="tile"><h3>기억 노트와 색인</h3><p>Claude Code 자동 메모리로 작업 직후 규약·교훈·사고 기록을 주제별 노트 90여 개와 색인으로 남김. 낡은 내용은 표시·정정하고, 진행 상황·도구 설명·하위 에이전트 결과까지 한국어로 통일해 새 세션이 과거 대화 대신 문서와 증거를 읽고 작업을 이어 가게 함.</p></div><div class="tile"><h3>입사 초 저장소 지도</h3><p>입사 초 Codex 로 문서가 부족한 사내 저장소들을 읽혀 저장소별 에이전트 규칙 초안(기술 스택·명령·구조·위험 영역)과 저장소 지도·서비스 의존성 지도를 작성. 이 형식이 이후 저장소별 작업 규칙으로 이어짐.</p></div></div></div>
+
+</section>
+<section class="sec">
+<div class="sec__head"><h2 class="sec__title">하네스가 자라 온 순서</h2></div>
+<div class="sec__body"><ol class="tl"><li><div class="tl__when">2026.04</div><div class="tl__what"><b>도구 전역 작업 규칙으로 출발</b><span>입사 직후 AI 코딩 에이전트(Claude Code·Codex)로 업무 시작, 도구 전역 규칙 마련</span></div></li><li><div class="tl__when">2026.05</div><div class="tl__what"><b>저장소 지도·저장소별 규칙</b><span>사내 저장소들의 에이전트 규칙 초안과 저장소·서비스 의존성 지도 작성, 주력 저장소 작업 규칙 작성(모듈 전체 시험 단일 관문·시험 약화 금지·운영 함정), API 오류 응답 예시 의무·테넌트 격리 체크리스트·외부 호출 서킷브레이커 의무 규칙화</span></div></li><li><div class="tl__when">2026.06</div><div class="tl__what"><b>첫 다중 에이전트 워크플로</b><span>첫 실행부터 반박 검토 포함, CSV 내보내기 규약, 기획서 대조 검증 절차 규칙화와 첫 적용</span></div></li><li><div class="tl__when">2026.07</div><div class="tl__what"><b>버그를 작업공간 공통 규칙으로</b><span>'등록 API 는 등록일·등록자만' 규칙을 Claude Code·Codex 공용 규칙 파일에 추가</span></div></li><li><div class="tl__when">2026.08</div><div class="tl__what"><b>서비스 공개 전 보안 점검</b><span>10개 축 찾기·반박 워크플로로 고위험 2건 포함 10건 확정·수정</span></div></li><li><div class="tl__when">2026.09</div><div class="tl__what"><b>복구 절차·권한 재조정</b><span>대규모 워크플로 재개 문제를 실행 기록으로 분석해 복구 절차 정립, 주력 저장소는 에이전트가 PR 작성까지·병합은 사람으로 역할 조정</span></div></li><li><div class="tl__when">2026.10</div><div class="tl__what"><b>예약 점검·한국어 통일</b><span>읽기 전용 예약 점검 판정 보고서 6건, 진행 상황·도구 설명·하위 에이전트 결과까지 한국어 통일</span></div></li></ol></div>
+
+</section>
+<section class="sec sec--glow sec--flip">
+<div class="sec__head"><h2 class="sec__title">성과<span class="dim">숫자로 본 하네스</span></h2><div class="sec__lead"><p>숫자는 로컬 워크플로 실행 기록·판정 기록과 사내 저장소 git 이력에서 직접 센 값이다. 세션·도구 호출 기록은 입사 초 몇 달치가 남아 있지 않아 하한이다.</p></div></div>
+<div class="sec__body"><figure class="figure figure--soft"><div class="chart"><svg viewBox="0 0 720 154" role="img" aria-label="가로 막대 차트"><line x1="220" x2="220" y1="4" y2="150" stroke="#3f424d" stroke-width="1"/><text x="206" y="27" text-anchor="end" font-size="13" fill="#9196a5">반박 검증 단계를 넣은</text><text x="206" y="43" text-anchor="end" font-size="13" fill="#9196a5">워크플로(약)</text><path class="mark" tabindex="0" data-tip="반박 검증 단계를 넣은 워크플로(약): 70%" d="M220,21H498.8Q502.8,21 502.8,25V37Q502.8,41 498.8,41H220Z" fill="#3d6bf4"/><text x="512.8" y="36" font-size="14" font-weight="600" fill="#d7d8de">70%</text><text x="206" y="73" text-anchor="end" font-size="13" fill="#9196a5">AI 공동 작성 표기</text><text x="206" y="89" text-anchor="end" font-size="13" fill="#9196a5">커밋(하한)</text><path class="mark" tabindex="0" data-tip="AI 공동 작성 표기 커밋(하한): 57.6%" d="M220,67H448.7Q452.7,67 452.7,71V83Q452.7,87 448.7,87H220Z" fill="#3d6bf4"/><text x="462.7" y="82" font-size="14" font-weight="600" fill="#d7d8de">57.6%</text><text x="206" y="119" text-anchor="end" font-size="13" fill="#9196a5">반박 판정 중 기각(약, 판정</text><text x="206" y="135" text-anchor="end" font-size="13" fill="#9196a5">기록 기준)</text><path class="mark" tabindex="0" data-tip="반박 판정 중 기각(약, 판정 기록 기준): 27%" d="M220,113H325.08Q329.08,113 329.08,117V129Q329.08,133 325.08,133H220Z" fill="#3d6bf4"/><text x="339.08" y="128" font-size="14" font-weight="600" fill="#d7d8de">27%</text></svg><details><summary>표로 보기</summary><div class="table-wrap"><table class="t"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>반박 검증 단계를 넣은 워크플로(약)</td><td>70%</td></tr><tr><td>AI 공동 작성 표기 커밋(하한)</td><td>57.6%</td></tr><tr><td>반박 판정 중 기각(약, 판정 기록 기준)</td><td>27%</td></tr></tbody></table></div></details></div><figcaption style="padding:12px 0 0">실측 — 워크플로 324회·반박 판정 2,335건·본인 비병합 커밋 1,806건 기준. 70%·27% 는 반올림한 근사값, 57.6% 는 직접 커밋한 기간이 있어 하한</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>다중 에이전트 워크플로 324회(2026.06~10), 에이전트 약 4,900개</li><li>약 70%에 독립 반박 검증 단계, 반박 판정 2,335건 중 약 27% 기각(판정 기록 기준)</li><li>데이터 파이프라인·API 주요 변경 5건에서 확정 결함 62건 배포 전 반영</li><li>사내 저장소 17개에 남긴 본인 비병합 커밋 1,806건 중 57.6%에 AI 공동 작성 표기(도구 기본 표기, 직접 커밋한 기간이 있어 하한)</li><li>본인 작성 PR 316건(10개 저장소, 병합 314건), 처음 만든 저장소 4개(백엔드·데이터 파이프라인·IaC·백오피스 API)</li><li>주력 저장소 작업 규칙 224줄·46회 개정, 기억 노트 90여 개</li><li>읽기 전용 예약 점검 에이전트 4개·판정 보고서 6건</li><li>사람 확인 질문 215회·세션 88개·도구 호출 29,855회(남은 기록 기준 하한)</li></ul></div></div>
+
+</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>AI 코딩 에이전트</h3><div class="card__tags"><span class="tag">Claude Code(Workflow·하위 에이전트·자동 메모리·예약 작업·MCP)</span><span class="tag">Codex(AGENTS.md)</span></div></div><div class="stack__group"><h3>시험·품질 관문</h3><div class="card__tags"><span class="tag">Gradle</span><span class="tag">JUnit5</span><span class="tag">Testcontainers(PostgreSQL)</span><span class="tag">embedded-redis</span><span class="tag">pytest</span></div></div><div class="stack__group"><h3>협업·버전 관리</h3><div class="card__tags"><span class="tag">Git(worktree·stacked PR)</span><span class="tag">GitHub PR</span><span class="tag">gh CLI</span></div></div><div class="stack__group"><h3>읽기 전용 운영 점검</h3><div class="card__tags"><span class="tag">kubectl(조회)</span><span class="tag">PostgreSQL 읽기 전용 트랜잭션</span><span class="tag">Airflow</span><span class="tag">Prometheus·promtool</span></div></div><div class="stack__group"><h3>대상 시스템</h3><div class="card__tags"><span class="tag">Kotlin·Spring WebFlux</span><span class="tag">Python·Airflow</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">에이전트 하나의 자기 검증을 믿지 않기 — 찾기와 반박을 나누다 · '렌더 통과' 보고를 믿고 배포 — 경보 약 32분 중단 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
+<div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 4개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 에이전트 하나의 자기 검증을 믿지 않기 — 찾기와 반박을 나누다</span></a><a class="ctl" href="#case-2"><span>02 '렌더 통과' 보고를 믿고 배포 — 경보 약 32분 중단</span></a><a class="ctl" href="#case-3"><span>03 워크플로를 재개했더니 캐시가 하나도 안 먹었다 — 실행 기록에서 복구</span></a><a class="ctl" href="#case-4"><span>04 에이전트가 본 시각·네트워크가 실제와 다를 때</span></a></div></section><article class="case sec--glow" id="case-1">
+<div class="case__head"><span class="case__no">CASE 01 · AI통합</span><h3 class="case__title">에이전트 하나의 자기 검증을 믿지 않기 — 찾기와 반박을 나누다</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>에이전트가 만든 코드·설계·조사 결과를 사람이 전부 다시 보기에는 범위가 넓었다(보안 10개 축, 여러 도메인·저장소). 에이전트에게 스스로 검증하게 하면 그럴듯한 오답(거짓 양성)과 놓친 것(누락)을 거를 수 없었다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>찾는 역할과 판정하는 역할이 한 에이전트에 있어 발견을 의심하는 단계가 없었다. 발견 형식도 제각각이라 판정·중복 정리가 사람 몫으로 남았다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>관점(축·렌즈)마다 '찾기' 에이전트를 병렬로 두고 발견을 정해진 JSON 형식으로 내게 함</li><li>발견마다 처음부터 의심하는 독립 '반박' 에이전트가 코드를 다시 읽어 확정·기각·근거 부족으로 판정</li><li>필요한 작업에는 종합·비판 단계를 붙여 중복을 합치고 빠진 관점을 지적</li><li>살아남은 발견만 사람이 판정하고, 고칠 것은 시험과 함께 수정</li><li>설계 작업은 조사·설계안·심사를 각각 세 갈래로 돌린 뒤 종합·비판, 구현 작업은 구현 → 반박 검토 → 고침·PR 형식으로 정형화</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>2026.06~10 워크플로 324회, 약 70%에 반박 단계. 반박 판정 2,335건 중 약 27%가 사람에게 오기 전에 기각됨(판정 기록 기준). 데이터 파이프라인·API 주요 변경 5건에서 확정 결함 62건을 배포 전에 반영했고, 서비스 공개 전 10개 축 보안 점검에서는 고위험 2건 포함 10건을 시험과 함께 수정. 다른 패치 리뷰에서도 일부 지적은 반증으로 기각돼 불필요한 수정을 피함.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">다중 에이전트 워크플로</div><div class="delta__val"><span class="to">324회</span></div><div class="delta__note">2026.06~10</div></div><div class="delta"><div class="delta__label">반박 검증 단계 포함</div><div class="delta__val"><span class="to">약 70%</span></div><div class="delta__note">스크립트 기준</div></div><div class="delta"><div class="delta__label">반박 판정 중 기각</div><div class="delta__val"><span class="to">약 27%</span></div><div class="delta__note">2,335건, 판정 기록 기준</div></div><div class="delta"><div class="delta__label">배포 전 반영한 확정 결함</div><div class="delta__val"><span class="to">62건</span></div><div class="delta__note">주요 변경 5건</div></div></div><p class="sub-h">검증 구조의 전/후</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
+  subgraph B1[&quot;전: 한 에이전트가 찾고 스스로 검증&quot;]
+    direction LR
+    a1[&quot;에이전트&lt;br/&gt;찾기&quot;] --&gt; a2[&quot;같은 에이전트&lt;br/&gt;자기 검증&quot;] --&gt; a3[&quot;사람&lt;br/&gt;후보 전부 검토&quot;]
+  end
+  subgraph A1[&quot;후: 찾기와 반박을 분리&quot;]
+    direction LR
+    b1[&quot;관점별 찾기&lt;br/&gt;병렬&quot;] --&gt; b2[&quot;독립 반박&lt;br/&gt;처음부터 의심&quot;] --&gt; b3[&quot;종합·비판&lt;br/&gt;필요할 때&quot;] --&gt; b4[&quot;사람&lt;br/&gt;살아남은 발견만 판정&quot;]
+  end
+  B1 ~~~ A1">flowchart TB
+  subgraph B1[&quot;전: 한 에이전트가 찾고 스스로 검증&quot;]
+    direction LR
+    a1[&quot;에이전트&lt;br/&gt;찾기&quot;] --&gt; a2[&quot;같은 에이전트&lt;br/&gt;자기 검증&quot;] --&gt; a3[&quot;사람&lt;br/&gt;후보 전부 검토&quot;]
+  end
+  subgraph A1[&quot;후: 찾기와 반박을 분리&quot;]
+    direction LR
+    b1[&quot;관점별 찾기&lt;br/&gt;병렬&quot;] --&gt; b2[&quot;독립 반박&lt;br/&gt;처음부터 의심&quot;] --&gt; b3[&quot;종합·비판&lt;br/&gt;필요할 때&quot;] --&gt; b4[&quot;사람&lt;br/&gt;살아남은 발견만 판정&quot;]
+  end
+  B1 ~~~ A1</pre></div></figure><div class="lesson"><b>배운 점</b><p>찾는 에이전트와 판정하는 에이전트를 나누고 판정 에이전트를 처음부터 의심하게 두면, 사람에게 올라오는 후보가 줄고 남은 후보의 근거가 단단해진다.</p></div>
+
+</article>
+<article class="case" id="case-2">
+<div class="case__head"><span class="case__no">CASE 02 · 회고</span><h3 class="case__title">'렌더 통과' 보고를 믿고 배포 — 경보 약 32분 중단</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>경보 메일 템플릿을 에이전트와 함께 고쳤고, 에이전트가 템플릿 렌더 검사를 통과했다고 보고해 그대로 배포했다. 배포 뒤 경보 서버가 템플릿을 읽지 못해 재시작을 반복했고 알림이 약 32분 끊겼다. 원인은 내 배포 변경이었다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>템플릿 주석 안에 주석을 닫는 기호(*/)가 섞여 주석이 일찍 끝났고, 경보 서버가 템플릿 파싱에 실패했다. 배포 도구(Helm)의 렌더 확인은 설정 형식만 검증하고 경보 서버의 템플릿 문법은 검증하지 못한다. 에이전트의 '통과' 보고가 무엇을 대상으로 무엇을 검사했는지, 배포본과 같은 대상인지 확인하지 않았다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>경보 서버 로그의 파싱 오류로 원인 확정, 주석을 고쳐 복구</li><li>배포 전: 배포본 기준 실제 템플릿 파싱 검증(Helm 렌더만으로 끝내지 않음)</li><li>배포 직후: 경보 서버 준비(ready) 상태와 로그 확인을 표준 관문으로</li><li>템플릿 주석 최소화·주석 안 특수 기호 금지를 기억 노트에 규칙으로 기록</li><li>에이전트의 '통과' 보고는 검사 대상과 범위까지 확인하는 원칙 추가</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>알림 약 32분 중단 뒤 복구. 이후 경보 템플릿 변경은 배포본 파싱 검증과 배포 직후 준비 상태·로그 확인을 거치는 절차로 정리.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">알림 중단</div><div class="delta__val"><span class="to">약 32분</span></div><div class="delta__note">본인 배포 변경이 원인, 회고</div></div></div><p class="sub-h">경보 템플릿 배포 절차의 전/후</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
+  subgraph P0[&quot;전: 통과 보고를 믿고 배포&quot;]
+    direction LR
+    c1[&quot;에이전트&lt;br/&gt;렌더 통과 보고&quot;] --&gt; c2[&quot;Helm 렌더 확인&lt;br/&gt;설정 형식만 검증&quot;] --&gt; c3[&quot;배포&quot;] --&gt; c4[&quot;배포본 템플릿 파싱 실패&lt;br/&gt;경보 서버 재시작 반복&quot;]
+  end
+  subgraph Q0[&quot;후: 배포본 기준 확인&quot;]
+    direction LR
+    d1[&quot;배포본 기준&lt;br/&gt;템플릿 실제 파싱&quot;] --&gt; d2[&quot;배포&quot;] --&gt; d3[&quot;경보 서버 준비 상태&lt;br/&gt;로그 확인&quot;] --&gt; d4[&quot;통과해야&lt;br/&gt;작업 완료&quot;]
+  end
+  P0 ~~~ Q0">flowchart TB
+  subgraph P0[&quot;전: 통과 보고를 믿고 배포&quot;]
+    direction LR
+    c1[&quot;에이전트&lt;br/&gt;렌더 통과 보고&quot;] --&gt; c2[&quot;Helm 렌더 확인&lt;br/&gt;설정 형식만 검증&quot;] --&gt; c3[&quot;배포&quot;] --&gt; c4[&quot;배포본 템플릿 파싱 실패&lt;br/&gt;경보 서버 재시작 반복&quot;]
+  end
+  subgraph Q0[&quot;후: 배포본 기준 확인&quot;]
+    direction LR
+    d1[&quot;배포본 기준&lt;br/&gt;템플릿 실제 파싱&quot;] --&gt; d2[&quot;배포&quot;] --&gt; d3[&quot;경보 서버 준비 상태&lt;br/&gt;로그 확인&quot;] --&gt; d4[&quot;통과해야&lt;br/&gt;작업 완료&quot;]
+  end
+  P0 ~~~ Q0</pre></div></figure><div class="lesson"><b>배운 점</b><p>에이전트의 '통과'는 무엇을 대상으로 무엇을 검사했는지까지 봐야 근거가 된다. 검사 대상과 배포 대상이 다르면 통과 보고는 아무것도 증명하지 않는다.</p></div>
+
+</article>
+<article class="case sec--glow sec--flip" id="case-3">
+<div class="case__head"><span class="case__no">CASE 03 · 효율화</span><h3 class="case__title">워크플로를 재개했더니 캐시가 하나도 안 먹었다 — 실행 기록에서 복구</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>서비스 공개 전 대규모 감사 워크플로가 사용량 한도에 걸려 검증 일부와 종합·비판 단계가 실패했다. 재개했더니 이미 끝난 검증이 처음부터 다시 돌아 한도만 소모했고, 정작 실패했던 검증에는 끝내 닿지 못했다. '처음부터 다시 도는 것 같다'는 이상 징후를 보고 중단시켰다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>실행 기록(저널)을 세어 보니 재개 때 시작된 호출이 모두 새 캐시 키였다(재사용 0건). 재개 캐시는 에이전트 호출 순서가 바뀌지 않은 앞부분까지만 재생되는데, 단계 안에 병렬을 중첩한 구조에서는 재개 때 정찰 결과가 즉시 캐시로 돌아와 모든 관점이 동시에 검증 단계로 들어가면서 호출 순서가 달라졌다. 도구 내부를 직접 본 것이 아니라 실행 기록에 근거한 추론이다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>낭비 확인 즉시 중단</li><li>실행 기록의 시작·결과 짝을 파싱해 결과를 형식으로 판별(발견인지 판정인지)하고 복구</li><li>남은 종합·비판은 직접 통합</li><li>규칙화: 중첩 병렬 구조는 재개 대신 실행 기록에서 복구, 재개가 필요하면 단일 병렬로 순서를 고정하거나 단계별로 워크플로를 분리</li><li>낭비 징후(시작 수가 재개 대상보다 훨씬 많고 캐시 키가 모두 새것)가 보이면 즉시 중단</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>재개 때 다시 시작된 호출 전부가 새 캐시 키였고(재사용 0건) 이미 끝난 판정이 중복 실행된 것을 실행 기록으로 확인. 이후 진행 화면에 '중지됨·오류'로 보인 다른 워크플로도 실행 기록의 시작·결과 짝으로 전부 완료됐음을 확인해 불필요한 재실행을 피함. 구조가 단순한 워크플로는 재개가 정상 동작해 규칙 범위를 중첩 병렬 구조로 좁힘.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">재개 시 캐시 재사용</div><div class="delta__val"><span class="to">0건</span></div><div class="delta__note">재개 때 시작된 호출 전부가 새 캐시 키</div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">1차 실행</div><div class="tl__what"><b>한도로 일부 실패</b><span>검증 일부·종합·비판 단계 실패</span></div></li><li><div class="tl__when">재개</div><div class="tl__what"><b>검증 단계 통째로 재실행</b><span>정찰 결과만 캐시로 재생, 실패했던 검증에는 끝내 닿지 못함</span></div></li><li><div class="tl__when">중단</div><div class="tl__what"><b>이상 징후 확인 후 중단</b><span>이미 끝난 검증이 다시 도는 것을 확인</span></div></li><li><div class="tl__when">분석</div><div class="tl__what"><b>실행 기록 집계</b><span>재개 때 시작된 호출 전부가 새 캐시 키, 판정 중복 실행 확인</span></div></li><li><div class="tl__when">복구</div><div class="tl__what"><b>기록에서 결과 복구·직접 통합</b><span>결과 형식으로 발견·판정 구분</span></div></li><li><div class="tl__when">규칙화</div><div class="tl__what"><b>재개 대신 복구 규칙</b><span>중첩 병렬 구조 한정, 낭비 징후 시 즉시 중단</span></div></li></ol><p class="sub-h">부분 실패한 대규모 워크플로 처리 방식의 전/후</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
+  subgraph R0[&quot;전: 그대로 재개&quot;]
+    direction LR
+    e1[&quot;재개&quot;] --&gt; e2[&quot;정찰 결과만&lt;br/&gt;캐시로 즉시 반환&quot;] --&gt; e3[&quot;모든 관점이 동시에&lt;br/&gt;검증 단계 진입&quot;] --&gt; e4[&quot;호출 순서 달라짐&lt;br/&gt;이후 전부 재실행&quot;]
+  end
+  subgraph R1[&quot;후: 실행 기록에서 복구&quot;]
+    direction LR
+    f1[&quot;낭비 징후 보이면&lt;br/&gt;즉시 중단&quot;] --&gt; f2[&quot;실행 기록의&lt;br/&gt;시작·결과 짝 파싱&quot;] --&gt; f3[&quot;결과 형식으로&lt;br/&gt;발견·판정 구분&quot;] --&gt; f4[&quot;남은 종합·비판만&lt;br/&gt;직접 통합&quot;]
+  end
+  R0 ~~~ R1">flowchart TB
+  subgraph R0[&quot;전: 그대로 재개&quot;]
+    direction LR
+    e1[&quot;재개&quot;] --&gt; e2[&quot;정찰 결과만&lt;br/&gt;캐시로 즉시 반환&quot;] --&gt; e3[&quot;모든 관점이 동시에&lt;br/&gt;검증 단계 진입&quot;] --&gt; e4[&quot;호출 순서 달라짐&lt;br/&gt;이후 전부 재실행&quot;]
+  end
+  subgraph R1[&quot;후: 실행 기록에서 복구&quot;]
+    direction LR
+    f1[&quot;낭비 징후 보이면&lt;br/&gt;즉시 중단&quot;] --&gt; f2[&quot;실행 기록의&lt;br/&gt;시작·결과 짝 파싱&quot;] --&gt; f3[&quot;결과 형식으로&lt;br/&gt;발견·판정 구분&quot;] --&gt; f4[&quot;남은 종합·비판만&lt;br/&gt;직접 통합&quot;]
+  end
+  R0 ~~~ R1</pre></div></figure><div class="lesson"><b>배운 점</b><p>도구의 재개·캐시를 믿기 전에 실행 기록으로 실제로 무엇이 재사용됐는지 센다. 대규모 작업은 처음부터 복구 가능한 순서로 짠다.</p></div>
+
+</article>
+<article class="case" id="case-4">
+<div class="case__head"><span class="case__no">CASE 04 · 검증설계</span><h3 class="case__title">에이전트가 본 시각·네트워크가 실제와 다를 때</h3></div>
+<div class="steps">
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>근접 사고가 두 번 있었다. ① 에이전트가 로컬 시각 변환(TZ)이 9시간 어긋난 값을 보고 '새벽'이라 판단해 평일 오후에 전 기간 대량 재처리를 요청했다. ② 외부 공개 범위를 점검하던 에이전트의 웹 요청이 게이트웨이 허용 목록에 든 사무실 네트워크로 나가, 사내 전용으로 잠가 둔 주소를 '열림'으로 볼 뻔했다.</p></div>
+<div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>에이전트가 보는 환경(로컬 시각 변환, 사무실 네트워크)이 판정 대상(운영 시각, 외부 사용자의 위치)과 달랐고, 에이전트는 그 차이를 스스로 알 수 없었다.</p></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>① 재처리 요청은 본인이 앞서 운영 안전장치로 넣어 둔 업무시간 이중 확인 가드가 요청 검증 단계에서 차단</li><li>업무시간·스케줄 판정은 클러스터·DB 시각으로만 하도록 규칙화, 예약 점검 지시문에도 DB 시각 기준 반영</li><li>② 게이트웨이 접근 로그로 에이전트 요청의 출발지가 사무실 네트워크임을 확인</li><li>외부 도달 여부는 게이트웨이 라우트 단위 접근 제어 설정으로 확정하고, 최종 확인은 사외망에서 하는 원칙 수립</li></ol></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>재처리 요청은 실행되지 않아 부작용이 없었다. 외부 공개 판정은 설정 계층 확인과 사외망 확인으로 정리. 두 교훈 모두 기억 노트 규칙과 예약 점검 지시문에 반영돼 이후 작업에서 재사용.</p></div>
+</div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">로컬 시각 변환 오차</div><div class="delta__val"><span class="to">9시간</span></div></div><div class="delta"><div class="delta__label">대량 재처리 요청</div><div class="delta__val"><span class="to">차단</span></div><div class="delta__note">기존 업무시간 가드가 요청 단계에서 막음</div></div></div><p class="sub-h">가설을 하나씩 버린 과정</p><ol class="funnel"><li class=""><span class="n">1</span><div><b>에이전트 웹 요청으로 확인</b><span>사내 전용으로 잠가 둔 주소가 정상 응답</span></div><span class="out">'외부 공개됨'으로 볼 뻔함</span></li><li class=""><span class="n">2</span><div><b>요청 출발지 확인</b><span>게이트웨이 접근 로그로 보니 요청이 허용 목록에 든 사무실 네트워크에서 나감</span></div><span class="out">이 작업 환경에는 외부 관점이 없어 요청 결과는 증거가 되지 않음</span></li><li class="is-adopted"><span class="n">3</span><div><b>게이트웨이 설정 계층 확인</b><span>라우트 단위 접근 제어 설정으로 도달 여부 판정</span></div><span class="out">판정 근거로 채택</span></li><li class="is-adopted"><span class="n">4</span><div><b>사외망 최종 확인</b><span>모바일 데이터 등 사외망에서 직접 열어 확인</span></div><span class="out">최종 확인 원칙으로 채택</span></li></ol><p class="sub-h">판정 근거의 출처를 바꾼 전/후</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
+  subgraph T0[&quot;전: 에이전트가 본 환경을 그대로 믿음&quot;]
+    direction LR
+    g1[&quot;로컬 시각 변환&lt;br/&gt;9시간 어긋남&quot;] --&gt; g2[&quot;새벽으로 오판&quot;] --&gt; g3[&quot;업무 시간에&lt;br/&gt;대량 재처리 요청&quot;] --&gt; g4[&quot;업무시간 가드가&lt;br/&gt;요청 단계에서 차단&quot;]
+  end
+  subgraph T1[&quot;후: 판정 근거를 운영 쪽에서 가져옴&quot;]
+    direction LR
+    h1[&quot;시각 판정은&lt;br/&gt;클러스터·DB 시각&quot;] --&gt; h2[&quot;외부 도달은&lt;br/&gt;게이트웨이 설정으로&quot;] --&gt; h3[&quot;최종 확인은&lt;br/&gt;사외망에서&quot;]
+  end
+  T0 ~~~ T1">flowchart TB
+  subgraph T0[&quot;전: 에이전트가 본 환경을 그대로 믿음&quot;]
+    direction LR
+    g1[&quot;로컬 시각 변환&lt;br/&gt;9시간 어긋남&quot;] --&gt; g2[&quot;새벽으로 오판&quot;] --&gt; g3[&quot;업무 시간에&lt;br/&gt;대량 재처리 요청&quot;] --&gt; g4[&quot;업무시간 가드가&lt;br/&gt;요청 단계에서 차단&quot;]
+  end
+  subgraph T1[&quot;후: 판정 근거를 운영 쪽에서 가져옴&quot;]
+    direction LR
+    h1[&quot;시각 판정은&lt;br/&gt;클러스터·DB 시각&quot;] --&gt; h2[&quot;외부 도달은&lt;br/&gt;게이트웨이 설정으로&quot;] --&gt; h3[&quot;최종 확인은&lt;br/&gt;사외망에서&quot;]
+  end
+  T0 ~~~ T1</pre></div></figure><div class="lesson"><b>배운 점</b><p>에이전트가 보는 시각과 네트워크 위치가 운영의 시각·외부 사용자의 위치와 같은지 먼저 묻는다. 되돌리기 어려운 작업 앞에는 에이전트와 무관하게 동작하는 가드를 둔다.</p></div>
+
+</article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>찾는 에이전트와 판정하는 에이전트를 나누고 판정 에이전트를 처음부터 의심하게 두면, 사람에게 올라오는 후보가 줄고 남은 후보의 근거가 단단해진다.</p><p>에이전트의 '통과'는 무엇을 대상으로 무엇을 검사했는지까지 봐야 근거가 된다. 검사 대상과 배포 대상이 다르면 통과 보고는 아무것도 증명하지 않는다.</p><p>도구의 재개·캐시를 믿기 전에 실행 기록으로 실제로 무엇이 재사용됐는지 센다. 대규모 작업은 처음부터 복구 가능한 순서로 짠다.</p></section></div>
+<nav class="pager" aria-label="다른 프로젝트"><a href="platform-ops-security.html"><small>← 이전 프로젝트</small><b>사내 쿠버네티스 플랫폼 운영·보안 하드닝</b></a><a class="next" href="pharmacy-ai-agent.html"><small>다음 프로젝트 →</small><b>약국 AI Agent 서비스 — LLM 에이전트 설계·AI PoC</b></a></nav>
+<footer class="footer"><p>황병준 · 백엔드·데이터 엔지니어 · <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p><small>디자인 바탕: <a href="https://once-ui.com" target="_blank" rel="noopener">Once UI</a> Magic Portfolio · 도표는 직접 그린 개념도입니다</small></footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" defer></script>
+<script src="../assets/js/site.js?v=fdaea7ac" defer></script>
+</body>
+</html>
