@@ -54,7 +54,9 @@
   /* 감소·증가 글자색(바탕 대비 4.5 이상). 색만으로 뜻을 전하지 않게 ↓·↑ 기호를 함께 둔다 */
   --delta-down: #3fd39a;
   --delta-up: #6ea8ff;
+  --teal: #14b8a6;            /* 장식 청록(숫자 뜻 없음): 기술 페이지 스파이더 허브 청록(spider.css --sp-teal)과 같은 값 */
   --chart-surface: #1c1d22;
+  --on-accent: #ffffff;       /* 강조색(파랑·보라) 칠 위 글자 — 두 테마 모두 흰색 */
 
   /* 쓰임 토큰(위 값에서 정함) */
   --accent-ink: #cdd8fb;      /* 강조 칸(옅은 파랑) 위 아이콘·번호·본문 링크 글자 */
@@ -115,7 +117,9 @@
   --accent-3: #b5561a;
   --delta-down: #0b7a54;
   --delta-up: #1f5fd6;
+  --teal: #0d8f82;
   --chart-surface: #ffffff;
+  --on-accent: #ffffff;
 
   --accent-ink: #2347b8;
   --accent-3-ink: #8f430f;
@@ -155,6 +159,17 @@
   --mm-pane: #eef0f4;
 }
 
+/* 소개 쪽 카드·지도 장식 색 다섯(build.js ABOUT_HUES): 테마 변수에서만 고르거나 섞는다 — 테마가 바뀌면 따라 바뀐다.
+   감소·증가 색(--delta-*)은 숫자 뜻이 있어 쓰지 않는다. 청록은 장식 청록 토큰(--teal, 스파이더 허브와 같은 값),
+   다섯째(운영·품질)는 보라와 주황을 섞은 자주: 예전 '파랑 + 글자색'은 첫째 파랑(언어·프레임워크)과 범례·선에서 잘 구분되지 않았다 */
+:root {
+  --hue-a: var(--accent);
+  --hue-b: var(--accent-2);
+  --hue-c: var(--teal);
+  --hue-d: var(--accent-3);
+  --hue-e: color-mix(in srgb, var(--accent-2) 50%, var(--accent-3));
+}
+
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: clip; } /* 넓은 판이 모바일에서 가로 넘침을 만들지 않게 */
 body {
@@ -184,14 +199,17 @@ img, svg { max-width: 100%; }
   padding: 40px var(--gutter) 0;
   padding-left: max(var(--gutter), calc(var(--nav-reserve) - max(0px, (100vw - 1440px) / 2)));
 }
-@media (min-width: 1200px) { :root { --nav-reserve: 256px; } }                    /* 20 + 메뉴 208 + 28 → 1440 화면에서 본문 1144 */
-@media (min-width: 900px) and (max-width: 1199px) { :root { --nav-reserve: 136px; } } /* 16 + 메뉴 92 + 28 */
+/* 메뉴 자리: 5차(사용자 요구 '메뉴 네비게이션도 2배 크기로')에 메뉴를 키우며 함께 넓혔다.
+   이름 메뉴(1680~) = 왼쪽 24 + 메뉴 300 + 틈 32 = 356. 이 폭부터 본문 1144 와 함께 들어간다(1680 에서 본문 1144).
+   아이콘 막대(900~1679) = 왼쪽 16 + 막대 112 + 틈 28 = 156. 1440 화면에서 본문 1144(남는 폭은 본문 양옆) */
+@media (min-width: 1680px) { :root { --nav-reserve: 356px; } }
+@media (min-width: 900px) and (max-width: 1679px) { :root { --nav-reserve: 156px; } }
 
 /* 한 컨테이너(모든 쪽): 머리·탭·절·사례·카드·칩·표·쪽 넘김이 모두 같은 폭(최대 --content 1144), 같은 좌우 끝선.
    공통 쪽(홈·소개·경력·프로젝트·기술 = .wrap--page)도 같은 컨테이너에 넣어, 아래 규칙으로 블록마다 따로 있던 좌우 여백(56·48·8px)을 없앴다 */
 .wrap { width: 100%; max-width: var(--content); margin-inline: auto; }
 .wrap .intro { max-width: none; padding: 40px 0 24px; border-radius: 0; }
-.wrap .stats, .wrap .grid, .wrap .axis-grid, .wrap .ways, .wrap .chips, .wrap .cols2, .wrap .skills-stack { padding: 0; }
+.wrap .stats, .wrap .grid, .wrap .axis-grid, .wrap .ways, .wrap .skills-stack { padding: 0; }
 .wrap .block-title { margin: 120px 0 40px; }
 .wrap .company { padding: 56px 0 0; }
 .wrap .block-title + .company { padding-top: 0; } /* 절 제목 바로 아래 첫 회사는 위 여백 없이(제목과 첫 회사 이름 사이가 96px 로 떠 있었다) */
@@ -204,19 +222,18 @@ img, svg { max-width: 100%; }
 .page-text--lead { margin: 0 0 24px; font-size: 18px; line-height: 28px; }
 .intro__text.page-text { margin: 0; color: var(--text-3); font-size: 20px; line-height: 28px; }
 .page-note { max-width: var(--text-measure); margin: 12px 0 0; color: var(--text-3); font-size: 14px; line-height: 22px; }
-.page-link { margin: 24px 0 0; }
+.page-link { margin: 40px 0 0; } /* 큰 버튼은 위 숫자 타일과 24px 이면 붙어 보였다(ai.html) */
+@media (max-width: 899px) { .page-link { margin-top: 32px; } }
 .sub-title { margin: 56px 0 16px; font-size: 24px; line-height: 32px; font-weight: 600; }
 @media (max-width: 899px) { .intro__text.page-text { font-size: 17px; line-height: 26px; } .page-text--lead { font-size: 16px; line-height: 26px; } .sub-title { margin-top: 40px; font-size: 21px; line-height: 28px; } }
 
-/* 자기 평가(점수 없음): 내용 폭만큼만 차지하는 번호 알약 */
-.rank { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
-.rank li { display: inline-flex; align-items: center; gap: 10px; padding: 6px 16px 6px 6px; border-radius: 40px; border: 1px solid var(--line); background: var(--tile); }
-.rank__n { flex: none; width: 28px; height: 28px; border-radius: 28px; display: grid; place-items: center; background: var(--fill-2); font-size: 13px; font-weight: 600; }
-.rank b { font-size: 15px; line-height: 22px; font-weight: 600; color: var(--text-2); }
-
 /* ---------- 메뉴 (_Navigation) ----------
-   넓은 화면(1200~): 왼쪽 세로 메뉴 — 아이콘 + 긴 이름이 늘 보인다.
-   중간(900~1199): 왼쪽 세로 막대 — 아이콘 아래 짧은 이름.  좁은 화면(~899): 아래 막대 — 아이콘 아래 짧은 이름.
+   5차(사용자 요구 '메뉴 네비게이션도 2배 크기로'): 줄 높이·글씨·아이콘을 4차의 약 2배로.
+   아주 넓은 화면(1680~): 왼쪽 세로 메뉴 — 아이콘 + 긴 이름이 늘 보인다(줄 높이 88·글씨 22·아이콘 38).
+   넓은·중간 화면(900~1679): 왼쪽 아이콘 막대 — 큰 아이콘 아래 짧은 이름(줄 높이 88·아이콘 38·이름 16).
+     이름 메뉴(폭 300)와 본문 1144 가 함께 들어가지 않는 폭(1440 노트북 포함)이라 아이콘 위주로 바꿔 본문 폭을 지킨다.
+   좁은 화면(~899): 아래 막대 — 아이콘 아래 짧은 이름(7칸 한 줄, 화면 폭에 맞춰 커진다).
+   메뉴가 창 높이보다 길면 메뉴 안에서 위아래로 넘긴다.
    선택 표시는 아이콘 칸(.nav__ic) 또는 줄(알약)에 그려 아이콘 가운데와 정확히 맞는다(말풍선 없음). */
 .nav {
   position: fixed; z-index: 50;
@@ -227,7 +244,7 @@ img, svg { max-width: 100%; }
   box-shadow: var(--shadow-m);
 }
 .nav__item {
-  position: relative; display: flex; align-items: center;
+  position: relative; display: flex; align-items: center; flex: none;
   color: var(--text-3); text-decoration: none;
   transition: color .2s, background .2s;
 }
@@ -237,55 +254,77 @@ img, svg { max-width: 100%; }
 .nav__item:hover { color: var(--text-2); }
 .nav__item[aria-current="page"] { color: var(--text); }
 .nav__div { flex: none; background: var(--line-2); }
-/* 테마 바꾸기 단추(build.js themeToggle): 메뉴 줄과 같은 모양의 <button>. 지금 다크면 해 + '라이트', 라이트면 달 + '다크' */
+/* 테마 바꾸기 단추(build.js themeToggle): 메뉴 줄과 같은 모양·같은 크기의 <button>. 지금 다크면 해 + '라이트', 라이트면 달 + '다크' */
 .nav__theme { appearance: none; -webkit-appearance: none; margin: 0; padding: 0; border: 0; background: transparent; cursor: pointer; text-align: left; }
 :root[data-theme="light"] .nav__to-light, :root:not([data-theme="light"]) .nav__to-dark,
 :root[data-theme="light"] .nav__sun, :root:not([data-theme="light"]) .nav__moon { display: none; }
 .nav__theme:hover .nav__ic svg { transform: rotate(-20deg); }
 .nav__theme .nav__ic svg { transition: transform .3s ease; }
 
-/* 세로 메뉴(900~): 창 높이가 낮으면 메뉴 안에서 위아래로 넘긴다(테마 단추까지 8줄이 잘리지 않게). 메뉴 높이 약 450(넓은)·570(중간) */
-@media (min-width: 900px) and (max-height: 660px) { .nav { max-height: calc(100vh - 48px); overflow-y: auto; scrollbar-width: none; } .nav::-webkit-scrollbar { display: none; } }
-/* 넓은 화면: 줄 높이 48, 알약 반지름 24, 글씨 16. 아이콘 왼쪽 여백 12 → 아이콘 가운데(12+12=24)가 알약 왼쪽 둥근 끝의 가운데와 같다 */
-@media (min-width: 1200px) {
-  .nav { left: 20px; top: 24px; width: 208px; padding: 8px; border-radius: 32px; gap: 4px; }
-  .nav__item { gap: 12px; height: 48px; padding: 0 14px 0 12px; border-radius: 24px; font: 600 16px/22px var(--font); }
-  .nav__ic { width: 24px; height: 24px; }
+/* 세로 메뉴(900~): 창 높이보다 길면 메뉴 안에서 위아래로 넘긴다(테마 단추까지 8줄이 잘리지 않게). 메뉴 높이 약 790(이름)·780(막대) */
+@media (min-width: 900px) {
+  .nav { max-height: calc(100vh - 48px); max-height: calc(100dvh - 48px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+}
+/* 아주 넓은 화면: 줄 높이 88, 알약 반지름 44, 글씨 22, 아이콘 38. 아이콘 왼쪽 여백 25 → 아이콘 가운데(25+19=44)가 알약 왼쪽 둥근 끝의 가운데와 같다.
+   메뉴 폭 300 = 가장 긴 이름 'AI로 일하는 방식'(22px 약 170) + 아이콘 38 + 틈 18 + 좌우 여백 25·24 + 메뉴 안 여백 12 × 2 + 여유 */
+@media (min-width: 1680px) {
+  .nav { left: 24px; top: 24px; width: 300px; padding: 12px; border-radius: 56px; gap: 6px; }
+  .nav__item { gap: 18px; height: 88px; padding: 0 24px 0 25px; border-radius: 44px; font: 600 22px/30px var(--font); letter-spacing: -0.01em; }
+  .nav__ic { width: 38px; height: 38px; }
+  .nav__ic svg { width: 38px; height: 38px; }
   .nav__item:hover { background: var(--fill); }
   .nav__item[aria-current="page"] { background: var(--fill-2); box-shadow: inset 0 0 0 1px var(--line); }
   .nav__item[aria-current="page"] .nav__ic { color: var(--accent-ink); }
   .nav__short { display: none; }
-  .nav__div { height: 1px; margin: 6px 12px; }
+  .nav__div { height: 1px; margin: 8px 20px; }
 }
-/* 중간·좁은 화면 공통: 아이콘 칸(알약) 아래 짧은 이름. 선택되면 알약에 배경 — 아이콘이 알약 정가운데 */
-@media (max-width: 1199px) {
-  .nav__item { flex-direction: column; justify-content: center; gap: 4px; font: 600 13px/16px var(--font); }
-  .nav__ic { width: 52px; height: 34px; border-radius: 17px; }
+/* 아이콘 막대·아래 막대 공통: 아이콘 칸(알약) 아래 짧은 이름. 선택되면 알약에 배경 — 아이콘이 알약 정가운데 */
+@media (max-width: 1679px) {
+  .nav__item { flex-direction: column; justify-content: center; gap: 6px; font: 600 16px/20px var(--font); letter-spacing: -0.01em; }
   .nav__item:hover .nav__ic { background: var(--fill); }
   .nav__item[aria-current="page"] .nav__ic { background: var(--fill-2); box-shadow: inset 0 0 0 1px var(--line); color: var(--accent-ink); }
   .nav__long { display: none; }
 }
-@media (min-width: 900px) and (max-width: 1199px) {
-  .nav { left: 16px; top: 24px; width: 92px; padding: 8px 4px; border-radius: 30px; gap: 6px; }
-  .nav__item { height: 64px; font-size: 14px; line-height: 18px; }
-  .nav__div { height: 1px; margin: 2px 16px; }
+/* 아이콘 막대(900~1679): 막대 폭 112, 줄 높이 88(아이콘 칸 52 + 틈 6 + 이름 20 + 위아래 여유), 아이콘 38 */
+@media (min-width: 900px) and (max-width: 1679px) {
+  .nav { left: 16px; top: 24px; width: 112px; padding: 10px 6px; border-radius: 40px; gap: 6px; }
+  .nav__item { height: 88px; }
+  .nav__ic { width: 74px; height: 52px; border-radius: 26px; }
+  .nav__ic svg { width: 38px; height: 38px; }
+  .nav__div { height: 1px; margin: 4px 18px; }
 }
-/* 좁은 화면 아래 막대: 7칸(메뉴 6 + 테마). 이메일 칸은 뺐다(꼬리말·연락 절에 있다) — 예전 8칸은 이름표가 12px 였다.
-   7칸 최소 폭(아이콘 칸 42 × 6 + '프로젝트' 56 ≈ 313px)이 360px 화면 막대(336px) 안에 들어가 이름표를 14px 로 키운다.
+/* 창 높이가 낮으면(1366×768·1280×720 노트북, 1024×768 등) 줄 높이를 한 단계씩 줄여 테마 단추까지 8줄이 메뉴 안에 다 보이게 한다.
+   줄 88 그대로면 메뉴(약 783·795)가 창보다 길어 마지막 테마 단추가 반쯤 잘려 보였다(숨긴 스크롤바라 넘길 수 있는 줄 몰랐다).
+   메뉴 높이 = 줄 8개 + 약 79(아이콘 막대)·91(이름 메뉴). 단계: 88 → 76(창 830 이하) → 68(창 734 이하). 더 낮은 창만 메뉴 안에서 넘긴다 */
+@media (min-width: 900px) and (max-width: 1679px) and (max-height: 830px) {
+  .nav__item { height: 76px; }
+  .nav__ic { height: 46px; }
+}
+@media (min-width: 900px) and (max-width: 1679px) and (max-height: 734px) {
+  .nav__item { height: 68px; gap: 4px; }
+  .nav__ic { height: 40px; }
+  .nav__ic svg { width: 32px; height: 32px; }
+}
+@media (min-width: 1680px) and (max-height: 842px) { .nav__item { height: 76px; } }
+@media (min-width: 1680px) and (max-height: 746px) { .nav__item { height: 68px; } }
+/* 좁은 화면 아래 막대: 7칸(메뉴 6 + 테마). 이메일 칸은 뺐다(꼬리말·연락 절에 있다).
+   아이콘·이름은 화면 폭(vw)에 맞춰 허락하는 만큼 키운다: 390 화면에서 아이콘 28·이름 15·아이콘 칸 48,
+   360 화면에서도 7칸 최소 폭(아이콘 칸 44 × 6 + '프로젝트' 약 56 + 구분선 5 ≈ 325px)이 막대 안(336px)에 들어간다.
    칸 폭은 이름 길이를 따른다(flex-basis auto) — '프로젝트'처럼 긴 이름 칸이 조금 넓고 남는 폭은 고르게 나눈다 */
 @media (max-width: 899px) {
   :root { --gutter: 16px; }
   .nav {
     left: 8px; right: 8px; bottom: 8px; top: auto;
     flex-direction: row; justify-content: space-between; gap: 0;
-    padding: 6px 4px; border-radius: 26px;
+    padding: 6px 4px; border-radius: 28px;
   }
-  .nav__item { flex: 1 1 auto; min-width: 0; height: 60px; font: 600 14px/17px var(--font); letter-spacing: -0.01em; }
+  .nav__item { flex: 1 1 auto; min-width: 0; height: 66px; gap: 4px; font: 600 clamp(12px, 3.85vw, 15px)/18px var(--font); }
   .nav__item--mail { display: none; }
-  .nav__ic { width: 42px; height: 32px; border-radius: 16px; }
-  .nav__ic svg { width: 24px; height: 24px; }
-  .nav__div { width: 1px; height: 34px; align-self: center; margin: 0 2px; }
-  body { padding-bottom: 96px; }
+  .nav__ic { width: clamp(38px, 12.3vw, 52px); height: 36px; border-radius: 18px; }
+  .nav__ic svg { width: clamp(24px, 7.2vw, 28px); height: clamp(24px, 7.2vw, 28px); }
+  .nav__div { width: 1px; height: 38px; align-self: center; margin: 0 2px; }
+  body { padding-bottom: 104px; } /* 막대 높이 66 + 위아래 12 + 테두리 2 + 아래 8 + 여유 16 */
 }
 
 /* ---------- 머리 (About / Design 블록) ---------- */
@@ -325,17 +364,22 @@ img, svg { max-width: 100%; }
 @media (max-width: 599px) { .h2 .dim { display: block; margin: 4px 0 0; line-height: 1.3; } }
 
 /* ---------- 버튼 (_ControlButton) ----------
-   3차: 버튼·탭·링크 버튼을 키웠다 — 높이 48px(바깥 테두리 포함), 글씨 16px, 아이콘 18px. 좁은 화면은 높이 44px·글씨 15px */
+   button.ctl · a.ctl · summary.ctl(표로 보기) 공용. 4차에 3차 높이 48px 의 두 배(96px)로 키웠다가,
+   5차(사용자 요구 '버튼 위아래 폭만 조금 줄여줘. 텍스트와 여백이 많아')에 글씨는 거의 두고 위아래 여백만 줄였다.
+   넓은 화면(900~): 높이 74px(바깥 테두리 포함 = 1 + 5 + 17 + 28 + 17 + 5 + 1)·글씨 20px·아이콘 24px·좌우 여백 34px.
+   좁은 화면(~899): 높이 58px(1 + 3 + 12 + 26 + 12 + 3 + 1)·글씨 18px·아이콘 22px, 아주 좁은 화면(~599)은 좌우 여백만 16px 로(탭 막대 세 버튼이 한 줄에).
+   버튼이 판보다 길면 글이 줄을 바꾼다(max-width) — 가로로 넘치지 않게 */
 .ctl {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 3px; border-radius: 80px; border: 1px solid var(--line);
+  display: inline-flex; align-items: center; gap: 8px; max-width: 100%;
+  padding: 5px; border-radius: 999px; border: 1px solid var(--line);
   background: linear-gradient(180deg, var(--fill) 0%, transparent 100%), var(--ctl-bg);
   box-shadow: var(--shadow-m);
-  color: var(--text-2); font: 600 16px/22px var(--font); text-decoration: none; cursor: pointer;
+  color: var(--text-2); font: 600 20px/28px var(--font); letter-spacing: -0.005em; text-decoration: none; cursor: pointer;
   transition: background .2s, color .2s, border-color .2s;
 }
-.ctl > span { display: inline-flex; align-items: center; gap: 10px; padding: 9px 20px; border-radius: 40px; }
-.ctl svg { flex: none; width: 18px; height: 18px; fill: currentColor; }
+.ctl > span { display: inline-flex; align-items: center; gap: 12px; min-width: 0; padding: 17px 34px; border-radius: 999px; }
+.ctl svg { flex: none; width: 24px; height: 24px; fill: currentColor; }
+.ctl .count { margin-left: 2px; }
 .ctl:hover { background: linear-gradient(180deg, var(--fill) 0%, transparent 100%), var(--fill-2); color: var(--text); }
 /* 고른 탭·필터: 두 테마 모두 강조 파랑 바탕(옅게) + 파랑 테두리 + 진한 글. 예전 회색 바탕은 라이트에서 고른 탭이 오히려 눌린·끈 상태처럼 보였다 */
 .ctl[aria-selected="true"], .ctl[aria-pressed="true"] {
@@ -355,41 +399,51 @@ img, svg { max-width: 100%; }
 /* 다음 탭으로 넘기는 주 버튼: 강조 파랑 테두리·글자 */
 .ctl--primary { border-color: color-mix(in srgb, var(--accent) 60%, transparent); color: var(--text); background: color-mix(in srgb, var(--accent) 16%, transparent); }
 .ctl--primary:hover { background: color-mix(in srgb, var(--accent) 26%, transparent); }
-@media (max-width: 599px) { .ctl { font-size: 15px; line-height: 20px; } .ctl > span { padding: 9px 16px; } }
+@media (max-width: 899px) {
+  .ctl { padding: 3px; font-size: 18px; line-height: 26px; }
+  .ctl > span { gap: 10px; padding: 12px 22px; }   /* 높이 58 = 1 + 3 + 12 + 26 + 12 + 3 + 1 */
+  .ctl svg { width: 22px; height: 22px; }
+}
+@media (max-width: 599px) { .ctl > span { padding: 12px 16px; } }
 
-/* Controls 래퍼 (탭·필터 막대) */
+/* Controls 래퍼 (탭·필터 막대). 막대 높이 = 버튼 74 + 위아래 12 = 98px(좁은 화면 58 + 위아래 8 = 74px) */
 .controls {
   position: sticky; top: 12px; z-index: 40;
   display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
-  margin: 8px; padding: 24px 40px 24px 64px; border-radius: 20px;
+  margin: 8px; padding: 24px 40px 24px 64px; border-radius: 28px;
   background: color-mix(in srgb, var(--bg) 70%, transparent); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
 }
 .controls__end { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
-@media (max-width: 899px) { .controls { padding: 12px; gap: 8px; margin: 8px 0; top: 8px; } .controls__end { margin-left: 0; } }
+@media (max-width: 899px) { .controls { padding: 12px; gap: 8px; margin: 8px 0; top: 8px; border-radius: 22px; } .controls__end { margin-left: 0; } }
 .wrap .controls { margin: 8px -16px; padding: 12px 16px; }
 @media (max-width: 899px) { .wrap .controls { margin: 8px -8px; padding: 8px; } }
 /* 탭 머리 자리표: 탭 막대(sticky)의 원래 자리. site.js 가 탭을 바꿀 때 여기로 스크롤한다 */
 .tabs-anchor { display: block; height: 0; scroll-margin-top: 0; }
-/* 사례 바로가기·#problems 로 갈 때 위에 붙은 탭 막대에 제목이 가리지 않게 */
-.panel [id] { scroll-margin-top: 112px; }
-@media (max-width: 899px) { .panel [id] { scroll-margin-top: 96px; } }
-/* 좁은 화면: 상세 탭 막대는 한 줄로(버튼이 커져 두 줄이 되면 위에 붙은 막대가 화면을 많이 가린다).
-   목록 링크는 '○○ 프로젝트' 를 숨기고 '목록 →' 만(.ctl__long, 이름은 aria-label) — 세 버튼이 약 290px 로 한 줄(374px)에 들어간다.
-   그래도 넘치는 아주 좁은 화면은 옆으로 밀어 보고, 오른쪽 끝을 흐리게 한다(site.js markEdges) */
-@media (max-width: 599px) {
-  .controls .ctl__long { display: none; }
-  .controls[role="tablist"] { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-  .controls[role="tablist"]::-webkit-scrollbar { display: none; }
-  .controls[role="tablist"] .ctl, .controls[role="tablist"] .controls__end { flex: none; }
-  .controls[role="tablist"] .controls__end { margin-left: auto; }
+/* 사례 바로가기·#problems 로 갈 때 위에 붙은 탭 막대(위 12 + 높이 98)에 제목이 가리지 않게: 110 + 여유 16 */
+.panel [id] { scroll-margin-top: 126px; }
+@media (max-width: 899px) { .panel [id] { scroll-margin-top: 98px; } } /* 위 8 + 높이 74 + 여유 16 */
+/* 상세 탭 막대·프로젝트 목록 필터는 늘 한 줄(두 줄로 감기면 위에 붙은 막대가 화면을 크게 가린다).
+   한 줄에 안 들어가는 폭에서는 막대 안에서 옆으로 밀어 보고, 오른쪽 끝을 흐리게 한다(도표 판과 같은 is-scrollx·is-end, site.js markEdges).
+   아주 좁은 화면(~599)의 탭 막대 목록 링크는 '○○ 프로젝트' 를 숨기고 '목록 →' 만(.ctl__long, 이름은 aria-label) — 세 버튼이 약 330px 로 한 줄(358px)에 들어간다 */
+.controls[role="tablist"], .controls--filter { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.controls[role="tablist"]::-webkit-scrollbar, .controls--filter::-webkit-scrollbar { display: none; }
+.controls[role="tablist"] .ctl, .controls[role="tablist"] .controls__end, .controls--filter .ctl { flex: none; }
+.controls[role="tablist"] .controls__end { margin-left: auto; }
+.controls[role="tablist"] .ctl > span, .controls--filter .ctl > span { white-space: nowrap; }
+@media (max-width: 599px) { .controls .ctl__long { display: none; } }
+/* 직무 필터 다섯 개는 넓은 화면 크기(74px)로 합이 약 925px 라, 막대가 그보다 좁은 900~1139 폭(1024 노트북 포함)에서는
+   마지막 버튼이 잘리고 흐렸다(스크롤바가 숨어 마우스로는 밀 수 없음). 이 폭에서만 필터를 좁은 화면 크기(58px·18px, 합 약 690px)로 */
+@media (min-width: 900px) and (max-width: 1139px) {
+  .controls--filter .ctl { padding: 3px; font-size: 18px; line-height: 26px; }
+  .controls--filter .ctl > span { gap: 10px; padding: 12px 18px; }
+  .controls--filter .ctl svg { width: 22px; height: 22px; }
 }
-/* 프로젝트 목록 필터: 좁은 화면에서는 한 줄로 두고 옆으로 넘긴다(두 줄로 감기면 고정 막대가 화면을 많이 가린다).
-   넘칠 때는 오른쪽 끝을 흐리게(도표 판과 같은 is-scrollx·is-end, site.js markEdges) — 더 넘길 수 있다는 것이 보이게 */
-@media (max-width: 599px) {
-  .controls--filter { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-  .controls--filter::-webkit-scrollbar { display: none; }
-  .controls--filter .ctl { flex: none; }
-}
+/* 막대가 위에 붙었을 때(site.js 가 .is-stuck) 막대 위 틈(top 12px, 좁은 화면 8px)을 바탕색으로 채운다:
+   틈으로 스크롤되는 글·도표 조각이 비쳐 보였다. 막대가 옆으로 넘기는 판(overflow)이라 ::before 는 잘려서, 바깥 그림자로 칠한다
+   (위로 틈만큼 올리고 같은 만큼 넓혀 둥근 모서리까지 덮는다. 막대 밑에는 그려지지 않는다).
+   붙지 않았을 때는 그리지 않는다(위 머리 글을 덮지 않게) */
+.controls.is-stuck { box-shadow: 0 -12px 0 12px var(--bg); }
+@media (max-width: 899px) { .controls.is-stuck { box-shadow: 0 -8px 0 8px var(--bg); } }
 
 /* ---------- 카드 (_Card) ---------- */
 .card {
@@ -531,7 +585,7 @@ p .dv, li .dv, td .dv, dd .dv { font-weight: 600; }
 .to__note { display: block; margin-top: 2px; color: var(--text-3); font-size: 13px; line-height: 18px; font-weight: 400; letter-spacing: 0; }
 
 /* ---------- 상세 페이지 ----------
-   표지 카드(hero-card)는 없앴다. 모든 블록은 .wrap(최대 1040px) 폭을 그대로 쓰고 왼쪽 정렬 — 좌우 끝선이 하나다 */
+   표지 카드(hero-card)는 없앴다. 모든 블록은 .wrap(최대 1144px, --content) 폭을 그대로 쓰고 왼쪽 정렬 — 좌우 끝선이 하나다 */
 /* 개요: 위 두 칸(개요 글 | 회사·기간·역할 카드) + 아래 숫자 칸 한 줄. 두 칸 높이가 비슷해 한쪽만 크게 비지 않는다 */
 .overview {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 372px);
@@ -646,7 +700,7 @@ html.start-problems #panel-problems[hidden] { display: block; }
 
 /* 도표 판 (큰 _Card 안 둥근 판) */
 .figure { margin: 0; }
-.figure .card__media { background: var(--pane); padding: 32px 24px; overflow-x: auto; } /* 1040 컨테이너 안에서 도표가 쓸 폭을 넓힌다 */
+.figure .card__media { background: var(--pane); padding: 32px 24px; overflow-x: auto; } /* 1144(--content) 컨테이너 안에서 도표가 쓸 폭을 넓힌다 */
 .figure figcaption { padding: 10px 32px 14px; color: var(--text-3); font-size: 14px; line-height: 20px; }
 .figure--soft { border-radius: 24px; border: 1px solid var(--line-2); background: var(--chart-surface); padding: 32px; } /* 차트 판 = --chart-surface(선 차트 점 테두리 색과 같다) */
 .mermaid { display: flex; justify-content: center; min-height: 80px; color: var(--text-2); font-family: var(--font); }
@@ -876,15 +930,55 @@ table.t tr:last-child td { border-bottom: 0; }
 .takeaway--sm::before { display: none; }
 .takeaway--sm h2 { font-size: 28px; line-height: 36px; }
 .takeaway--sm p { font-size: 18px; line-height: 28px; }
-/* 다음 탭 안내: 사례 제목을 번호 목록으로(제목 굵게 + 설명은 조금 작게·흐리게 — .ct-main/.ct-sub), '외 N개' 는 작은 회색 글 */
-.next-cases { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
-.next-cases li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 8px; align-items: baseline; }
-.next-cases__no { color: var(--text-3); font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.next-cases__t { display: grid; gap: 2px; min-width: 0; }
-.next-cases .ct-main { font-size: 19px; line-height: 28px; color: var(--text-2); }
-.next-cases .ct-sub { font-size: 15px; line-height: 23px; }
-.takeaway--sm .next-cases__more { margin-top: -12px; color: var(--text-3); font-size: 15px; line-height: 22px; }
-@media (max-width: 899px) { .next-cases .ct-main { font-size: 17px; line-height: 25px; } .next-cases .ct-sub { font-size: 14px; line-height: 21px; } }
+/* 다음 탭 안내(상세 탭 끝, build.js toProblems): 상자 폭 전체를 쓴다.
+   머리 줄 = 제목(왼쪽) + '문제해결 보기' 버튼(오른쪽 끝), 그 아래 사례 전부를 카드 목록으로(넓으면 2열, 좁으면 1열).
+   예전에는 사례 2개 + '외 N개' 가 왼쪽 칸에만 있어 오른쪽 넓은 칸이 텅 비었다.
+   카드 = 번호 칸 + 제목(굵게) + 그 아래 설명(조금 작게·흐리게, .ct-main/.ct-sub) + 화살표. 누르면 그 사례로 간다(site.js).
+   좁은 화면(~719)은 제목 → 카드 목록 → 버튼(폭 전체) 순서 */
+.takeaway--next {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 28px 24px;
+  grid-template-areas: "title go" "list list";
+  container-type: inline-size; /* 카드 목록 열 수를 상자 안 폭으로 정한다(아래 @container) */
+}
+.takeaway--next .next__title { grid-area: title; min-width: 0; }
+.takeaway--next .next__title .dim { display: inline; margin-left: .45em; font-size: .78em; white-space: nowrap; }
+.next__go { grid-area: go; display: flex; justify-content: flex-end; }
+/* 상자 안 버튼은 한 단계 작게(높이 60 = 1 + 4 + 12 + 26 + 12 + 4 + 1, 글씨 18) — 상자 머리 줄에 맞는 크기 */
+.next__go .ctl { padding: 4px; font-size: 18px; line-height: 26px; }
+.next__go .ctl > span { gap: 10px; padding: 12px 26px; white-space: nowrap; }
+.next__go .ctl svg { width: 22px; height: 22px; }
+.next-cases { grid-area: list; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.next-cases > li { display: flex; min-width: 0; }
+/* 사례 수가 홀수면 마지막 카드는 두 칸을 다 쓴다(오른쪽 반이 비지 않게) */
+.next-cases > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+/* 상자 안 폭이 700 보다 좁으면(900~969 화면 등) 한 열 — 두 열 카드가 300px 안팎으로 좁아 제목이 서너 줄로 감겼다 */
+@container (max-width: 700px) { .next-cases { grid-template-columns: minmax(0, 1fr); } .next-cases > li:last-child:nth-child(odd) { grid-column: auto; } }
+.next-case {
+  flex: 1; min-width: 0; display: grid; grid-template-columns: 44px minmax(0, 1fr) 22px; align-items: center; gap: 16px;
+  padding: 18px 20px 18px 18px; border-radius: 22px; border: 1px solid var(--line); background: var(--fill);
+  color: var(--text); text-decoration: none; transition: background .2s, border-color .2s, transform .2s;
+}
+.next-case:hover { background: var(--fill-2); border-color: var(--line-2); transform: translateY(-1px); }
+.next-case__no { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 14px; background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent-ink); font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.next-case__t { display: grid; gap: 2px; min-width: 0; }
+.next-case .ct-main { font-size: 18px; line-height: 26px; }
+.next-case .ct-sub { font-size: 15px; line-height: 22px; }
+.next-case__arr { width: 22px; height: 22px; fill: var(--text-3); transition: fill .2s, transform .2s; }
+.next-case:hover .next-case__arr { fill: var(--text); transform: translateX(2px); }
+@media (max-width: 899px) { .next__go .ctl { padding: 3px; } } /* 좁은 화면 버튼 높이 58(다른 버튼과 같게) */
+@media (max-width: 719px) {
+  .takeaway--next { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "list" "go"; gap: 20px; }
+  .next-cases { gap: 10px; }
+  .next__go .ctl { width: 100%; justify-content: center; }
+  .next__go .ctl > span { padding: 12px 20px; }
+}
+@media (max-width: 599px) {
+  .next-case { grid-template-columns: 38px minmax(0, 1fr) 18px; gap: 12px; padding: 14px 14px 14px 12px; border-radius: 18px; }
+  .next-case__no { width: 38px; height: 38px; border-radius: 12px; font-size: 15px; }
+  .next-case .ct-main { font-size: 17px; line-height: 25px; }
+  .next-case .ct-sub { font-size: 14px; line-height: 21px; }
+  .next-case__arr { width: 18px; height: 18px; }
+}
 @media (max-width: 899px) { .takeaway { margin-top: 64px; padding: 40px 20px; gap: 20px; border-radius: 28px; } .takeaway--sm { padding: 28px 20px; } .takeaway h2 { font-size: 30px; line-height: 38px; } .takeaway--sm h2 { font-size: 24px; line-height: 32px; } .takeaway p { font-size: 17px; line-height: 26px; } }
 
 /* 초안 표시 */
@@ -935,6 +1029,11 @@ table.t tr:last-child td { border-bottom: 0; }
 .chart details { margin-top: 16px; color: var(--text-3); font-size: 15px; }
 .chart details[open] > summary { color: var(--text); border-color: var(--line-2); }
 .chart details .table-wrap { margin-top: 12px; }
+/* 차트 '표로 보기' 표: 구분·값 칸이 모두 짧은 표(build.js chartTable 이 t--tight)는 그 칸을 한 줄로 둔다. 좁은 칸에서 '범위 하한' 이
+   두 줄로 접혀 줄마다 높이가 들쭉날쭉했다. 줄바꿈은 첫 칸(항목)만, 좁은 화면은 칸 여백을 줄여 첫 칸 자리를 남긴다 */
+.chart details table.t--tight td:not(:first-child) { white-space: nowrap; }
+@media (max-width: 599px) { .chart details table.t th, .chart details table.t td { padding: 12px 14px; } }
+@media (max-width: 374px) { .chart details table.t th, .chart details table.t td { padding: 12px 10px; } } /* 360 화면: '구축(일회성)' 같은 끊지 않는 낱말이 있는 표도 판 안에 들어오게 */
 .tip {
   position: fixed; z-index: 90; pointer-events: none; padding: 8px 12px; border-radius: 10px;
   background: var(--tip-bg); color: var(--tip-ink); font-size: 13px; line-height: 18px; box-shadow: var(--shadow-m);
@@ -945,23 +1044,306 @@ table.t tr:last-child td { border-bottom: 0; }
 /* ---------- 홈·소개 ---------- */
 .ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 8px; }
 @media (max-width: 1099px) { .ways { grid-template-columns: 1fr; } }
-.cols2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 8px; }
-@media (max-width: 899px) { .cols2 { grid-template-columns: 1fr; } }
-.plan { padding: 28px; border-radius: 32px; border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 22%, transparent), color-mix(in srgb, var(--accent) 5%, transparent)); }
-.plan h3 { margin: 0 0 14px; font-size: 20px; line-height: 28px; }
-.plan ul { margin: 0; padding-left: 18px; color: var(--text-2); font-size: 16px; line-height: 28px; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px; }
-.chips .tag { font-size: 15px; line-height: 22px; padding: 7px 16px; }
 .company { padding: 40px 8px 8px; }
 .company__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; margin: 0 48px 16px; }
 .company__head h3 { margin: 0; font-size: 28px; line-height: 36px; font-weight: 600; }
 .company__head span { color: var(--text-3); font-size: 15px; line-height: 22px; }
 .company__lead { margin: 0 48px 24px; color: var(--text-2); font-size: 17px; line-height: 27px; max-width: var(--text-measure); }
 @media (max-width: 899px) { .company__head, .company__lead { margin-left: 8px; margin-right: 8px; } .company__head h3 { font-size: 22px; line-height: 30px; } } /* 좁은 화면 절 제목(26px)보다 작게 — 제목 위계 */
-.contact { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin: 0 56px; }
-.contact a.mail { font-size: 24px; line-height: 32px; font-weight: 600; color: var(--text); text-decoration: none; border-bottom: 1px solid var(--line-2); }
+/* 연락(홈·소개 공용): 아이콘 칸 + 큰 이메일 + 안내 글을 한 장의 카드로 */
+.contact {
+  display: flex; align-items: center; gap: 22px; margin: 0 56px; padding: 26px 32px; border-radius: 32px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  background: linear-gradient(120deg, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%), var(--tile);
+}
+.contact__ic { flex: none; width: 60px; height: 60px; display: grid; place-items: center; border-radius: 20px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: var(--on-accent); box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 30%, transparent); }
+.contact__ic svg { width: 30px; height: 30px; fill: currentColor; }
+.contact__txt { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; min-width: 0; }
+.contact a.mail { font-size: 26px; line-height: 34px; font-weight: 700; color: var(--text); text-decoration: none; border-bottom: 1px solid var(--line-2); overflow-wrap: anywhere; }
+.contact a.mail:hover { border-bottom-color: var(--accent); }
 .contact__note { color: var(--text-3); font-size: 16px; line-height: 24px; }
-@media (max-width: 899px) { .contact { margin: 0 8px; } .contact a.mail { font-size: 19px; } }
+@media (max-width: 899px) { .contact { margin: 0 8px; padding: 20px; gap: 16px; border-radius: 26px; } .contact__ic { width: 48px; height: 48px; border-radius: 16px; } .contact__ic svg { width: 24px; height: 24px; } .contact a.mail { font-size: 19px; line-height: 27px; } .contact__note { font-size: 15px; line-height: 22px; } }
+
+/* ---------- 소개 쪽 (build.js aboutPage) ----------
+   기술 페이지 스파이더 지도·도메인 카드 짜임을 따랐다: 테마 변수 색(--hue-a~e)을 카드마다 --c 로 받고, 아이콘 칸 + 큰 제목 + 옅은 색 빛.
+   색은 모두 테마 변수와 그 섞음(color-mix)뿐이다. 다크·라이트를 바꾸면 따라 바뀐다 */
+
+/* 핵심 역량 지도(competencyMap): 넓은 판 = 정적 SVG(가운데 이름 원 + 둘레 역량 알약), 좁은 판(960 미만) = 분류별 카드 */
+.cmap { position: relative; container-type: inline-size; }
+.cmap__canvas {
+  position: relative; overflow: hidden; padding: 28px 16px 26px; border-radius: 36px; border: 1px solid var(--line); /* 좌우 16 = 1144 판 안쪽 1110(그림 폭)이 줄지 않게 */
+  background: radial-gradient(70% 60% at 50% 46%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 72%), var(--chart-surface);
+}
+.cmap__svg { display: block; width: 100%; max-width: var(--cm-w, 1110px); height: auto; margin: 0 auto; overflow: visible; }
+.cmap__svg text { font-family: var(--font); }
+.cmap__glow-a { stop-color: var(--accent); stop-opacity: .14; }
+.cmap__glow-b { stop-color: var(--accent); stop-opacity: 0; }
+.cmap__core-a { stop-color: color-mix(in srgb, var(--accent) 86%, var(--on-accent)); }
+.cmap__core-b { stop-color: var(--accent-2); }
+.cmap__core-halo { fill: none; stroke: var(--accent); stroke-opacity: .4; stroke-width: 1.5; stroke-dasharray: 2 5; }
+.cmap__ring { fill: none; stroke: var(--line-2); stroke-width: 1; stroke-dasharray: 3 8; }
+.cmap__ring--in { stroke: color-mix(in srgb, var(--accent) 35%, transparent); }
+.cmap__ctitle { fill: var(--on-accent); font-weight: 700; letter-spacing: .06em; }
+.cmap__csub { fill: var(--on-accent); fill-opacity: .86; font-weight: 500; }
+.cmap__link { fill: none; stroke: var(--c); stroke-opacity: .55; stroke-width: 1.6; transition: stroke-opacity .25s, stroke-width .25s; }
+.cmap__dot { fill: var(--c); }
+.cmap__pill { fill: color-mix(in srgb, var(--c) 12%, var(--chart-surface)); stroke: color-mix(in srgb, var(--c) 48%, var(--chart-surface)); stroke-width: 1.2; transition: stroke .25s, filter .25s; }
+.cmap__icbg { fill: color-mix(in srgb, var(--c) 26%, var(--chart-surface)); }
+.cmap__glyph { fill: color-mix(in srgb, var(--c) 55%, var(--text)); }
+.cmap__t { fill: var(--text); font-weight: 600; }
+/* 마우스를 올린 역량: 그 분류 색으로 테두리가 빛나고 선이 짙어진다(기술 페이지 스파이더와 같은 느낌) */
+.cmap__node:hover .cmap__pill { stroke: var(--c); filter: drop-shadow(0 0 10px color-mix(in srgb, var(--c) 55%, transparent)); }
+.cmap__node:hover .cmap__link { stroke-opacity: 1; stroke-width: 2.4; }
+.cmap__legend { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 24px; color: var(--text-2); font-size: 15px; line-height: 22px; font-weight: 600; }
+.cmap__legend li { display: inline-flex; align-items: center; gap: 8px; }
+.cmap__legend i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 25%, transparent); }
+.cmap__legend span { color: var(--text-3); font-weight: 500; }
+/* 분류 카드: 넓은 판에서는 화면 낭독기용(눈에는 숨김), 좁은 판에서 보인다 */
+.cmap__groups { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.cmap__grp { min-width: 0; padding: 20px 20px 18px; border-radius: 24px; border: 1px solid color-mix(in srgb, var(--c) 35%, var(--line)); background: linear-gradient(160deg, color-mix(in srgb, var(--c) 12%, transparent), transparent 60%), var(--tile); }
+.cmap__gh { margin: 0 0 14px; display: flex; align-items: center; gap: 10px; color: var(--text); font-size: 18px; line-height: 26px; font-weight: 700; }
+.cmap__gh i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 22%, transparent); }
+.cmap__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.cmap__list li { display: flex; align-items: center; gap: 12px; color: var(--text); font-size: 16px; line-height: 23px; font-weight: 600; }
+.cmap__lic { flex: none; width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; background: color-mix(in srgb, var(--c) 18%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 40%, transparent); color: color-mix(in srgb, var(--c) 55%, var(--text)); }
+.cmap__lic svg { width: 20px; height: 20px; fill: currentColor; }
+@container (max-width: 959px) {
+  .cmap__canvas { display: none; }
+  .cmap__groups { position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .cmap__grp:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
+@container (max-width: 599px) {
+  .cmap__groups { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .cmap__grp { padding: 18px 16px 16px; border-radius: 22px; }
+}
+
+/* 강점: 번호(윤곽 숫자)·아이콘 칸·제목·본문이 있는 큰 카드. 본문 핵심어(**…**)는 형광펜처럼 */
+.strengths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 1099px) { .strengths { grid-template-columns: minmax(0, 1fr); } }
+.strength {
+  position: relative; overflow: hidden; min-width: 0; display: flex; flex-direction: column; gap: 14px;
+  padding: 28px 28px 30px; border-radius: 32px; border: 1px solid var(--line);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--c) 16%, transparent) 0%, transparent 55%), var(--tile);
+  transition: border-color .25s, transform .25s, box-shadow .25s;
+}
+.strength::after { content: ""; position: absolute; right: -60px; top: -60px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--c) 22%, transparent), transparent 70%); pointer-events: none; }
+:root[data-theme="light"] .strength::after { opacity: .5; }
+.strength:hover { border-color: color-mix(in srgb, var(--c) 60%, transparent); transform: translateY(-2px); box-shadow: var(--shadow-m); }
+.strength__top { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.strength__ic { width: 60px; height: 60px; display: grid; place-items: center; border-radius: 20px; color: color-mix(in srgb, var(--c) 45%, var(--text)); background: color-mix(in srgb, var(--c) 22%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 50%, transparent); }
+.strength__ic svg { width: 30px; height: 30px; fill: currentColor; }
+.strength__no { font-size: 48px; line-height: 1; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: color-mix(in srgb, var(--c) 45%, transparent); }
+.strength__t { position: relative; z-index: 1; margin: 0; color: var(--text); font-size: 24px; line-height: 32px; font-weight: 700; }
+.strength__t .dim { display: block; color: var(--text-3); font-size: .88em; font-weight: 500; }
+.strength__b { position: relative; z-index: 1; margin: 0; color: var(--text-2); font-size: 17px; line-height: 29px; }
+.strength__b .hl { color: var(--text); font-weight: 600; padding: 0 2px; border-radius: 3px; background: linear-gradient(transparent 58%, color-mix(in srgb, var(--c) 32%, transparent) 58%); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+@media (max-width: 1099px) and (min-width: 600px) {
+  .strength { display: grid; grid-template-columns: 60px minmax(0, 1fr); grid-template-areas: "top title" "top body"; gap: 6px 22px; align-items: start; }
+  .strength__top { grid-area: top; flex-direction: column; align-items: center; gap: 14px; margin: 0; }
+  .strength__no { font-size: 32px; }
+  .strength__t { grid-area: title; }
+  .strength__b { grid-area: body; }
+}
+@media (max-width: 599px) {
+  .strength { padding: 22px 20px 24px; border-radius: 26px; gap: 10px; }
+  .strength__ic { width: 50px; height: 50px; border-radius: 16px; }
+  .strength__ic svg { width: 26px; height: 26px; }
+  .strength__no { font-size: 38px; }
+  .strength__t { font-size: 21px; line-height: 28px; }
+  .strength__b { font-size: 16px; line-height: 27px; }
+}
+
+/* 지금 하는 일: 왼쪽 색 줄 + 아이콘 칸 + 역할 + '재직 중' 표시(작은 숨쉬는 점) + 본문 */
+.now-card {
+  position: relative; overflow: hidden; display: grid; gap: 20px; padding: 32px 36px 32px 40px; border-radius: 32px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 12%, transparent) 0%, transparent 50%), var(--tile);
+}
+.now-card::before { content: ""; position: absolute; left: 0; top: 28px; bottom: 28px; width: 4px; border-radius: 0 4px 4px 0; background: linear-gradient(180deg, var(--accent), var(--accent-2)); }
+.now-card__head { display: flex; align-items: center; gap: 16px; }
+.now-card__ic { flex: none; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 18px; color: var(--accent-ink); background: color-mix(in srgb, var(--accent) 20%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent); }
+.now-card__ic svg { width: 28px; height: 28px; fill: currentColor; }
+.now-card__who { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; min-width: 0; }
+.now-card__who b { color: var(--text); font-size: 21px; line-height: 28px; font-weight: 700; }
+.now-card__live { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 40px; background: color-mix(in srgb, var(--hue-c) 16%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--hue-c) 40%, transparent); color: var(--text); font-size: 14px; line-height: 20px; font-weight: 600; }
+.now-card__live i { width: 8px; height: 8px; border-radius: 50%; background: var(--hue-c); animation: now-pulse 2.2s ease-out infinite; }
+@keyframes now-pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--hue-c) 55%, transparent); } 70%, 100% { box-shadow: 0 0 0 8px transparent; } }
+.now-card__text { color: var(--text-2); font-size: 18px; line-height: 31px; }
+.now-card__text p { margin: 0 0 12px; }
+.now-card__text p:last-child { margin: 0; }
+@media (max-width: 899px) { .now-card { padding: 22px 20px 24px 24px; border-radius: 26px; gap: 16px; } .now-card__ic { width: 46px; height: 46px; border-radius: 15px; } .now-card__ic svg { width: 24px; height: 24px; } .now-card__who b { font-size: 18px; line-height: 25px; } .now-card__text { font-size: 16px; line-height: 27px; } }
+
+/* 자기 평가 순서(rankOrbit): 왼쪽 동심원 지도(1위 = 가운데 원, 2위부터 바깥 고리) + 오른쪽 순위 목록(배지 색이 고리 배지 색과 같다) */
+.rorbit {
+  display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); align-items: center; gap: 32px 56px;
+  padding: 36px 40px; border-radius: 36px; border: 1px solid var(--line);
+  background: radial-gradient(55% 80% at 22% 50%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 70%), var(--chart-surface);
+}
+.rorbit__map { display: grid; gap: 12px; justify-items: center; min-width: 0; }
+.rorbit__svg { display: block; width: 100%; max-width: 420px; height: auto; overflow: visible; }
+.rorbit__svg text { font-family: var(--font); }
+.rorbit__band { fill: color-mix(in srgb, var(--c) 7%, transparent); stroke: color-mix(in srgb, var(--c) 45%, transparent); stroke-width: 1.2; stroke-dasharray: 4 6; }
+.rorbit__spoke { stroke: color-mix(in srgb, var(--c) 55%, transparent); stroke-width: 1.4; }
+.rorbit__core-halo { fill: none; stroke: var(--accent); stroke-opacity: .45; stroke-width: 1.5; stroke-dasharray: 2 5; }
+.rorbit__one { fill: var(--on-accent); font-weight: 800; }
+.rorbit__mark circle { fill: color-mix(in srgb, var(--c) 24%, var(--chart-surface)); stroke: var(--c); stroke-width: 2; }
+.rorbit__mark text { fill: var(--text); font-weight: 700; }
+.rorbit__key { margin: 0; color: var(--text-3); font-size: 14px; line-height: 20px; text-align: center; }
+.rorbit__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; min-width: 0; }
+.rorbit__item { display: flex; align-items: center; gap: 16px; padding: 14px 20px 14px 14px; border-radius: 22px; border: 1px solid var(--line); background: var(--tile); transition: border-color .25s; }
+.rorbit__item:hover { border-color: color-mix(in srgb, var(--c) 55%, transparent); }
+.rorbit__item.is-top { padding: 18px 24px 18px 16px; border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%), var(--tile); }
+.rorbit__n { flex: none; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--c) 22%, var(--chart-surface)); box-shadow: inset 0 0 0 2px var(--c); color: var(--text); font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.rorbit__item.is-top .rorbit__n { width: 52px; height: 52px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 35%, transparent); color: var(--on-accent); font-size: 22px; }
+.rorbit__t { min-width: 0; color: var(--text); font-size: 19px; line-height: 26px; font-weight: 600; }
+.rorbit__item.is-top .rorbit__t { font-size: 23px; line-height: 30px; font-weight: 700; }
+@media (max-width: 1099px) { .rorbit { grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 24px 32px; padding: 28px; } }
+@media (max-width: 699px) {
+  .rorbit { grid-template-columns: minmax(0, 1fr); padding: 22px 16px 18px; border-radius: 28px; gap: 18px; }
+  .rorbit__svg { max-width: 320px; }
+  .rorbit__item { padding: 12px 16px 12px 12px; border-radius: 18px; gap: 14px; }
+  .rorbit__item.is-top { padding: 14px 18px 14px 12px; }
+  .rorbit__n { width: 36px; height: 36px; font-size: 16px; }
+  .rorbit__item.is-top .rorbit__n { width: 44px; height: 44px; font-size: 19px; }
+  .rorbit__t { font-size: 17px; line-height: 24px; }
+  .rorbit__item.is-top .rorbit__t { font-size: 19px; line-height: 26px; }
+}
+
+/* 즉시 기여·중장기: 아이콘 머리 + 번호 붙은 줄 카드 */
+.plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 899px) { .plans { grid-template-columns: minmax(0, 1fr); } }
+.plan2 {
+  position: relative; overflow: hidden; min-width: 0; padding: 30px 30px 28px; border-radius: 32px;
+  border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
+  background: linear-gradient(170deg, color-mix(in srgb, var(--c) 18%, transparent), color-mix(in srgb, var(--c) 3%, transparent) 70%), var(--tile);
+}
+.plan2__head { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.plan2__ic { flex: none; width: 52px; height: 52px; display: grid; place-items: center; border-radius: 16px; background: color-mix(in srgb, var(--c) 24%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 50%, transparent); color: color-mix(in srgb, var(--c) 45%, var(--text)); }
+.plan2__ic svg { width: 26px; height: 26px; fill: currentColor; }
+.plan2__head h3 { margin: 0; color: var(--text); font-size: 22px; line-height: 30px; font-weight: 700; }
+.plan2__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.plan2__list li { display: flex; align-items: flex-start; gap: 14px; padding: 13px 16px; border-radius: 16px; border: 1px solid var(--line); background: var(--fill); color: var(--text); font-size: 17px; line-height: 26px; font-weight: 500; }
+.plan2__n { flex: none; width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--c) 28%, transparent); color: var(--text); font-size: 14px; line-height: 1; font-weight: 700; }
+@media (max-width: 899px) { .plan2 { padding: 22px 18px 20px; border-radius: 26px; } .plan2__head h3 { font-size: 19px; line-height: 27px; } .plan2__list li { font-size: 16px; line-height: 24px; padding: 11px 14px; } }
+/* 협업 기대 효과: 아이콘 칸이 붙은 카드 */
+.tile__ic { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 16px; border-radius: 15px; color: var(--accent-ink); background: color-mix(in srgb, var(--accent) 18%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent); }
+.tile__ic svg { width: 24px; height: 24px; fill: currentColor; }
+.effects .tile { padding: 26px 26px 28px; transition: border-color .25s, transform .25s; }
+.effects .tile:hover { border-color: color-mix(in srgb, var(--accent) 50%, transparent); transform: translateY(-2px); }
+.effects .tile h3 { font-size: 19px; line-height: 27px; }
+.effects .tile p { font-size: 16px; line-height: 26px; }
+
+/* 학력(최종 학력 하나) + 석사 논문: 모든 폭에서 위아래로 쌓는다. 예전에는 넓은 화면에서 나란히(4 : 7) 두어,
+   학력 카드가 논문 카드 높이만큼 늘어나 가운데가 420~480px 비고 논문 단계 카드 글이 4~5줄로 접혔다.
+   넓은 화면(1100~)에서는 학력 카드를 가로 띠(아이콘 | 학위·학교·전공 | 기간)로 바꿔 '최종 학력'을 띠로 강조하고(아래 규칙),
+   논문 카드는 전체 폭을 쓴다(1340~ 에서 4단계를 한 줄 4칸으로) */
+.edu { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: stretch; }
+.edu-card {
+  position: relative; overflow: hidden; min-width: 0; display: flex; flex-direction: column; gap: 22px;
+  padding: 32px; border-radius: 36px; border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+  background:
+    radial-gradient(90% 70% at 100% 0%, color-mix(in srgb, var(--accent-2) 26%, transparent), transparent 70%),
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 20%, transparent), transparent 65%), var(--tile);
+}
+.edu-card > * { position: relative; z-index: 1; }
+/* 큰 학사모 무늬(장식): 카드 오른쪽 빈 곳에 옅게 */
+.edu-card > .edu-card__mark { position: absolute; z-index: 0; right: -40px; bottom: 56px; width: 260px; height: 260px; pointer-events: none; color: var(--accent); opacity: .08; }
+.edu-card__mark svg { display: block; width: 100%; height: 100%; fill: currentColor; }
+:root[data-theme="light"] .edu-card > .edu-card__mark { opacity: .06; }
+.edu-card__k { margin: 0; color: var(--accent-ink); font-size: 14px; line-height: 20px; font-weight: 700; letter-spacing: .08em; }
+.edu-card__ic { width: 76px; height: 76px; display: grid; place-items: center; border-radius: 24px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: var(--on-accent); box-shadow: 0 10px 30px color-mix(in srgb, var(--accent) 35%, transparent); }
+.edu-card__ic svg { width: 40px; height: 40px; fill: currentColor; }
+.edu-card__body { display: grid; gap: 10px; }
+.edu-card__deg { justify-self: start; padding: 4px 16px; border-radius: 40px; background: color-mix(in srgb, var(--accent) 22%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); color: var(--text); font-size: 15px; line-height: 22px; font-weight: 700; }
+.edu-card__school { margin: 0; color: var(--text); font-size: 30px; line-height: 39px; font-weight: 800; letter-spacing: -0.01em; text-wrap: balance; }
+.edu-card__major { margin: 0; color: var(--text-2); font-size: 21px; line-height: 29px; font-weight: 600; }
+.edu-card__period { margin: auto 0 0; display: flex; align-items: center; gap: 12px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--text-2); font-size: 18px; line-height: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.edu-card__pic { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; background: var(--fill-2); color: var(--text-2); }
+.edu-card__pic svg { width: 18px; height: 18px; fill: currentColor; }
+.thesis-card {
+  position: relative; overflow: hidden; min-width: 0; display: flex; flex-direction: column; gap: 20px;
+  padding: 32px 34px; border-radius: 36px; border: 1px solid color-mix(in srgb, var(--accent-2) 45%, var(--line));
+  background: radial-gradient(70% 60% at 0% 0%, color-mix(in srgb, var(--accent-2) 16%, transparent), transparent 70%), var(--tile);
+}
+.thesis-card__k { margin: 0; display: flex; align-items: center; gap: 12px; color: var(--text-2); font-size: 15px; line-height: 22px; font-weight: 700; letter-spacing: .02em; }
+.thesis-card__ic { flex: none; width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; background: color-mix(in srgb, var(--accent-2) 22%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-2) 45%, transparent); color: color-mix(in srgb, var(--accent-2) 45%, var(--text)); }
+.thesis-card__ic svg { width: 20px; height: 20px; fill: currentColor; }
+.thesis-card__t { margin: 0; color: var(--text); font-size: 28px; line-height: 39px; font-weight: 800; letter-spacing: -0.01em; text-wrap: balance; }
+.thesis-card__lead { margin: 0; color: var(--text-2); font-size: 17px; line-height: 28px; }
+.tsteps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.tstep { display: grid; grid-template-columns: 44px minmax(0, 1fr); grid-template-rows: auto 1fr; gap: 4px 14px; min-width: 0; padding: 16px 18px 16px 16px; border-radius: 20px; border: 1px solid var(--line); background: var(--fill); }
+.tstep__ic { grid-row: 1 / span 2; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 14px; background: color-mix(in srgb, var(--accent-2) 18%, transparent); color: color-mix(in srgb, var(--accent-2) 45%, var(--text)); }
+.tstep__ic svg { width: 22px; height: 22px; fill: currentColor; }
+.tstep__k { display: flex; align-items: baseline; gap: 8px; color: var(--text); font-size: 17px; line-height: 24px; font-weight: 700; }
+.tstep__no { color: color-mix(in srgb, var(--accent-2) 55%, var(--text)); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tstep__b { color: var(--text-2); font-size: 15px; line-height: 24px; }
+.tstep__b .hl { color: var(--text); font-weight: 600; }
+.thesis-card__kw { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.thesis-card__kw li { padding: 5px 14px; border-radius: 40px; border: 1px solid var(--line-2); background: var(--fill); color: var(--text-2); font-size: 14px; line-height: 20px; font-weight: 600; }
+.thesis-card__go { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; padding-top: 22px; border-top: 1px solid var(--line); }
+.thesis-card__gol { margin: 0; display: grid; gap: 2px; min-width: 0; flex: 1 1 240px; }
+.thesis-card__gol span { color: var(--text-3); font-size: 14px; line-height: 20px; font-weight: 600; }
+.thesis-card__gol b { color: var(--text); font-size: 18px; line-height: 26px; font-weight: 600; }
+/* 넓은 화면: 학력 카드 = 가로 띠. 왼쪽 큰 아이콘, 가운데 '최종 학력' + 학교 이름(크게) + 학위 알약 + 전공, 오른쪽 세로 선 뒤에 기간 */
+@media (min-width: 1100px) {
+  .edu-card {
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "ic k period" "ic body period";
+    align-items: center; column-gap: 36px; row-gap: 8px; padding: 36px 44px;
+  }
+  .edu-card__ic { grid-area: ic; width: 104px; height: 104px; border-radius: 32px; }
+  .edu-card__ic svg { width: 54px; height: 54px; }
+  .edu-card__k { grid-area: k; align-self: end; }
+  .edu-card__body { grid-area: body; align-self: start; display: flex; flex-wrap: wrap; align-items: center; column-gap: 16px; row-gap: 6px; }
+  .edu-card__school { order: 1; font-size: 36px; line-height: 46px; }
+  .edu-card__deg { order: 2; padding: 6px 18px; font-size: 17px; line-height: 24px; }
+  .edu-card__major { order: 3; flex-basis: 100%; font-size: 22px; line-height: 30px; }
+  .edu-card__period { grid-area: period; align-self: stretch; margin: 0; padding: 0 0 0 36px; border-top: 0; border-left: 1px solid var(--line); font-size: 20px; line-height: 28px; }
+  .edu-card__pic { width: 40px; height: 40px; border-radius: 13px; }
+  .edu-card__pic svg { width: 22px; height: 22px; }
+  .edu-card > .edu-card__mark { right: 300px; top: -48px; bottom: auto; width: 240px; height: 240px; } /* 띠 가운데 빈 오른쪽(기간 앞) 뒤에 옅게 */
+}
+/* 1100~1339: 본문 칸이 좁아 학교 이름과 학위 알약이 한 줄에 들어가게 조금 줄인다(1100 에서 학교 이름이 두 줄로 접혔다) */
+@media (min-width: 1100px) and (max-width: 1339px) {
+  .edu-card { column-gap: 28px; padding: 32px 36px; }
+  .edu-card__ic { width: 88px; height: 88px; border-radius: 28px; }
+  .edu-card__ic svg { width: 46px; height: 46px; }
+  .edu-card__school { font-size: 30px; line-height: 40px; }
+  .edu-card__major { font-size: 20px; line-height: 28px; }
+  .edu-card__period { padding-left: 28px; font-size: 18px; line-height: 26px; }
+  .edu-card > .edu-card__mark { right: 250px; width: 200px; height: 200px; top: -36px; }
+}
+/* 논문 4단계: 넓은 화면(1340~)은 한 줄 4칸(아이콘 위, 번호·제목, 글 순서로 세로), 그보다 좁으면 2 × 2 */
+@media (min-width: 1340px) {
+  .tsteps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .tstep { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto 1fr; gap: 10px; padding: 20px 20px 22px; }
+  .tstep__ic { grid-row: auto; }
+}
+@media (max-width: 899px) {
+  .edu-card, .thesis-card { padding: 24px 20px; border-radius: 28px; gap: 18px; }
+  .edu-card__ic { width: 60px; height: 60px; border-radius: 19px; }
+  .edu-card > .edu-card__mark { width: 132px; height: 132px; right: -18px; top: 14px; bottom: auto; } /* 좁은 화면: 글과 겹치지 않게 빈 오른쪽 위로 */
+  .edu-card__ic svg { width: 32px; height: 32px; }
+  .edu-card__school { font-size: 25px; line-height: 33px; }
+  .edu-card__major { font-size: 18px; line-height: 26px; }
+  .edu-card__period { font-size: 16px; }
+  .thesis-card__t { font-size: 22px; line-height: 31px; }
+  .thesis-card__lead { font-size: 16px; line-height: 26px; }
+  .tsteps { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .tstep { padding: 14px; border-radius: 18px; }
+}
+
+/* 지재권·수상: 아이콘 카드(제목 + 기관·연도 작은 줄) */
+.awards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 899px) { .awards { grid-template-columns: minmax(0, 1fr); gap: 10px; } }
+.award { display: flex; align-items: center; gap: 18px; min-width: 0; padding: 20px 24px 20px 20px; border-radius: 26px; border: 1px solid var(--line); background: linear-gradient(120deg, color-mix(in srgb, var(--c) 12%, transparent), transparent 55%), var(--tile); transition: border-color .25s, transform .25s; }
+.award:hover { border-color: color-mix(in srgb, var(--c) 55%, transparent); transform: translateY(-2px); }
+.award__ic { flex: none; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 18px; background: color-mix(in srgb, var(--c) 22%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 45%, transparent); color: color-mix(in srgb, var(--c) 45%, var(--text)); }
+.award__ic svg { width: 28px; height: 28px; fill: currentColor; }
+.award__txt { display: grid; gap: 4px; min-width: 0; }
+.award__t { color: var(--text); font-size: 18px; line-height: 26px; font-weight: 600; }
+.award__m { color: var(--text-3); font-size: 15px; line-height: 22px; }
+@media (max-width: 599px) { .award { padding: 16px; gap: 14px; border-radius: 22px; } .award__ic { width: 48px; height: 48px; border-radius: 15px; } .award__ic svg { width: 24px; height: 24px; } .award__t { font-size: 16px; line-height: 24px; } .award__m { font-size: 14px; line-height: 20px; } }
 
 /* ---------- 꼬리 (Footer) ---------- */
 .footer { display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 80px 0; color: var(--text-3); text-align: center; }
@@ -999,6 +1381,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   .card { transform: none !important; }
   html.js-reveal #main, html.js-reveal .intro > *, html.js-reveal .rv-up, html.js-reveal .rv-down { animation: none; }
   html.js-reveal .rv-out { opacity: 1; }
+  .now-card__live i { animation: none; }
 }
 
 /* 본문 안 다른 프로젝트 링크 */

@@ -193,6 +193,24 @@
   function markControls() {
     document.querySelectorAll(".controls--filter, .controls[role=\"tablist\"]").forEach(markEdges);
   }
+  // 위에 붙는 막대(.controls, sticky): 화면 위에 붙어 있을 때만 .is-stuck(site.css 가 막대 위 틈을 바탕색으로 채운다)
+  function markStuck() {
+    var y = window.scrollY || window.pageYOffset || 0;
+    document.querySelectorAll(".controls").forEach(function (el) {
+      if (el.offsetParent === null) return;
+      var top = parseFloat(window.getComputedStyle(el).top) || 0;
+      el.classList.toggle("is-stuck", y > 0 && el.getBoundingClientRect().top <= top + 0.5);
+    });
+  }
+  function setupStuck() {
+    var queued = false;
+    window.addEventListener("scroll", function () {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(function () { queued = false; markStuck(); });
+    }, { passive: true });
+    markStuck();
+  }
   // 판의 실제 안쪽 폭(좌우 padding 을 뺀 값)
   function innerWidth(el) {
     var cs = window.getComputedStyle(el);
@@ -277,6 +295,26 @@
       cv.style.zoom = String(s);
       var sx = parseFloat(cv.getAttribute("data-start-x"));
       markScroll(sc, over, isNaN(sx) ? 0 : sx * s);
+    });
+  }
+
+  // 숫자 타일(.stat): 값의 숫자·단위·↓↑ 는 한 덩어리라 줄이 바뀌지 않는다. 그래서 타일이 좁은 폭(예: 900~1199 화면의 3열,
+  // 360 화면의 2열)에서는 '2억 2,800만원↓' 같은 값이 타일 테두리 밖으로 나갔다. 값이 타일 안쪽 폭보다 길면 그 묶음(.stats)의
+  // 값 글씨를 같은 비율로 함께 줄여 맞춘다(한 칸만 작아 보이지 않게, CSS 크기의 0.6배 아래로는 줄이지 않음). 스크립트가 없으면 CSS 크기 그대로
+  function fitStats(rootEl) {
+    (rootEl || document).querySelectorAll(".stats").forEach(function (g) {
+      var vs = g.querySelectorAll(".stat__value");
+      if (!vs.length) return;
+      vs.forEach(function (v) { v.style.fontSize = ""; });
+      if (g.offsetParent === null) return; // 숨은 탭: 탭을 열 때 다시 잰다
+      var scale = 1;
+      vs.forEach(function (v) {
+        var cw = v.clientWidth, sw = v.scrollWidth;
+        if (cw && sw > cw + 0.5) scale = Math.min(scale, cw / sw);
+      });
+      if (scale >= 1) return;
+      scale = Math.max(0.6, scale * 0.98);
+      vs.forEach(function (v) { v.style.fontSize = Math.floor(parseFloat(window.getComputedStyle(v).fontSize) * scale * 10) / 10 + "px"; });
     });
   }
 
@@ -381,7 +419,7 @@
       if (push) history.replaceState(null, "", id === "detail" ? location.pathname : "#" + id);
       root.classList.remove("start-problems"); // 머리 스크립트가 붙인 '처음부터 문제해결 탭' 표시: 이제 탭이 정했다
       var panel = document.getElementById("panel-" + id);
-      requestAnimationFrame(function () { fitFlows(panel); renderDiagrams(panel); refitDiagrams(); markChartScroll(); markControls(); });
+      requestAnimationFrame(function () { fitFlows(panel); fitStats(panel); renderDiagrams(panel); refitDiagrams(); markChartScroll(); markControls(); });
     }
     // 주소의 # 가 가리키는 탭: '#problems' 이거나, 그 아이디의 요소(예: 사례 바로가기 '#case-3')가 문제해결 패널 안에 있으면 문제해결
     function panelOfHash() {
@@ -427,13 +465,31 @@
         next.focus(); next.click();
       });
     });
+    // 탭을 바꾼 뒤 그 탭 안의 한 요소(예: 사례 '#case-3')로 간다. 숨어 있던 패널은 탭을 연 뒤에야 자리가 생겨 두 프레임 뒤에 잰다.
+    // scroll-margin(site.css .panel [id])이 위에 붙은 탭 막대를 비켜 준다
+    function scrollToEl(el) {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          try { el.scrollIntoView({ block: "start", behavior: reduceMotion ? "auto" : "smooth" }); } catch (e) { el.scrollIntoView(); }
+        });
+      });
+    }
     document.querySelectorAll("[data-goto-panel]").forEach(function (a) {
       a.addEventListener("click", function (e) {
         e.preventDefault();
-        select(a.getAttribute("data-goto-panel"), true);
-        // 상세 탭 맨 아래 '문제해결 보기'에서 눌러도 새 탭의 맨 위(탭 머리)부터 보이게 늘 올린다
-        scrollToTabs(true);
-        var tab = document.getElementById("tab-" + a.getAttribute("data-goto-panel"));
+        var id = a.getAttribute("data-goto-panel");
+        select(id, true);
+        // 상세 탭 끝 '다음 탭' 상자의 사례 카드(data-goto-case): 문제해결 탭으로 바꾸고 그 사례로 간다(주소도 '#case-N' 으로 — 새로고침·공유해도 같은 사례)
+        var target = a.getAttribute("data-goto-case");
+        var el = target ? document.getElementById(target) : null;
+        if (el) {
+          history.replaceState(null, "", "#" + target);
+          scrollToEl(el);
+        } else {
+          // 상세 탭 맨 아래 '문제해결 보기'에서 눌러도 새 탭의 맨 위(탭 머리)부터 보이게 늘 올린다
+          scrollToTabs(true);
+        }
+        var tab = document.getElementById("tab-" + id);
         if (tab) { try { tab.focus({ preventScroll: true }); } catch (err) { /* 오래된 브라우저: 초점은 그대로 */ } }
       });
     });
@@ -558,8 +614,10 @@
     ".block-title", ".sec__head", ".sec__body > :not(.tiles):not(.rcards):not(.sec__bullets):not(.case-jump):not(.mcards-wrap)",
     ".tiles > *", ".rcards__head", ".rcard", ".sec__bullets > li", ".jump__item",
     ".overview__body", ".overview__facts", ".stat", ".grid > .card", ".axis-grid > .card",
-    ".ways > *", ".cols2 > *", ".chips", ".rank", ".page-text:not(.intro__text)", ".page-note", ".sub-title", ".page-link",
+    ".ways > *", ".page-text:not(.intro__text)", ".page-note", ".sub-title", ".page-link",
     ".company__head", ".company__lead", ".htl__item", ".domain", ".tl > li", ".skills-stack > *",
+    // 소개 쪽 카드(역량 지도·강점·지금 하는 일·순위 지도·계획·학력·논문·수상)
+    ".cmap", ".strength", ".now-card", ".rorbit", ".plans > *", ".edu > *", ".awards > li",
     ".pcase__head", ".pcase__blk", ".pcase__panel", ".pcase__lesson", ".pcase__more",
     ".takeaway", ".pager > a", ".contact"
   ].join(",");
@@ -633,14 +691,19 @@
     setupTabs();
     setupReveal(); // 탭·필터가 보일 패널·카드를 정한 뒤에 '처음 화면 안' 을 가린다
     fitFlows(document);
+    fitStats(document);
     renderDiagrams(document);
     markControls();
+    setupStuck();
+    // 처음 그릴 때 글꼴이 아직 안 들어와 막대가 넘친다고 보고 끝 흐림(is-scrollx)을 붙였다가, 글꼴이 들어온 뒤 다 들어가도
+    // 다시 재지 않아 흐림이 남았다(360 상세 탭 막대). 글꼴이 다 들어오면 한 번 더 잰다
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { markControls(); fitStats(document); });
     var t = 0;
     window.addEventListener("resize", function () {
       clearTimeout(t);
-      t = setTimeout(function () { fitFlows(document); refitDiagrams(); markControls(); }, 150);
+      t = setTimeout(function () { fitFlows(document); fitStats(document); refitDiagrams(); markControls(); markStuck(); }, 150);
     });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
-  window.addEventListener("load", function () { renderDiagrams(document); });
+  window.addEventListener("load", function () { renderDiagrams(document); markControls(); fitStats(document); });
 })();
