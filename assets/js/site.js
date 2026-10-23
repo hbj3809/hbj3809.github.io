@@ -1,6 +1,7 @@
 // 황병준 포트폴리오 — 탭(상세·문제해결), 직무 필터, 카드 기울임, 도표(Mermaid) 늦은 렌더링, 차트 말풍선.
 (function () {
   "use strict";
+  document.documentElement.classList.add("js");
 
   // ---- Mermaid: 보이는 패널의 도표만 그린다(숨은 패널에서 그리면 크기가 0 으로 계산됨) ----
   var mermaidReady = false;
@@ -59,14 +60,19 @@
         compositeTitleBackground: "#25213a",
         altBackground: "#1a1c22"
       },
-      themeCSS: ".node rect, .node polygon { rx: 12px; ry: 12px; } .cluster rect { rx: 18px; ry: 18px; } .edgeLabel { font-size: 14px; } .er.entityBox { rx: 10px; ry: 10px; }",
-      flowchart: { htmlLabels: true, curve: "basis", padding: 18, nodeSpacing: 48, rankSpacing: 60, useMaxWidth: true },
-      sequence: { mirrorActors: false, actorMargin: 60, messageMargin: 36 },
-      er: { layoutDirection: "LR", minEntityWidth: 120 }
+      // 머리 글(묶음 제목·alt/loop 이름표·엔터티 이름)과 내용 사이를 넉넉하게: 묶음 제목 위아래 여백, 시퀀스 상자 여백, ERD 칸 여백을 늘렸다
+      // 시퀀스 메시지 글 뒤에 판 색 테두리를 둘러 세로 생명선이 글을 가로지르지 않게, ERD 관계 이름 바탕을 판 색으로 막아 끝 기호가 글자를 가리지 않게
+      themeCSS: ".node rect, .node polygon { rx: 12px; ry: 12px; } .cluster rect { rx: 18px; ry: 18px; } .cluster-label { font-weight: 600; } .edgeLabel { font-size: 14px; } .er.entityBox { rx: 10px; ry: 10px; } .er.entityLabel { font-weight: 600; } .loopText, .loopText > tspan { font-weight: 600; } .labelText, .labelText > tspan { font-weight: 600; } .messageText { paint-order: stroke; stroke: #1b1c21; stroke-width: 6px; stroke-linejoin: round; } .relationshipLabelBox { fill: #1b1c21 !important; opacity: 1 !important; }",
+      flowchart: { htmlLabels: true, curve: "basis", padding: 18, nodeSpacing: 48, rankSpacing: 60, useMaxWidth: true, subGraphTitleMargin: { top: 14, bottom: 22 } },
+      sequence: { mirrorActors: false, actorMargin: 44, messageMargin: 44, boxMargin: 18, boxTextMargin: 12, noteMargin: 16, labelBoxHeight: 26, diagramMarginY: 16 },
+      er: { layoutDirection: "LR", fontSize: 15, minEntityWidth: 140, entityPadding: 24, diagramPadding: 24 }
     });
     mermaidReady = true;
     return true;
   }
+  // Mermaid 가 window load 때 스스로 기본(밝은) 테마로 그리지 않게, 스크립트가 시작하자마자 설정한다
+  // (문제해결 탭 주소로 열면 보이는 도표가 없어 설정이 늦어지던 경합 — 숨은 상세 탭 도표가 기본 테마로 그려지거나 원문이 남았다)
+  if (window.mermaid) initMermaid();
 
   // 도표 아이디는 페이지 전체에서 늘어나는 순번으로 준다. mermaid.run 은 아이디를 시각(Date.now)으로 만들어
   // 같은 1ms 안에 그린 도표(헤드리스 가상 시간에서는 전부)가 같은 아이디를 받아 한곳에 겹친다.
@@ -87,19 +93,96 @@
     return Promise.race([wait, limit]);
   }
 
-  // 넓은 도표는 판 폭에 맞춰 줄이면 글자가 너무 작아진다 → 원래 크기의 85% 아래로는 줄이지 않고 판 안에서 옆으로 넘긴다
+  // ---- 판 안에서 옆으로 넘기는 도표: 판 위 안내 + 오른쪽 흐림 + 처음 위치 ----
+  var HINT_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.3 5.3a1 1 0 0 1 1.4 0l6 6a1 1 0 0 1 0 1.4l-6 6a1 1 0 1 1-1.4-1.4L18.58 13H3a1 1 0 1 1 0-2h15.58l-4.3-4.3a1 1 0 0 1 0-1.4z"/></svg>';
+  function scrollEdges(el) {
+    var max = el.scrollWidth - el.clientWidth;
+    el.classList.toggle("is-end", el.scrollLeft >= max - 2);
+    el.classList.toggle("is-start-off", el.scrollLeft > 2);
+  }
+  // over=true 면 안내(판 위)와 흐림을 붙이고 startX(그림 안 x, px)가 가운데 오게 처음 위치를 잡는다. false 면 떼어 낸다
+  function markScroll(el, over, startX) {
+    var prev = el.previousElementSibling;
+    var hasHint = prev && prev.classList && prev.classList.contains("scroll-hint");
+    if (!over) {
+      if (hasHint) prev.parentNode.removeChild(prev);
+      el.classList.remove("is-scrollx", "is-end", "is-start-off");
+      return;
+    }
+    if (!hasHint) {
+      var p = document.createElement("p");
+      p.className = "scroll-hint";
+      p.setAttribute("aria-hidden", "true");
+      p.innerHTML = HINT_ICON + "<span>옆으로 밀어 전체 보기</span>";
+      el.parentNode.insertBefore(p, el);
+    }
+    el.classList.add("is-scrollx");
+    el.setAttribute("tabindex", "0");
+    if (!el.hasAttribute("data-scroll-bound")) {
+      el.setAttribute("data-scroll-bound", "");
+      el.addEventListener("scroll", function () { scrollEdges(el); }, { passive: true });
+    }
+    if (!el.hasAttribute("data-scrolled") && startX != null) {
+      el.scrollLeft = Math.max(0, Math.min(el.scrollWidth - el.clientWidth, startX - el.clientWidth / 2));
+      el.setAttribute("data-scrolled", "");
+    }
+    scrollEdges(el);
+  }
+  // 판의 실제 안쪽 폭(좌우 padding 을 뺀 값)
+  function innerWidth(el) {
+    var cs = window.getComputedStyle(el);
+    return el.clientWidth - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0);
+  }
+
+  // 남은 Mermaid(시퀀스·ERD): 판보다 조금 넓으면(판 폭 ÷ 원래 폭 ≥ 0.66) 판 폭에 맞춰 줄인다.
+  // 그보다 넓으면 원래 크기의 80% 로 두고 판 안에서 옆으로 넘긴다(안내 + 흐림 + 가운데부터 보이게)
   function fitDiagram(n) {
     var svg = n.querySelector("svg");
-    if (!svg) return;
-    var natural = parseFloat(svg.style.maxWidth) || (svg.viewBox && svg.viewBox.baseVal ? svg.viewBox.baseVal.width : 0);
-    var box = n.parentElement ? n.parentElement.clientWidth - 16 : 0;
-    if (natural && box && natural * 0.85 > box) {
-      svg.style.maxWidth = "none";
-      svg.style.width = Math.round(natural * 0.85) + "px";
-      n.style.justifyContent = "flex-start";
-      n.parentElement.setAttribute("tabindex", "0");
-      n.parentElement.setAttribute("aria-label", "넓은 도표 — 옆으로 넘겨 보세요");
+    var media = n.parentElement;
+    if (!svg || !media) return;
+    var natural = parseFloat(n.getAttribute("data-nw")) || parseFloat(svg.style.maxWidth) || (svg.viewBox && svg.viewBox.baseVal ? svg.viewBox.baseVal.width : 0);
+    if (!natural) return;
+    n.setAttribute("data-nw", String(natural));
+    var box = innerWidth(media);
+    if (!box) return;
+    if (natural <= box || box / natural >= 0.66) {
+      svg.style.maxWidth = "100%";
+      svg.style.width = Math.min(natural, box) + "px";
+      n.style.justifyContent = "";
+      media.removeAttribute("aria-label");
+      markScroll(media, false);
+      return;
     }
+    svg.style.maxWidth = "none";
+    svg.style.width = Math.round(natural * 0.8) + "px";
+    n.style.justifyContent = "flex-start";
+    media.setAttribute("aria-label", "넓은 도표 — 옆으로 넘겨 보세요");
+    markScroll(media, true, (media.scrollWidth) / 2);
+  }
+  function refitDiagrams() {
+    document.querySelectorAll(".mermaid[data-nw]").forEach(function (n) { if (n.offsetParent !== null) fitDiagram(n); });
+  }
+
+  // 플로우차트 부품(정적 HTML)의 넓은 그래프: 판 폭에 맞춰 줄여도 글자가 읽히면(넓은 화면 0.85배, 좁은 화면 0.7배 이상) 줄여서 판에 맞추고,
+  // 더 넓으면 판 안에서 옆으로 넘긴다(안내 + 흐림 + 첫 상자가 보이게). 스크립트가 없으면 flow.css 의 고정 규칙(zoom)을 그대로 쓴다.
+  function fitFlows(root) {
+    var wide = window.matchMedia("(min-width: 900px)").matches;
+    var minScale = wide ? 0.85 : 0.7;
+    (root || document).querySelectorAll(".flow__scroll").forEach(function (sc) {
+      if (sc.offsetParent === null) return;
+      var cv = sc.querySelector(".flow__canvas");
+      if (!cv) return;
+      var w = parseFloat(cv.style.width);
+      var avail = sc.clientWidth;
+      if (!w || !avail) return;
+      var s = avail >= w ? 1 : avail / w;
+      var over = false;
+      if (s < minScale) { s = wide ? minScale : 0.86; over = w * s > avail + 1; }
+      s = Math.floor(s * 1000) / 1000;
+      cv.style.zoom = String(s);
+      var sx = parseFloat(cv.getAttribute("data-start-x"));
+      markScroll(sc, over, isNaN(sx) ? 0 : sx * s);
+    });
   }
 
   function renderOne(n) {
@@ -123,6 +206,14 @@
   }
 
   function renderDiagrams(root) {
+    // 안전망: 이 스크립트가 아닌 Mermaid 자동 그리기가 먼저 손댄 도표(data-processed 는 있는데 우리 줄에 오른 적 없음)는
+    // 기본 테마로 그려졌거나 원문이 남은 것이라 지우고 다시 그린다
+    (root || document).querySelectorAll(".mermaid[data-processed]:not([data-queued])").forEach(function (n) {
+      if (n.getAttribute("data-processed") === "fallback") return;
+      n.removeAttribute("data-processed");
+      n.classList.remove("mermaid--error");
+      n.textContent = n.getAttribute("data-src") || n.textContent;
+    });
     var nodes = Array.prototype.slice.call((root || document).querySelectorAll(".mermaid:not([data-processed])"));
     nodes = nodes.filter(function (n) { return n.offsetParent !== null && !n.hasAttribute("data-queued"); });
     if (!nodes.length) return;
@@ -152,7 +243,7 @@
       });
       if (push) history.replaceState(null, "", id === "detail" ? location.pathname : "#" + id);
       var panel = document.getElementById("panel-" + id);
-      requestAnimationFrame(function () { renderDiagrams(panel); markChartScroll(); });
+      requestAnimationFrame(function () { fitFlows(panel); renderDiagrams(panel); refitDiagrams(); markChartScroll(); });
     }
     tabs.forEach(function (t) {
       t.addEventListener("click", function () {
@@ -262,7 +353,13 @@
     setupChartTips();
     setupChartScroll();
     setupTabs();
+    fitFlows(document);
     renderDiagrams(document);
+    var t = 0;
+    window.addEventListener("resize", function () {
+      clearTimeout(t);
+      t = setTimeout(function () { fitFlows(document); refitDiagrams(); }, 150);
+    });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
   window.addEventListener("load", function () { renderDiagrams(document); });
