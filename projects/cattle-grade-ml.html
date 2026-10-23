@@ -4,15 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>축우·고객 등급 예측 ML 모델 개발 및 현업 적용 — 황병준 포트폴리오</title>
-<meta name="description" content="축우 관련 사업부는 매월 사육 중인 개체의 육질·육량 데이터를 보고 다음 달 등급을 수기로 예측해 보고했고, 정확도는 60~70%로 참고용에 그쳤습니다. 석사 과정에서 연구한 Random Forest·XGBoost·LightGBM Stacking Ensemble 모델을 이 보고 업무에 붙이자는 AI 서비스 도입 품의를 직접 작성해 확정까지 이끌었고, 등급 예측 서비스를 대시보드 형태로 제공했습니다. 현업 적용 직후 정확도가 85% 내외로 떨어진 원인은 하이퍼파라미터·모델 조정 문제였고, 2개월간 하이퍼파라미터 튜닝, 예측과 실제 판정을 비교해 모델을 계속 개선하는 강화학습, 데이터 추가 확보로 89~91%까지 올렸습니다. SHAP 변수 중요도 분석 결과는 사양 관리 지표로 현업에 넘겼고, 여신·미수금과 실제 거래처 매출·주문 데이터로 D등급 발생이 예상되는 거래처를 미리 찾는 고객 등급 예측 서비스는 현업과 계산식을 함께 정하고, 현업 마케터·본부와 미수금·계약 관리 업무에 적용했습니다.">
+<meta name="description" content="축우 관련 사업부는 매월 사육 중인 개체의 육질·육량 데이터를 보고 다음 달 등급을 수기로 예측해 보고했고, 정확도는 60~70%로 참고용에 그쳤습니다. 석사 과정에서 연구한 Random Forest, XGBoost, LightGBM 을 묶은 Stacking Ensemble 모델을 이 보고 업무에 붙이자는 AI 서비스 도입 품의를 직접 작성해 확정까지 이끌었고, 등급 예측 서비스를 대시보드 형태로 제공했습니다. 현업 적용 직후 정확도가 85% 내외로 떨어진 원인은 하이퍼파라미터·모델 조정 문제였고, 2개월간 하이퍼파라미터 튜닝, 예측과 실제 판정을 비교해 모델을 계속 개선하는 강화학습, 데이터 추가 확보로 89~91%까지 올렸습니다. SHAP 변수 중요도 분석 결과는 사양 관리 지표로 현업에 넘겼고, 여신·미수금과 실제 거래처 매출·주문 데이터로 D등급 발생이 예상되는 거래처를 미리 찾는 고객 등급 예측 서비스는 현업과 계산식을 함께 정하고, 마케터·본부와 미수금·계약 관리 업무에 적용했습니다.">
 <meta name="theme-color" content="#15161a">
 <meta property="og:title" content="축우·고객 등급 예측 ML 모델 개발 및 현업 적용 — 황병준 포트폴리오">
-<meta property="og:description" content="축우 관련 사업부는 매월 사육 중인 개체의 육질·육량 데이터를 보고 다음 달 등급을 수기로 예측해 보고했고, 정확도는 60~70%로 참고용에 그쳤습니다. 석사 과정에서 연구한 Random Forest·XGBoost·LightGBM Stacking Ensemble 모델을 이 보고 업무에 붙이자는 AI 서비스 도입 품의를 직접 작성해 확정까지 이끌었고, 등급 예측 서비스를 대시보드 형태로 제공했습니다. 현업 적용 직후 정확도가 85% 내외로 떨어진 원인은 하이퍼파라미터·모델 조정 문제였고, 2개월간 하이퍼파라미터 튜닝, 예측과 실제 판정을 비교해 모델을 계속 개선하는 강화학습, 데이터 추가 확보로 89~91%까지 올렸습니다. SHAP 변수 중요도 분석 결과는 사양 관리 지표로 현업에 넘겼고, 여신·미수금과 실제 거래처 매출·주문 데이터로 D등급 발생이 예상되는 거래처를 미리 찾는 고객 등급 예측 서비스는 현업과 계산식을 함께 정하고, 현업 마케터·본부와 미수금·계약 관리 업무에 적용했습니다.">
+<meta property="og:description" content="축우 관련 사업부는 매월 사육 중인 개체의 육질·육량 데이터를 보고 다음 달 등급을 수기로 예측해 보고했고, 정확도는 60~70%로 참고용에 그쳤습니다. 석사 과정에서 연구한 Random Forest, XGBoost, LightGBM 을 묶은 Stacking Ensemble 모델을 이 보고 업무에 붙이자는 AI 서비스 도입 품의를 직접 작성해 확정까지 이끌었고, 등급 예측 서비스를 대시보드 형태로 제공했습니다. 현업 적용 직후 정확도가 85% 내외로 떨어진 원인은 하이퍼파라미터·모델 조정 문제였고, 2개월간 하이퍼파라미터 튜닝, 예측과 실제 판정을 비교해 모델을 계속 개선하는 강화학습, 데이터 추가 확보로 89~91%까지 올렸습니다. SHAP 변수 중요도 분석 결과는 사양 관리 지표로 현업에 넘겼고, 여신·미수금과 실제 거래처 매출·주문 데이터로 D등급 발생이 예상되는 거래처를 미리 찾는 고객 등급 예측 서비스는 현업과 계산식을 함께 정하고, 마케터·본부와 미수금·계약 관리 업무에 적용했습니다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="../assets/css/site.css?v=75c9176d">
+<link rel="stylesheet" href="../assets/css/site.css?v=a2fdc10a">
 </head>
 <body>
 <a class="skip" href="#main">본문 바로가기</a>
@@ -26,23 +26,23 @@
 </div>
 <div class="card hero-card"><div class="card__media"><div class="cover cover--ai"><p class="cover__title">축우 등급 예측 ML</p><p class="cover__sub">경험에 기대던 월간 등급 예측(정확도 60~70%)을 Stacking Ensemble 모델로 바꿔 89~91%까지 올리고, SHAP 변수 분석을 사양 관리 지표로 넘긴 프로젝트</p></div></div></div>
 <div class="panel" id="panel-detail" role="tabpanel" aria-labelledby="tab-detail"><div class="overview">
-<div class="overview__side"><div class="stat"><p class="stat__value">89~91%</p><p class="stat__label">축우 등급 예측 정확도(최종)</p><p class="stat__note">현업 수기 예측 60~70% 대비</p></div><div class="stat"><p class="stat__value">9~11%</p><p class="stat__label">예측 오차율(정확도 환산)</p><p class="stat__note">수기 예측 30~40%에서, 정확도에서 환산한 값</p></div><div class="stat"><p class="stat__value">100만 건</p><p class="stat__label">모델 개발에 쓴 축우 개체 데이터</p></div><div class="stat"><p class="stat__value">2개월</p><p class="stat__label">현업 적용 후 재튜닝 기간</p><p class="stat__note">85% 내외 → 89~91%</p></div>
+<div class="overview__side"><div class="stat"><p class="stat__value">89~91%</p><p class="stat__label">축우 등급 예측 정확도(최종)</p><p class="stat__note">현업 수기 예측 60~70% 대비</p></div><div class="stat"><p class="stat__value">9~11%</p><p class="stat__label">예측 오차율(정확도 환산)</p><p class="stat__note">수기 예측 30~40% 대비 · 정확도에서 환산한 값</p></div><div class="stat"><p class="stat__value">100만 건</p><p class="stat__label">모델 개발에 쓴 축우 개체 데이터</p></div><div class="stat"><p class="stat__value">2개월</p><p class="stat__label">현업 적용 후 재튜닝 기간</p><p class="stat__note">85% 내외 → 89~91%</p></div>
 <dl class="facts"><div><dt>회사</dt><dd>선진 · 기술연구소 디지털혁신센터 · 대리</dd></div><div><dt>기간</dt><dd>2023.03 ~ 2023.12</dd></div><div><dt>역할</dt><dd>AI 도입 품의 작성, 모델 설계·개발 주도, 학습 파이프라인 운영</dd></div><div><dt>팀</dt><dd>AI·빅데이터 영역 2인(본인·DBA 1인) + 현업 마케터·해당 본부 인력 협업</dd></div><div><dt>상태</dt><dd>현업 적용 완료</dd></div></dl></div>
-<div class="overview__body"><h2>프로젝트 개요<br><span class="dim">무엇을, 왜 만들었나</span></h2><p class="overview__lead">축우 관련 사업부는 매월 사육 중인 개체의 육질·육량 데이터를 보고 다음 달 등급을 수기로 예측해 보고했고, 정확도는 60~70%로 참고용에 그쳤습니다. 석사 과정에서 연구한 Random Forest·XGBoost·LightGBM Stacking Ensemble 모델을 이 보고 업무에 붙이자는 AI 서비스 도입 품의를 직접 작성해 확정까지 이끌었고, 등급 예측 서비스를 대시보드 형태로 제공했습니다. 현업 적용 직후 정확도가 85% 내외로 떨어진 원인은 하이퍼파라미터·모델 조정 문제였고, 2개월간 하이퍼파라미터 튜닝, 예측과 실제 판정을 비교해 모델을 계속 개선하는 강화학습, 데이터 추가 확보로 89~91%까지 올렸습니다. SHAP 변수 중요도 분석 결과는 사양 관리 지표로 현업에 넘겼고, 여신·미수금과 실제 거래처 매출·주문 데이터로 D등급 발생이 예상되는 거래처를 미리 찾는 고객 등급 예측 서비스는 현업과 계산식을 함께 정하고, 현업 마케터·본부와 미수금·계약 관리 업무에 적용했습니다.</p><p class="overview__more">AI 도입 품의 작성, 모델 설계·개발 주도, 학습 파이프라인 운영 · AI·빅데이터 영역 2인(본인·DBA 1인) + 현업 마케터·해당 본부 인력 협업</p>
+<div class="overview__body"><h2>프로젝트 개요<br><span class="dim">무엇을, 왜 만들었나</span></h2><p class="overview__lead">축우 관련 사업부는 매월 사육 중인 개체의 육질·육량 데이터를 보고 다음 달 등급을 수기로 예측해 보고했고, 정확도는 60~70%로 참고용에 그쳤습니다. 석사 과정에서 연구한 Random Forest, XGBoost, LightGBM 을 묶은 Stacking Ensemble 모델을 이 보고 업무에 붙이자는 AI 서비스 도입 품의를 직접 작성해 확정까지 이끌었고, 등급 예측 서비스를 대시보드 형태로 제공했습니다. 현업 적용 직후 정확도가 85% 내외로 떨어진 원인은 하이퍼파라미터·모델 조정 문제였고, 2개월간 하이퍼파라미터 튜닝, 예측과 실제 판정을 비교해 모델을 계속 개선하는 강화학습, 데이터 추가 확보로 89~91%까지 올렸습니다. SHAP 변수 중요도 분석 결과는 사양 관리 지표로 현업에 넘겼고, 여신·미수금과 실제 거래처 매출·주문 데이터로 D등급 발생이 예상되는 거래처를 미리 찾는 고객 등급 예측 서비스는 현업과 계산식을 함께 정하고, 마케터·본부와 미수금·계약 관리 업무에 적용했습니다.</p>
 <div><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 사례 4개 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div></div>
 </div><section class="sec sec--glow">
-<div class="sec__head"><h2 class="sec__title">개요</h2><div class="sec__lead"><p>축우 관련 사업부는 매월 농장·목장에서 사육 중인 개체의 육질·육량 데이터를 보고 다음 달 육질·육량 등급을 예측해 보고했습니다. 수기 예측 정확도는 60~70%로, 보고서는 참고용에 머물렀습니다. 석사 과정에서 연구한 축우 등급 예측 모델을 이 보고 업무에 붙이자는 AI 서비스 도입 품의를 직접 작성해 확정까지 이끌었고, 축우 개체의 성장 데이터와 도축 당시 육질·육량 지표로 도축 시 판정 등급을 예측하는 서비스를 대시보드 형태로 제공했습니다. 같은 기간 D등급 발생이 예상되는 거래처를 미리 골라내는 고객 등급 예측 서비스도 현업과 함께 적용했습니다.</p></div></div>
-<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>기간: 2023.03 ~ 2023.12 (선진 기술연구소 디지털혁신센터 재직, 석사 과정 병행)</li><li>목표: 경험에 기대던 월간 등급 예측 보고를 데이터 기반 예측으로 전환</li><li>내 역할: 도입 품의 작성·확정, 모델 설계·개발 주도, 학습 파이프라인 운영, SHAP 분석 결과의 현업 지표화</li><li>팀: AI·빅데이터 영역 2인(본인·DBA 1인). 비즈니스 모델 적용은 현업 마케터·해당 본부 인력과 협업</li><li>범위: 축우 등급 예측 대시보드, 고객 D등급 예측 서비스</li><li>발판: 같은 시기 구축하던 SFA/CRM 프로젝트를 발판으로 AI 기능(축우 대시보드·D등급 예측)을 실제 업무에 반영</li><li>근거 연구: 석사 학위 논문 「앙상블 모델을 활용한 축우 등급 판정 결과 예측 및 상관 관계 분석」</li></ul></div></div>
+<div class="sec__head"><h2 class="sec__title">개요<span class="dim">목표·역할·범위</span></h2><div class="sec__lead"><p>모델은 축우 개체의 성장 데이터와 도축 당시 육질·육량 지표로 도축 시 판정 등급을 예측합니다. 예측 결과는 사업부가 매월 올리던 다음 달 등급 예측 보고에 쓰였습니다.</p></div></div>
+<div class="sec__body"><div style="margin-top:0px"><ul class="sec__bullets"><li>학업: 재직 중 석사 과정 병행</li><li>목표: 경험에 기대던 월간 등급 예측 보고를 데이터 기반 예측으로 전환</li><li>내 역할: 도입 품의 작성·확정, 모델 설계·개발 주도, 학습 파이프라인 운영, SHAP 분석 결과의 현업 지표화</li><li>협업: 비즈니스 모델 적용은 현업 마케터·해당 본부 인력과 함께 진행</li><li>범위: 축우 등급 예측 대시보드, 고객 D등급 예측 서비스</li><li>발판: 같은 시기 구축하던 SFA/CRM 프로젝트를 발판으로 AI 기능(축우 대시보드·D등급 예측)을 실제 업무에 반영</li><li>근거 연구: 석사 학위 논문 「앙상블 모델을 활용한 축우 등급 판정 결과 예측 및 상관 관계 분석」</li></ul></div></div>
 
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">진행 경과</h2><div class="sec__lead"><p>석사 연구에서 출발한 모델이 품의·현업 적용·재튜닝을 거쳐 월간 보고에 자리 잡기까지의 순서입니다.</p></div></div>
-<div class="sec__body"><ol class="tl"><li><div class="tl__when">2021.09</div><div class="tl__what"><b>석사 과정 시작</b><span>공학대학원 컴퓨터공학, 직장과 병행</span></div></li><li><div class="tl__when"></div><div class="tl__what"><b>논문 연구: 축우 등급 예측 모델</b><span>사내 목장·농장 데이터와 공공 축산물 이력 데이터를 함께 쓴 100만 건 축우 개체 데이터로 Stacking Ensemble 모델 검증, 정확도 93%</span></div></li><li><div class="tl__when">2023.03</div><div class="tl__what"><b>현업 적용 시작</b><span>AI 서비스 도입 품의 작성·확정, 대시보드 형태로 사업부에 제공</span></div></li><li><div class="tl__when"></div><div class="tl__what"><b>적용 직후 정확도 85% 내외</b><span>논문 단계보다 낮아진 정확도 확인. 원인은 하이퍼파라미터·모델 조정 문제</span></div></li><li><div class="tl__when"></div><div class="tl__what"><b>2개월 튜닝·강화학습·데이터 추가 확보</b><span>예측과 실제 판정을 비교해 모델을 계속 개선. 최종 정확도 89~91%, 월간 등급 예측 보고에 사용</span></div></li><li><div class="tl__when">2023.12</div><div class="tl__what"><b>프로젝트 기간 종료</b><span>축우 등급 예측 대시보드·고객 D등급 예측 서비스 현업 적용</span></div></li><li><div class="tl__when">2024.02</div><div class="tl__what"><b>논문 완성 · 그룹 표준 모델 채택</b><span>석사 학위 논문 완성. SFA/CRM 이 그룹 계열사 공통 ERP 표준 모델로 채택될 때 이 AI 프로젝트 성과도 긍정 요인으로 함께 인정</span></div></li></ol></div>
+<div class="sec__body"><ol class="tl"><li><div class="tl__when">2021.09</div><div class="tl__what"><b>석사 과정 시작</b><span>공학대학원 컴퓨터공학, 직장과 병행</span></div></li><li><div class="tl__when"></div><div class="tl__what"><b>논문 연구: 축우 등급 예측 모델</b><span>사내 목장·농장 데이터와 공공 축산물 이력 데이터를 함께 쓴 100만 건 축우 개체 데이터로 Stacking Ensemble 모델 검증, 정확도 93%</span></div></li><li><div class="tl__when">2023.03</div><div class="tl__what"><b>현업 적용 시작</b><span>AI 서비스 도입 품의 작성·확정, 대시보드 형태로 사업부에 제공</span></div></li><li><div class="tl__when"></div><div class="tl__what"><b>적용 직후 정확도 85% 내외</b><span>논문 단계보다 낮아진 정확도 확인. 원인은 하이퍼파라미터·모델 조정 문제</span></div></li><li><div class="tl__when"></div><div class="tl__what"><b>2개월 튜닝·강화학습·데이터 추가 확보</b><span>예측과 실제 판정을 비교해 모델을 계속 개선. 최종 정확도 89~91%, 월간 등급 예측 보고에 사용</span></div></li><li><div class="tl__when">2023.12</div><div class="tl__what"><b>프로젝트 기간 종료</b><span>축우 등급 예측 대시보드·고객 D등급 예측 서비스 현업 적용</span></div></li><li><div class="tl__when">2024.02</div><div class="tl__what"><b>논문 완성 · SFA/CRM 그룹 표준 채택</b><span>석사 학위 논문 완성. SFA/CRM 이 그룹 계열사 공통 ERP 표준 모델로 채택될 때 이 AI 프로젝트 성과도 긍정 요인으로 함께 인정</span></div></li></ol></div>
 
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">전체 구성</h2><div class="sec__lead"><p>사내 목장·농장 데이터와 공공 축산물 이력 데이터를 정기 수집해 분석용 저장소에 쌓고, Spark 로 전처리·피처 생성을 분산 처리한 뒤 Stacking Ensemble 로 축우 등급을 예측합니다. 현업 적용 단계의 학습·튜닝·강화학습 루프는 Databricks 작업 공간(노트북·작업 스케줄)에서 관리했고, 예측과 실제 판정을 비교한 결과가 다시 이 루프로 들어갑니다. 고객 등급 예측은 거래처 여신·미수금과 실제 매출·주문 데이터를 쓰는 별도 모델로 두고, 예측 결과는 대시보드와 거래처 목록으로, SHAP 변수 중요도 분석은 사양 관리 지표로 현업에 나갑니다.</p></div></div>
-<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
   subgraph SRC[&quot;데이터 원천&quot;]
     A1[&quot;사내 목장·농장 데이터&lt;br/&gt;사육 개체·도축·등급 판정&quot;]
     A2[&quot;공공 축산물 이력 데이터&lt;br/&gt;소도체 이력·도축·등급 판정&quot;]
@@ -57,11 +57,11 @@
     C1[&quot;Databricks 작업 공간&lt;br/&gt;노트북·작업 스케줄&quot;]
     C2[&quot;RF·XGBoost·LightGBM&lt;br/&gt;Stacking Ensemble&quot;]
     C3[&quot;SHAP&lt;br/&gt;변수 중요도&quot;]
-    C4[&quot;고객 등급 예측 모델&quot;]
+    C4[&quot;고객 등급&lt;br/&gt;예측 모델&quot;]
   end
   subgraph SERVE[&quot;현업 제공&quot;]
     D1[&quot;예측 결과 제공&lt;br/&gt;Flask·Tableau&quot;]
-    D2[&quot;축우 등급 예측 대시보드&quot;]
+    D2[&quot;축우 등급&lt;br/&gt;예측 대시보드&quot;]
     D3[&quot;사양 관리 지표&quot;]
     D4[&quot;D등급 예상 거래처&lt;br/&gt;미수금·계약 관리&quot;]
   end
@@ -70,15 +70,14 @@
   B1 --&gt; B2
   B2 --&gt; B3
   B3 --&gt; C2
-  C1 --&gt;|&quot;학습·튜닝·강화학습 루프&quot;| C2
+  C1 --&gt;|&quot;학습·튜닝·강화학습 루프&lt;br/&gt;예측 대비 실제 판정 비교&quot;| C2
   C2 --&gt; C3
   C2 --&gt; D1
   A3 --&gt; C4
   C4 --&gt; D1
   D1 --&gt; D2
   D1 --&gt; D4
-  C3 --&gt; D3
-  D2 -.-&gt;|&quot;예측 대비 실제 판정 비교&quot;| C1">flowchart LR
+  C3 --&gt; D3">flowchart TB
   subgraph SRC[&quot;데이터 원천&quot;]
     A1[&quot;사내 목장·농장 데이터&lt;br/&gt;사육 개체·도축·등급 판정&quot;]
     A2[&quot;공공 축산물 이력 데이터&lt;br/&gt;소도체 이력·도축·등급 판정&quot;]
@@ -93,11 +92,11 @@
     C1[&quot;Databricks 작업 공간&lt;br/&gt;노트북·작업 스케줄&quot;]
     C2[&quot;RF·XGBoost·LightGBM&lt;br/&gt;Stacking Ensemble&quot;]
     C3[&quot;SHAP&lt;br/&gt;변수 중요도&quot;]
-    C4[&quot;고객 등급 예측 모델&quot;]
+    C4[&quot;고객 등급&lt;br/&gt;예측 모델&quot;]
   end
   subgraph SERVE[&quot;현업 제공&quot;]
     D1[&quot;예측 결과 제공&lt;br/&gt;Flask·Tableau&quot;]
-    D2[&quot;축우 등급 예측 대시보드&quot;]
+    D2[&quot;축우 등급&lt;br/&gt;예측 대시보드&quot;]
     D3[&quot;사양 관리 지표&quot;]
     D4[&quot;D등급 예상 거래처&lt;br/&gt;미수금·계약 관리&quot;]
   end
@@ -106,15 +105,14 @@
   B1 --&gt; B2
   B2 --&gt; B3
   B3 --&gt; C2
-  C1 --&gt;|&quot;학습·튜닝·강화학습 루프&quot;| C2
+  C1 --&gt;|&quot;학습·튜닝·강화학습 루프&lt;br/&gt;예측 대비 실제 판정 비교&quot;| C2
   C2 --&gt; C3
   C2 --&gt; D1
   A3 --&gt; C4
   C4 --&gt; D1
   D1 --&gt; D2
   D1 --&gt; D4
-  C3 --&gt; D3
-  D2 -.-&gt;|&quot;예측 대비 실제 판정 비교&quot;| C1</pre></div><figcaption>직접 그린 개념도. 구성 요소는 실제 사용 기술 기준. 고객 등급 예측 모델의 수집 경로와 Flask·Tableau 의 세부 역할 분담은 확인되지 않아 단순화해 표기</figcaption></figure></div>
+  C3 --&gt; D3</pre></div><figcaption>직접 그린 개념도. 구성 요소는 실제 사용 기술 기준이며, 고객 등급 예측 모델의 수집 경로와 Flask·Tableau 역할은 단순화해 표기</figcaption></figure></div>
 
 </section>
 <section class="sec sec--glow sec--flip">
@@ -180,27 +178,27 @@
   participant M as 등급 예측 모델
   participant D as 예측 대시보드
   participant B as 축우 관련 사업부
-  F-&gt;&gt;P: 사육 개체 성장·육질·육량 데이터(월간)
+  F-&gt;&gt;P: 사육 개체 성장·육질·육량&lt;br/&gt;데이터(월간)
   P-&gt;&gt;M: 전처리·피처 생성 후 예측 요청
   M--&gt;&gt;D: 익월 육질·육량 등급 예측
   D--&gt;&gt;B: 월간 등급 예측 보고 자료
   M--&gt;&gt;B: 변수 중요도(SHAP) 기반 사양 관리 지표(모델 전체 기준)
   F-&gt;&gt;P: 실제 도축 판정 등급
   P-&gt;&gt;M: 예측 대비 실제 비교 데이터
-  Note over M: 예측 대비 실제 판정으로 튜닝·강화학습·데이터 보강(Databricks 에서 관리)">sequenceDiagram
+  Note over M: 튜닝·강화학습·데이터 보강(Databricks)">sequenceDiagram
   participant F as 농장·목장·공공 이력 데이터
   participant P as 수집 파이프라인
   participant M as 등급 예측 모델
   participant D as 예측 대시보드
   participant B as 축우 관련 사업부
-  F-&gt;&gt;P: 사육 개체 성장·육질·육량 데이터(월간)
+  F-&gt;&gt;P: 사육 개체 성장·육질·육량&lt;br/&gt;데이터(월간)
   P-&gt;&gt;M: 전처리·피처 생성 후 예측 요청
   M--&gt;&gt;D: 익월 육질·육량 등급 예측
   D--&gt;&gt;B: 월간 등급 예측 보고 자료
   M--&gt;&gt;B: 변수 중요도(SHAP) 기반 사양 관리 지표(모델 전체 기준)
   F-&gt;&gt;P: 실제 도축 판정 등급
   P-&gt;&gt;M: 예측 대비 실제 비교 데이터
-  Note over M: 예측 대비 실제 판정으로 튜닝·강화학습·데이터 보강(Databricks 에서 관리)</pre></div><figcaption>직접 그린 개념도. 월간 보고 주기와 강화학습 루프는 실제 기준이며, 지표가 농장 사양 관리에 반영되는 단계는 그리지 않음</figcaption></figure></div>
+  Note over M: 튜닝·강화학습·데이터 보강(Databricks)</pre></div><figcaption>직접 그린 개념도. 월간 보고 주기와 강화학습 루프는 실제 기준이며, 지표가 농장 사양 관리에 반영되는 단계는 그리지 않음</figcaption></figure></div>
 
 </section>
 <section class="sec">
@@ -213,7 +211,7 @@
   CATTLE ||--o{ GRADE_PREDICTION : &quot;예측 대상&quot;
   MODEL_VERSION ||--o{ GRADE_PREDICTION : &quot;생성&quot;
   MODEL_VERSION ||--o{ VARIABLE_IMPORTANCE : &quot;변수 중요도&quot;
-  PARTNER ||--o{ PARTNER_GRADE_PREDICTION : &quot;예측 대상&quot;
+  PARTNER ||--o{ PARTNER_GRADE_PREDICTION : &quot;대상&quot;
   MODEL_VERSION ||--o{ PARTNER_GRADE_PREDICTION : &quot;생성&quot;
   FARM {
     string farm_id PK
@@ -280,7 +278,7 @@
   CATTLE ||--o{ GRADE_PREDICTION : &quot;예측 대상&quot;
   MODEL_VERSION ||--o{ GRADE_PREDICTION : &quot;생성&quot;
   MODEL_VERSION ||--o{ VARIABLE_IMPORTANCE : &quot;변수 중요도&quot;
-  PARTNER ||--o{ PARTNER_GRADE_PREDICTION : &quot;예측 대상&quot;
+  PARTNER ||--o{ PARTNER_GRADE_PREDICTION : &quot;대상&quot;
   MODEL_VERSION ||--o{ PARTNER_GRADE_PREDICTION : &quot;생성&quot;
   FARM {
     string farm_id PK
@@ -343,7 +341,7 @@
 
 </section>
 <section class="sec sec--glow">
-<div class="sec__head"><h2 class="sec__title">모델 운영 단계</h2><div class="sec__lead"><p>논문 검증에서 현업 운영까지 모델이 거친 단계입니다. 사업부에 제공하자 정확도가 한 번 내려갔고(원인은 하이퍼파라미터·모델 조정 문제), 2개월 튜닝·강화학습을 거쳐 월간 예측 운영에 들어갔습니다.</p></div></div>
+<div class="sec__head"><h2 class="sec__title">모델 운영 단계</h2><div class="sec__lead"><p>논문 검증에서 현업 운영까지 모델이 거친 단계입니다. 사업부에 제공하자 정확도가 한 번 내려갔고, 2개월 튜닝·강화학습을 거쳐 월간 예측 운영에 들어갔습니다.</p></div></div>
 <div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="stateDiagram-v2
   state &quot;석사 연구 · 논문 검증&quot; as Thesis
   state &quot;AI 도입 품의 확정&quot; as Proposal
@@ -353,7 +351,7 @@
   [*] --&gt; Thesis
   Thesis --&gt; Proposal : 논문 모델 정확도 93% 기반 제안
   Proposal --&gt; Applied : 사업부에 대시보드로 제공
-  Applied --&gt; Tuning : 정확도 85% 내외로 하락(하이퍼파라미터·모델 조정 문제)
+  Applied --&gt; Tuning : 정확도 85% 내외로 하락
   Tuning --&gt; Operating : 2개월 뒤 정확도 89~91%
   Operating --&gt; Operating : 매월 익월 등급 예측 보고">stateDiagram-v2
   state &quot;석사 연구 · 논문 검증&quot; as Thesis
@@ -364,40 +362,40 @@
   [*] --&gt; Thesis
   Thesis --&gt; Proposal : 논문 모델 정확도 93% 기반 제안
   Proposal --&gt; Applied : 사업부에 대시보드로 제공
-  Applied --&gt; Tuning : 정확도 85% 내외로 하락(하이퍼파라미터·모델 조정 문제)
+  Applied --&gt; Tuning : 정확도 85% 내외로 하락
   Tuning --&gt; Operating : 2개월 뒤 정확도 89~91%
   Operating --&gt; Operating : 매월 익월 등급 예측 보고</pre></div><figcaption>단계와 수치는 실제 진행 기준</figcaption></figure></div>
 
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">설계 결정<span class="dim">왜 이렇게 골랐나</span></h2></div>
-<div class="sec__body"><div class="tiles"><div class="tile"><h3>단일 모델 대신 Stacking Ensemble</h3><p>같은 데이터로 Random Forest·XGBoost·LightGBM 을 각각 학습해 알고리즘별 최고 모델을 고른 뒤 결합. 한 알고리즘의 약점에 기대지 않고, 개별 모델과 최종 모델의 정확도를 나란히 비교할 수 있게 한 선택.</p></div><div class="tile"><h3>트리 계열 알고리즘 3종</h3><p>개체 이력·도축·등급 평가처럼 수치와 범주가 섞인 표 형태 데이터. 변수 중요도를 바로 뽑을 수 있어 뒤의 설명 단계(SHAP)와 잘 맞는 계열로 한정.</p></div><div class="tile"><h3>SHAP 변수 분석을 사양 관리 지표로 전달</h3><p>논문 단계의 변수 분석과 신규 지표 추천을 처음부터 현업 적용 계획에 포함. Feature·Permutation Importance 로 전체 중요도를 보고 SHAP 으로 변수 간 관계를 분석해, 활용성 높은 변수를 사양 관리 지표로 제공.</p></div><div class="tile"><h3>새 업무 대신 기존 월간 보고에 얹기</h3><p>사업부가 이미 매월 하던 '다음 달 등급 예측 보고'는 그대로 두고 예측 방식만 교체. 수기 예측과 같은 잣대(정확도)로 바로 비교 가능.</p></div><div class="tile"><h3>성과는 정확도로 재고, 오차율은 환산으로 표기</h3><p>현업 보고가 정확도로 비교되므로 정확도로 측정. 예측 오차율 30~40%→9~11% 는 정확도에서 환산한 값이며 따로 잰 값이 아님을 함께 표기.</p></div></div></div>
+<div class="sec__body"><div class="tiles"><div class="tile"><h3>단일 모델 대신 Stacking Ensemble</h3><p>같은 데이터로 Random Forest, XGBoost, LightGBM 을 각각 학습해 알고리즘별 최고 모델을 고른 뒤 결합. 한 알고리즘의 약점에 기대지 않고, 개별 모델과 최종 모델의 정확도를 나란히 비교할 수 있게 한 선택.</p></div><div class="tile"><h3>트리 계열 알고리즘 3종</h3><p>개체 이력·도축·등급 평가처럼 수치와 범주가 섞인 표 형태 데이터. 변수 중요도를 바로 뽑을 수 있어 뒤의 설명 단계(SHAP)와 잘 맞는 계열로 한정.</p></div><div class="tile"><h3>SHAP 변수 분석을 사양 관리 지표로 전달</h3><p>논문 단계의 변수 분석과 신규 지표 추천을 처음부터 현업 적용 계획에 포함. Feature·Permutation Importance 로 전체 중요도를 보고 SHAP 으로 변수 간 관계를 분석해, 활용성 높은 변수를 사양 관리 지표로 제공.</p></div><div class="tile"><h3>새 업무 대신 기존 월간 보고에 얹기</h3><p>사업부가 이미 매월 하던 '다음 달 등급 예측 보고'는 그대로 두고 예측 방식만 교체. 수기 예측과 같은 잣대(정확도)로 바로 비교 가능. 예측 오차율 30~40%→9~11% 는 이 정확도에서 환산한 값이며 따로 잰 값이 아님.</p></div></div></div>
 
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">주요 기능</h2></div>
-<div class="sec__body"><div class="tiles"><div class="tile"><h3>축우 등급 예측 대시보드</h3><p>사육 중인 개체의 성장 데이터와 도축 당시 육질·육량 지표로 도축 시 판정 등급을 예측. 사업부의 월간 등급 예측 보고에 쓰는 화면.</p></div><div class="tile"><h3>사양 관리 지표</h3><p>SHAP 변수 중요도 분석 결과를 사양 관리 지표로 정리해 현업에 제공. 어떤 변수가 등급에 크게 작용했는지를 모델 전체 기준으로 정리.</p></div><div class="tile"><h3>고객 D등급 예측</h3><p>거래처 여신·미수금과 실제 거래처 매출·주문 데이터를 바탕으로 D등급 발생이 예상되는 거래처를 미리 골라 냄. 계산식은 현업과 함께 정했고, 현업 마케터·본부와 미수금·계약 관리 업무 모델로 적용. 정확도 수치는 따로 제시하지 않음.</p></div><div class="tile"><h3>재튜닝·강화학습</h3><p>예측과 실제 판정 결과를 비교해 모델을 계속 개선하는 강화학습 루프. 현업 적용 직후 2개월간 하이퍼파라미터·모델 조정, 강화학습, 데이터 추가 확보로 정확도 89~91% 확보.</p></div></div></div>
+<div class="sec__body"><div class="tiles"><div class="tile"><h3>축우 등급 예측 대시보드</h3><p>사육 중인 개체의 성장 데이터와 도축 당시 육질·육량 지표로 도축 시 판정 등급을 예측. 사업부의 월간 등급 예측 보고에 쓰는 화면.</p></div><div class="tile"><h3>사양 관리 지표</h3><p>SHAP 변수 중요도 분석 결과를 사양 관리 지표로 정리해 현업에 제공. 어떤 변수가 등급에 크게 작용했는지를 모델 전체 기준으로 정리.</p></div><div class="tile"><h3>고객 D등급 예측</h3><p>거래처 여신·미수금과 실제 매출·주문 데이터로 D등급 발생이 예상되는 거래처를 미리 골라 냄. 계산식은 현업과 함께 정했고, 마케터·본부와 미수금·계약 관리 업무에 적용. 정확도 수치는 따로 제시하지 않음.</p></div><div class="tile"><h3>재튜닝·강화학습</h3><p>예측과 실제 판정 결과를 비교해 모델을 계속 개선하는 강화학습 루프. 현업 적용 직후 2개월간 하이퍼파라미터·모델 조정, 강화학습, 데이터 추가 확보로 정확도 89~91% 확보.</p></div></div></div>
 
 </section>
 <section class="sec sec--glow sec--flip">
-<div class="sec__head"><h2 class="sec__title">성과</h2><div class="sec__lead"><p>축우 등급 예측 정확도는 현업 수기 60~70%→최종 89~91%. 예측 오차율로 바꾸면 30~40%→9~11%(정확도 환산 값). 논문 단계 93% 에서 현업 적용 직후 85% 내외로 내려간 원인은 하이퍼파라미터·모델 조정 문제였고, 2개월 튜닝·강화학습·데이터 추가 확보로 회복. 고객 D등급 예측은 정확도 수치 없음. 이 AI 프로젝트 성과는 이후 그룹 계열사 공통 ERP 표준 모델 채택 과정에서도 긍정 요인으로 함께 인정됨.</p></div></div>
-<div class="sec__body"><figure class="figure figure--soft"><div class="chart"><svg viewBox="0 0 720 384" role="img" aria-label="가로 막대 차트"><line x1="220" x2="220" y1="4" y2="380" stroke="#3f424d" stroke-width="1"/><text x="206" y="35" text-anchor="end" font-size="13" fill="#9196a5">현업 수기 예측</text><path class="mark" tabindex="0" data-tip="현업 수기 예측: 60%" d="M220,21H458.4Q462.4,21 462.4,25V37Q462.4,41 458.4,41H220Z" fill="#3d6bf4"/><text x="472.4" y="36" font-size="14" font-weight="600" fill="#d7d8de">60%</text><text x="206" y="81" text-anchor="end" font-size="13" fill="#9196a5">현업 수기 예측</text><path class="mark" tabindex="0" data-tip="현업 수기 예측: 70%" d="M220,67H498.8Q502.8,67 502.8,71V83Q502.8,87 498.8,87H220Z" fill="#3d6bf4"/><text x="512.8" y="82" font-size="14" font-weight="600" fill="#d7d8de">70%</text><text x="206" y="127" text-anchor="end" font-size="13" fill="#9196a5">논문 검증</text><path class="mark" tabindex="0" data-tip="논문 검증: 93%" d="M220,113H591.72Q595.72,113 595.72,117V129Q595.72,133 591.72,133H220Z" fill="#3d6bf4"/><text x="605.72" y="128" font-size="14" font-weight="600" fill="#d7d8de">93%</text><text x="206" y="173" text-anchor="end" font-size="13" fill="#9196a5">논문 검증</text><path class="mark" tabindex="0" data-tip="논문 검증: 93%" d="M220,159H591.72Q595.72,159 595.72,163V175Q595.72,179 591.72,179H220Z" fill="#3d6bf4"/><text x="605.72" y="174" font-size="14" font-weight="600" fill="#d7d8de">93%</text><text x="206" y="219" text-anchor="end" font-size="13" fill="#9196a5">현업 적용 직후</text><path class="mark" tabindex="0" data-tip="현업 적용 직후: 85%" d="M220,205H559.4Q563.4,205 563.4,209V221Q563.4,225 559.4,225H220Z" fill="#3d6bf4"/><text x="573.4" y="220" font-size="14" font-weight="600" fill="#d7d8de">85%</text><text x="206" y="265" text-anchor="end" font-size="13" fill="#9196a5">현업 적용 직후</text><path class="mark" tabindex="0" data-tip="현업 적용 직후: 85%" d="M220,251H559.4Q563.4,251 563.4,255V267Q563.4,271 559.4,271H220Z" fill="#3d6bf4"/><text x="573.4" y="266" font-size="14" font-weight="600" fill="#d7d8de">85%</text><text x="206" y="311" text-anchor="end" font-size="13" fill="#9196a5">2개월 튜닝 후 최종</text><path class="mark" tabindex="0" data-tip="2개월 튜닝 후 최종: 89%" d="M220,297H575.56Q579.56,297 579.56,301V313Q579.56,317 575.56,317H220Z" fill="#3d6bf4"/><text x="589.56" y="312" font-size="14" font-weight="600" fill="#d7d8de">89%</text><text x="206" y="357" text-anchor="end" font-size="13" fill="#9196a5">2개월 튜닝 후 최종</text><path class="mark" tabindex="0" data-tip="2개월 튜닝 후 최종: 91%" d="M220,343H583.64Q587.64,343 587.64,347V359Q587.64,363 583.64,363H220Z" fill="#3d6bf4"/><text x="597.64" y="358" font-size="14" font-weight="600" fill="#d7d8de">91%</text></svg><details><summary>표로 보기</summary><div class="table-wrap"><table class="t"><thead><tr><th>항목</th><th>구분</th><th>값</th></tr></thead><tbody><tr><td>현업 수기 예측</td><td>범위 하한</td><td>60%</td></tr><tr><td>현업 수기 예측</td><td>범위 상한</td><td>70%</td></tr><tr><td>논문 검증</td><td>범위 하한</td><td>93%</td></tr><tr><td>논문 검증</td><td>범위 상한</td><td>93%</td></tr><tr><td>현업 적용 직후</td><td>범위 하한</td><td>85%</td></tr><tr><td>현업 적용 직후</td><td>범위 상한</td><td>85%</td></tr><tr><td>2개월 튜닝 후 최종</td><td>범위 하한</td><td>89%</td></tr><tr><td>2개월 튜닝 후 최종</td><td>범위 상한</td><td>91%</td></tr></tbody></table></div></details></div><figcaption style="padding:12px 0 0">단계별 축우 등급 예측 정확도(현업 측정값, 논문 검증값은 데이터가 달라 참고용). 범위 값은 하한·상한 두 막대, 현업 적용 직후 85% 는 '내외'</figcaption></figure></div>
+<div class="sec__head"><h2 class="sec__title">성과</h2><div class="sec__lead"><p>축우 등급 예측 정확도는 현업 수기 60~70%→최종 89~91%. 예측 오차율로 바꾸면 30~40%→9~11%(정확도 환산 값). 논문 단계 93% 에서 현업 적용 직후 85% 내외로 내려갔고, 2개월 튜닝·강화학습·데이터 추가 확보로 회복. 고객 D등급 예측은 정확도 수치 없음. 이 AI 프로젝트 성과는 이후 SFA/CRM 이 그룹 계열사 공통 ERP 표준 모델로 채택되는 과정에서도 긍정 요인으로 함께 인정됨.</p></div></div>
+<div class="sec__body"><figure class="figure figure--soft"><div class="chart"><div class="chart__legend"><span><i style="background:#3d6bf4"></i>범위 하한</span><span><i style="background:#3d6bf4;opacity:0.45"></i>범위 상한</span></div><div class="chart__plot"><svg class="chart__wide" viewBox="0 0 720 320" role="img" aria-label="막대 차트"><line x1="16" x2="704" y1="256" y2="256" stroke="#3f424d" stroke-width="1"/><g class="mark" tabindex="0" data-tip="현업 수기 예측: 60~70%"><path d="M90,256V106Q90,102 94,102H110Q114,102 114,106V256Z" fill="#3d6bf4" fill-opacity="0.45"/><path d="M90,256V124Q90,124 90,124H114Q114,124 114,124V256Z" fill="#3d6bf4"/></g><text x="102" y="92" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">60~70%</text><text x="102" y="278" text-anchor="middle" font-size="13" fill="#9196a5">현업 수기 예측</text><path class="mark" tabindex="0" data-tip="논문 검증: 93%" d="M262,256V55.4Q262,51.4 266,51.4H282Q286,51.4 286,55.4V256Z" fill="#3d6bf4"/><text x="274" y="41.4" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">93%</text><text x="274" y="278" text-anchor="middle" font-size="13" fill="#9196a5">논문 검증</text><path class="mark" tabindex="0" data-tip="현업 적용 직후: 85%" d="M434,256V73Q434,69 438,69H454Q458,69 458,73V256Z" fill="#3d6bf4"/><text x="446" y="59" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">85%</text><text x="446" y="278" text-anchor="middle" font-size="13" fill="#9196a5">현업 적용 직후</text><g class="mark" tabindex="0" data-tip="2개월 튜닝 후 최종: 89~91%"><path d="M606,256V59.8Q606,55.8 610,55.8H626Q630,55.8 630,59.8V256Z" fill="#3d6bf4" fill-opacity="0.45"/><path d="M606,256V60.2Q606,60.2 606,60.2H630Q630,60.2 630,60.2V256Z" fill="#3d6bf4"/></g><text x="618" y="45.8" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">89~91%</text><text x="618" y="278" text-anchor="middle" font-size="13" fill="#9196a5">2개월 튜닝 후 최종</text></svg><svg class="chart__narrow" viewBox="0 0 360 226" role="img" aria-label="막대 차트"><text x="0" y="18" font-size="14" fill="#9196a5">현업 수기 예측</text><g class="mark" tabindex="0" data-tip="현업 수기 예측: 60~70%"><path d="M0,29H202.92Q206.92,29 206.92,33V41Q206.92,45 202.92,45H0Z" fill="#3d6bf4" fill-opacity="0.45"/><path d="M0,29H177.3Q177.3,29 177.3,29V45Q177.3,45 177.3,45H0Z" fill="#3d6bf4"/></g><text x="214.92" y="42" font-size="14" font-weight="600" fill="#d7d8de">60~70%</text><text x="0" y="77" font-size="14" fill="#9196a5">논문 검증</text><path class="mark" tabindex="0" data-tip="논문 검증: 93%" d="M0,88H270.9Q274.9,88 274.9,92V100Q274.9,104 270.9,104H0Z" fill="#3d6bf4"/><text x="282.9" y="101" font-size="14" font-weight="600" fill="#d7d8de">93%</text><text x="0" y="136" font-size="14" fill="#9196a5">현업 적용 직후</text><path class="mark" tabindex="0" data-tip="현업 적용 직후: 85%" d="M0,147H247.2Q251.2,147 251.2,151V159Q251.2,163 247.2,163H0Z" fill="#3d6bf4"/><text x="259.2" y="160" font-size="14" font-weight="600" fill="#d7d8de">85%</text><text x="0" y="195" font-size="14" fill="#9196a5">2개월 튜닝 후 최종</text><g class="mark" tabindex="0" data-tip="2개월 튜닝 후 최종: 89~91%"><path d="M0,206H264.9Q268.9,206 268.9,210V218Q268.9,222 264.9,222H0Z" fill="#3d6bf4" fill-opacity="0.45"/><path d="M0,206H263.0Q263.0,206 263.0,206V222Q263.0,222 263.0,222H0Z" fill="#3d6bf4"/></g><text x="276.9" y="219" font-size="14" font-weight="600" fill="#d7d8de">89~91%</text></svg></div><details><summary>표로 보기</summary><div class="table-wrap"><table class="t"><thead><tr><th>항목</th><th>구분</th><th>값</th></tr></thead><tbody><tr><td>현업 수기 예측</td><td>범위 하한</td><td>60%</td></tr><tr><td>현업 수기 예측</td><td>범위 상한</td><td>70%</td></tr><tr><td>논문 검증</td><td>범위 하한</td><td>93%</td></tr><tr><td>논문 검증</td><td>범위 상한</td><td>93%</td></tr><tr><td>현업 적용 직후</td><td>범위 하한</td><td>85%</td></tr><tr><td>현업 적용 직후</td><td>범위 상한</td><td>85%</td></tr><tr><td>2개월 튜닝 후 최종</td><td>범위 하한</td><td>89%</td></tr><tr><td>2개월 튜닝 후 최종</td><td>범위 상한</td><td>91%</td></tr></tbody></table></div></details></div><figcaption style="padding:12px 0 0">단계별 축우 등급 예측 정확도(현업 측정값, 논문 검증값은 데이터가 달라 참고용). 범위 값은 한 막대에 하한~상한으로 표시, 현업 적용 직후 85% 는 '내외'</figcaption></figure></div>
 
 </section>
 <section class="sec">
-<div class="sec__head"><h2 class="sec__title">기술 스택과 쓴 곳</h2></div>
-<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>영역</th><th>기술</th><th>쓴 곳·고른 이유</th></tr></thead><tbody><tr><td>모델링</td><td>Python · scikit-learn · Random Forest · XGBoost · LightGBM</td><td>표 형태 개체 데이터의 등급 분류, 알고리즘별 최고 모델 선정</td></tr><tr><td>앙상블·튜닝</td><td>Stacking Ensemble · Bayesian Optimization</td><td>개별 모델 결합, 하이퍼파라미터 탐색</td></tr><tr><td>설명</td><td>Feature·Permutation Importance · SHAP</td><td>변수 중요도·변수 간 상관 분석 → 사양 관리 지표</td></tr><tr><td>수집·적재</td><td>Apache Airflow · Amazon Redshift</td><td>사내 목장·농장 데이터와 공공 축산물 이력 데이터의 소도체 이력·도축·등급 평가 항목 정의·수집 파이프라인(논문 단계)</td></tr><tr><td>분산 처리</td><td>Apache Spark</td><td>축우 개체 데이터 100만 건 규모의 전처리·피처 생성을 분산 처리</td></tr><tr><td>학습·운영 관리</td><td>Databricks</td><td>현업 적용 단계의 학습·튜닝·강화학습 루프를 작업 공간(노트북·작업 스케줄)에서 관리</td></tr><tr><td>제공</td><td>Flask · Tableau</td><td>예측 결과를 현업에 제공</td></tr></tbody></table></div></div>
+<div class="sec__head"><h2 class="sec__title">기술별 쓰임새<span class="dim">어디에 · 왜</span></h2></div>
+<div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>영역</th><th>기술</th><th>쓴 곳·고른 이유</th></tr></thead><tbody><tr><td>모델링</td><td>Python · scikit-learn · Random Forest · XGBoost · LightGBM</td><td>표 형태 개체 데이터의 등급 분류, 알고리즘별 최고 모델 선정</td></tr><tr><td>앙상블·튜닝</td><td>Stacking Ensemble · Bayesian Optimization</td><td>개별 모델 결합, 하이퍼파라미터 탐색</td></tr><tr><td>설명</td><td>Feature·Permutation Importance · SHAP</td><td>변수 중요도·변수 간 상관 분석 → 사양 관리 지표</td></tr><tr><td>수집·적재</td><td>Apache Airflow · Amazon Redshift</td><td>사내 목장·농장 데이터와 공공 축산물 이력 데이터의 소도체 이력·도축·등급 평가 항목 정의·수집 파이프라인(논문 단계에 구축, 현업 월간 수집에도 사용)</td></tr><tr><td>분산 처리</td><td>Apache Spark</td><td>축우 개체 데이터 100만 건 규모의 전처리·피처 생성을 분산 처리</td></tr><tr><td>학습·운영 관리</td><td>Databricks</td><td>현업 적용 단계의 학습·튜닝·강화학습 루프를 작업 공간(노트북·작업 스케줄)에서 관리</td></tr><tr><td>제공</td><td>Flask · Tableau</td><td>예측 결과를 현업에 제공</td></tr></tbody></table></div></div>
 
-</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>모델링</h3><div class="card__tags"><span class="tag">Python</span><span class="tag">scikit-learn</span><span class="tag">Random Forest</span><span class="tag">XGBoost</span><span class="tag">LightGBM</span><span class="tag">Stacking Ensemble</span><span class="tag">Bayesian Optimization</span></div></div><div class="stack__group"><h3>설명·분석</h3><div class="card__tags"><span class="tag">SHAP</span><span class="tag">Feature Importance</span><span class="tag">Permutation Importance</span></div></div><div class="stack__group"><h3>데이터 파이프라인</h3><div class="card__tags"><span class="tag">Apache Airflow</span><span class="tag">Amazon Redshift</span><span class="tag">Apache Spark</span></div></div><div class="stack__group"><h3>학습·운영 관리</h3><div class="card__tags"><span class="tag">Databricks</span></div></div><div class="stack__group"><h3>제공</h3><div class="card__tags"><span class="tag">Flask</span><span class="tag">Tableau</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">참고용에 그치던 수기 등급 예측을 데이터 기반 보고로 · 논문 93% 가 현업에서 85% 로 — 2개월 재튜닝으로 89~91% 회복 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
-<div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 4개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 참고용에 그치던 수기 등급 예측을 데이터 기반 보고로</span></a><a class="ctl" href="#case-2"><span>02 논문 93% 가 현업에서 85% 로 — 2개월 재튜닝으로 89~91% 회복</span></a><a class="ctl" href="#case-3"><span>03 출처가 다른 개체·도축·판정 데이터를 학습용 한 벌로</span></a><a class="ctl" href="#case-4"><span>04 논문의 변수 분석을 현업 지표로 — SHAP 변수 중요도를 사양 관리 지표로 제공</span></a></div></section><article class="case sec--glow" id="case-1">
+</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>모델링</h3><div class="card__tags"><span class="tag">Python</span><span class="tag">scikit-learn</span><span class="tag">Random Forest</span><span class="tag">XGBoost</span><span class="tag">LightGBM</span><span class="tag">Stacking Ensemble</span><span class="tag">Bayesian Optimization</span></div></div><div class="stack__group"><h3>설명·분석</h3><div class="card__tags"><span class="tag">SHAP</span><span class="tag">Feature Importance</span><span class="tag">Permutation Importance</span></div></div><div class="stack__group"><h3>데이터·학습 운영</h3><div class="card__tags"><span class="tag">Apache Airflow</span><span class="tag">Amazon Redshift</span><span class="tag">Apache Spark</span><span class="tag">Databricks</span></div></div><div class="stack__group"><h3>제공</h3><div class="card__tags"><span class="tag">Flask</span><span class="tag">Tableau</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">참고용에 그치던 수기 등급 예측을 데이터 기반 보고로<br>논문 93%가 현업에서 85%로 — 2개월 재튜닝으로 89~91% 회복<br>외 2개</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
+<div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 4개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 참고용에 그치던 수기 등급 예측을 데이터 기반 보고로</span></a><a class="ctl" href="#case-2"><span>02 논문 93%가 현업에서 85%로 — 2개월 재튜닝으로 89~91% 회복</span></a><a class="ctl" href="#case-3"><span>03 출처가 다른 개체·도축·판정 데이터를 학습용 한 벌로</span></a><a class="ctl" href="#case-4"><span>04 논문 속 변수 분석을 현업으로 — SHAP 변수 중요도를 사양 관리 지표로 제공</span></a></div></section><article class="case sec--glow" id="case-1">
 <div class="case__head"><span class="case__no">CASE 01 · 모델개발</span><h3 class="case__title">참고용에 그치던 수기 등급 예측을 데이터 기반 보고로</h3></div>
 <div class="steps">
 <div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>축우 관련 사업부는 매월 사육 중인 개체의 육질·육량 데이터를 보고 다음 달 육질·육량 등급을 예측해 보고했습니다. 수기 예측 정확도는 60~70% 로, 보고서는 참고용으로만 쓰였습니다.</p></div>
 <div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>담당자 경험에 기댄 판단이라 신뢰도가 낮았고, 보고서는 의사결정 자료가 아닌 참고 자료에 머물렀습니다.</p></div>
-<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>기존 월간 등급 예측 보고를 대상으로 AI 서비스 도입 품의 작성·확정</li><li>100만 건 축우 개체 데이터로 Random Forest·XGBoost·LightGBM 학습, 알고리즘별 최고 모델을 Stacking Ensemble 로 결합</li><li>등급 예측 서비스를 대시보드 형태로 사업부에 제공</li><li>AI·빅데이터 영역은 DBA 1인과 2인으로 수행, 비즈니스 적용은 현업 마케터·본부 인력과 협업</li></ol></div>
+<div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>기존 월간 등급 예측 보고를 대상으로 AI 서비스 도입 품의 작성·확정</li><li>100만 건 축우 개체 데이터로 Random Forest, XGBoost, LightGBM 학습, 알고리즘별 최고 모델을 Stacking Ensemble 로 결합</li><li>등급 예측 서비스를 대시보드 형태로 사업부에 제공</li><li>AI·빅데이터 영역 2인(본인·DBA 1인)이 수행하고, 비즈니스 적용은 현업 마케터·본부 인력과 협업</li></ol></div>
 <div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>축우 등급 예측 정확도 60~70%→89~91%, 예측 오차율 30~40%→9~11%(정확도 환산).</p></div>
 </div>
-<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">축우 등급 예측 정확도</div><div class="delta__val"><span class="from">60~70%(수기)</span><span class="arrow">→</span><span class="to">89~91%(모델 최종)</span></div></div><div class="delta"><div class="delta__label">예측 오차율</div><div class="delta__val"><span class="from">30~40%</span><span class="arrow">→</span><span class="to">9~11%</span></div><div class="delta__note">정확도에서 환산한 값</div></div></div><p class="sub-h">월간 등급 예측 보고의 전/후 구조</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">축우 등급 예측 정확도</div><div class="delta__val"><span class="from">60~70%(수기)</span><span class="arrow">→</span><span class="to">89~91%(모델 최종)</span></div></div><div class="delta"><div class="delta__label">예측 오차율</div><div class="delta__val"><span class="from">30~40%</span><span class="arrow">→</span><span class="to">9~11%</span></div><div class="delta__note">정확도에서 환산한 값</div></div></div><p class="sub-h">월간 등급 예측 보고의 전/후 구조</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
   subgraph BEFORE[&quot;이전: 수기 예측&quot;]
     B1[&quot;월간 개체 육질·육량 데이터&quot;]
     B2[&quot;담당자 경험 기반 판단&quot;]
@@ -413,7 +411,8 @@
   B2 --&gt; B3
   A1 --&gt; A2
   A2 --&gt; A4
-  A2 --&gt; A3">flowchart LR
+  A2 --&gt; A3
+  BEFORE -.-&gt;|&quot;모델로 교체&quot;| AFTER">flowchart TB
   subgraph BEFORE[&quot;이전: 수기 예측&quot;]
     B1[&quot;월간 개체 육질·육량 데이터&quot;]
     B2[&quot;담당자 경험 기반 판단&quot;]
@@ -429,18 +428,19 @@
   B2 --&gt; B3
   A1 --&gt; A2
   A2 --&gt; A4
-  A2 --&gt; A3</pre></div></figure><div class="lesson"><b>배운 점</b><p>모델을 새 업무로 들이지 않고 이미 매월 하던 보고에 얹었기 때문에, 수기 예측과 같은 잣대(정확도)로 바로 비교할 수 있었습니다.</p></div>
+  A2 --&gt; A3
+  BEFORE -.-&gt;|&quot;모델로 교체&quot;| AFTER</pre></div></figure><div class="lesson"><b>배운 점</b><p>모델을 새 업무로 들이지 않고 이미 매월 하던 보고에 얹었기 때문에, 수기 예측과 같은 잣대(정확도)로 바로 비교할 수 있었습니다.</p></div>
 
 </article>
 <article class="case" id="case-2">
-<div class="case__head"><span class="case__no">CASE 02 · 성능개선</span><h3 class="case__title">논문 93% 가 현업에서 85% 로 — 2개월 재튜닝으로 89~91% 회복</h3></div>
+<div class="case__head"><span class="case__no">CASE 02 · 성능개선</span><h3 class="case__title">논문 93%가 현업에서 85%로 — 2개월 재튜닝으로 89~91% 회복</h3></div>
 <div class="steps">
-<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>석사 논문에서 100만 건 축우 개체 데이터로 검증한 모델은 정확도 93% 였습니다. 같은 모델을 사업부에 대시보드로 제공하자 정확도가 85% 내외로 내려갔습니다. 월간 등급 보고에 쓰려면 다시 끌어올려야 했습니다.</p></div>
+<div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>석사 논문에서 100만 건 축우 개체 데이터로 검증한 모델은 정확도 93%였습니다. 같은 모델을 사업부에 대시보드로 제공하자 정확도가 85% 내외로 내려갔습니다. 월간 등급 보고에 쓰려면 다시 끌어올려야 했습니다.</p></div>
 <div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>원인은 하이퍼파라미터·모델 조정 문제였습니다. 논문 단계에서 맞춰 둔 설정을 현업 적용 환경에 맞게 다시 조정해야 했습니다.</p></div>
 <div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>예측 결과와 실제 도축 판정 등급을 맞대어 정확도 저하 확인</li><li>하이퍼파라미터·모델 설정 재조정</li><li>예측과 실제 판정을 비교해 모델을 계속 개선하는 강화학습 루프 운영</li><li>데이터 추가 확보</li><li>학습·튜닝·강화학습 루프를 Databricks 작업 공간(노트북·작업 스케줄)에서 관리</li><li>2개월간 조정과 강화학습을 반복하며 정확도 재측정</li></ol></div>
 <div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>정확도 85% 내외→89~91%. 현업 수기 예측(60~70%) 대비로는 예측 오차율 30~40%→9~11%(정확도 환산).</p></div>
 </div>
-<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">축우 등급 예측 정확도</div><div class="delta__val"><span class="from">85% 내외(현업 적용 직후)</span><span class="arrow">→</span><span class="to">89~91%</span></div><div class="delta__note">2개월 튜닝·강화학습·데이터 추가 확보</div></div><div class="delta"><div class="delta__label">참고: 논문 검증 정확도</div><div class="delta__val"><span class="from">93%</span><span class="arrow">→</span><span class="to">89~91%(현업 운영 데이터 기준)</span></div><div class="delta__note">검증 데이터가 달라 직접 비교 대상은 아님</div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">적용 직후</div><div class="tl__what"><b>정확도 85% 내외</b><span>사업부 제공 뒤 예측과 실제 판정 비교에서 저하 확인. 원인은 하이퍼파라미터·모델 조정 문제</span></div></li><li><div class="tl__when">이후 2개월</div><div class="tl__what"><b>튜닝·강화학습·데이터 추가 확보 반복</b><span>Databricks 작업 공간에서 학습·튜닝·강화학습 루프 관리</span></div></li><li><div class="tl__when">튜닝 후</div><div class="tl__what"><b>최종 정확도 89~91%</b><span>월간 등급 예측 보고에 사용</span></div></li></ol><div class="lesson"><b>배운 점</b><p>논문 정확도는 출발점일 뿐이었습니다. 현업 데이터로 다시 재고 하이퍼파라미터·모델을 조정하는 기간을 처음부터 일정에 넣어야 한다는 기준이 생겼습니다.</p></div>
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">축우 등급 예측 정확도</div><div class="delta__val"><span class="from">85% 내외(현업 적용 직후)</span><span class="arrow">→</span><span class="to">89~91%</span></div><div class="delta__note">2개월 튜닝·강화학습·데이터 추가 확보</div></div><div class="delta"><div class="delta__label">참고: 논문 검증 정확도</div><div class="delta__val"><span class="to">93%</span></div><div class="delta__note">논문 데이터 기준, 현업 운영 정확도와 직접 비교 대상은 아님</div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">적용 직후</div><div class="tl__what"><b>정확도 85% 내외</b><span>사업부 제공 뒤 예측과 실제 판정 비교에서 저하 확인</span></div></li><li><div class="tl__when">이후 2개월</div><div class="tl__what"><b>튜닝·강화학습·데이터 추가 확보 반복</b><span>Databricks 작업 공간에서 학습·튜닝·강화학습 루프 관리</span></div></li><li><div class="tl__when">튜닝 후</div><div class="tl__what"><b>최종 정확도 89~91%</b><span>월간 등급 예측 보고에 사용</span></div></li></ol><div class="lesson"><b>배운 점</b><p>논문 정확도는 출발점일 뿐이었습니다. 현업 데이터로 다시 재고 하이퍼파라미터·모델을 조정하는 기간을 처음부터 일정에 넣어야 한다는 기준이 생겼습니다.</p></div>
 
 </article>
 <article class="case sec--glow sec--flip" id="case-3">
@@ -451,7 +451,7 @@
 <div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>예측에 쓸 소도체 이력·도축 정보·등급 평가 정보 항목 정의</li><li>사내 목장·농장 데이터와 공공 축산물 이력 데이터를 함께 사용</li><li>Apache Airflow 파이프라인으로 정기 수집, Amazon Redshift 에 적재</li><li>100만 건 규모의 전처리·피처 생성을 Apache Spark 로 분산 처리하고, EDA 로 데이터 보정</li><li>기본 변수만 쓴 경우와 추가 지표를 결합한 경우를 나눠 정확도 비교</li><li>알고리즘별 최고 모델을 골라 Stacking Ensemble 로 최종 정확도 측정</li></ol></div>
 <div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>100만 건 축우 개체 데이터로 학습한 Stacking Ensemble 모델이 논문 데이터 기준 정확도 93% 를 기록했고, 이 절차가 현업 모델의 뼈대가 되었습니다.</p></div>
 </div>
-<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">논문 단계 최종 정확도</div><div class="delta__val"><span class="to">93%</span></div><div class="delta__note">100만 건 축우 개체 데이터, Stacking Ensemble</div></div></div><p class="sub-h">논문 단계 수집·가공 흐름의 전/후</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">논문 단계 최종 정확도</div><div class="delta__val"><span class="to">93%</span></div><div class="delta__note">100만 건 축우 개체 데이터, Stacking Ensemble</div></div></div><p class="sub-h">논문 단계 수집·가공 흐름의 전/후</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
   subgraph BEFORE[&quot;이전: 출처별 원천 데이터&quot;]
     B1[&quot;사내 목장·농장 데이터&quot;]
     B2[&quot;공공 축산물 이력 데이터&quot;]
@@ -462,11 +462,10 @@
     A3[&quot;Spark 전처리·피처 생성&lt;br/&gt;EDA 보정&quot;]
     A4[&quot;기본 변수 + 추가 지표&lt;br/&gt;조합별 정확도 비교&quot;]
   end
-  B1 --&gt; A1
-  B2 --&gt; A1
+  BEFORE --&gt; AFTER
   A1 --&gt; A2
   A2 --&gt; A3
-  A3 --&gt; A4">flowchart LR
+  A3 --&gt; A4">flowchart TB
   subgraph BEFORE[&quot;이전: 출처별 원천 데이터&quot;]
     B1[&quot;사내 목장·농장 데이터&quot;]
     B2[&quot;공공 축산물 이력 데이터&quot;]
@@ -477,27 +476,26 @@
     A3[&quot;Spark 전처리·피처 생성&lt;br/&gt;EDA 보정&quot;]
     A4[&quot;기본 변수 + 추가 지표&lt;br/&gt;조합별 정확도 비교&quot;]
   end
-  B1 --&gt; A1
-  B2 --&gt; A1
+  BEFORE --&gt; AFTER
   A1 --&gt; A2
   A2 --&gt; A3
   A3 --&gt; A4</pre></div></figure><div class="lesson"><b>배운 점</b><p>모델 정확도보다 먼저, 무엇을 같은 개체로 묶을지 정의하는 일이 학습의 출발점이었습니다.</p></div>
 
 </article>
 <article class="case" id="case-4">
-<div class="case__head"><span class="case__no">CASE 04 · 현업연계</span><h3 class="case__title">논문의 변수 분석을 현업 지표로 — SHAP 변수 중요도를 사양 관리 지표로 제공</h3></div>
+<div class="case__head"><span class="case__no">CASE 04 · 현업연계</span><h3 class="case__title">논문 속 변수 분석을 현업으로 — SHAP 변수 중요도를 사양 관리 지표로 제공</h3></div>
 <div class="steps">
 <div class="step"><div class="step__k"><i>1</i>문제 상황</div><p>논문 단계에서 변수 중요도와 SHAP 으로 변수 관계를 분석해 신규 지표 후보를 추천해 두었고, 현업 적용 때 이 결과를 예측과 함께 사업부에 넘기기로 했습니다.</p></div>
 <div class="step"><div class="step__k"><i>2</i>원인 분석</div><p>앙상블 예측 등급만으로는 어떤 변수가 등급을 움직였는지 드러나지 않습니다.</p></div>
 <div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>논문 단계에서 Feature Importance·Permutation Importance 로 전체 변수 중요도 측정</li><li>SHAP 으로 변수 간 상관 관계와 변수별 기여도 분석</li><li>활용성이 높은 변수를 신규 지표 후보로 추천</li><li>현업 적용 때 분석 결과를 모델 전체 기준 사양 관리 지표로 정리해 예측과 함께 제공</li></ol></div>
-<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>SHAP 기반 변수 중요도 분석 결과가 사양 관리 지표로 현업에 제공됨(정량 수치 없음). 이 AI 프로젝트 성과는 이후 그룹 계열사 공통 ERP 표준 모델 채택 과정에서도 긍정 요인으로 함께 인정됨.</p></div>
+<div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>SHAP 기반 변수 중요도 분석 결과가 사양 관리 지표로 현업에 제공됨(정량 수치 없음). 이 AI 프로젝트 성과는 이후 SFA/CRM 이 그룹 계열사 공통 ERP 표준 모델로 채택되는 과정에서도 긍정 요인으로 함께 인정됨.</p></div>
 </div>
-<p class="sub-h">변수 분석 결과가 현업 지표로 옮겨 간 전/후</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<p class="sub-h">변수 분석 결과가 현업 지표로 옮겨 간 전/후</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
   subgraph BEFORE[&quot;이전: 논문 안의 분석&quot;]
     B1[&quot;논문 단계 예측 모델&lt;br/&gt;변수 중요도·SHAP 분석&quot;]
     B2[&quot;변수 분석은 논문 안에만 있음&quot;]
   end
-  subgraph AFTER[&quot;이후: 예측과 지표를 함께 전달&quot;]
+  subgraph AFTER[&quot;이후: 예측·지표 함께 전달&quot;]
     A1[&quot;Stacking 예측 등급&quot;]
     A2[&quot;SHAP 변수 중요도&quot;]
     A3[&quot;활용성 높은 변수 추천&quot;]
@@ -506,12 +504,13 @@
   B1 --&gt; B2
   A1 --&gt; A2
   A2 --&gt; A3
-  A3 --&gt; A4">flowchart LR
+  A3 --&gt; A4
+  BEFORE -.-&gt;|&quot;현업 적용&quot;| AFTER">flowchart TB
   subgraph BEFORE[&quot;이전: 논문 안의 분석&quot;]
     B1[&quot;논문 단계 예측 모델&lt;br/&gt;변수 중요도·SHAP 분석&quot;]
     B2[&quot;변수 분석은 논문 안에만 있음&quot;]
   end
-  subgraph AFTER[&quot;이후: 예측과 지표를 함께 전달&quot;]
+  subgraph AFTER[&quot;이후: 예측·지표 함께 전달&quot;]
     A1[&quot;Stacking 예측 등급&quot;]
     A2[&quot;SHAP 변수 중요도&quot;]
     A3[&quot;활용성 높은 변수 추천&quot;]
@@ -520,13 +519,14 @@
   B1 --&gt; B2
   A1 --&gt; A2
   A2 --&gt; A3
-  A3 --&gt; A4</pre></div></figure><div class="lesson"><b>배운 점</b><p>변수 분석을 처음부터 적용 계획에 넣어 두어 예측과 지표를 함께 넘길 수 있었습니다.</p></div>
+  A3 --&gt; A4
+  BEFORE -.-&gt;|&quot;현업 적용&quot;| AFTER</pre></div></figure><div class="lesson"><b>배운 점</b><p>변수 분석을 처음부터 적용 계획에 넣어 두어 예측과 지표를 함께 넘길 수 있었습니다.</p></div>
 
-</article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>모델을 새 업무로 들이지 않고 이미 매월 하던 보고에 얹었기 때문에, 수기 예측과 같은 잣대(정확도)로 바로 비교할 수 있었습니다.</p><p>논문 정확도는 출발점일 뿐이었습니다. 현업 데이터로 다시 재고 하이퍼파라미터·모델을 조정하는 기간을 처음부터 일정에 넣어야 한다는 기준이 생겼습니다.</p><p>모델 정확도보다 먼저, 무엇을 같은 개체로 묶을지 정의하는 일이 학습의 출발점이었습니다.</p></section></div>
+</article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>석사 연구에서 만든 모델을 사업부의 월간 등급 예측 보고에 붙이고, 적용 직후 떨어진 정확도를 재튜닝으로 다시 끌어올려 보고에 쓰이게 했습니다. SHAP 변수 분석은 사양 관리 지표로 함께 넘겼고, 고객 등급 예측은 현업과 함께 정한 계산식으로 미수금·계약 관리 업무에 적용했습니다.</p></section></div>
 <nav class="pager" aria-label="다른 프로젝트"><a href="tms-wms-insourcing.html"><small>← 이전 프로젝트</small><b>외주 물류 시스템 내재화 — 자체 TMS/WMS·MES·전자계약</b></a><a class="next" href="ht-opp.html"><small>다음 프로젝트 →</small><b>HT-OPP 온라인 부정시험방지 솔루션</b></a></nav>
 <footer class="footer"><p>황병준 · 백엔드·데이터 엔지니어 · <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p><small>디자인 바탕: <a href="https://once-ui.com" target="_blank" rel="noopener">Once UI</a> Magic Portfolio · 도표는 직접 그린 개념도입니다</small></footer>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" defer></script>
-<script src="../assets/js/site.js?v=fdaea7ac" defer></script>
+<script src="../assets/js/site.js?v=22ba24f0" defer></script>
 </body>
 </html>

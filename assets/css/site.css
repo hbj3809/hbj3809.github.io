@@ -41,7 +41,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: clip; } /* body 의 clip 이 화면 전체로 넘어가지 않게 — 비스듬한 절 빛이 모바일에서 가로 넘침을 만들지 않게 */
 body {
   margin: 0;
   background: var(--bg);
@@ -278,7 +278,6 @@ a.card:hover::after { opacity: 1; }
 .overview__body h2 { margin: 0; font-size: 48px; line-height: 56px; font-weight: 600; }
 .overview__body h2 .dim { color: var(--text-3); }
 .overview__lead { margin: 0; color: var(--text-2); font-size: 24px; line-height: 32px; }
-.overview__more { margin: 0; color: var(--text-2); font-size: 18px; line-height: 26px; }
 .overview__side { display: flex; flex-direction: column; gap: 16px; }
 .facts { margin: 0; display: grid; gap: 14px; padding: 24px 28px; border-radius: 32px; border: 1px solid var(--line); background: var(--fill); }
 .facts div { display: grid; gap: 2px; }
@@ -323,8 +322,8 @@ a.card:hover::after { opacity: 1; }
 .figure--soft { border-radius: 24px; border: 1px solid var(--line-2); background: rgba(255, 255, 255, 0.04); padding: 32px; }
 .mermaid { display: flex; justify-content: center; min-height: 80px; color: var(--grey-900); font-family: var(--font); }
 .mermaid:not([data-processed]) { white-space: pre; font: 13px/1.5 var(--mono); color: transparent; }
-.mermaid svg { max-width: 100%; height: auto; }
-.figure .mermaid svg { min-width: min(100%, 560px); }
+.mermaid svg { max-width: 100%; height: auto; flex-shrink: 0; } /* 판(flex) 안에서 줄어들지 않게 — 넓은 도표는 site.js 가 85% 폭을 주고 옆으로 넘긴다 */
+.mermaid foreignObject { overflow: visible; }
 .mermaid--error { color: var(--grey-600) !important; justify-content: flex-start; white-space: pre-wrap !important; }
 @media (max-width: 899px) { .figure .card__media { padding: 16px; } .figure figcaption { padding: 8px 14px 12px; } }
 
@@ -334,6 +333,10 @@ table.t { width: 100%; border-collapse: collapse; font-size: 15px; line-height: 
 table.t th, table.t td { padding: 14px 18px; border-bottom: 1px solid var(--line); vertical-align: top; }
 table.t th { color: var(--grey-900); font-weight: 600; background: rgba(255, 255, 255, 0.04); white-space: nowrap; }
 table.t td { color: var(--text-2); }
+table.t th, table.t td { overflow-wrap: break-word; } /* 본문의 overflow-wrap: anywhere 가 표 칸을 단어보다 좁게 만들어 단어 중간이 끊기지 않게. 넘치는 표는 .table-wrap 안에서 옆으로 넘긴다 */
+@media (max-width: 599px) { table.t th { white-space: normal; } }
+.sec__caption { margin: 12px 0 0; padding: 0 12px; color: var(--text-3); font-size: 14px; line-height: 20px; text-align: left; }
+.tl + .sec__caption { max-width: 1024px; margin-left: auto; margin-right: auto; padding: 0; }
 table.t tr:last-child td { border-bottom: 0; }
 
 /* 카드 묶음·타임라인 */
@@ -433,7 +436,20 @@ table.t tr:last-child td { border-bottom: 0; }
 @media (max-width: 899px) { .pager { grid-template-columns: 1fr; } .pager .next { text-align: left; } }
 
 /* ---------- 차트 ---------- */
-.chart { width: 100%; }
+.chart { width: 100%; max-width: 880px; margin: 0 auto; } /* 넓은 화면에서 720 폭 차트가 1.5배로 부풀지 않게 */
+.figure--soft > figcaption { max-width: 880px; margin: 0 auto; }
+/* 좁은 화면: 720 폭 차트를 줄이면 글자가 5px 대가 된다 → 막대 차트는 이름을 막대 위에 둔 좁은 판(폭 360)으로 바꿔 보이고,
+   좁은 판이 없는 선 차트는 최소 폭을 두고 판 안에서 옆으로 넘긴다 */
+.chart svg.chart__narrow { display: none; }
+@media (max-width: 899px) {
+  .figure--soft { padding: 20px 16px; }
+  .chart__plot--scroll { overflow-x: auto; }
+  .chart__plot--scroll svg { min-width: 600px; }
+}
+@media (max-width: 639px) {
+  .chart svg.chart__wide { display: none; }
+  .chart svg.chart__narrow { display: block; }
+}
 .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
 .chart text { font-family: var(--font); }
 .chart .mark { transition: opacity .15s; }

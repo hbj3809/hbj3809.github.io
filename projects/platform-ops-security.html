@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="../assets/css/site.css?v=75c9176d">
+<link rel="stylesheet" href="../assets/css/site.css?v=a2fdc10a">
 </head>
 <body>
 <a class="skip" href="#main">본문 바로가기</a>
@@ -28,22 +28,22 @@
 <div class="panel" id="panel-detail" role="tabpanel" aria-labelledby="tab-detail"><div class="overview">
 <div class="overview__side"><div class="stat"><p class="stat__value">23.2초</p><p class="stat__label">게이트웨이 전환 중단</p><p class="stat__note">호스트 33개, 같은 날 1·2차 실패(자동 롤백) 원인을 고친 3차 시도</p></div><div class="stat"><p class="stat__value">39개</p><p class="stat__label">SealedSecret 작성·전환</p><p class="stat__note">30여 개 저장소 평문 자격증명 점검, Jenkinsfile 20개 자격 바인딩</p></div><div class="stat"><p class="stat__value">71건</p><p class="stat__label">권한 평가 기대 일치</p><p class="stat__note">앱 한정 역할 적용 전후 평가, 재plan 드리프트 0</p></div><div class="stat"><p class="stat__value">약 4개월</p><p class="stat__label">인증서 자동 갱신 조기 전환</p><p class="stat__note">기존 만료일보다 앞서 전환, DNS 이전 검증 23/23</p></div>
 <dl class="facts"><div><dt>회사</dt><dd>알스솔루션 · Engineering팀 · 선임연구원</dd></div><div><dt>기간</dt><dd>2026.05 ~ 현재</dd></div><div><dt>역할</dt><dd>인프라·보안 운영 단독 수행(Claude Code 협업)</dd></div><div><dt>팀</dt><dd>스타트업 소규모 개발팀(인프라 전담 인력 없음)</dd></div><div><dt>상태</dt><dd>운영 상시</dd></div></dl></div>
-<div class="overview__body"><h2>프로젝트 개요<br><span class="dim">무엇을, 왜 만들었나</span></h2><p class="overview__lead">온프레미스 k3s 와 이후 AWS EKS 위의 사내 플랫폼 층(게이트웨이·SSO·CI·인증서·시크릿·모니터링)을 인프라 담당으로 혼자 맡아 교체하고 하드닝했습니다. 호스트 33개를 Envoy Gateway 로 옮긴 전환은 같은 날 두 번 실패한 원인을 고쳐 세 번째에 중단 23.2초로 마쳤습니다. 30여 개 저장소의 평문 자격증명을 점검한 뒤 SealedSecrets 를 도입해 봉인 시크릿 39개를 만들었고, 인증서·권한·경보는 자동화·코드화한 뒤 검증 관문을 붙였습니다.</p><p class="overview__more">인프라·보안 운영 단독 수행(Claude Code 협업) · 스타트업 소규모 개발팀(인프라 전담 인력 없음)</p>
+<div class="overview__body"><h2>프로젝트 개요<br><span class="dim">무엇을, 왜 만들었나</span></h2><p class="overview__lead">온프레미스 k3s 와 이후 AWS EKS 위의 사내 플랫폼 층(게이트웨이·SSO·CI·인증서·시크릿·모니터링)을 인프라 담당으로 혼자 맡아 교체하고 하드닝했습니다. 호스트 33개를 Envoy Gateway 로 옮긴 전환은 같은 날 두 번 실패한 원인을 고쳐 세 번째에 중단 23.2초로 마쳤습니다. 30여 개 저장소의 평문 자격증명을 점검한 뒤 SealedSecrets 를 도입해 봉인 시크릿 39개를 만들었고, 인증서·권한·경보는 자동화·코드화한 뒤 검증 관문을 붙였습니다.</p>
 <div><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 사례 4개 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></div></div>
 </div><section class="sec sec--glow">
 <div class="sec__head"><h2 class="sec__title">개요<span class="dim">넘겨받은 클러스터의 플랫폼 층을 다시 세우기</span></h2><div class="sec__lead"><p>입사 전에 구축된 온프레미스 k3s 클러스터를 넘겨받았을 때, 플랫폼 층에는 보안 지원이 끝난 인그레스 컨트롤러, 저장소와 설정에 흩어진 평문 자격증명, 여러 운영 도구가 함께 쓰는 SSO client, 손으로 복사하는 와일드카드 인증서, 지원이 끝난 관측 스택이 남아 있었습니다.</p><p>업그레이드 영향도부터 평가해 '고장 나면 전체가 멈추는가'를 첫 기준으로 우선순위를 세웠고, 서비스를 멈추지 않는 범위에서 하나씩 교체하며 모든 변경을 Git 과 검증 관문 위로 옮겼습니다. 이후 AWS EKS 이관(별도 사례) 때 같은 설계를 새 클러스터로 옮겼습니다.</p></div></div>
-<div class="sec__body"><ol class="tl"><li><div class="tl__when">2026.05</div><div class="tl__what"><b>관측 스택 교체 착수</b><span>지원이 끝난 로그·메트릭 스택을 7단계로 나눠 교체 시작</span></div></li><li><div class="tl__when">2026.06</div><div class="tl__what"><b>인증서 자동 발급·시크릿 봉인·CI 이관</b><span>DNS 를 Route53 으로 옮겨 와일드카드 인증서 자동 발급, 30여 개 저장소 자격증명 점검과 SealedSecrets 도입, CI 서버를 SSO·설정 코드화 인스턴스로 이관</span></div></li><li><div class="tl__when">2026.08</div><div class="tl__what"><b>게이트웨이 전환·GitOps 이관·EKS 이식</b><span>호스트 33개를 Envoy Gateway 로 전환, 수동 helm values 저장소를 Argo CD 로 이관, SSO·CI·관측 스택을 EKS 로 이식</span></div></li><li><div class="tl__when">2026.10</div><div class="tl__what"><b>SSO 렐름 하드닝·CI 코어 업그레이드</b><span>단계별 승인으로 렐름 하드닝 적용, CI 서버 LTS 업그레이드 31초 만에 정상 기동</span></div></li></ol><div style="margin-top:32px"><ul class="sec__bullets"><li>목표: 중단을 최소로 한 교체 · 변경은 Git 으로만 · 사고는 재발 방지 장치까지 마무리</li><li>내 역할: 조사·설계·실행 단독 수행. 시크릿 정리는 팀장 지시로 시작했고, 권한 대상·사고 복구 범위는 팀장·팀과 함께 결정</li><li>팀: 스타트업 소규모 개발팀, 인프라 전담 인력 없음</li><li>기간: 2026.05 ~ 현재(운영 상시)</li><li>AI 활용: Claude Code(일부 Codex)로 조사·스크립트·읽기 전용 다중 에이전트 점검, 운영 변경·비밀값 입력·파괴 작업은 본인 승인·실행</li></ul></div></div>
+<div class="sec__body"><ol class="tl"><li><div class="tl__when">2026.05</div><div class="tl__what"><b>관측 스택 교체 착수</b><span>지원이 끝난 로그·메트릭 스택을 7단계로 나눠 교체 시작</span></div></li><li><div class="tl__when">2026.06</div><div class="tl__what"><b>인증서 자동 발급·시크릿 봉인·CI 이관</b><span>DNS 를 Route53 으로 옮겨 와일드카드 인증서 자동 발급, 30여 개 저장소 자격증명 점검과 SealedSecrets 도입, CI 서버를 SSO·설정 코드화 인스턴스로 이관</span></div></li><li><div class="tl__when">2026.08</div><div class="tl__what"><b>게이트웨이 전환·GitOps 이관·EKS 이식</b><span>호스트 33개를 Envoy Gateway 로 전환, 수동 helm values 저장소를 Argo CD 로 이관, SSO·CI·관측 스택을 EKS 로 이식</span></div></li><li><div class="tl__when">2026.10</div><div class="tl__what"><b>SSO 렐름 하드닝·CI 코어 업그레이드</b><span>단계별 승인으로 렐름 하드닝 적용, CI 서버 LTS 업그레이드 31초 만에 정상 기동</span></div></li></ol><div style="margin-top:32px"><ul class="sec__bullets"><li>목표: 중단을 최소로 한 교체 · 변경은 Git 으로만 · 사고는 재발 방지 장치까지 마무리</li><li>내 역할: 조사·설계·실행 단독 수행. 시크릿 정리는 팀장 지시로 시작했고, 권한 대상·사고 복구 범위는 팀장·팀과 함께 결정</li><li>AI 활용: Claude Code(일부 Codex)로 조사·스크립트·읽기 전용 다중 에이전트 점검, 운영 변경·비밀값 입력·파괴 작업은 본인 승인·실행</li></ul></div></div>
 
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">플랫폼 구성<span class="dim">진입·배포·인증·관측 네 경로</span></h2><div class="sec__lead"><p>사용자 요청은 DNS 와 게이트웨이를 거쳐 서비스로, 코드 변경은 CI 와 GitOps 저장소를 거쳐 클러스터로 들어갑니다.</p><p>운영 도구는 사내 SSO 를 앱별 전용 client 로 쓰고, 권한은 Terraform 코드가 소유합니다. 메트릭과 로그는 공용 관측 플랫폼을 거쳐 팀 알림방 하나로 모입니다.</p></div></div>
-<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
+  KC[&quot;Keycloak SSO&lt;br/&gt;앱별 전용 client&quot;] --&gt;|&quot;OIDC&quot;| TOOLS
   USR[&quot;사용자·외부 호출&quot;] --&gt; DNS[&quot;Route53 DNS&quot;]
   DNS --&gt; GW[&quot;Envoy Gateway&lt;br/&gt;Gateway API&quot;]
   CM[&quot;cert-manager&lt;br/&gt;DNS-01 자동 발급&quot;] --&gt;|&quot;와일드카드 인증서&quot;| GW
   GW --&gt; APP[&quot;서비스 워크로드&quot;]
-  GW --&gt; TOOLS[&quot;운영 도구 5종&lt;br/&gt;Grafana·Airflow·Argo CD·Jenkins·Headlamp&quot;]
-  KC[&quot;Keycloak SSO&lt;br/&gt;앱별 전용 client&quot;] --&gt;|&quot;OIDC&quot;| TOOLS
+  GW --&gt; TOOLS[&quot;운영 도구 5종&lt;br/&gt;Grafana·Airflow·Argo CD&lt;br/&gt;Jenkins·Headlamp&quot;]
   subgraph DELIVERY[&quot;배포 경로&quot;]
     CI[&quot;Jenkins&lt;br/&gt;JCasC·kaniko&quot;] --&gt;|&quot;Pod Identity&quot;| REG[&quot;ECR 레지스트리&quot;]
     CI --&gt;|&quot;이미지 태그 커밋&quot;| GIT[&quot;GitOps 저장소&lt;br/&gt;매니페스트·SealedSecret&quot;]
@@ -51,17 +51,17 @@
   end
   ARGO --&gt; APP
   REG -.-&gt;|&quot;이미지 풀&quot;| APP
-  SS[&quot;SealedSecrets 컨트롤러&quot;] --&gt;|&quot;Secret 복호화&quot;| APP
+  SS[&quot;SealedSecrets&lt;br/&gt;컨트롤러&quot;] --&gt;|&quot;Secret 복호화&quot;| APP
   TF[&quot;Terraform&lt;br/&gt;RBAC·접근 명부&quot;] --&gt;|&quot;RBAC 코드화&quot;| ARGO
   APP --&gt;|&quot;메트릭·로그&quot;| OBS[&quot;Prometheus·Loki·Alloy&quot;]
   OBS --&gt; AM[&quot;Alertmanager&quot;]
-  AM --&gt; ROOM[&quot;팀 알림방&quot;]">flowchart LR
+  AM --&gt; ROOM[&quot;팀 알림방&quot;]">flowchart TB
+  KC[&quot;Keycloak SSO&lt;br/&gt;앱별 전용 client&quot;] --&gt;|&quot;OIDC&quot;| TOOLS
   USR[&quot;사용자·외부 호출&quot;] --&gt; DNS[&quot;Route53 DNS&quot;]
   DNS --&gt; GW[&quot;Envoy Gateway&lt;br/&gt;Gateway API&quot;]
   CM[&quot;cert-manager&lt;br/&gt;DNS-01 자동 발급&quot;] --&gt;|&quot;와일드카드 인증서&quot;| GW
   GW --&gt; APP[&quot;서비스 워크로드&quot;]
-  GW --&gt; TOOLS[&quot;운영 도구 5종&lt;br/&gt;Grafana·Airflow·Argo CD·Jenkins·Headlamp&quot;]
-  KC[&quot;Keycloak SSO&lt;br/&gt;앱별 전용 client&quot;] --&gt;|&quot;OIDC&quot;| TOOLS
+  GW --&gt; TOOLS[&quot;운영 도구 5종&lt;br/&gt;Grafana·Airflow·Argo CD&lt;br/&gt;Jenkins·Headlamp&quot;]
   subgraph DELIVERY[&quot;배포 경로&quot;]
     CI[&quot;Jenkins&lt;br/&gt;JCasC·kaniko&quot;] --&gt;|&quot;Pod Identity&quot;| REG[&quot;ECR 레지스트리&quot;]
     CI --&gt;|&quot;이미지 태그 커밋&quot;| GIT[&quot;GitOps 저장소&lt;br/&gt;매니페스트·SealedSecret&quot;]
@@ -69,7 +69,7 @@
   end
   ARGO --&gt; APP
   REG -.-&gt;|&quot;이미지 풀&quot;| APP
-  SS[&quot;SealedSecrets 컨트롤러&quot;] --&gt;|&quot;Secret 복호화&quot;| APP
+  SS[&quot;SealedSecrets&lt;br/&gt;컨트롤러&quot;] --&gt;|&quot;Secret 복호화&quot;| APP
   TF[&quot;Terraform&lt;br/&gt;RBAC·접근 명부&quot;] --&gt;|&quot;RBAC 코드화&quot;| ARGO
   APP --&gt;|&quot;메트릭·로그&quot;| OBS[&quot;Prometheus·Loki·Alloy&quot;]
   OBS --&gt; AM[&quot;Alertmanager&quot;]
@@ -87,8 +87,8 @@
   participant K as 클러스터
   D-&gt;&gt;J: 빌드 실행
   J-&gt;&gt;J: 앱 빌드와 이미지 태그 결정
-  J-&gt;&gt;R: kaniko 빌드 후 push (Pod Identity, 정적 키 없음)
-  J-&gt;&gt;G: 매니페스트 이미지 태그 갱신 커밋 (Git 자격은 자격 저장소 바인딩)
+  J-&gt;&gt;R: kaniko 빌드 후 push&lt;br/&gt;(Pod Identity, 정적 키 없음)
+  J-&gt;&gt;G: 매니페스트 이미지 태그 갱신 커밋&lt;br/&gt;(Git 자격은 자격 저장소 바인딩)
   A-&gt;&gt;G: 변경 감지
   A-&gt;&gt;K: 자동 동기화와 롤아웃
   K-&gt;&gt;R: 새 이미지 풀
@@ -101,8 +101,8 @@
   participant K as 클러스터
   D-&gt;&gt;J: 빌드 실행
   J-&gt;&gt;J: 앱 빌드와 이미지 태그 결정
-  J-&gt;&gt;R: kaniko 빌드 후 push (Pod Identity, 정적 키 없음)
-  J-&gt;&gt;G: 매니페스트 이미지 태그 갱신 커밋 (Git 자격은 자격 저장소 바인딩)
+  J-&gt;&gt;R: kaniko 빌드 후 push&lt;br/&gt;(Pod Identity, 정적 키 없음)
+  J-&gt;&gt;G: 매니페스트 이미지 태그 갱신 커밋&lt;br/&gt;(Git 자격은 자격 저장소 바인딩)
   A-&gt;&gt;G: 변경 감지
   A-&gt;&gt;K: 자동 동기화와 롤아웃
   K-&gt;&gt;R: 새 이미지 풀
@@ -189,7 +189,7 @@
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">경보 경로<span class="dim">공용 관측 플랫폼과 감시 세 층</span></h2><div class="sec__lead"><p>지원이 끝난 로그·메트릭 스택을 7단계로 나눠 교체해, 각 프로젝트가 라벨만 달면 수집·경보·대시보드가 붙는 공용 플랫폼으로 바꿨습니다.</p><p>데이터 파이프라인 쪽은 SLA 점검·작업별 실패 알림·Prometheus 규칙의 세 층이 같은 Teams 연결을 거쳐 알림방 하나로 모입니다. 경보 경로를 시험해 보니 '규칙이 있다'와 '알림이 도착한다'는 다른 일이어서, 경보 없이 지나가는 실패를 따로 목록으로 정리해 매일 확인 절차에 넣었습니다.</p></div></div>
-<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<div class="sec__body"><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
   subgraph L1[&quot;1층 데이터 작업 SLA 점검&quot;]
     SLA[&quot;하루 네 번&lt;br/&gt;준비 완료 기록·누락일 점검&quot;]
   end
@@ -197,7 +197,7 @@
     FAIL[&quot;파이프라인 작업&lt;br/&gt;실패 콜백&quot;]
   end
   subgraph L3[&quot;3층 Prometheus 규칙&quot;]
-    LBL[&quot;ServiceMonitor·PrometheusRule&lt;br/&gt;계약 라벨로 자동 수집&quot;] --&gt; PROM[&quot;Prometheus&quot;]
+    LBL[&quot;ServiceMonitor&lt;br/&gt;PrometheusRule&lt;br/&gt;계약 라벨로 자동 수집&quot;] --&gt; PROM[&quot;Prometheus&quot;]
     PROM --&gt; AM[&quot;Alertmanager&lt;br/&gt;경보 이름 = 라우팅 키&quot;]
   end
   SLA --&gt; HOOK[&quot;Teams 연결&lt;br/&gt;Power Automate&quot;]
@@ -205,7 +205,7 @@
   AM --&gt; HOOK
   HOOK --&gt; ROOM[&quot;팀 알림방&quot;]
   GATE[&quot;배포 관문&lt;br/&gt;실제 파싱·기동 확인&quot;] -.-&gt; AM
-  CHECK[&quot;아침 확인&lt;br/&gt;조용한 실패 목록 점검&quot;] -.-&gt; ROOM">flowchart LR
+  CHECK[&quot;아침 확인&lt;br/&gt;조용한 실패 목록 점검&quot;] -.-&gt; ROOM">flowchart TB
   subgraph L1[&quot;1층 데이터 작업 SLA 점검&quot;]
     SLA[&quot;하루 네 번&lt;br/&gt;준비 완료 기록·누락일 점검&quot;]
   end
@@ -213,7 +213,7 @@
     FAIL[&quot;파이프라인 작업&lt;br/&gt;실패 콜백&quot;]
   end
   subgraph L3[&quot;3층 Prometheus 규칙&quot;]
-    LBL[&quot;ServiceMonitor·PrometheusRule&lt;br/&gt;계약 라벨로 자동 수집&quot;] --&gt; PROM[&quot;Prometheus&quot;]
+    LBL[&quot;ServiceMonitor&lt;br/&gt;PrometheusRule&lt;br/&gt;계약 라벨로 자동 수집&quot;] --&gt; PROM[&quot;Prometheus&quot;]
     PROM --&gt; AM[&quot;Alertmanager&lt;br/&gt;경보 이름 = 라우팅 키&quot;]
   end
   SLA --&gt; HOOK[&quot;Teams 연결&lt;br/&gt;Power Automate&quot;]
@@ -260,14 +260,14 @@
 </section>
 <section class="sec">
 <div class="sec__head"><h2 class="sec__title">성과<span class="dim">숫자로 본 결과</span></h2><div class="sec__lead"><p>성과 숫자는 모두 실측값입니다. 게이트웨이 전환은 실패한 시도까지 함께 적습니다.</p></div></div>
-<div class="sec__body"><figure class="figure figure--soft"><div class="chart"><svg viewBox="0 0 720 320" role="img" aria-label="막대 차트"><line x1="16" x2="704" y1="256" y2="256" stroke="#3f424d" stroke-width="1"/><path class="mark" tabindex="0" data-tip="1차 시도(실패, 약 62초): 62초" d="M118.6,256V191.8Q118.6,187.8 122.6,187.8H138.6Q142.6,187.8 142.6,191.8V256Z" fill="#3d6bf4"/><text x="130.6" y="177.8" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">62초</text><text x="130.6" y="278" text-anchor="middle" font-size="13" fill="#9196a5">1차 시도(실패, 약 62초)</text><path class="mark" tabindex="0" data-tip="2차 시도(실패, 약 2분): 120초" d="M348,256V128Q348,124 352,124H368Q372,124 372,128V256Z" fill="#3d6bf4"/><text x="360" y="114" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">120초</text><text x="360" y="278" text-anchor="middle" font-size="13" fill="#9196a5">2차 시도(실패, 약 2분)</text><path class="mark" tabindex="0" data-tip="3차 시도(성공): 23.2초" d="M577.3,256V234.48Q577.3,230.48 581.3,230.48H597.3Q601.3,230.48 601.3,234.48V256Z" fill="#3d6bf4"/><text x="589.3" y="220.48" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">23.2초</text><text x="589.3" y="278" text-anchor="middle" font-size="13" fill="#9196a5">3차 시도(성공)</text></svg><details><summary>표로 보기</summary><div class="table-wrap"><table class="t"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>1차 시도(실패, 약 62초)</td><td>62초</td></tr><tr><td>2차 시도(실패, 약 2분)</td><td>120초</td></tr><tr><td>3차 시도(성공)</td><td>23.2초</td></tr></tbody></table></div></details></div><figcaption style="padding:12px 0 0">게이트웨이 전환 시도별 서비스 중단 시간(실측: 전환 스크립트 타임라인·분당 요청 로그). 1·2차는 실패 후 자동 롤백까지의 계획 외 중단이라 약값, 3차는 계획 중단.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>게이트웨이: 호스트 33개 전환, 3차 중단 23.2초, 전환 후 40시간 5xx 0.021%(게이트웨이 기인 0건), 게이트웨이 지표 수집 신설</li><li>시크릿: 30여 개 저장소 점검, SealedSecret 39개 작성·전환, Jenkinsfile 20개 자격 바인딩, 관리자 자격 3종 회전</li><li>SSO·권한: EKS 기준 운영 도구 5개 전용 client, 앱 한정 역할 권한 평가 71건 기대 일치·재plan 드리프트 0, Keycloak 26.4→26.7.2</li><li>인증서: DNS 이전 검증 23/23, ingress 14건 자동 발급 전환, 기존 만료일보다 약 4개월 앞서 전환, 검색엔진 노드 재시작 0·SSL 오류 0</li><li>CI: 잡 45개 이관·첫 빌드 성공, LTS 업그레이드 31초 만에 정상 기동·플러그인 112개 유지, 자사 빌드 잡 6종 kaniko 전환</li><li>관측: 7단계 교체, 1단계 결함 6건 수정, 구 스택 제거 후 새 스택 영향 없음</li><li>공유 DB: 커넥션 99→33, 초기화 재현 때 사전 덤프로 DB 7개 복원, 이튿날 SSO·배포 도구 로그인 복구</li></ul></div></div>
+<div class="sec__body"><figure class="figure figure--soft"><div class="chart"><div class="chart__plot"><svg class="chart__wide" viewBox="0 0 720 320" role="img" aria-label="막대 차트"><line x1="16" x2="704" y1="256" y2="256" stroke="#3f424d" stroke-width="1"/><path class="mark" tabindex="0" data-tip="1차 시도(실패, 약 62초): 62초" d="M118.6,256V191.8Q118.6,187.8 122.6,187.8H138.6Q142.6,187.8 142.6,191.8V256Z" fill="#3d6bf4"/><text x="130.6" y="177.8" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">62초</text><text x="130.6" y="278" text-anchor="middle" font-size="13" fill="#9196a5">1차 시도(실패, 약 62초)</text><path class="mark" tabindex="0" data-tip="2차 시도(실패, 약 2분): 120초" d="M348,256V128Q348,124 352,124H368Q372,124 372,128V256Z" fill="#3d6bf4"/><text x="360" y="114" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">120초</text><text x="360" y="278" text-anchor="middle" font-size="13" fill="#9196a5">2차 시도(실패, 약 2분)</text><path class="mark" tabindex="0" data-tip="3차 시도(성공): 23.2초" d="M577.3,256V234.48Q577.3,230.48 581.3,230.48H597.3Q601.3,230.48 601.3,234.48V256Z" fill="#3d6bf4"/><text x="589.3" y="220.48" text-anchor="middle" font-size="14" font-weight="600" fill="#d7d8de">23.2초</text><text x="589.3" y="278" text-anchor="middle" font-size="13" fill="#9196a5">3차 시도(성공)</text></svg><svg class="chart__narrow" viewBox="0 0 360 167" role="img" aria-label="막대 차트"><text x="0" y="18" font-size="14" fill="#9196a5">1차 시도(실패, 약 62초)</text><path class="mark" tabindex="0" data-tip="1차 시도(실패, 약 62초): 62초" d="M0,29H88.5Q92.5,29 92.5,33V41Q92.5,45 88.5,45H0Z" fill="#3d6bf4"/><text x="100.5" y="42" font-size="14" font-weight="600" fill="#d7d8de">62초</text><text x="0" y="77" font-size="14" fill="#9196a5">2차 시도(실패, 약 2분)</text><path class="mark" tabindex="0" data-tip="2차 시도(실패, 약 2분): 120초" d="M0,88H175.04Q179.04,88 179.04,92V100Q179.04,104 175.04,104H0Z" fill="#3d6bf4"/><text x="187.04" y="101" font-size="14" font-weight="600" fill="#d7d8de">120초</text><text x="0" y="136" font-size="14" fill="#9196a5">3차 시도(성공)</text><path class="mark" tabindex="0" data-tip="3차 시도(성공): 23.2초" d="M0,147H30.6Q34.6,147 34.6,151V159Q34.6,163 30.6,163H0Z" fill="#3d6bf4"/><text x="42.6" y="160" font-size="14" font-weight="600" fill="#d7d8de">23.2초</text></svg></div><details><summary>표로 보기</summary><div class="table-wrap"><table class="t"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>1차 시도(실패, 약 62초)</td><td>62초</td></tr><tr><td>2차 시도(실패, 약 2분)</td><td>120초</td></tr><tr><td>3차 시도(성공)</td><td>23.2초</td></tr></tbody></table></div></details></div><figcaption style="padding:12px 0 0">게이트웨이 전환 시도별 서비스 중단 시간(실측: 전환 스크립트 타임라인·분당 요청 로그). 1·2차는 실패 후 자동 롤백까지의 계획 외 중단이라 어림값, 3차는 계획 중단.</figcaption></figure><div style="margin-top:32px"><ul class="sec__bullets"><li>게이트웨이: 호스트 33개 전환, 3차 중단 23.2초, 전환 후 40시간 5xx 0.021%(게이트웨이 기인 0건), 게이트웨이 지표 수집 신설</li><li>시크릿: 30여 개 저장소 점검, SealedSecret 39개 작성·전환, Jenkinsfile 20개 자격 바인딩, 관리자 자격 3종 회전</li><li>SSO·권한: EKS 기준 운영 도구 5개 전용 client, 앱 한정 역할 권한 평가 71건 기대 일치·재plan 드리프트 0, Keycloak 26.4→26.7.2</li><li>인증서: DNS 이전 검증 23/23, ingress 14건 자동 발급 전환, 기존 만료일보다 약 4개월 앞서 전환, 검색엔진 노드 재시작 0·SSL 오류 0</li><li>CI: 잡 45개 이관·첫 빌드 성공, LTS 업그레이드 31초 만에 정상 기동·플러그인 112개 유지, 자사 빌드 잡 6종 kaniko 전환</li><li>관측: 7단계 교체, 1단계 결함 6건 수정, 구 스택 제거 후 새 스택 영향 없음</li><li>공유 DB: 커넥션 99→33, 초기화 재현 때 사전 덤프로 DB 7개 복원, 이튿날 SSO·배포 도구 로그인 복구</li></ul></div></div>
 
 </section>
 <section class="sec sec--glow sec--flip">
-<div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">어디에 왜 썼나</span></h2></div>
+<div class="sec__head"><h2 class="sec__title">기술별 쓰임새<span class="dim">어디에 · 왜</span></h2></div>
 <div class="sec__body"><div class="table-wrap"><table class="t"><thead><tr><th>기술</th><th>쓴 곳</th><th>고른 이유·메모</th></tr></thead><tbody><tr><td>Envoy Gateway(Gateway API)</td><td>클러스터 진입점, 호스트 33개</td><td>보안 지원이 끝난 ingress-nginx 대체, 게이트웨이 단위 정책으로 타임아웃 의미 차이 흡수</td></tr><tr><td>cert-manager·Let's Encrypt·Route53</td><td>와일드카드 인증서 DNS-01 자동 발급·갱신, 내부 CA Issuer</td><td>수동 복사·만료 안내 부재 해소, 발급 권한은 해당 zone 검증용 레코드로 한정</td></tr><tr><td>Keycloak 26.7(OIDC)</td><td>사내 SSO, 운영 도구 5개 전용 client</td><td>운영 모드 이중화, DB 통째 이관으로 서명 키 유지</td></tr><tr><td>Terraform</td><td>Argo CD·Kubernetes RBAC, 사람 접근 명부</td><td>콘솔 수작업 권한을 코드로, 재plan 드리프트 0 으로 검증</td></tr><tr><td>Argo CD</td><td>GitOps 동기화</td><td>Git 이 정본, 서버 측 dry-run diff 로 차이 0 확인 후 이관</td></tr><tr><td>Jenkins(JCasC)·kaniko·EKS Pod Identity</td><td>CI</td><td>설정 코드화, docker.sock 없는 빌드, 이미지 푸시용 정적 클라우드 키 제거</td></tr><tr><td>Sealed Secrets</td><td>Git 안의 시크릿 봉인</td><td>봉인 수단이 없던 클러스터에 도입, 새 시크릿은 봉인해서만 Git 에</td></tr><tr><td>reflector</td><td>인증서·레지스트리 시크릿 네임스페이스 복제</td><td>이미 쓰던 도구 재사용, 소스 갱신 지연 경보로 단일 실패점 보완</td></tr><tr><td>kube-prometheus-stack·Alertmanager·Grafana·Loki·Alloy</td><td>공용 관측 플랫폼</td><td>계약 라벨 기반 자동 연결, promtool 가상 시계 시험으로 날짜 조건 경보 검증</td></tr><tr><td>PostgreSQL·Elasticsearch 8</td><td>공유 DB·검색엔진 운영</td><td>정기 백업·소실 경보, 검색엔진 노드 무재시작 인증서 교체·자동 갱신 이관</td></tr><tr><td>Claude Code(일부 Codex)</td><td>조사·스크립트·읽기 전용 다중 에이전트 점검</td><td>운영 변경·비밀값·파괴 작업은 본인 승인·실행으로 권한 분리</td></tr></tbody></table></div></div>
 
-</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>클러스터·GitOps</h3><div class="card__tags"><span class="tag">Kubernetes(k3s·EKS)</span><span class="tag">Argo CD</span><span class="tag">Helm</span><span class="tag">Kustomize</span><span class="tag">Terraform</span></div></div><div class="stack__group"><h3>엣지·인증서</h3><div class="card__tags"><span class="tag">Envoy Gateway(Gateway API)</span><span class="tag">cert-manager</span><span class="tag">Let's Encrypt(DNS-01)</span><span class="tag">Route53</span><span class="tag">reflector</span></div></div><div class="stack__group"><h3>인증·권한</h3><div class="card__tags"><span class="tag">Keycloak 26.7(OIDC)</span><span class="tag">oauth2-proxy</span><span class="tag">Argo CD RBAC</span><span class="tag">Kubernetes RBAC</span><span class="tag">Terraform 접근 명부</span></div></div><div class="stack__group"><h3>CI</h3><div class="card__tags"><span class="tag">Jenkins(JCasC)</span><span class="tag">kaniko</span><span class="tag">EKS Pod Identity</span><span class="tag">ECR</span></div></div><div class="stack__group"><h3>시크릿</h3><div class="card__tags"><span class="tag">Sealed Secrets</span></div></div><div class="stack__group"><h3>관측</h3><div class="card__tags"><span class="tag">kube-prometheus-stack</span><span class="tag">Prometheus·promtool</span><span class="tag">Alertmanager</span><span class="tag">Grafana</span><span class="tag">Loki</span><span class="tag">Grafana Alloy</span></div></div><div class="stack__group"><h3>데이터 저장소 운영</h3><div class="card__tags"><span class="tag">PostgreSQL</span><span class="tag">Elasticsearch 8</span></div></div><div class="stack__group"><h3>AI 활용</h3><div class="card__tags"><span class="tag">Claude Code(읽기 전용 다중 에이전트 점검)</span><span class="tag">Codex(일부)</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">인그레스 교체 — 같은 날 두 번 실패한 전환을 세 번째에 23.2초로 · 흩어진 평문 자격증명 — 참조 구조부터 바꾼 뒤 회전 …</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
+</section><section class="sec"><div class="sec__head"><h2 class="sec__title">기술 스택<span class="dim">이 프로젝트에서 실제로 쓴 것</span></h2></div><div class="sec__body"><div class="stack"><div class="stack__group"><h3>클러스터·GitOps</h3><div class="card__tags"><span class="tag">Kubernetes(k3s·EKS)</span><span class="tag">Argo CD</span><span class="tag">Helm</span><span class="tag">Kustomize</span><span class="tag">Terraform</span></div></div><div class="stack__group"><h3>엣지·인증서</h3><div class="card__tags"><span class="tag">Envoy Gateway(Gateway API)</span><span class="tag">cert-manager</span><span class="tag">Let's Encrypt(DNS-01)</span><span class="tag">Route53</span><span class="tag">reflector</span></div></div><div class="stack__group"><h3>인증·권한</h3><div class="card__tags"><span class="tag">Keycloak 26.7(OIDC)</span><span class="tag">oauth2-proxy</span><span class="tag">Argo CD RBAC</span><span class="tag">Kubernetes RBAC</span><span class="tag">Terraform 접근 명부</span></div></div><div class="stack__group"><h3>CI</h3><div class="card__tags"><span class="tag">Jenkins(JCasC)</span><span class="tag">kaniko</span><span class="tag">EKS Pod Identity</span><span class="tag">ECR</span></div></div><div class="stack__group"><h3>시크릿</h3><div class="card__tags"><span class="tag">Sealed Secrets</span></div></div><div class="stack__group"><h3>관측</h3><div class="card__tags"><span class="tag">kube-prometheus-stack</span><span class="tag">Prometheus·promtool</span><span class="tag">Alertmanager</span><span class="tag">Grafana</span><span class="tag">Loki</span><span class="tag">Grafana Alloy</span></div></div><div class="stack__group"><h3>데이터 저장소 운영</h3><div class="card__tags"><span class="tag">PostgreSQL</span><span class="tag">Elasticsearch 8</span></div></div><div class="stack__group"><h3>AI 활용</h3><div class="card__tags"><span class="tag">Claude Code(읽기 전용 다중 에이전트 점검)</span><span class="tag">Codex(일부)</span></div></div></div></div></section><div class="takeaway takeaway--sm"><h2>다음 탭: 문제해결<span class="dim">인그레스 교체 — 같은 날 두 번 실패한 전환을 세 번째에 23.2초로<br>흩어진 평문 자격증명 — 참조 구조부터 바꾼 뒤 회전<br>외 2개</span></h2><p><a class="ctl" href="#problems" data-goto-panel="problems"><span>문제해결 보기 <svg class="" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.7458 7.33595H3.40583C3.03917 7.33595 2.73917 7.63595 2.73917 8.00262C2.73917 8.36929 3.03917 8.66929 3.40583 8.66929H10.7458V9.86262C10.7458 10.1626 11.1058 10.3093 11.3125 10.096L13.1658 8.23595C13.2925 8.10262 13.2925 7.89595 13.1658 7.76262L11.3125 5.90262C11.1058 5.68929 10.7458 5.84262 10.7458 6.13595V7.33595Z"/></svg></span></a></p></div></div>
 <div class="panel" id="panel-problems" role="tabpanel" aria-labelledby="tab-problems" hidden><section class="sec sec--glow"><div class="sec__head"><h2 class="sec__title">문제해결<span class="dim">사례 4개</span></h2><div class="sec__lead"><p>문제 상황 → 원인 분석 → 해결 과정 → 결과 순서로 정리했습니다.</p></div></div><div class="sec__body" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><a class="ctl" href="#case-1"><span>01 인그레스 교체 — 같은 날 두 번 실패한 전환을 세 번째에 23.2초로</span></a><a class="ctl" href="#case-2"><span>02 흩어진 평문 자격증명 — 참조 구조부터 바꾼 뒤 회전</span></a><a class="ctl" href="#case-3"><span>03 만료본을 서빙하던 인증서와 '고장 대기' 검색엔진</span></a><a class="ctl" href="#case-4"><span>04 경보가 약 32분 끊긴 배포 — '렌더 통과'와 '실제 파싱'의 차이</span></a></div></section><article class="case sec--glow" id="case-1">
 <div class="case__head"><span class="case__no">CASE 01 · 플랫폼이관</span><h3 class="case__title">인그레스 교체 — 같은 날 두 번 실패한 전환을 세 번째에 23.2초로</h3></div>
 <div class="steps">
@@ -276,27 +276,33 @@
 <div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>설정 소스·라이브 값·실트래픽 로그 3단 대조로 외부 호출 경로 확정, 변환 도구의 구현체별 출력 비교(기본 출력이 설정 일부를 경고 없이 버리는 함정 확인)</li><li>타임아웃 의미 차이(유휴 기준 vs 요청 전체 기준)를 액세스 로그로 실측해 게이트웨이 단위 정책 설계</li><li>1차 후: 생성기에 운영값 고정, nginx 정지 전 4항목 사전 게이트(하나라도 어긋나면 nginx 무접촉 종료), 리허설을 실제 명령과 똑같이</li><li>2차 후: 단계별 독립 대기 예산, 판정 기준을 소켓 실제 해제로 변경</li><li>유휴 노드에서 중단 없이 nginx 포트가 실제로 풀리는 시간을 다시 재 확인(처음 폴링은 매번 같은 값이 나와 측정 도구의 해상도를 잰 것으로 보고 고해상도 폴링으로 다시 잼)</li><li>3차: 중단 23.2초로 전환, 33개 호스트 응답 코드 대조, 40시간 관측 게이트 통과 후 Ingress 33개 정리(롤백 스냅샷 보존)</li></ol></div>
 <div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>3차 시도 중단 23.2초로 호스트 33개 전환, 전환 후 40시간 5xx 0.021%(게이트웨이 기인 0건), 게이트웨이 지표 수집 신설. 설계는 이후 EKS 게이트웨이로 이식.</p></div>
 </div>
-<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">전환 중단 시간</div><div class="delta__val"><span class="from">1차 약 62초·2차 약 2분(실패·자동 롤백)</span><span class="arrow">→</span><span class="to">3차 23.2초</span></div><div class="delta__note">실측, 같은 날</div></div><div class="delta"><div class="delta__label">전환 후 40시간 5xx</div><div class="delta__val"><span class="to">0.021%</span></div><div class="delta__note">게이트웨이 기인 0건</div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">조사</div><div class="tl__what"><b>우선순위 1순위로 선정·경로 확정</b><span>업그레이드 영향도 평가에서 1순위, 3단 대조로 외부 호출 경로 확정</span></div></li><li><div class="tl__when">PoC</div><div class="tl__what"><b>다른 포트에서 병행 검증</b><span>타임아웃 의미 차이 실측, 게이트웨이 단위 정책 설계</span></div></li><li><div class="tl__when">1차 시도</div><div class="tl__what"><b>실패·자동 롤백(약 62초)</b><span>생성기와 라이브 불일치, 사전 게이트 부재</span></div></li><li><div class="tl__when">2차 시도</div><div class="tl__what"><b>실패·자동 롤백(약 2분)</b><span>대기 예산 공유, 오브젝트 소멸을 포트 해제로 오판</span></div></li><li><div class="tl__when">실측</div><div class="tl__what"><b>중단 없이 포트 해제 시간 측정</b><span>유휴 노드에서 포트 해제 시간을 다시 재 소켓 기준 판정이 맞았음을 확인</span></div></li><li><div class="tl__when">3차 시도</div><div class="tl__what"><b>중단 23.2초로 전환</b><span>사전 게이트 통과, 33개 호스트 응답 코드 대조</span></div></li><li><div class="tl__when">전환 후 40시간</div><div class="tl__what"><b>관측 게이트 통과·정리</b><span>5xx 0.021%(게이트웨이 기인 0건), Ingress 33개 정리</span></div></li></ol><p class="sub-h">실패한 절차(위)와 고친 절차(아래). 고친 지점마다 관문을 하나씩 더했습니다.</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">전환 중단 시간</div><div class="delta__val"><span class="from">1차 약 62초·2차 약 2분(실패·자동 롤백)</span><span class="arrow">→</span><span class="to">3차 23.2초</span></div><div class="delta__note">실측, 같은 날</div></div><div class="delta"><div class="delta__label">전환 후 40시간 5xx</div><div class="delta__val"><span class="to">0.021%</span></div><div class="delta__note">게이트웨이 기인 0건</div></div></div><p class="sub-h">진행 순서</p><ol class="tl"><li><div class="tl__when">조사</div><div class="tl__what"><b>우선순위 1순위로 선정·경로 확정</b><span>업그레이드 영향도 평가에서 1순위, 3단 대조로 외부 호출 경로 확정</span></div></li><li><div class="tl__when">PoC</div><div class="tl__what"><b>다른 포트에서 병행 검증</b><span>타임아웃 의미 차이 실측, 게이트웨이 단위 정책 설계</span></div></li><li><div class="tl__when">1차 시도</div><div class="tl__what"><b>실패·자동 롤백(약 62초)</b><span>생성기와 라이브 불일치, 사전 게이트 부재</span></div></li><li><div class="tl__when">2차 시도</div><div class="tl__what"><b>실패·자동 롤백(약 2분)</b><span>대기 예산 공유, 오브젝트 소멸을 포트 해제로 오판</span></div></li><li><div class="tl__when">실측</div><div class="tl__what"><b>중단 없이 포트 해제 시간 측정</b><span>유휴 노드에서 포트 해제 시간을 다시 재 소켓 기준 판정이 맞았음을 확인</span></div></li><li><div class="tl__when">3차 시도</div><div class="tl__what"><b>중단 23.2초로 전환</b><span>사전 게이트 통과, 33개 호스트 응답 코드 대조</span></div></li><li><div class="tl__when">전환 후 40시간</div><div class="tl__what"><b>관측 게이트 통과·정리</b><span>5xx 0.021%(게이트웨이 기인 0건), Ingress 33개 정리</span></div></li></ol><p class="sub-h">실패한 절차(위)와 고친 절차(아래). 고친 지점마다 관문을 하나씩 더했습니다.</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
   subgraph BEF[&quot;1·2차 절차&quot;]
+    direction LR
     B1[&quot;라이브만 수정&lt;br/&gt;생성기 미반영&quot;] --&gt; B2[&quot;사전조건 실패해도&lt;br/&gt;nginx 정지&quot;]
     B2 --&gt; B3[&quot;공유 대기 예산&lt;br/&gt;오브젝트 소멸로 판정&quot;]
     B3 --&gt; B4[&quot;실패·자동 롤백&quot;]
   end
   subgraph AFT[&quot;3차 절차&quot;]
+    direction LR
     A1[&quot;생성기 = 라이브&lt;br/&gt;리허설 = 실제 명령&quot;] --&gt; A2[&quot;4항목 사전 게이트&lt;br/&gt;불일치 시 무접촉 종료&quot;]
     A2 --&gt; A3[&quot;단계별 독립 대기 예산&lt;br/&gt;소켓 해제로 판정&quot;]
     A3 --&gt; A4[&quot;중단 23.2초 전환&lt;br/&gt;33개 호스트 대조&quot;]
-  end">flowchart LR
+  end
+  BEF ~~~ AFT">flowchart TB
   subgraph BEF[&quot;1·2차 절차&quot;]
+    direction LR
     B1[&quot;라이브만 수정&lt;br/&gt;생성기 미반영&quot;] --&gt; B2[&quot;사전조건 실패해도&lt;br/&gt;nginx 정지&quot;]
     B2 --&gt; B3[&quot;공유 대기 예산&lt;br/&gt;오브젝트 소멸로 판정&quot;]
     B3 --&gt; B4[&quot;실패·자동 롤백&quot;]
   end
   subgraph AFT[&quot;3차 절차&quot;]
+    direction LR
     A1[&quot;생성기 = 라이브&lt;br/&gt;리허설 = 실제 명령&quot;] --&gt; A2[&quot;4항목 사전 게이트&lt;br/&gt;불일치 시 무접촉 종료&quot;]
     A2 --&gt; A3[&quot;단계별 독립 대기 예산&lt;br/&gt;소켓 해제로 판정&quot;]
     A3 --&gt; A4[&quot;중단 23.2초 전환&lt;br/&gt;33개 호스트 대조&quot;]
-  end</pre></div></figure><div class="lesson"><b>배운 점</b><p>'파일과 라이브가 같다'는 가정이 1차를, '오브젝트가 사라지면 포트도 풀린다'는 가정이 2차를 무너뜨렸습니다. 리허설은 실제 명령과 똑같이 하고, 판정은 대리 신호가 아니라 실제 상태(소켓)로 합니다. 측정 중 같은 값이 연속으로 나오면 대상이 아니라 측정 도구의 해상도를 잰 것인지 먼저 의심합니다.</p></div>
+  end
+  BEF ~~~ AFT</pre></div></figure><div class="lesson"><b>배운 점</b><p>'파일과 라이브가 같다'는 가정이 1차를, '오브젝트가 사라지면 포트도 풀린다'는 가정이 2차를 무너뜨렸습니다. 리허설은 실제 명령과 똑같이 하고, 판정은 대리 신호가 아니라 실제 상태(소켓)로 합니다. 측정 중 같은 값이 연속으로 나오면 대상이 아니라 측정 도구의 해상도를 잰 것인지 먼저 의심합니다.</p></div>
 
 </article>
 <article class="case" id="case-2">
@@ -307,7 +313,7 @@
 <div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>저장소마다 읽기 전용 AI 에이전트를 붙여 30여 개 저장소 병렬 스캔, 값은 출력하지 않고 위치·종류만 모으도록 설계(스캔 중 값이 섞인 임시 결과는 삭제)</li><li>'공유 자격 재사용' 축으로 우선순위를 묶은 정본 점검 표 작성</li><li>SealedSecrets 를 Argo CD 앱으로 도입하고 봉인→Secret 생성 흐름 검증, 데이터 플랫폼·EKS 까지 같은 관례 적용</li><li>'자격 저장소 등록 → 바인딩 전환(동작 불변) → 카나리 빌드 → 회전' 순서로 Jenkinsfile 20개 전환</li><li>일괄 변환이 남긴 Groovy 문자열 보간(로그 마스킹 우회 위험)을 검사로 찾아 정리</li><li>관리자 자격 3종 회전 중 두 함정 해결: 비밀번호 환경변수를 첫 기동 때만 적용하는 도구는 DB 값까지 재설정, GitOps 자동 복구가 클러스터 직접 수정을 되돌리는 문제는 Git 경유로 재반영</li></ol></div>
 <div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>30여 개 저장소 점검, SealedSecret 39개 작성·전환, Jenkinsfile 20개 자격 바인딩, 관리자 자격 3종 회전(파이프라인 손상 없음).</p></div>
 </div>
-<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">봉인 시크릿</div><div class="delta__val"><span class="from">봉인 수단 없음</span><span class="arrow">→</span><span class="to">SealedSecret 39개</span></div></div><div class="delta"><div class="delta__label">Jenkinsfile 자격 참조</div><div class="delta__val"><span class="from">평문 참조</span><span class="arrow">→</span><span class="to">자격 저장소 바인딩 20개</span></div></div><div class="delta"><div class="delta__label">관리자 자격</div><div class="delta__val"><span class="to">3종 회전</span></div><div class="delta__note">카나리 빌드 성공 뒤 회전, 파이프라인 손상 없음</div></div></div><p class="sub-h">점검 → 봉인 → 참조 전환 → 회전 순서. 회전은 맨 마지막입니다.</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">봉인 시크릿</div><div class="delta__val"><span class="from">봉인 수단 없음</span><span class="arrow">→</span><span class="to">SealedSecret 39개</span></div></div><div class="delta"><div class="delta__label">Jenkinsfile 자격 참조</div><div class="delta__val"><span class="from">평문 참조</span><span class="arrow">→</span><span class="to">자격 저장소 바인딩 20개</span></div></div><div class="delta"><div class="delta__label">관리자 자격</div><div class="delta__val"><span class="to">3종 회전</span></div><div class="delta__note">카나리 빌드 성공 뒤 회전, 파이프라인 손상 없음</div></div></div><p class="sub-h">점검 → 봉인 → 참조 전환 → 회전 순서. 회전은 맨 마지막입니다.</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
   S1[&quot;읽기 전용 에이전트&lt;br/&gt;30여 개 저장소 병렬 스캔&quot;] --&gt; S2[&quot;정본 점검 표&lt;br/&gt;공유 자격 재사용 축&quot;]
   S2 --&gt; S3[&quot;SealedSecrets 도입&lt;br/&gt;봉인해서만 Git 에&quot;]
   S2 --&gt; S4[&quot;자격 저장소 등록&quot;]
@@ -315,7 +321,7 @@
   S5 --&gt; S6[&quot;문자열 보간&lt;br/&gt;검사·정리&quot;]
   S6 --&gt; S7[&quot;카나리 빌드 성공&quot;]
   S7 --&gt; S8[&quot;관리자 자격 회전&quot;]
-  S3 --&gt; S8">flowchart LR
+  S3 --&gt; S8">flowchart TB
   S1[&quot;읽기 전용 에이전트&lt;br/&gt;30여 개 저장소 병렬 스캔&quot;] --&gt; S2[&quot;정본 점검 표&lt;br/&gt;공유 자격 재사용 축&quot;]
   S2 --&gt; S3[&quot;SealedSecrets 도입&lt;br/&gt;봉인해서만 Git 에&quot;]
   S2 --&gt; S4[&quot;자격 저장소 등록&quot;]
@@ -345,35 +351,41 @@
 <div class="step"><div class="step__k"><i>3</i>해결 과정</div><ol><li>수정 커밋으로 복구</li><li>템플릿 변경은 배포본 기준 실제 파싱 검사 + 배포 직후 Alertmanager ready·로그 확인을 표준 관문으로 지정</li><li>템플릿 주석에 구분자 문자를 쓰지 않는 규칙 추가</li><li>날짜 조건이 걸린 경보는 promtool 가상 시계 시험으로 배포 전 증명(옛 규칙이 실패하는 것을 음성 대조군으로)</li><li>EKS 이식 때도 같은 원칙으로 실제 수신 경로 접수(HTTP 202)까지 확인</li></ol></div>
 <div class="step step--result"><div class="step__k"><i>4</i>결과</div><p>약 32분 끊긴 알림을 수정 커밋으로 복구했고, 이후 템플릿·규칙 변경은 실제 파싱·기동 확인 관문을 거쳐 배포합니다.</p></div>
 </div>
-<p class="sub-h">숫자로 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">알림 중단</div><div class="delta__val"><span class="from">약 32분</span><span class="arrow">→</span><span class="to">수정 커밋으로 복구</span></div><div class="delta__note">본인 배포가 원인, 회고</div></div><div class="delta"><div class="delta__label">EKS 이식 후 수신 경로</div><div class="delta__val"><span class="to">실제 수신 경로 접수 HTTP 202 확인</span></div></div></div><p class="sub-h">렌더 확인만 하던 배포(위)와, 실제 파싱·기동 확인을 관문으로 둔 배포(아래).</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart LR
+<p class="sub-h">한눈에 본 변화</p><div class="deltas"><div class="delta"><div class="delta__label">알림 중단</div><div class="delta__val"><span class="from">약 32분</span><span class="arrow">→</span><span class="to">수정 커밋으로 복구</span></div><div class="delta__note">본인 배포가 원인, 회고</div></div><div class="delta"><div class="delta__label">EKS 이식 후 수신 경로</div><div class="delta__val"><span class="to">실제 수신 경로 접수 HTTP 202 확인</span></div></div></div><p class="sub-h">렌더 확인만 하던 배포(위)와, 실제 파싱·기동 확인을 관문으로 둔 배포(아래).</p><figure class="figure card"><div class="card__media"><pre class="mermaid" data-src="flowchart TB
   subgraph OLD[&quot;이전 배포 확인&quot;]
+    direction LR
     O1[&quot;AI 에이전트가&lt;br/&gt;템플릿 작성&quot;] --&gt; O2[&quot;렌더 통과 보고&lt;br/&gt;helm 은 템플릿 파싱 미검증&quot;]
     O2 --&gt; O3[&quot;본인 배포&quot;]
     O3 --&gt; O4[&quot;Alertmanager 파싱 실패&lt;br/&gt;알림 약 32분 중단&quot;]
   end
   subgraph NEW[&quot;바꾼 배포 관문&quot;]
+    direction LR
     N1[&quot;템플릿 변경&quot;] --&gt; N2[&quot;배포본 기준&lt;br/&gt;실제 파싱 검사&quot;]
     N2 --&gt; N3[&quot;배포&quot;]
     N3 --&gt; N4[&quot;Alertmanager ready&lt;br/&gt;로그 확인&quot;]
     N5[&quot;날짜 조건 경보&lt;br/&gt;promtool 가상 시계 시험&quot;] --&gt; N3
-  end">flowchart LR
+  end
+  OLD ~~~ NEW">flowchart TB
   subgraph OLD[&quot;이전 배포 확인&quot;]
+    direction LR
     O1[&quot;AI 에이전트가&lt;br/&gt;템플릿 작성&quot;] --&gt; O2[&quot;렌더 통과 보고&lt;br/&gt;helm 은 템플릿 파싱 미검증&quot;]
     O2 --&gt; O3[&quot;본인 배포&quot;]
     O3 --&gt; O4[&quot;Alertmanager 파싱 실패&lt;br/&gt;알림 약 32분 중단&quot;]
   end
   subgraph NEW[&quot;바꾼 배포 관문&quot;]
+    direction LR
     N1[&quot;템플릿 변경&quot;] --&gt; N2[&quot;배포본 기준&lt;br/&gt;실제 파싱 검사&quot;]
     N2 --&gt; N3[&quot;배포&quot;]
     N3 --&gt; N4[&quot;Alertmanager ready&lt;br/&gt;로그 확인&quot;]
     N5[&quot;날짜 조건 경보&lt;br/&gt;promtool 가상 시계 시험&quot;] --&gt; N3
-  end</pre></div></figure><div class="lesson"><b>배운 점</b><p>'검증했다'는 보고를 받으면 무엇을 검증했는지(렌더·파싱·기동)부터 확인합니다. 도구가 통과시킨 것과 운영에서 실제로 돌아가는 것은 다를 수 있어서, 관문은 배포본 기준으로 둡니다.</p></div>
+  end
+  OLD ~~~ NEW</pre></div></figure><div class="lesson"><b>배운 점</b><p>'검증했다'는 보고를 받으면 무엇을 검증했는지(렌더·파싱·기동)부터 확인합니다. 도구가 통과시킨 것과 운영에서 실제로 돌아가는 것은 다를 수 있어서, 관문은 배포본 기준으로 둡니다.</p></div>
 
-</article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>'파일과 라이브가 같다'는 가정이 1차를, '오브젝트가 사라지면 포트도 풀린다'는 가정이 2차를 무너뜨렸습니다. 리허설은 실제 명령과 똑같이 하고, 판정은 대리 신호가 아니라 실제 상태(소켓)로 합니다. 측정 중 같은 값이 연속으로 나오면 대상이 아니라 측정 도구의 해상도를 잰 것인지 먼저 의심합니다.</p><p>회전보다 참조 구조를 먼저 바꿔야 회전이 안전합니다. AI 가 한 일괄 변환도 검사 관문 없이 믿지 않습니다. 에이전트에게 시크릿 점검을 맡길 때는 '값 미출력' 규칙을 두되, 실제로 지켜졌는지 산출물을 다시 확인합니다.</p><p>겉보기 green 은 '기존 연결이 살아 있다'는 뜻일 뿐입니다. dry-run 은 런타임 조회를 반영하지 못하니 판단 근거로 쓰지 않습니다. 신뢰 기준(CA)과 갱신 주기를 분리해 두면 다음 갱신 때는 아무것도 재시작하지 않아도 됩니다.</p></section></div>
+</article><section class="takeaway"><h2>정리:<span class="dim">이 프로젝트에서 남긴 것</span></h2><p>실패가 드러난 자리마다 같은 일이 되풀이되지 않도록 관문을 하나씩 더했습니다. 두 번 실패한 게이트웨이 전환에는 사전 게이트와 소켓 기준 판정을, 약 32분 끊긴 경보에는 배포본 기준 파싱 검사를, 되살리지 못한 첫 DB 소실 뒤에는 변경 전 백업을 붙였습니다.</p></section></div>
 <nav class="pager" aria-label="다른 프로젝트"><a href="eks-migration.html"><small>← 이전 프로젝트</small><b>온프레미스 k3s → AWS EKS 플랫폼 이관·재구축</b></a><a class="next" href="ai-agent-harness.html"><small>다음 프로젝트 →</small><b>AI 코딩 에이전트 하네스 엔지니어링</b></a></nav>
 <footer class="footer"><p>황병준 · 백엔드·데이터 엔지니어 · <a href="mailto:hbj3809@naver.com">hbj3809@naver.com</a></p><small>디자인 바탕: <a href="https://once-ui.com" target="_blank" rel="noopener">Once UI</a> Magic Portfolio · 도표는 직접 그린 개념도입니다</small></footer>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" defer></script>
-<script src="../assets/js/site.js?v=fdaea7ac" defer></script>
+<script src="../assets/js/site.js?v=22ba24f0" defer></script>
 </body>
 </html>
