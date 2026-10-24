@@ -1,10 +1,7 @@
-/* ==== site.css ==== */
-/* 황병준 포트폴리오 — Magic Portfolio(Once UI) 피그마 디자인 토큰을 옮긴 공용 스타일.
-   값의 출처: 피그마 변수(Grey/Primary/Secondary·Display/Heading 글꼴·Shadow M/XL·Blur S)와
-   부품(_Navigation, _Card, _ControlButton, Controls, Footer, 절 제목, Takeaway). */
+
 
 :root {
-  /* 색 — 피그마 변수(다크 원본 팔레트). 규칙은 이 이름을 직접 쓰지 않고 아래 테마 토큰만 쓴다(부품 CSS 의 예비 값 자리에만 남아 있다) */
+  
   --grey-100: #15161a;
   --grey-200: #3f424d;
   --grey-400: #656a7b;
@@ -17,25 +14,23 @@
   --primary-500: #3d6bf4;
   --primary-900: #cdd8fb;
   --secondary-300: #6a1cfd;
-  --orange: #ca6821; /* 표지(Art)의 주황 — 그래프 '전' 계열 */
+  --orange: #ca6821; 
 
   --font: "Inter", "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* 움직임(나타나기): 이동 거리·시간·곡선·형제 시차 */
+  
   --rv-dist: 20px;
   --rv-dur: .62s;
   --rv-ease: cubic-bezier(.22, .7, .24, 1);
 
   --gutter: 40px;
-  --content: 1144px;   /* 모든 쪽 한 컨테이너 폭(.wrap) — 모든 절 내용이 같은 좌우 끝선. 3차: 1040 → 1144(약 10% 넓힘) */
-  --nav-reserve: 0px;  /* 왼쪽 고정 메뉴가 차지하는 폭 + 여백(본문이 메뉴에 가리지 않게) */
-  --text-measure: none; /* 글 덩어리 최대 폭: 컨테이너 폭 그대로(한 쪽 안 본문 오른쪽 끝선을 머리글·AI 절 본문과 같게. 예전 990 은 끝선이 1246/1400 으로 갈렸다) */
+  --content: 1144px;   
+  --nav-reserve: 0px;  
+  --text-measure: none; 
 }
 
-/* ---------- 테마 토큰(설계서 3차 요구 10) ----------
-   <html data-theme="dark|light">. 머리의 작은 스크립트가 그리기 전에 정한다(저장한 선택 > 기본 다크, 주소 ?theme= 가 있으면 그것).
-   모든 규칙·부품 CSS·차트 SVG 는 아래 이름만 쓴다. 예외: 표지(cover) 그라데이션 그림 색 — 두 테마 모두 어두운 그림, 그 위 글은 흰색 */
+
 :root, :root[data-theme="dark"] {
   color-scheme: dark;
   --bg: #15161a;
@@ -51,29 +46,29 @@
   --accent: #3d6bf4;
   --accent-2: #6a1cfd;
   --accent-3: #ca6821;
-  /* 감소·증가 글자색(바탕 대비 4.5 이상). 색만으로 뜻을 전하지 않게 ↓·↑ 기호를 함께 둔다 */
+  
   --delta-down: #3fd39a;
   --delta-up: #6ea8ff;
-  --teal: #14b8a6;            /* 장식 청록(숫자 뜻 없음): 기술 페이지 스파이더 허브 청록(spider.css --sp-teal)과 같은 값 */
+  --teal: #14b8a6;            
   --chart-surface: #1c1d22;
-  --on-accent: #ffffff;       /* 강조색(파랑·보라) 칠 위 글자 — 두 테마 모두 흰색 */
+  --on-accent: #ffffff;       
 
-  /* 쓰임 토큰(위 값에서 정함) */
-  --accent-ink: #cdd8fb;      /* 강조 칸(옅은 파랑) 위 아이콘·번호·본문 링크 글자 */
-  --accent-3-ink: #f2b58a;    /* 주황 꼬리표(초안 표시) 글자 */
-  --icon-dim: #656a7b;        /* 카드 정보 칸의 흐린 아이콘 */
-  --chart-other: #656a7b;     /* 차트 '참고값·다른 몫' 회색 막대 */
+  
+  --accent-ink: #cdd8fb;      
+  --accent-3-ink: #f2b58a;    
+  --icon-dim: #656a7b;        
+  --chart-other: #656a7b;     
   --card-bg: rgba(255, 255, 255, 0.02);
-  --tile: rgba(255, 255, 255, 0.04);      /* 낱장 칸(숫자·카드·행 카드·사실 칸 등) 바탕 = --fill. 라이트에서는 흰 판 */
-  --tile-under: transparent;               /* 그라데이션 카드 밑바탕 */
-  --ctl-bg: rgba(255, 255, 255, 0.04);     /* 버튼 바탕 = --fill. 라이트에서는 흰 단추 */
-  --card-glow: rgba(255, 255, 255, 0.07); /* 카드 위 마우스 빛 */
-  --pane: rgba(255, 255, 255, 0.03);       /* 도표 판(남은 Mermaid) 바탕 */
-  --glass: rgba(21, 22, 26, 0.72);          /* 메뉴 유리 바탕 */
-  --sheen: rgba(255, 255, 255, 0.05);       /* 유리 위쪽 광택 */
+  --tile: rgba(255, 255, 255, 0.04);      
+  --tile-under: transparent;               
+  --ctl-bg: rgba(255, 255, 255, 0.04);     
+  --card-glow: rgba(255, 255, 255, 0.07); 
+  --pane: rgba(255, 255, 255, 0.03);       
+  --glass: rgba(21, 22, 26, 0.72);          
+  --sheen: rgba(255, 255, 255, 0.05);       
   --tip-bg: #3f424d;
   --tip-ink: #ffffff;
-  --glow-1: rgba(118, 230, 200, 0.40);      /* 정리 상자 빛(청록·파랑·보라) */
+  --glow-1: rgba(118, 230, 200, 0.40);      
   --glow-2: rgba(61, 107, 244, 0.42);
   --glow-3: rgba(106, 28, 253, 0.16);
 
@@ -82,7 +77,7 @@
   --shadow-card: 0 12px 24px rgba(0, 0, 0, 0.6), 0 3px 12px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-xl: 0 24px 36px rgba(0, 0, 0, 0.6), 0 8px 12px rgba(0, 0, 0, 0.12), 0 3px 4px rgba(0, 0, 0, 0.04);
 
-  /* 남은 Mermaid(시퀀스·ERD) 색 — site.js 가 읽어 themeVariables 로 넘긴다(Mermaid 는 var() 를 못 읽어 값으로 둔다) */
+  
   --mm-node: #1f2230;
   --mm-node-2: #25213a;
   --mm-node-3: #1a1c22;
@@ -95,11 +90,9 @@
   --mm-border: #3d6bf4;
   --mm-border-2: #6a1cfd;
   --mm-cluster: #3f424d;
-  --mm-pane: #1b1c21;       /* 판 색(불투명): 글 뒤 테두리·관계 이름 바탕 */
+  --mm-pane: #1b1c21;       
 }
-/* 라이트: 밝은 회색 바탕 + 흰 판, 강조색은 조금 짙게, 그림자는 옅게.
-   감소 초록은 설계서 값(#0E8A5F)이 흰 바탕에서 대비 4.4 라 조금 짙게(#0B7A54, 대비 5.3), 흐린 글(--text-3)도 설계서 .58 은
-   바탕 대비 4.4 라 .62(대비 5.0)로 정했다 */
+
 :root[data-theme="light"] {
   color-scheme: light;
   --bg: #f6f7f9;
@@ -159,9 +152,7 @@
   --mm-pane: #eef0f4;
 }
 
-/* 소개 쪽 카드·지도 장식 색 다섯(build.js ABOUT_HUES): 테마 변수에서만 고르거나 섞는다 — 테마가 바뀌면 따라 바뀐다.
-   감소·증가 색(--delta-*)은 숫자 뜻이 있어 쓰지 않는다. 청록은 장식 청록 토큰(--teal, 스파이더 허브와 같은 값),
-   다섯째(운영·품질)는 보라와 주황을 섞은 자주: 예전 '파랑 + 글자색'은 첫째 파랑(언어·프레임워크)과 범례·선에서 잘 구분되지 않았다 */
+
 :root {
   --hue-a: var(--accent);
   --hue-b: var(--accent-2);
@@ -171,7 +162,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: clip; } /* 넓은 판이 모바일에서 가로 넘침을 만들지 않게 */
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: clip; } 
 body {
   margin: 0;
   background: var(--bg);
@@ -182,59 +173,49 @@ body {
   word-break: keep-all;
   overflow-wrap: anywhere;
   -webkit-font-smoothing: antialiased;
-  overflow-x: clip; /* 가로 스크롤이 생기지 않게. clip 은 sticky 를 깨지 않는다 */
+  overflow-x: clip; 
 }
 a { color: inherit; }
-p, li, td, dd, figcaption { text-wrap: pretty; } /* 마지막 줄에 낱말 하나만 남지 않게(지원 브라우저만) */
+p, li, td, dd, figcaption { text-wrap: pretty; } 
 img, svg { max-width: 100%; }
 ::selection { background: color-mix(in srgb, var(--accent) 40%, transparent); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
 .skip { position: absolute; left: -9999px; }
 .skip:focus { left: 16px; top: 16px; z-index: 100; background: var(--surface-2); color: var(--text); padding: 8px 12px; border-radius: 8px; }
 
-/* ---------- 레이아웃 ---------- */
-/* 본문은 가운데 1440 상자. 왼쪽 고정 메뉴와 겹치지 않도록, 상자 왼쪽 여백이 메뉴 자리(--nav-reserve)보다 작으면 그만큼 더 띄운다 */
+
+
 .page {
   max-width: 1440px; margin: 0 auto;
   padding: 40px var(--gutter) 0;
   padding-left: max(var(--gutter), calc(var(--nav-reserve) - max(0px, (100vw - 1440px) / 2)));
 }
-/* 메뉴 자리: 5차(사용자 요구 '메뉴 네비게이션도 2배 크기로')에 메뉴를 키우며 함께 넓혔다.
-   이름 메뉴(1680~) = 왼쪽 24 + 메뉴 300 + 틈 32 = 356. 이 폭부터 본문 1144 와 함께 들어간다(1680 에서 본문 1144).
-   아이콘 막대(900~1679) = 왼쪽 16 + 막대 112 + 틈 28 = 156. 1440 화면에서 본문 1144(남는 폭은 본문 양옆) */
+
 @media (min-width: 1680px) { :root { --nav-reserve: 356px; } }
 @media (min-width: 900px) and (max-width: 1679px) { :root { --nav-reserve: 156px; } }
 
-/* 한 컨테이너(모든 쪽): 머리·탭·절·사례·카드·칩·표·쪽 넘김이 모두 같은 폭(최대 --content 1144), 같은 좌우 끝선.
-   공통 쪽(홈·소개·경력·프로젝트·기술 = .wrap--page)도 같은 컨테이너에 넣어, 아래 규칙으로 블록마다 따로 있던 좌우 여백(56·48·8px)을 없앴다 */
+
 .wrap { width: 100%; max-width: var(--content); margin-inline: auto; }
 .wrap .intro { max-width: none; padding: 40px 0 24px; border-radius: 0; }
 .wrap .stats, .wrap .grid, .wrap .axis-grid, .wrap .ways, .wrap .skills-stack { padding: 0; }
 .wrap .block-title { margin: 120px 0 40px; }
 .wrap .company { padding: 56px 0 0; }
-.wrap .block-title + .company { padding-top: 0; } /* 절 제목 바로 아래 첫 회사는 위 여백 없이(제목과 첫 회사 이름 사이가 96px 로 떠 있었다) */
+.wrap .block-title + .company { padding-top: 0; } 
 .wrap .company__head, .wrap .company__lead { margin-left: 0; margin-right: 0; }
 .wrap .contact { margin: 0; }
 @media (max-width: 899px) { .wrap .block-title { margin: 72px 0 24px; } .wrap .company { padding-top: 40px; } .wrap .block-title + .company { padding-top: 0; } }
 
-/* 공통 쪽 글 덩어리(예전 인라인 margin:0 56px 대신) */
+
 .page-text { max-width: var(--text-measure); margin: 16px 0 0; color: var(--text-2); font-size: 16px; line-height: 26px; }
 .page-text--lead { margin: 0 0 24px; font-size: 18px; line-height: 28px; }
 .intro__text.page-text { margin: 0; color: var(--text-3); font-size: 20px; line-height: 28px; }
 .page-note { max-width: var(--text-measure); margin: 12px 0 0; color: var(--text-3); font-size: 14px; line-height: 22px; }
-.page-link { margin: 40px 0 0; } /* 큰 버튼은 위 숫자 타일과 24px 이면 붙어 보였다(ai.html) */
+.page-link { margin: 40px 0 0; } 
 @media (max-width: 899px) { .page-link { margin-top: 32px; } }
 .sub-title { margin: 56px 0 16px; font-size: 24px; line-height: 32px; font-weight: 600; }
 @media (max-width: 899px) { .intro__text.page-text { font-size: 17px; line-height: 26px; } .page-text--lead { font-size: 16px; line-height: 26px; } .sub-title { margin-top: 40px; font-size: 21px; line-height: 28px; } }
 
-/* ---------- 메뉴 (_Navigation) ----------
-   5차(사용자 요구 '메뉴 네비게이션도 2배 크기로'): 줄 높이·글씨·아이콘을 4차의 약 2배로.
-   아주 넓은 화면(1680~): 왼쪽 세로 메뉴 — 아이콘 + 긴 이름이 늘 보인다(줄 높이 88·글씨 22·아이콘 38).
-   넓은·중간 화면(900~1679): 왼쪽 아이콘 막대 — 큰 아이콘 아래 짧은 이름(줄 높이 88·아이콘 38·이름 16).
-     이름 메뉴(폭 300)와 본문 1144 가 함께 들어가지 않는 폭(1440 노트북 포함)이라 아이콘 위주로 바꿔 본문 폭을 지킨다.
-   좁은 화면(~899): 아래 막대 — 아이콘 아래 짧은 이름(7칸 한 줄, 화면 폭에 맞춰 커진다).
-   메뉴가 창 높이보다 길면 메뉴 안에서 위아래로 넘긴다.
-   선택 표시는 아이콘 칸(.nav__ic) 또는 줄(알약)에 그려 아이콘 가운데와 정확히 맞는다(말풍선 없음). */
+
 .nav {
   position: fixed; z-index: 50;
   display: flex; flex-direction: column; align-items: stretch; gap: 2px;
@@ -254,20 +235,19 @@ img, svg { max-width: 100%; }
 .nav__item:hover { color: var(--text-2); }
 .nav__item[aria-current="page"] { color: var(--text); }
 .nav__div { flex: none; background: var(--line-2); }
-/* 테마 바꾸기 단추(build.js themeToggle): 메뉴 줄과 같은 모양·같은 크기의 <button>. 지금 다크면 해 + '라이트', 라이트면 달 + '다크' */
+
 .nav__theme { appearance: none; -webkit-appearance: none; margin: 0; padding: 0; border: 0; background: transparent; cursor: pointer; text-align: left; }
 :root[data-theme="light"] .nav__to-light, :root:not([data-theme="light"]) .nav__to-dark,
 :root[data-theme="light"] .nav__sun, :root:not([data-theme="light"]) .nav__moon { display: none; }
 .nav__theme:hover .nav__ic svg { transform: rotate(-20deg); }
 .nav__theme .nav__ic svg { transition: transform .3s ease; }
 
-/* 세로 메뉴(900~): 창 높이보다 길면 메뉴 안에서 위아래로 넘긴다(테마 단추까지 8줄이 잘리지 않게). 메뉴 높이 약 790(이름)·780(막대) */
+
 @media (min-width: 900px) {
   .nav { max-height: calc(100vh - 48px); max-height: calc(100dvh - 48px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
   .nav::-webkit-scrollbar { display: none; }
 }
-/* 아주 넓은 화면: 줄 높이 88, 알약 반지름 44, 글씨 22, 아이콘 38. 아이콘 왼쪽 여백 25 → 아이콘 가운데(25+19=44)가 알약 왼쪽 둥근 끝의 가운데와 같다.
-   메뉴 폭 300 = 가장 긴 이름 'AI로 일하는 방식'(22px 약 170) + 아이콘 38 + 틈 18 + 좌우 여백 25·24 + 메뉴 안 여백 12 × 2 + 여유 */
+
 @media (min-width: 1680px) {
   .nav { left: 24px; top: 24px; width: 300px; padding: 12px; border-radius: 56px; gap: 6px; }
   .nav__item { gap: 18px; height: 88px; padding: 0 24px 0 25px; border-radius: 44px; font: 600 22px/30px var(--font); letter-spacing: -0.01em; }
@@ -279,14 +259,14 @@ img, svg { max-width: 100%; }
   .nav__short { display: none; }
   .nav__div { height: 1px; margin: 8px 20px; }
 }
-/* 아이콘 막대·아래 막대 공통: 아이콘 칸(알약) 아래 짧은 이름. 선택되면 알약에 배경 — 아이콘이 알약 정가운데 */
+
 @media (max-width: 1679px) {
   .nav__item { flex-direction: column; justify-content: center; gap: 6px; font: 600 16px/20px var(--font); letter-spacing: -0.01em; }
   .nav__item:hover .nav__ic { background: var(--fill); }
   .nav__item[aria-current="page"] .nav__ic { background: var(--fill-2); box-shadow: inset 0 0 0 1px var(--line); color: var(--accent-ink); }
   .nav__long { display: none; }
 }
-/* 아이콘 막대(900~1679): 막대 폭 112, 줄 높이 88(아이콘 칸 52 + 틈 6 + 이름 20 + 위아래 여유), 아이콘 38 */
+
 @media (min-width: 900px) and (max-width: 1679px) {
   .nav { left: 16px; top: 24px; width: 112px; padding: 10px 6px; border-radius: 40px; gap: 6px; }
   .nav__item { height: 88px; }
@@ -294,9 +274,7 @@ img, svg { max-width: 100%; }
   .nav__ic svg { width: 38px; height: 38px; }
   .nav__div { height: 1px; margin: 4px 18px; }
 }
-/* 창 높이가 낮으면(1366×768·1280×720 노트북, 1024×768 등) 줄 높이를 한 단계씩 줄여 테마 단추까지 8줄이 메뉴 안에 다 보이게 한다.
-   줄 88 그대로면 메뉴(약 783·795)가 창보다 길어 마지막 테마 단추가 반쯤 잘려 보였다(숨긴 스크롤바라 넘길 수 있는 줄 몰랐다).
-   메뉴 높이 = 줄 8개 + 약 79(아이콘 막대)·91(이름 메뉴). 단계: 88 → 76(창 830 이하) → 68(창 734 이하). 더 낮은 창만 메뉴 안에서 넘긴다 */
+
 @media (min-width: 900px) and (max-width: 1679px) and (max-height: 830px) {
   .nav__item { height: 76px; }
   .nav__ic { height: 46px; }
@@ -308,10 +286,7 @@ img, svg { max-width: 100%; }
 }
 @media (min-width: 1680px) and (max-height: 842px) { .nav__item { height: 76px; } }
 @media (min-width: 1680px) and (max-height: 746px) { .nav__item { height: 68px; } }
-/* 좁은 화면 아래 막대: 7칸(메뉴 6 + 테마). 이메일 칸은 뺐다(꼬리말·연락 절에 있다).
-   아이콘·이름은 화면 폭(vw)에 맞춰 허락하는 만큼 키운다: 390 화면에서 아이콘 28·이름 15·아이콘 칸 48,
-   360 화면에서도 7칸 최소 폭(아이콘 칸 44 × 6 + '프로젝트' 약 56 + 구분선 5 ≈ 325px)이 막대 안(336px)에 들어간다.
-   칸 폭은 이름 길이를 따른다(flex-basis auto) — '프로젝트'처럼 긴 이름 칸이 조금 넓고 남는 폭은 고르게 나눈다 */
+
 @media (max-width: 899px) {
   :root { --gutter: 16px; }
   .nav {
@@ -324,10 +299,10 @@ img, svg { max-width: 100%; }
   .nav__ic { width: clamp(38px, 12.3vw, 52px); height: 36px; border-radius: 18px; }
   .nav__ic svg { width: clamp(24px, 7.2vw, 28px); height: clamp(24px, 7.2vw, 28px); }
   .nav__div { width: 1px; height: 38px; align-self: center; margin: 0 2px; }
-  body { padding-bottom: 104px; } /* 막대 높이 66 + 위아래 12 + 테두리 2 + 아래 8 + 여유 16 */
+  body { padding-bottom: 104px; } 
 }
 
-/* ---------- 머리 (About / Design 블록) ---------- */
+
 .intro { display: flex; flex-direction: column; gap: 40px; padding: 40px 56px; border-radius: 40px; max-width: 1003px; }
 .intro__eyebrow { margin: 0 0 -24px; color: var(--text-3); font-size: 14px; line-height: 20px; font-weight: 600; letter-spacing: .02em; }
 .intro h1 { margin: 0; font-size: 48px; line-height: 56px; font-weight: 600; letter-spacing: -0.01em; }
@@ -337,12 +312,11 @@ img, svg { max-width: 100%; }
 .hl { color: var(--text); font-weight: inherit; }
 .intro__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 0; color: var(--text-3); font-size: 15px; line-height: 22px; margin-top: -16px; }
 .intro__meta b { color: var(--text-2); font-weight: 600; }
-/* 항목 사이 구분: 글자가 아닌 가는 세로선(CSS). 줄이 바뀌어도 어디까지가 한 항목인지 보이게.
-   선은 항목 왼쪽 10px 에 두고, 줄 맨 앞 항목의 선은 묶음 왼쪽 끝 밖(-1px)에 떨어져 잘린다(overflow) — 줄 머리에 선이 붙지 않는다 */
+
 .intro__meta { margin-left: -9px; overflow: hidden; }
 .intro__meta > span { position: relative; margin: 0 9px; }
 .intro__meta > span::before { content: ""; position: absolute; left: -10px; top: 50%; width: 1px; height: 13px; margin-top: -6.5px; background: var(--line-2); }
-/* 홈 이름: 한글 이름 글자 간격을 조금 넓히고, 옆에 영어 이름(작고 흐리게, 글자 기준선 맞춤) */
+
 .intro--home h1 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 20px; }
 .intro__name { letter-spacing: .06em; }
 .intro__name-en { color: var(--text-3); font-size: .5em; line-height: 1.2; font-weight: 500; letter-spacing: .04em; white-space: nowrap; }
@@ -354,21 +328,16 @@ img, svg { max-width: 100%; }
   .intro__name-en { font-size: .56em; }
 }
 
-/* ---------- 제목 ---------- */
-/* 제목 옆·아래 보조 설명(.dim): 줄표 없이 '아주 조금 작은 크기 + 흐린 색' 으로만 제목과 구분한다(제목의 약 88%) */
+
+
 .h2 { margin: 0; font-size: 32px; line-height: 40px; font-weight: 600; }
 .h2 .dim { color: var(--text-3); font-size: .88em; font-weight: 500; margin-left: .2em; }
 .block-title { margin: 120px 56px 40px; }
 @media (max-width: 899px) { .block-title { margin: 72px 8px 24px; } .h2 { font-size: 26px; line-height: 34px; } }
-/* 좁은 화면: 블록 제목 옆 보조 설명은 다음 줄로(한 줄에 섞여 감기면 경계가 안 보인다) */
+
 @media (max-width: 599px) { .h2 .dim { display: block; margin: 4px 0 0; line-height: 1.3; } }
 
-/* ---------- 버튼 (_ControlButton) ----------
-   button.ctl · a.ctl · summary.ctl(표로 보기) 공용. 4차에 3차 높이 48px 의 두 배(96px)로 키웠다가,
-   5차(사용자 요구 '버튼 위아래 폭만 조금 줄여줘. 텍스트와 여백이 많아')에 글씨는 거의 두고 위아래 여백만 줄였다.
-   넓은 화면(900~): 높이 74px(바깥 테두리 포함 = 1 + 5 + 17 + 28 + 17 + 5 + 1)·글씨 20px·아이콘 24px·좌우 여백 34px.
-   좁은 화면(~899): 높이 58px(1 + 3 + 12 + 26 + 12 + 3 + 1)·글씨 18px·아이콘 22px, 아주 좁은 화면(~599)은 좌우 여백만 16px 로(탭 막대 세 버튼이 한 줄에).
-   버튼이 판보다 길면 글이 줄을 바꾼다(max-width) — 가로로 넘치지 않게 */
+
 .ctl {
   display: inline-flex; align-items: center; gap: 8px; max-width: 100%;
   padding: 5px; border-radius: 999px; border: 1px solid var(--line);
@@ -381,7 +350,7 @@ img, svg { max-width: 100%; }
 .ctl svg { flex: none; width: 24px; height: 24px; fill: currentColor; }
 .ctl .count { margin-left: 2px; }
 .ctl:hover { background: linear-gradient(180deg, var(--fill) 0%, transparent 100%), var(--fill-2); color: var(--text); }
-/* 고른 탭·필터: 두 테마 모두 강조 파랑 바탕(옅게) + 파랑 테두리 + 진한 글. 예전 회색 바탕은 라이트에서 고른 탭이 오히려 눌린·끈 상태처럼 보였다 */
+
 .ctl[aria-selected="true"], .ctl[aria-pressed="true"] {
   background: color-mix(in srgb, var(--accent) 20%, var(--ctl-bg));
   color: var(--text); border-color: var(--accent);
@@ -390,23 +359,23 @@ img, svg { max-width: 100%; }
 .ctl[aria-selected="true"]:hover, .ctl[aria-pressed="true"]:hover { background: color-mix(in srgb, var(--accent) 26%, var(--ctl-bg)); }
 .ctl .count { color: var(--text-3); font-weight: 500; }
 .ctl[aria-selected="true"] .count, .ctl[aria-pressed="true"] .count { color: var(--accent-ink); font-weight: 600; }
-/* 탭 막대 오른쪽 목록 링크: 탭과 다른 모양(테두리만, 그림자·바탕 없음) — 탭처럼 보이지 않게 */
+
 .ctl--ghost { background: transparent; box-shadow: none; border-color: var(--line); color: var(--text-2); }
 .ctl--ghost:hover { background: var(--fill); }
-/* 차트 '표로 보기'(details summary) = .ctl 과 같은 크기 */
+
 .ctl--sum { list-style: none; }
 .ctl--sum::-webkit-details-marker { display: none; }
-/* 다음 탭으로 넘기는 주 버튼: 강조 파랑 테두리·글자 */
+
 .ctl--primary { border-color: color-mix(in srgb, var(--accent) 60%, transparent); color: var(--text); background: color-mix(in srgb, var(--accent) 16%, transparent); }
 .ctl--primary:hover { background: color-mix(in srgb, var(--accent) 26%, transparent); }
 @media (max-width: 899px) {
   .ctl { padding: 3px; font-size: 18px; line-height: 26px; }
-  .ctl > span { gap: 10px; padding: 12px 22px; }   /* 높이 58 = 1 + 3 + 12 + 26 + 12 + 3 + 1 */
+  .ctl > span { gap: 10px; padding: 12px 22px; }   
   .ctl svg { width: 22px; height: 22px; }
 }
 @media (max-width: 599px) { .ctl > span { padding: 12px 16px; } }
 
-/* Controls 래퍼 (탭·필터 막대). 막대 높이 = 버튼 74 + 위아래 12 = 98px(좁은 화면 58 + 위아래 8 = 74px) */
+
 .controls {
   position: sticky; top: 12px; z-index: 40;
   display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
@@ -417,35 +386,29 @@ img, svg { max-width: 100%; }
 @media (max-width: 899px) { .controls { padding: 12px; gap: 8px; margin: 8px 0; top: 8px; border-radius: 22px; } .controls__end { margin-left: 0; } }
 .wrap .controls { margin: 8px -16px; padding: 12px 16px; }
 @media (max-width: 899px) { .wrap .controls { margin: 8px -8px; padding: 8px; } }
-/* 탭 머리 자리표: 탭 막대(sticky)의 원래 자리. site.js 가 탭을 바꿀 때 여기로 스크롤한다 */
+
 .tabs-anchor { display: block; height: 0; scroll-margin-top: 0; }
-/* 사례 바로가기·#problems 로 갈 때 위에 붙은 탭 막대(위 12 + 높이 98)에 제목이 가리지 않게: 110 + 여유 16 */
+
 .panel [id] { scroll-margin-top: 126px; }
-@media (max-width: 899px) { .panel [id] { scroll-margin-top: 98px; } } /* 위 8 + 높이 74 + 여유 16 */
-/* 상세 탭 막대·프로젝트 목록 필터는 늘 한 줄(두 줄로 감기면 위에 붙은 막대가 화면을 크게 가린다).
-   한 줄에 안 들어가는 폭에서는 막대 안에서 옆으로 밀어 보고, 오른쪽 끝을 흐리게 한다(도표 판과 같은 is-scrollx·is-end, site.js markEdges).
-   아주 좁은 화면(~599)의 탭 막대 목록 링크는 '○○ 프로젝트' 를 숨기고 '목록 →' 만(.ctl__long, 이름은 aria-label) — 세 버튼이 약 330px 로 한 줄(358px)에 들어간다 */
+@media (max-width: 899px) { .panel [id] { scroll-margin-top: 98px; } } 
+
 .controls[role="tablist"], .controls--filter { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .controls[role="tablist"]::-webkit-scrollbar, .controls--filter::-webkit-scrollbar { display: none; }
 .controls[role="tablist"] .ctl, .controls[role="tablist"] .controls__end, .controls--filter .ctl { flex: none; }
 .controls[role="tablist"] .controls__end { margin-left: auto; }
 .controls[role="tablist"] .ctl > span, .controls--filter .ctl > span { white-space: nowrap; }
 @media (max-width: 599px) { .controls .ctl__long { display: none; } }
-/* 직무 필터 다섯 개는 넓은 화면 크기(74px)로 합이 약 925px 라, 막대가 그보다 좁은 900~1139 폭(1024 노트북 포함)에서는
-   마지막 버튼이 잘리고 흐렸다(스크롤바가 숨어 마우스로는 밀 수 없음). 이 폭에서만 필터를 좁은 화면 크기(58px·18px, 합 약 690px)로 */
+
 @media (min-width: 900px) and (max-width: 1139px) {
   .controls--filter .ctl { padding: 3px; font-size: 18px; line-height: 26px; }
   .controls--filter .ctl > span { gap: 10px; padding: 12px 18px; }
   .controls--filter .ctl svg { width: 22px; height: 22px; }
 }
-/* 막대가 위에 붙었을 때(site.js 가 .is-stuck) 막대 위 틈(top 12px, 좁은 화면 8px)을 바탕색으로 채운다:
-   틈으로 스크롤되는 글·도표 조각이 비쳐 보였다. 막대가 옆으로 넘기는 판(overflow)이라 ::before 는 잘려서, 바깥 그림자로 칠한다
-   (위로 틈만큼 올리고 같은 만큼 넓혀 둥근 모서리까지 덮는다. 막대 밑에는 그려지지 않는다).
-   붙지 않았을 때는 그리지 않는다(위 머리 글을 덮지 않게) */
+
 .controls.is-stuck { box-shadow: 0 -12px 0 12px var(--bg); }
 @media (max-width: 899px) { .controls.is-stuck { box-shadow: 0 -8px 0 8px var(--bg); } }
 
-/* ---------- 카드 (_Card) ---------- */
+
 .card {
   position: relative; display: flex; flex-direction: column; gap: 8px;
   padding: 8px; border-radius: 40px; border: 1px solid var(--line);
@@ -465,21 +428,16 @@ img, svg { max-width: 100%; }
 a.card:hover { box-shadow: var(--shadow-card); }
 a.card:hover::after { opacity: 1; }
 .card__media { position: relative; flex: none; border-radius: 32px; overflow: hidden; }
-/* 정보 칸은 위에 붙인다: 같은 줄 두 카드 중 한쪽 제목이 두 줄이어도 제목 첫 줄 높이가 같다. 아이콘은 제목 첫 줄에 맞춘다 */
+
 .card__info { flex: 1 1 auto; display: flex; align-items: flex-start; gap: 20px; padding: 12px 32px 14px; }
 .card__info > div { min-width: 0; }
 .card__icon { flex: none; width: 32px; height: 32px; margin-top: -4px; fill: var(--icon-dim); }
 .card__title { margin: 0; font-size: 18px; line-height: 24px; font-weight: 600; color: var(--text); }
 .card__desc { margin: 4px 0 0; font-size: 15px; line-height: 22px; color: var(--text-3); }
-/* 정보 칸 글(제목·회사·기간·직무)은 자르지 않는다 — 좁은 화면에서 '…' 로 잘려 재직 기간 같은 사실이 안 보였다.
-   같은 줄 카드 높이는 격자가 맞춘다(표지 높이는 고정 비율이라 늘 같다) */
+
 @media (max-width: 899px) { .card { border-radius: 28px; } .card__media { border-radius: 22px; } .card__info { padding: 8px 14px 10px; gap: 14px; } .card__icon { width: 26px; height: 26px; } .cover { padding: 16px; } }
 
-/* 표지 — 피그마 _Project_Design / _Project-Art / _Project-Photography / _Project-2
-   3차: 직무(업무 유형) 네 가지 표지를 한 가지 짜임으로 통일했다 — 어두운 바탕 + 같은 자리의 빛 세 개(위 가운데·오른쪽 아래·왼쪽 아래)
-   + 위쪽 옅은 광택. 직무마다 바꾸는 것은 빛의 색뿐이다(--cv-base·--cv-a·--cv-b·--cv-c).
-   데이터 표지만 밝은 파란 바탕(--primary-300)이던 규칙은 없앴다 → 다른 표지처럼 어두운 보라 계열.
-   표지는 다크·라이트 두 테마 모두 어두운 그림이다(그 위 글은 늘 흰색). 그래서 이 절의 색은 테마 토큰 대신 그림 색을 직접 쓴다 */
+
 .cover {
   --cv-base: #07081a;
   --cv-a: rgba(106, 28, 253, 0.7);
@@ -503,21 +461,20 @@ a.card:hover::after { opacity: 1; }
 .cover--data    { --cv-base: #0a0620; --cv-a: rgba(106, 28, 253, 0.72); --cv-b: rgba(124, 74, 255, 0.62); --cv-c: rgba(38, 14, 120, 0.9); }
 .cover--ai      { --cv-base: #06042e; --cv-a: rgba(133, 4, 234, 0.9); --cv-b: rgba(202, 104, 33, 0.9); --cv-c: rgba(28, 0, 164, 0.95); }
 .cover--devops  { --cv-base: #050409; --cv-a: rgba(77, 46, 101, 1); --cv-b: rgba(235, 115, 28, 0.9); --cv-c: rgba(28, 24, 47, 0.9); }
-/* 표지 제목은 2줄까지 — 글이 길어도 표지 높이(고정 비율)가 바뀌지 않는다. 3차: 조금 줄였다 */
+
 .cover__title { position: relative; z-index: 1; margin: 0; font-weight: 900; font-size: clamp(28px, 3.8vw, 56px); line-height: 1.14; letter-spacing: -0.02em; color: #fff; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35); }
-/* 부제: 어두운 표지 위 흰 글(명암비 4.5:1 이상). 테마 토큰(--text-3)을 쓰면 라이트 테마에서 검은 글이 되므로 그림 색으로 고정 */
+
 .cover__sub { position: relative; z-index: 1; margin: 0; font-size: clamp(15px, 1.6vw, 22px); line-height: 1.4; color: rgba(255, 255, 255, 0.8); }
 .cover__sub { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-width: 34em; word-break: keep-all; text-wrap: balance; }
 .grid .cover__title { font-size: clamp(24px, 2.2vw, 36px); }
 .grid .cover__sub { font-size: clamp(14px, 1.1vw, 17px); }
 
-/* 프로젝트 카드 격자 — 표지(card__media)는 고정 비율이라 글 길이와 상관없이 높이가 같다.
-   같은 줄 카드는 격자가 높이를 맞추고, 남는 높이는 아래 정보 칸이 받는다 */
+
 .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; padding: 8px; }
-.grid > .card .card__media { aspect-ratio: 5 / 2; } /* 2:1 보다 낮게 — 글 묶음 위아래 빈 곳을 줄였다(부제 2줄까지 들어감) */
+.grid > .card .card__media { aspect-ratio: 5 / 2; } 
 @media (max-width: 899px) { .grid { grid-template-columns: 1fr; padding: 0; gap: 16px; } .grid > .card .card__media { aspect-ratio: 16 / 9; } }
 
-/* 홈 '직무별 프로젝트' — 옆으로 넘기지 않고 한 화면 격자(넓으면 4열, 그 밖 2×2 — 휴대폰에서도 네 장이 한 화면에) */
+
 .axis-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; padding: 8px; }
 .axis-grid .card { border-radius: 32px; }
 .axis-grid .card__media { aspect-ratio: 4 / 3; border-radius: 24px; }
@@ -533,7 +490,7 @@ a.card:hover::after { opacity: 1; }
   .axis-grid .card__media { aspect-ratio: 4 / 3; border-radius: 16px; }
   .axis-grid .cover { padding: 10px; }
   .axis-grid .cover__title { font-size: 18px; }
-  .axis-grid .cover__sub { display: none; } /* 같은 말이 상세 목록에 있다. 휴대폰에서는 2×2 가 한 화면에 들어가게 뺀다 */
+  .axis-grid .cover__sub { display: none; } 
   .axis-grid .card__info { padding: 4px 8px 8px; gap: 8px; }
   .axis-grid .card__icon { width: 20px; height: 20px; }
   .axis-grid .card__title { font-size: 15px; line-height: 20px; }
@@ -543,8 +500,8 @@ a.card:hover::after { opacity: 1; }
 .tag { display: inline-block; padding: 2px 10px; border-radius: 40px; border: 1px solid var(--line); color: var(--text-2); font-size: 12px; line-height: 20px; background: var(--fill); }
 .badge-draft { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 40px; background: color-mix(in srgb, var(--accent-3) 18%, transparent); border: 1px solid color-mix(in srgb, var(--accent-3) 60%, transparent); color: var(--accent-3-ink); font-size: 12px; line-height: 18px; font-weight: 600; vertical-align: middle; }
 
-/* ---------- 숫자 타일 ---------- */
-/* 개수에 맞춰 고르게: 6개·3개·9개 = 3열, 4개·2개 = 넓으면 4열/2열, 7·8개 = 4열. 좁은 화면 2열, 아주 좁으면 1열 */
+
+
 .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 8px; }
 .stats--n1 { grid-template-columns: minmax(0, 1fr); }
 .stats--n2, .stats--n4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -557,12 +514,11 @@ a.card:hover::after { opacity: 1; }
 .stat__label { margin: 8px 0 0; color: var(--text-2); font-size: 16px; line-height: 24px; font-weight: 600; }
 .stat__note { margin: 4px 0 0; color: var(--text-3); font-size: 14px; line-height: 20px; }
 @media (max-width: 1199px) { .stat__value { font-size: 34px; line-height: 42px; } }
-/* 좁은 화면 2열: 칸 순서는 그대로(dense 로 당겨 채우면 읽는 순서가 바뀐다). 숫자는 20px(아주 좁은 화면 18px) —
-   2열 칸 안쪽(약 146px)에 '2억 2,800만원'·'11.9→1.5초' 까지 한 줄로 들어가 6칸이 3줄 2열로 고르게 놓인다 */
+
 @media (max-width: 599px) {
   .stats { gap: 10px; }
   .stat { padding: 18px 14px 16px; border-radius: 24px; }
-  .stat--long { grid-column: 1 / -1; } /* 2열 칸에 한 줄로 안 들어가는 값은 한 줄을 통째로 — 숫자·단위·↓ 가 갈리지 않게 */
+  .stat--long { grid-column: 1 / -1; } 
   .stat__value { font-size: 20px; line-height: 26px; }
   .stat__label { font-size: 14px; line-height: 20px; }
   .stat__note { font-size: 14px; line-height: 20px; }
@@ -570,23 +526,22 @@ a.card:hover::after { opacity: 1; }
 @media (max-width: 379px) { .stat__value { font-size: 18px; line-height: 24px; } }
 .stat__value { word-break: keep-all; overflow-wrap: break-word; }
 
-/* ---------- 감소·증가 색 (build.js deltaText·deltaValue) ---------- */
-/* 값·단위·↓↑ 는 한 덩어리(줄이 사이에서 바뀌지 않음). 'A→B' 쌍은 앞 값과 '→ 뒤 값' 사이에서만 줄이 바뀐다 */
+
+
 .dv { white-space: nowrap; }
 .dv--down { color: var(--delta-down); }
 .dv--up { color: var(--delta-up); }
 p .dv, li .dv, td .dv, dd .dv { font-weight: 600; }
 .stat__value .dv { font-weight: inherit; }
 .dv__mk { font-style: normal; font-size: .72em; margin-left: .18em; vertical-align: .14em; }
-.dpair, .dpair__from, .dpair__to { white-space: nowrap; } /* 'A → B' 쌍은 한 덩어리(짧아서 넘치지 않는다) — '60분' 다음 줄이 '→10분↓' 로 시작하지 않게 */
+.dpair, .dpair__from, .dpair__to { white-space: nowrap; } 
 .dpair__from { color: var(--text-3); }
 .dpair__arr { color: var(--text-3); font-weight: 400; }
-/* 값 뒤 괄호 설명(예: '(모델 최종)')은 값 밑 작은 보통 글 */
+
 .to__note { display: block; margin-top: 2px; color: var(--text-3); font-size: 13px; line-height: 18px; font-weight: 400; letter-spacing: 0; }
 
-/* ---------- 상세 페이지 ----------
-   표지 카드(hero-card)는 없앴다. 모든 블록은 .wrap(최대 1144px, --content) 폭을 그대로 쓰고 왼쪽 정렬 — 좌우 끝선이 하나다 */
-/* 개요: 위 두 칸(개요 글 | 회사·기간·역할 카드) + 아래 숫자 칸 한 줄. 두 칸 높이가 비슷해 한쪽만 크게 비지 않는다 */
+
+
 .overview {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 372px);
   grid-template-areas: "body facts" "stats stats";
@@ -601,7 +556,7 @@ p .dv, li .dv, td .dv, dd .dv { font-weight: 600; }
 .overview__stats { grid-area: stats; gap: 12px; }
 .overview__stats .stat { padding: 22px 24px 20px; border-radius: 28px; }
 .overview__stats .stat__value { font-size: 28px; line-height: 36px; }
-/* 개요 사실 칸(회사·기간·역할·팀·상태): 줄마다 아이콘 칸 + 이름(작은 흐린 글) + 값(큰 글). 줄 사이는 가는 선 */
+
 .facts { margin: 0; display: grid; padding: 8px 24px; border-radius: 32px; border: 1px solid var(--line); background: var(--tile); box-shadow: inset 0 1px 0 var(--fill-2); }
 .fact { position: relative; display: grid; gap: 4px; padding: 18px 0 18px 60px; min-height: 80px; align-content: center; }
 .fact + .fact { border-top: 1px solid var(--line); }
@@ -612,7 +567,7 @@ p .dv, li .dv, td .dv, dd .dv { font-weight: 600; }
 @media (max-width: 1199px) {
   .overview { grid-template-columns: minmax(0, 1fr); grid-template-areas: "body" "stats" "facts"; gap: 32px; padding: 56px 0 16px; }
   .overview--nostats { grid-template-areas: "body" "facts"; }
-  /* 한 단이 되면 사실 칸은 넓은 판 — 두 칸씩 나란히 */
+  
   .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; }
   .fact + .fact { border-top: 0; }
   .fact:nth-child(n + 3) { border-top: 1px solid var(--line); }
@@ -630,15 +585,14 @@ p .dv, li .dv, td .dv, dd .dv { font-weight: 600; }
 }
 @media (max-width: 899px) { .overview__body h2 { font-size: 32px; line-height: 40px; } .overview__lead { font-size: 19px; line-height: 28px; } }
 
-/* 탭 패널 */
+
 .panel[hidden] { display: none; }
-/* 주소가 #problems·#case-N 이면(머리 스크립트가 html.start-problems) 스크립트가 돌기 전에도 문제해결 탭을 보인다 — 상세 탭이 잠깐 보였다 바뀌지 않게.
-   site.js 가 탭을 고르면 이 표시를 뗀다 */
+
 html.start-problems #panel-detail { display: none; }
 html.start-problems #panel-problems[hidden] { display: block; }
 
-/* 절 (Section title: / And a subtitle) */
-/* 절: 비스듬한 빛 배경 없음. 머리·본문 모두 같은 컨테이너 폭(--content)과 같은 좌우 끝선, 왼쪽 정렬 */
+
+
 .sec { position: relative; display: flex; flex-direction: column; align-items: stretch; gap: 40px; width: 100%; max-width: var(--content); margin-inline: auto; padding: 96px 0 24px; }
 .sec__head { display: flex; flex-direction: column; gap: 24px; text-align: left; }
 .sec__title { margin: 0; font-size: 44px; line-height: 52px; font-weight: 600; }
@@ -647,13 +601,13 @@ html.start-problems #panel-problems[hidden] { display: block; }
 .sec__lead p { margin: 0 0 12px; }
 .sec__lead p:last-child { margin: 0; }
 .sec__body { width: 100%; min-width: 0; }
-/* 공통 쪽(AI 쪽)의 절: 상세 쪽 절 부품을 그대로 쓰지만 제목은 홈·소개·기술 쪽 절 제목 크기에 가깝게(44 → 36px, 부제 약 32px) */
+
 .wrap--page .sec__title { font-size: 36px; line-height: 44px; }
 @media (max-width: 899px) { .wrap--page .sec__title { font-size: 26px; line-height: 34px; } }
-/* 절 안 덩어리(도표·차트·표·카드·글머리표) 사이는 늘 같은 간격 — 도표 판과 차트 판이 맞붙지 않게 */
+
 .sec__body:not(.case-jump) > * + * { margin-top: 32px; }
 .sec__body > .sec__caption { margin-top: 12px; }
-/* 문제해결 탭 '사례 바로가기': 세로 목록. 줄마다 번호 칸 + 제목(굵게) + 그 아래 설명(조금 작게, 흐리게) + 아래 화살표 */
+
 .case-jump { display: block; }
 .jump { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .jump__item {
@@ -666,7 +620,7 @@ html.start-problems #panel-problems[hidden] { display: block; }
 .jump__t { display: grid; gap: 4px; min-width: 0; }
 .jump__arr { width: 22px; height: 22px; fill: var(--text-3); transform: rotate(90deg); transition: fill .2s; }
 .jump__item:hover .jump__arr { fill: var(--text); }
-/* 사례 제목 두 줄(목록 공용): 제목 = 굵게, 설명 = 제목보다 조금 작게·흐리게 */
+
 .ct-main { display: block; font-size: 19px; line-height: 28px; font-weight: 600; color: var(--text); }
 .ct-sub { display: block; font-size: 16px; line-height: 24px; font-weight: 400; color: var(--text-3); }
 @media (max-width: 599px) {
@@ -678,9 +632,9 @@ html.start-problems #panel-problems[hidden] { display: block; }
 .sec__bullets { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
 .sec__bullets li { position: relative; padding: 14px 20px 14px 46px; border-radius: 20px; background: var(--tile); border: 1px solid var(--line); color: var(--text-2); font-size: 17px; line-height: 26px; text-align: left; }
 .sec__bullets li::before { content: ""; position: absolute; left: 22px; top: 25px; width: 6px; height: 6px; border-radius: 6px; background: var(--accent); }
-/* '이름: 설명' 글머리표(build.js bulletsHtml): 이름은 굵은 글자색 — 훑어볼 때 이름이 먼저 눈에 들어온다 */
+
 .kv__k { color: var(--text); font-weight: 600; }
-/* 모든 줄이 '이름: 설명' 이면 이름-값 목록: 왼쪽 이름 칸(폭 --kw, 가장 긴 이름에 맞춤) + 오른쪽 설명. 이름이 길면(--kv-stack) 이름이 설명 위 줄 */
+
 .sec__bullets--kv li { display: grid; grid-template-columns: var(--kw, 160px) minmax(0, 1fr); gap: 4px 24px; padding: 16px 24px; }
 .sec__bullets--kv li::before { display: none; }
 .sec__bullets--kv .kv__k { position: relative; padding-left: 16px; }
@@ -698,29 +652,29 @@ html.start-problems #panel-problems[hidden] { display: block; }
   .sec__bullets li::before { left: 16px; top: 22px; }
 }
 
-/* 도표 판 (큰 _Card 안 둥근 판) */
+
 .figure { margin: 0; }
-.figure .card__media { background: var(--pane); padding: 32px 24px; overflow-x: auto; } /* 1144(--content) 컨테이너 안에서 도표가 쓸 폭을 넓힌다 */
+.figure .card__media { background: var(--pane); padding: 32px 24px; overflow-x: auto; } 
 .figure figcaption { padding: 10px 32px 14px; color: var(--text-3); font-size: 14px; line-height: 20px; }
-.figure--soft { border-radius: 24px; border: 1px solid var(--line-2); background: var(--chart-surface); padding: 32px; } /* 차트 판 = --chart-surface(선 차트 점 테두리 색과 같다) */
+.figure--soft { border-radius: 24px; border: 1px solid var(--line-2); background: var(--chart-surface); padding: 32px; } 
 .mermaid { display: flex; justify-content: center; min-height: 80px; color: var(--text-2); font-family: var(--font); }
 .mermaid:not([data-processed]) { white-space: pre; font: 13px/1.5 var(--mono); color: transparent; }
-.mermaid svg { max-width: 100%; height: auto; flex-shrink: 0; } /* 판(flex) 안에서 줄어들지 않게 — 넓은 도표는 site.js 가 85% 폭을 주고 옆으로 넘긴다 */
+.mermaid svg { max-width: 100%; height: auto; flex-shrink: 0; } 
 .mermaid foreignObject { overflow: visible; }
 .mermaid--error { color: var(--text-3) !important; justify-content: flex-start; white-space: pre-wrap !important; }
-/* 판 안에서 옆으로 넘기는 도표(site.js 가 붙임): 판 위 안내 + 오른쪽 가장자리 흐림(끝까지 밀면 사라짐) */
+
 .scroll-hint { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0 0 10px; color: var(--text-3); font-size: 14px; line-height: 20px; text-align: center; }
 .scroll-hint svg { width: 16px; height: 16px; fill: currentColor; }
-/* Mermaid 시퀀스 메시지 글 뒤 판 색 상자(site.js): 낱말 사이 빈칸으로 세로 생명선이 지나가지 않게 */
+
 .mermaid .mm-msgbg { fill: var(--mm-pane); }
 .is-scrollx { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); }
 .is-scrollx.is-start-off { -webkit-mask-image: linear-gradient(to right, transparent, #000 36px, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, transparent, #000 36px, #000 calc(100% - 36px), transparent); }
 .is-scrollx.is-end { -webkit-mask-image: none; mask-image: none; }
 .is-scrollx.is-end.is-start-off { -webkit-mask-image: linear-gradient(to right, transparent, #000 36px); mask-image: linear-gradient(to right, transparent, #000 36px); }
-html.js .flow__hint { display: none !important; } /* 스크립트가 돌면 판 아래 안내 대신 판 위 안내(.scroll-hint)를 쓴다 */
+html.js .flow__hint { display: none !important; } 
 @media (max-width: 899px) { .figure .card__media { padding: 16px; } .figure figcaption { padding: 8px 14px 12px; } }
 
-/* 표 — 칸 글이 짧은 표만 표로 그린다(build.js tableKind). 글이 많은 표는 아래 행 카드(.rcards), 전·후 표는 변화 카드(.mcards) */
+
 .table-wrap { overflow-x: auto; border-radius: 24px; border: 1px solid var(--line-2); background: var(--tile); }
 table.t { width: 100%; border-collapse: collapse; font-size: 16px; line-height: 24px; text-align: left; }
 table.t th, table.t td { padding: 16px 20px; border-bottom: 1px solid var(--line); vertical-align: top; }
@@ -729,10 +683,9 @@ table.t td { color: var(--text-2); }
 table.t--cards td:first-child { color: var(--text); font-weight: 600; }
 table.t tbody tr:hover td { background: var(--fill); }
 
-/* 행 카드(.rcards): 표의 한 줄 = 카드 한 장. 왼쪽 = 첫 칸(작은 이름표 + 굵은 제목), 오른쪽 = 나머지 칸(이름표 + 값).
-   --stack: 값이 길어 위아래로 쌓는다(이름표 왼쪽 좁은 칸 + 값). --cols: 값이 짧아 옆으로 나란히. --two: 칸이 둘(제목 | 설명) */
+
 .rcards__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-/* 칸 폭(build.js rowCards): --c0 = 첫 칸(이름) 폭(가장 긴 이름에 맞춤), --cols = 옆으로 나란한 값 칸들(평균 글 길이 비례) */
+
 .rcard {
   display: grid; grid-template-columns: var(--c0, minmax(160px, 22%)) minmax(0, 1fr); gap: 12px 32px;
   padding: 24px 28px; border-radius: 24px; border: 1px solid var(--line); background: var(--tile);
@@ -741,7 +694,7 @@ table.t tbody tr:hover td { background: var(--fill); }
 .rcard:hover { border-color: var(--line-2); }
 .rcard__title { margin: 0; display: grid; gap: 4px; align-content: start; }
 .rcard__k { color: var(--text-3); font-size: 14px; line-height: 20px; font-weight: 600; letter-spacing: .02em; }
-/* 위아래로 쌓는 카드(--stack): 첫 칸 이름표('결정'·'실패 유형' 등)는 카드마다 같은 말이라 넓은 화면에서는 숨긴다(굵은 제목으로 충분). 좁은 화면은 보인다 */
+
 .rcards--stack .rcard__k { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .rcard__name { color: var(--text); font-size: 18px; line-height: 27px; font-weight: 600; }
 .rcard__fields { margin: 0; display: grid; gap: 14px; }
@@ -750,7 +703,7 @@ table.t tbody tr:hover td { background: var(--fill); }
 .rcard__f dt { color: var(--text-3); font-size: 14px; line-height: 25px; font-weight: 600; }
 .rcard__f dd { margin: 0; color: var(--text-2); font-size: 16px; line-height: 25px; }
 .rcard__f:first-child dd { color: var(--text); }
-/* 값이 짧으면 칸을 옆으로 나란히. 넓은 화면은 위 머리 줄(.rcards__head)이 칸 이름을 한 번만 보이고 카드 안 이름표는 숨긴다 */
+
 .rcards--cols .rcard { padding: 20px 28px; align-items: baseline; }
 .rcards--cols .rcard__k { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .rcards--cols .rcard__fields { grid-template-columns: var(--cols, repeat(var(--nf, 2), minmax(0, 1fr))); gap: 12px 28px; }
@@ -758,7 +711,7 @@ table.t tbody tr:hover td { background: var(--fill); }
 .rcards--cols .rcard__f + .rcard__f { padding-top: 0; border-top: 0; }
 .rcards--cols .rcard__f dt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .rcards__hf { display: grid; grid-template-columns: var(--cols, repeat(var(--nf, 2), minmax(0, 1fr))); gap: 28px; }
-/* 칸이 둘: 위에 머리 줄 하나(이름 | 설명), 카드 안 이름표는 화면 낭독기용으로만 */
+
 .rcards__head { display: grid; grid-template-columns: var(--c0, minmax(160px, 22%)) minmax(0, 1fr); gap: 32px; padding: 0 29px 10px; color: var(--text-3); font-size: 14px; line-height: 20px; font-weight: 600; letter-spacing: .02em; }
 .rcards--two .rcard { padding: 18px 28px; align-items: baseline; }
 .rcards--two .rcard__k, .rcard__vk { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -779,7 +732,7 @@ table.t tbody tr:hover td { background: var(--fill); }
   .rcard__v { font-size: 15px; line-height: 23px; }
 }
 
-/* 변화 카드(.mcards): '도입 전·후' 표의 한 줄 = 카드 한 장. 항목 이름 / 전(흐린 글) / 후(밝은 글, 감소·증가 색) / 근거 꼬리표 */
+
 .mcard { display: flex; flex-direction: column; gap: 14px; padding: 22px 24px; border-radius: 24px; border: 1px solid var(--line); background: var(--tile); min-width: 0; }
 .mcard__k { margin: 0; color: var(--text); font-size: 17px; line-height: 25px; font-weight: 600; }
 .mcard__ba { margin: 0; display: grid; gap: 10px; }
@@ -792,13 +745,13 @@ table.t tbody tr:hover td { background: var(--fill); }
 .mcard__notes { margin: auto 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .mcard__note { display: inline-flex; flex-wrap: wrap; gap: 6px; padding: 4px 12px; border-radius: 40px; background: var(--fill-2); color: var(--text-2); font-size: 13px; line-height: 20px; }
 .mcard__note b { color: var(--text-3); font-weight: 600; }
-table.t th, table.t td { overflow-wrap: break-word; } /* 본문의 overflow-wrap: anywhere 가 표 칸을 단어보다 좁게 만들어 단어 중간이 끊기지 않게. 넘치는 표는 .table-wrap 안에서 옆으로 넘긴다 */
+table.t th, table.t td { overflow-wrap: break-word; } 
 @media (max-width: 599px) { table.t th { white-space: normal; } }
 .sec__caption { margin: 12px 0 0; padding: 0; color: var(--text-3); font-size: 14px; line-height: 20px; text-align: left; }
 table.t tr:last-child td { border-bottom: 0; }
-/* 첫 칸(결정·구분 같은 머리말)이 두 글자마다 줄이 바뀌지 않게 */
+
 @media (min-width: 600px) { table.t--cards th:first-child, table.t--cards td:first-child { min-width: 7em; } }
-/* 좁은 화면: 본문 표(t--cards)는 줄마다 카드처럼 쌓는다 — 칸마다 머리 칸 이름(data-label)을 위에 작게 */
+
 @media (max-width: 599px) {
   table.t--cards, table.t--cards tbody, table.t--cards tr, table.t--cards td { display: block; width: 100%; }
   table.t--cards thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -810,7 +763,7 @@ table.t tr:last-child td { border-bottom: 0; }
   table.t--cards td:first-child { color: var(--text); font-weight: 600; }
 }
 
-/* 카드 묶음: 12칸 격자. build.js 가 줄마다 장 수를 고르게 나눠(4 = 2+2, 5 = 3+2, 7 = 4+3 …) 카드마다 칸 폭(--span)을 준다 */
+
 .tiles { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
 .tiles > * { grid-column: span var(--span, 4); min-width: 0; }
 @media (max-width: 1199px) {
@@ -822,10 +775,10 @@ table.t tr:last-child td { border-bottom: 0; }
 .tile { padding: 24px; border-radius: 28px; border: 1px solid var(--line); background: var(--tile); text-align: left; }
 .tile h3 { margin: 0 0 8px; font-size: 18px; line-height: 26px; font-weight: 600; }
 .tile p { margin: 0; color: var(--text-2); font-size: 15px; line-height: 24px; }
-/* 카드·타임라인 작은 제목의 부제(' | ' 로 나눈 뒤쪽): 다음 줄에 조금 작게·흐리게 */
+
 .tile h3 .dim, .tl__what b .dim { display: block; color: var(--text-3); font-size: .88em; font-weight: 500; }
 .tl { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; text-align: left; }
-/* 날짜 칸을 왼쪽 정렬·좁게 — 날짜가 본문과 같은 왼쪽 끝선에서 시작한다 */
+
 .tl li { position: relative; display: grid; grid-template-columns: 96px 1fr; gap: 24px; padding: 0 0 28px; }
 .tl li::before { content: ""; position: absolute; left: 108px; top: 8px; bottom: -8px; width: 1px; background: var(--line-2); }
 .tl li:last-child::before { display: none; }
@@ -840,9 +793,7 @@ table.t tr:last-child td { border-bottom: 0; }
   .tl__when { text-align: left; } .tl__what { padding-left: 0; }
 }
 
-/* 경력 타임라인(가로형, build.js careerTimeline): 왼쪽 오래된 회사 → 오른쪽 지금 회사.
-   가운데 가로 축(끝 화살표) 위에 점, 회사 카드는 축 위·아래로 번갈아(--up·--down). 카드 한 장 = 칸 두 개 폭(--c 부터 span 2), 칸 수 = 회사 수 + 1(--cols).
-   좁은 화면(~699): 세로 목록(지금 회사가 위, 왼쪽 세로 선) */
+
 .htl {
   --dot: 16px; --axis: 48px;
   list-style: none; margin: 0; padding: 0;
@@ -853,7 +804,7 @@ table.t tr:last-child td { border-bottom: 0; }
 .htl__item { grid-column: var(--c, 1) / span 2; position: relative; display: flex; flex-direction: column; align-items: stretch; gap: 10px; min-width: 0; padding: 0 4px; text-align: center; }
 .htl__item--up { grid-row: 1; flex-direction: column-reverse; align-self: end; padding-bottom: 12px; }
 .htl__item--down { grid-row: 3; align-self: start; padding-top: 12px; }
-/* 축과 카드를 잇는 가는 세로 선 + 축 위의 점 */
+
 .htl__item::before { content: ""; position: absolute; left: 50%; width: 2px; margin-left: -1px; height: calc(var(--axis) / 2 + 12px); background: var(--line-2); }
 .htl__item--up::before { bottom: calc(var(--axis) / -2); }
 .htl__item--down::before { top: calc(var(--axis) / -2); }
@@ -880,18 +831,17 @@ table.t tr:last-child td { border-bottom: 0; }
   .htl__card { align-items: flex-start; padding: 16px 16px 18px; border-radius: 20px; }
 }
 
-/* 기술 페이지 '도메인' 카드(build.js domainCards): 큼직한 카드 격자. 아이콘 칸 + 이름 + 괄호 안 세부(작은 흐린 줄).
-   줄마다 장 수를 고르게(7 = 4+3, --span). 중간 폭 2열, 좁은 화면 2열(아이콘 위·이름 아래) */
+
 .domains { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
 .domain {
   grid-column: span var(--span, 4); min-width: 0; position: relative; overflow: hidden;
-  display: flex; flex-direction: column; justify-content: flex-start; gap: 28px; min-height: 176px; /* 아이콘 바로 아래 고정 간격에 이름 — 부제가 있는 카드만 이름이 위로 올라가던 것 */
+  display: flex; flex-direction: column; justify-content: flex-start; gap: 28px; min-height: 176px; 
   padding: 26px 26px 24px; border-radius: 28px; border: 1px solid var(--line);
   background: linear-gradient(160deg, var(--fill-2) 0%, var(--fill) 55%), var(--tile-under);
   transition: border-color .25s, transform .25s, box-shadow .25s;
 }
 .domain::after { content: ""; position: absolute; right: -50px; top: -50px; width: 160px; height: 160px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%); pointer-events: none; }
-:root[data-theme="light"] .domain::after { background: radial-gradient(circle, color-mix(in srgb, var(--accent) 6%, transparent), transparent 70%); } /* 흰 바탕에서는 얼룩처럼 보여 옅게 */
+:root[data-theme="light"] .domain::after { background: radial-gradient(circle, color-mix(in srgb, var(--accent) 6%, transparent), transparent 70%); } 
 .domain:hover { border-color: color-mix(in srgb, var(--accent) 55%, transparent); transform: translateY(-2px); box-shadow: var(--shadow-m); }
 .domain__ic { position: relative; z-index: 1; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 18px; color: var(--accent-ink); background: color-mix(in srgb, var(--accent) 20%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent); }
 .domain__ic svg { width: 28px; height: 28px; fill: currentColor; }
@@ -908,16 +858,14 @@ table.t tr:last-child td { border-bottom: 0; }
   .domain__sub { font-size: 13px; line-height: 19px; }
 }
 
-/* ---------- 문제해결 탭 ----------
-   사례 한 칸(<article class="pcase">)의 모양은 모두 cases.css(.pcase…)에 있다.
-   예전 사례 규칙(.case·.steps·.step·.deltas·.delta·.funnel·.lesson·.sub-h)은 만든 쪽 어디에도 쓰이지 않아 지웠다. */
 
-/* Takeaway */
-/* 정리 상자: 빛을 둥근 사각 상자 안에 가둔다(overflow hidden) — 상자 밖으로 넘치지 않는다 */
+
+
+
 .takeaway { position: relative; width: 100%; max-width: var(--content); margin: 96px auto 0; padding: 72px 56px; display: flex; flex-direction: column; gap: 28px; isolation: isolate; overflow: hidden; border-radius: 40px; border: 1px solid var(--line); background: var(--card-bg); }
 .takeaway::before {
   content: ""; position: absolute; z-index: -1; inset: 0; pointer-events: none;
-  /* 빛은 비스듬한 그림 대신 부드러운 둥근 빛 두 개로 — 사선 모서리가 글을 가로지르지 않게 */
+  
   background:
     radial-gradient(55% 95% at 6% 115%, var(--glow-1), transparent 70%),
     radial-gradient(70% 85% at 62% 125%, var(--glow-2), transparent 72%),
@@ -930,28 +878,24 @@ table.t tr:last-child td { border-bottom: 0; }
 .takeaway--sm::before { display: none; }
 .takeaway--sm h2 { font-size: 28px; line-height: 36px; }
 .takeaway--sm p { font-size: 18px; line-height: 28px; }
-/* 다음 탭 안내(상세 탭 끝, build.js toProblems): 상자 폭 전체를 쓴다.
-   머리 줄 = 제목(왼쪽) + '문제해결 보기' 버튼(오른쪽 끝), 그 아래 사례 전부를 카드 목록으로(넓으면 2열, 좁으면 1열).
-   예전에는 사례 2개 + '외 N개' 가 왼쪽 칸에만 있어 오른쪽 넓은 칸이 텅 비었다.
-   카드 = 번호 칸 + 제목(굵게) + 그 아래 설명(조금 작게·흐리게, .ct-main/.ct-sub) + 화살표. 누르면 그 사례로 간다(site.js).
-   좁은 화면(~719)은 제목 → 카드 목록 → 버튼(폭 전체) 순서 */
+
 .takeaway--next {
   display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 28px 24px;
   grid-template-areas: "title go" "list list";
-  container-type: inline-size; /* 카드 목록 열 수를 상자 안 폭으로 정한다(아래 @container) */
+  container-type: inline-size; 
 }
 .takeaway--next .next__title { grid-area: title; min-width: 0; }
 .takeaway--next .next__title .dim { display: inline; margin-left: .45em; font-size: .78em; white-space: nowrap; }
 .next__go { grid-area: go; display: flex; justify-content: flex-end; }
-/* 상자 안 버튼은 한 단계 작게(높이 60 = 1 + 4 + 12 + 26 + 12 + 4 + 1, 글씨 18) — 상자 머리 줄에 맞는 크기 */
+
 .next__go .ctl { padding: 4px; font-size: 18px; line-height: 26px; }
 .next__go .ctl > span { gap: 10px; padding: 12px 26px; white-space: nowrap; }
 .next__go .ctl svg { width: 22px; height: 22px; }
 .next-cases { grid-area: list; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .next-cases > li { display: flex; min-width: 0; }
-/* 사례 수가 홀수면 마지막 카드는 두 칸을 다 쓴다(오른쪽 반이 비지 않게) */
+
 .next-cases > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
-/* 상자 안 폭이 700 보다 좁으면(900~969 화면 등) 한 열 — 두 열 카드가 300px 안팎으로 좁아 제목이 서너 줄로 감겼다 */
+
 @container (max-width: 700px) { .next-cases { grid-template-columns: minmax(0, 1fr); } .next-cases > li:last-child:nth-child(odd) { grid-column: auto; } }
 .next-case {
   flex: 1; min-width: 0; display: grid; grid-template-columns: 44px minmax(0, 1fr) 22px; align-items: center; gap: 16px;
@@ -965,7 +909,7 @@ table.t tr:last-child td { border-bottom: 0; }
 .next-case .ct-sub { font-size: 15px; line-height: 22px; }
 .next-case__arr { width: 22px; height: 22px; fill: var(--text-3); transition: fill .2s, transform .2s; }
 .next-case:hover .next-case__arr { fill: var(--text); transform: translateX(2px); }
-@media (max-width: 899px) { .next__go .ctl { padding: 3px; } } /* 좁은 화면 버튼 높이 58(다른 버튼과 같게) */
+@media (max-width: 899px) { .next__go .ctl { padding: 3px; } } 
 @media (max-width: 719px) {
   .takeaway--next { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "list" "go"; gap: 20px; }
   .next-cases { gap: 10px; }
@@ -981,14 +925,13 @@ table.t tr:last-child td { border-bottom: 0; }
 }
 @media (max-width: 899px) { .takeaway { margin-top: 64px; padding: 40px 20px; gap: 20px; border-radius: 28px; } .takeaway--sm { padding: 28px 20px; } .takeaway h2 { font-size: 30px; line-height: 38px; } .takeaway--sm h2 { font-size: 24px; line-height: 32px; } .takeaway p { font-size: 17px; line-height: 26px; } }
 
-/* 초안 표시 */
+
 .draft-note { margin: 24px 0 0; padding: 14px 18px; border-radius: 18px; border: 1px dashed color-mix(in srgb, var(--accent-3) 70%, transparent); background: color-mix(in srgb, var(--accent-3) 8%, transparent); color: var(--accent-3-ink); font-size: 14px; line-height: 22px; text-align: left; }
 
-/* 기술 스택: 기술 페이지 분류 묶음 자리. 안의 스파이더 도표 모양은 spider.css(.spider…)에 있다.
-   예전 분류 카드 규칙(.stack·.stack__group·.card__tags)은 스파이더로 바뀐 뒤 쓰이지 않아 지웠다 */
+
 .skills-stack { padding: 8px; }
 
-/* 이전·다음 */
+
 .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 80px 0 0; }
 .pager a { display: block; padding: 26px 30px; border-radius: 28px; border: 1px solid var(--line); background: var(--tile); text-decoration: none; transition: background .2s; }
 .pager a:hover { background: var(--fill-2); }
@@ -997,11 +940,10 @@ table.t tr:last-child td { border-bottom: 0; }
 .pager .next { text-align: right; }
 @media (max-width: 899px) { .pager { grid-template-columns: 1fr; } .pager .next { text-align: left; } }
 
-/* ---------- 차트 ---------- */
-.chart { width: 100%; max-width: 968px; margin: 0 auto; } /* 넓은 화면에서 720 폭 차트가 1.5배로 부풀지 않게 */
+
+.chart { width: 100%; max-width: 968px; margin: 0 auto; } 
 .figure--soft > figcaption { max-width: 968px; margin: 0 auto; }
-/* 좁은 화면: 720 폭 차트를 줄이면 글자가 5px 대가 된다 → 막대 차트는 이름을 막대 위에 둔 좁은 판(폭 360)으로 바꿔 보이고,
-   좁은 판이 없는 선 차트는 최소 폭을 두고 판 안에서 옆으로 넘긴다 */
+
 .chart svg.chart__narrow { display: none; }
 @media (max-width: 899px) {
   .figure--soft { padding: 20px 16px; }
@@ -1014,7 +956,7 @@ table.t tr:last-child td { border-bottom: 0; }
 }
 .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
 .chart text { font-family: var(--font); }
-/* 차트 글·선 색(build.js CX_*): 테마 토큰. 막대 색은 build.js 가 style="fill:var(--accent…)" 로 넣는다 */
+
 .chart .cx-t { fill: var(--text-2); }
 .chart .cx-m { fill: var(--text-3); }
 .chart .cx-g { stroke: var(--line-2); }
@@ -1025,15 +967,14 @@ table.t tr:last-child td { border-bottom: 0; }
 .chart .mark:hover, .chart .mark:focus { opacity: 1; outline: none; }
 .chart__legend { display: flex; flex-wrap: wrap; gap: 16px; margin: 0 0 12px; color: var(--text-2); font-size: 14px; line-height: 20px; }
 .chart__legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
-/* '표로 보기' 단추는 .ctl(높이 48px·글 16px, 좁은 화면 44px·15px)과 같은 부품(build.js chartTable 의 summary.ctl) */
+
 .chart details { margin-top: 16px; color: var(--text-3); font-size: 15px; }
 .chart details[open] > summary { color: var(--text); border-color: var(--line-2); }
 .chart details .table-wrap { margin-top: 12px; }
-/* 차트 '표로 보기' 표: 구분·값 칸이 모두 짧은 표(build.js chartTable 이 t--tight)는 그 칸을 한 줄로 둔다. 좁은 칸에서 '범위 하한' 이
-   두 줄로 접혀 줄마다 높이가 들쭉날쭉했다. 줄바꿈은 첫 칸(항목)만, 좁은 화면은 칸 여백을 줄여 첫 칸 자리를 남긴다 */
+
 .chart details table.t--tight td:not(:first-child) { white-space: nowrap; }
 @media (max-width: 599px) { .chart details table.t th, .chart details table.t td { padding: 12px 14px; } }
-@media (max-width: 374px) { .chart details table.t th, .chart details table.t td { padding: 12px 10px; } } /* 360 화면: '구축(일회성)' 같은 끊지 않는 낱말이 있는 표도 판 안에 들어오게 */
+@media (max-width: 374px) { .chart details table.t th, .chart details table.t td { padding: 12px 10px; } } 
 .tip {
   position: fixed; z-index: 90; pointer-events: none; padding: 8px 12px; border-radius: 10px;
   background: var(--tip-bg); color: var(--tip-ink); font-size: 13px; line-height: 18px; box-shadow: var(--shadow-m);
@@ -1041,7 +982,7 @@ table.t tr:last-child td { border-bottom: 0; }
 }
 .tip.is-on { opacity: 1; }
 
-/* ---------- 홈·소개 ---------- */
+
 .ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 8px; }
 @media (max-width: 1099px) { .ways { grid-template-columns: 1fr; } }
 .company { padding: 40px 8px 8px; }
@@ -1049,8 +990,8 @@ table.t tr:last-child td { border-bottom: 0; }
 .company__head h3 { margin: 0; font-size: 28px; line-height: 36px; font-weight: 600; }
 .company__head span { color: var(--text-3); font-size: 15px; line-height: 22px; }
 .company__lead { margin: 0 48px 24px; color: var(--text-2); font-size: 17px; line-height: 27px; max-width: var(--text-measure); }
-@media (max-width: 899px) { .company__head, .company__lead { margin-left: 8px; margin-right: 8px; } .company__head h3 { font-size: 22px; line-height: 30px; } } /* 좁은 화면 절 제목(26px)보다 작게 — 제목 위계 */
-/* 연락(홈·소개 공용): 아이콘 칸 + 큰 이메일 + 안내 글을 한 장의 카드로 */
+@media (max-width: 899px) { .company__head, .company__lead { margin-left: 8px; margin-right: 8px; } .company__head h3 { font-size: 22px; line-height: 30px; } } 
+
 .contact {
   display: flex; align-items: center; gap: 22px; margin: 0 56px; padding: 26px 32px; border-radius: 32px;
   border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
@@ -1064,14 +1005,12 @@ table.t tr:last-child td { border-bottom: 0; }
 .contact__note { color: var(--text-3); font-size: 16px; line-height: 24px; }
 @media (max-width: 899px) { .contact { margin: 0 8px; padding: 20px; gap: 16px; border-radius: 26px; } .contact__ic { width: 48px; height: 48px; border-radius: 16px; } .contact__ic svg { width: 24px; height: 24px; } .contact a.mail { font-size: 19px; line-height: 27px; } .contact__note { font-size: 15px; line-height: 22px; } }
 
-/* ---------- 소개 쪽 (build.js aboutPage) ----------
-   기술 페이지 스파이더 지도·도메인 카드 짜임을 따랐다: 테마 변수 색(--hue-a~e)을 카드마다 --c 로 받고, 아이콘 칸 + 큰 제목 + 옅은 색 빛.
-   색은 모두 테마 변수와 그 섞음(color-mix)뿐이다. 다크·라이트를 바꾸면 따라 바뀐다 */
 
-/* 핵심 역량 지도(competencyMap): 넓은 판 = 정적 SVG(가운데 이름 원 + 둘레 역량 알약), 좁은 판(960 미만) = 분류별 카드 */
+
+
 .cmap { position: relative; container-type: inline-size; }
 .cmap__canvas {
-  position: relative; overflow: hidden; padding: 28px 16px 26px; border-radius: 36px; border: 1px solid var(--line); /* 좌우 16 = 1144 판 안쪽 1110(그림 폭)이 줄지 않게 */
+  position: relative; overflow: hidden; padding: 28px 16px 26px; border-radius: 36px; border: 1px solid var(--line); 
   background: radial-gradient(70% 60% at 50% 46%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 72%), var(--chart-surface);
 }
 .cmap__svg { display: block; width: 100%; max-width: var(--cm-w, 1110px); height: auto; margin: 0 auto; overflow: visible; }
@@ -1091,14 +1030,14 @@ table.t tr:last-child td { border-bottom: 0; }
 .cmap__icbg { fill: color-mix(in srgb, var(--c) 26%, var(--chart-surface)); }
 .cmap__glyph { fill: color-mix(in srgb, var(--c) 55%, var(--text)); }
 .cmap__t { fill: var(--text); font-weight: 600; }
-/* 마우스를 올린 역량: 그 분류 색으로 테두리가 빛나고 선이 짙어진다(기술 페이지 스파이더와 같은 느낌) */
+
 .cmap__node:hover .cmap__pill { stroke: var(--c); filter: drop-shadow(0 0 10px color-mix(in srgb, var(--c) 55%, transparent)); }
 .cmap__node:hover .cmap__link { stroke-opacity: 1; stroke-width: 2.4; }
 .cmap__legend { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 24px; color: var(--text-2); font-size: 15px; line-height: 22px; font-weight: 600; }
 .cmap__legend li { display: inline-flex; align-items: center; gap: 8px; }
 .cmap__legend i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 25%, transparent); }
 .cmap__legend span { color: var(--text-3); font-weight: 500; }
-/* 분류 카드: 넓은 판에서는 화면 낭독기용(눈에는 숨김), 좁은 판에서 보인다 */
+
 .cmap__groups { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .cmap__grp { min-width: 0; padding: 20px 20px 18px; border-radius: 24px; border: 1px solid color-mix(in srgb, var(--c) 35%, var(--line)); background: linear-gradient(160deg, color-mix(in srgb, var(--c) 12%, transparent), transparent 60%), var(--tile); }
 .cmap__gh { margin: 0 0 14px; display: flex; align-items: center; gap: 10px; color: var(--text); font-size: 18px; line-height: 26px; font-weight: 700; }
@@ -1117,7 +1056,7 @@ table.t tr:last-child td { border-bottom: 0; }
   .cmap__grp { padding: 18px 16px 16px; border-radius: 22px; }
 }
 
-/* 강점: 번호(윤곽 숫자)·아이콘 칸·제목·본문이 있는 큰 카드. 본문 핵심어(**…**)는 형광펜처럼 */
+
 .strengths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 @media (max-width: 1099px) { .strengths { grid-template-columns: minmax(0, 1fr); } }
 .strength {
@@ -1153,7 +1092,7 @@ table.t tr:last-child td { border-bottom: 0; }
   .strength__b { font-size: 16px; line-height: 27px; }
 }
 
-/* 지금 하는 일: 왼쪽 색 줄 + 아이콘 칸 + 역할 + '재직 중' 표시(작은 숨쉬는 점) + 본문 */
+
 .now-card {
   position: relative; overflow: hidden; display: grid; gap: 20px; padding: 32px 36px 32px 40px; border-radius: 32px;
   border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
@@ -1173,7 +1112,7 @@ table.t tr:last-child td { border-bottom: 0; }
 .now-card__text p:last-child { margin: 0; }
 @media (max-width: 899px) { .now-card { padding: 22px 20px 24px 24px; border-radius: 26px; gap: 16px; } .now-card__ic { width: 46px; height: 46px; border-radius: 15px; } .now-card__ic svg { width: 24px; height: 24px; } .now-card__who b { font-size: 18px; line-height: 25px; } .now-card__text { font-size: 16px; line-height: 27px; } }
 
-/* 자기 평가 순서(rankOrbit): 왼쪽 동심원 지도(1위 = 가운데 원, 2위부터 바깥 고리) + 오른쪽 순위 목록(배지 색이 고리 배지 색과 같다) */
+
 .rorbit {
   display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); align-items: center; gap: 32px 56px;
   padding: 36px 40px; border-radius: 36px; border: 1px solid var(--line);
@@ -1209,7 +1148,7 @@ table.t tr:last-child td { border-bottom: 0; }
   .rorbit__item.is-top .rorbit__t { font-size: 19px; line-height: 26px; }
 }
 
-/* 즉시 기여·중장기: 아이콘 머리 + 번호 붙은 줄 카드 */
+
 .plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 @media (max-width: 899px) { .plans { grid-template-columns: minmax(0, 1fr); } }
 .plan2 {
@@ -1225,7 +1164,7 @@ table.t tr:last-child td { border-bottom: 0; }
 .plan2__list li { display: flex; align-items: flex-start; gap: 14px; padding: 13px 16px; border-radius: 16px; border: 1px solid var(--line); background: var(--fill); color: var(--text); font-size: 17px; line-height: 26px; font-weight: 500; }
 .plan2__n { flex: none; width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--c) 28%, transparent); color: var(--text); font-size: 14px; line-height: 1; font-weight: 700; }
 @media (max-width: 899px) { .plan2 { padding: 22px 18px 20px; border-radius: 26px; } .plan2__head h3 { font-size: 19px; line-height: 27px; } .plan2__list li { font-size: 16px; line-height: 24px; padding: 11px 14px; } }
-/* 협업 기대 효과: 아이콘 칸이 붙은 카드 */
+
 .tile__ic { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 16px; border-radius: 15px; color: var(--accent-ink); background: color-mix(in srgb, var(--accent) 18%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent); }
 .tile__ic svg { width: 24px; height: 24px; fill: currentColor; }
 .effects .tile { padding: 26px 26px 28px; transition: border-color .25s, transform .25s; }
@@ -1233,10 +1172,7 @@ table.t tr:last-child td { border-bottom: 0; }
 .effects .tile h3 { font-size: 19px; line-height: 27px; }
 .effects .tile p { font-size: 16px; line-height: 26px; }
 
-/* 학력(최종 학력 하나) + 석사 논문: 모든 폭에서 위아래로 쌓는다. 예전에는 넓은 화면에서 나란히(4 : 7) 두어,
-   학력 카드가 논문 카드 높이만큼 늘어나 가운데가 420~480px 비고 논문 단계 카드 글이 4~5줄로 접혔다.
-   넓은 화면(1100~)에서는 학력 카드를 가로 띠(아이콘 | 학위·학교·전공 | 기간)로 바꿔 '최종 학력'을 띠로 강조하고(아래 규칙),
-   논문 카드는 전체 폭을 쓴다(1340~ 에서 4단계를 한 줄 4칸으로) */
+
 .edu { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: stretch; }
 .edu-card {
   position: relative; overflow: hidden; min-width: 0; display: flex; flex-direction: column; gap: 22px;
@@ -1246,7 +1182,7 @@ table.t tr:last-child td { border-bottom: 0; }
     linear-gradient(160deg, color-mix(in srgb, var(--accent) 20%, transparent), transparent 65%), var(--tile);
 }
 .edu-card > * { position: relative; z-index: 1; }
-/* 큰 학사모 무늬(장식): 카드 오른쪽 빈 곳에 옅게 */
+
 .edu-card > .edu-card__mark { position: absolute; z-index: 0; right: -40px; bottom: 56px; width: 260px; height: 260px; pointer-events: none; color: var(--accent); opacity: .08; }
 .edu-card__mark svg { display: block; width: 100%; height: 100%; fill: currentColor; }
 :root[data-theme="light"] .edu-card > .edu-card__mark { opacity: .06; }
@@ -1284,7 +1220,7 @@ table.t tr:last-child td { border-bottom: 0; }
 .thesis-card__gol { margin: 0; display: grid; gap: 2px; min-width: 0; flex: 1 1 240px; }
 .thesis-card__gol span { color: var(--text-3); font-size: 14px; line-height: 20px; font-weight: 600; }
 .thesis-card__gol b { color: var(--text); font-size: 18px; line-height: 26px; font-weight: 600; }
-/* 넓은 화면: 학력 카드 = 가로 띠. 왼쪽 큰 아이콘, 가운데 '최종 학력' + 학교 이름(크게) + 학위 알약 + 전공, 오른쪽 세로 선 뒤에 기간 */
+
 @media (min-width: 1100px) {
   .edu-card {
     display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
@@ -1301,9 +1237,9 @@ table.t tr:last-child td { border-bottom: 0; }
   .edu-card__period { grid-area: period; align-self: stretch; margin: 0; padding: 0 0 0 36px; border-top: 0; border-left: 1px solid var(--line); font-size: 20px; line-height: 28px; }
   .edu-card__pic { width: 40px; height: 40px; border-radius: 13px; }
   .edu-card__pic svg { width: 22px; height: 22px; }
-  .edu-card > .edu-card__mark { right: 300px; top: -48px; bottom: auto; width: 240px; height: 240px; } /* 띠 가운데 빈 오른쪽(기간 앞) 뒤에 옅게 */
+  .edu-card > .edu-card__mark { right: 300px; top: -48px; bottom: auto; width: 240px; height: 240px; } 
 }
-/* 1100~1339: 본문 칸이 좁아 학교 이름과 학위 알약이 한 줄에 들어가게 조금 줄인다(1100 에서 학교 이름이 두 줄로 접혔다) */
+
 @media (min-width: 1100px) and (max-width: 1339px) {
   .edu-card { column-gap: 28px; padding: 32px 36px; }
   .edu-card__ic { width: 88px; height: 88px; border-radius: 28px; }
@@ -1313,7 +1249,7 @@ table.t tr:last-child td { border-bottom: 0; }
   .edu-card__period { padding-left: 28px; font-size: 18px; line-height: 26px; }
   .edu-card > .edu-card__mark { right: 250px; width: 200px; height: 200px; top: -36px; }
 }
-/* 논문 4단계: 넓은 화면(1340~)은 한 줄 4칸(아이콘 위, 번호·제목, 글 순서로 세로), 그보다 좁으면 2 × 2 */
+
 @media (min-width: 1340px) {
   .tsteps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .tstep { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto 1fr; gap: 10px; padding: 20px 20px 22px; }
@@ -1322,7 +1258,7 @@ table.t tr:last-child td { border-bottom: 0; }
 @media (max-width: 899px) {
   .edu-card, .thesis-card { padding: 24px 20px; border-radius: 28px; gap: 18px; }
   .edu-card__ic { width: 60px; height: 60px; border-radius: 19px; }
-  .edu-card > .edu-card__mark { width: 132px; height: 132px; right: -18px; top: 14px; bottom: auto; } /* 좁은 화면: 글과 겹치지 않게 빈 오른쪽 위로 */
+  .edu-card > .edu-card__mark { width: 132px; height: 132px; right: -18px; top: 14px; bottom: auto; } 
   .edu-card__ic svg { width: 32px; height: 32px; }
   .edu-card__school { font-size: 25px; line-height: 33px; }
   .edu-card__major { font-size: 18px; line-height: 26px; }
@@ -1333,7 +1269,7 @@ table.t tr:last-child td { border-bottom: 0; }
   .tstep { padding: 14px; border-radius: 18px; }
 }
 
-/* 지재권·수상: 아이콘 카드(제목 + 기관·연도 작은 줄) */
+
 .awards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 @media (max-width: 899px) { .awards { grid-template-columns: minmax(0, 1fr); gap: 10px; } }
 .award { display: flex; align-items: center; gap: 18px; min-width: 0; padding: 20px 24px 20px 20px; border-radius: 26px; border: 1px solid var(--line); background: linear-gradient(120deg, color-mix(in srgb, var(--c) 12%, transparent), transparent 55%), var(--tile); transition: border-color .25s, transform .25s; }
@@ -1345,20 +1281,13 @@ table.t tr:last-child td { border-bottom: 0; }
 .award__m { color: var(--text-3); font-size: 15px; line-height: 22px; }
 @media (max-width: 599px) { .award { padding: 16px; gap: 14px; border-radius: 22px; } .award__ic { width: 48px; height: 48px; border-radius: 15px; } .award__ic svg { width: 24px; height: 24px; } .award__t { font-size: 16px; line-height: 24px; } .award__m { font-size: 14px; line-height: 20px; } }
 
-/* ---------- 꼬리 (Footer) ---------- */
+
 .footer { display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 80px 0; color: var(--text-3); text-align: center; }
 .footer p { margin: 0; font-size: 18px; line-height: 24px; }
 .footer small { font-size: 14px; line-height: 20px; }
 .footer a { color: var(--text); text-decoration: none; }
 
-/* ---------- 나타나기(설계서 3차 요구 11) ----------
-   html.js-reveal 일 때만 움직인다(머리 스크립트가 붙인다: 움직임 줄이기·헤드리스 화면 찍기에서는 붙이지 않는다).
-   - 첫 화면: 본문 전체가 부드럽게 드러나고, 머리(이름표·제목·소개 글·사실)는 차례로 살짝 올라온다(CSS 만, 스크립트를 기다리지 않는다).
-   - 스크롤: site.js 가 절 머리·카드·도표·사례 블록 등에 .rv 를 붙이고, 처음 화면 밖에 있던 것만 숨긴다(.rv-out).
-     화면에 들어오면 스크롤 방향에 맞춰 나타난다 — 내려갈 때는 아래에서 위로(.rv-up), 올라갈 때는 위에서 아래로(.rv-down).
-     화면 밖으로 완전히 나가면 다시 숨겨 두어 다음에 들어올 때도 방향에 맞게 나타난다. 같이 들어온 형제는 짧은 시차(--rv-delay).
-   - 움직임은 transform 이 아닌 translate 속성으로 — 카드 기울임(transform)·마우스 올림 이동과 겹치지 않는다.
-   - 스크립트가 없거나 실패하면 .rv-out 이 붙지 않으므로 아무것도 숨지 않는다 */
+
 @keyframes rv-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes rv-up { from { opacity: 0; translate: 0 var(--rv-dist); } to { opacity: 1; translate: 0 0; } }
 @keyframes rv-down { from { opacity: 0; translate: 0 calc(var(--rv-dist) * -1); } to { opacity: 1; translate: 0 0; } }
@@ -1384,21 +1313,13 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   .now-card__live i { animation: none; }
 }
 
-/* 본문 안 다른 프로젝트 링크 */
+
 .inlink { color: var(--accent-ink); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--accent-ink) 40%, transparent); text-underline-offset: 3px; }
 .inlink:hover { text-decoration-color: var(--accent-ink); }
 
-/* ==== flow.css ==== */
-/* 플로우차트·상태도 부품 — build/flow.js 가 Mermaid 원문으로 만든 정적 HTML·SVG 의 모양.
-   틀(figure.card · card__media · figcaption)은 site.css 의 도표 판을 그대로 쓰고, 안쪽만 여기서 정한다.
-
-   색: 설계서 테마 변수(--bg · --surface · --surface-2 · --text · --text-3 · --line · --line-2 · --accent · --accent-2 · --accent-3 · --delta-down)만 쓴다.
-   흐름도에만 쓰는 값(--fl-*)은 아래 .flow 한곳에서 테마 변수로 만든다. 테마 변수가 아직 없을 때를 위한 예비 값도 여기에만 둔다.
-   라이트 테마에서 관계가 뒤집히는 값(판 바탕·상자 바탕·그림자)은 바로 아래 [data-theme="light"] 에 따로 적었다.
-   크기(2026-10-23 3차): 상자 글 16px, 화살표 글·작은 이름표 14px, 묶음 제목 16px(+ 부제 14px), 여백도 같은 비율로 키웠다. */
 
 .flow {
-  /* 테마 변수(없으면 다크 기본값) */
+  
   --fl-bg: var(--bg, #15161a);
   --fl-surface: var(--surface, #1c1d22);
   --fl-surface-2: var(--surface-2, #22242b);
@@ -1412,9 +1333,9 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   --fl-teal: color-mix(in srgb, var(--fl-green) 60%, var(--fl-blue));
   --fl-pink: color-mix(in srgb, var(--fl-purple) 50%, var(--fl-orange));
 
-  /* 흐름도 값 */
-  --fl-pane: color-mix(in srgb, var(--fl-ink) 2.5%, var(--fl-surface)); /* 도표 판 바탕(불투명 — 머리 글 알약 바탕과 같은 색이 되게) */
-  --fl-card: color-mix(in srgb, var(--fl-blue) 6%, var(--fl-surface-2)); /* 상자 바탕 */
+  
+  --fl-pane: color-mix(in srgb, var(--fl-ink) 2.5%, var(--fl-surface)); 
+  --fl-card: color-mix(in srgb, var(--fl-blue) 6%, var(--fl-surface-2)); 
   --fl-card-line: color-mix(in srgb, var(--fl-ink) 14%, transparent);
   --fl-title: var(--fl-ink);
   --fl-text: color-mix(in srgb, var(--fl-ink) 86%, var(--fl-bg));
@@ -1425,15 +1346,15 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   --fl-pill: color-mix(in srgb, var(--fl-ink) 9%, var(--fl-pane));
   --fl-pill-line: color-mix(in srgb, var(--fl-ink) 15%, transparent);
   --fl-pill-text: color-mix(in srgb, var(--fl-ink) 84%, var(--fl-bg));
-  --fl-dot: color-mix(in srgb, var(--fl-ink) 85%, var(--fl-bg)); /* 상태도 시작·끝 점 */
-  --fl-on-accent: #ffffff; /* 강조색(파랑) 위 글자: 두 테마 모두 흰색 */
+  --fl-dot: color-mix(in srgb, var(--fl-ink) 85%, var(--fl-bg)); 
+  --fl-on-accent: #ffffff; 
   --fl-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.2);
   --fl-shadow-flat: 0 6px 14px rgba(0, 0, 0, 0.35);
-  /* 묶음·판 색(기본 파랑). --fc-t 는 그 색의 글자용 밝기(다크는 밝게, 라이트는 짙게 — 글자색과 섞어 자동으로) */
+  
   --fc: var(--fl-blue);
 }
 .flow, .flow [class*="flow--c-"] { --fc-t: color-mix(in srgb, var(--fc) 58%, var(--fl-ink)); }
-/* 라이트 테마: 판은 옅은 회색, 상자는 흰 바탕, 그림자는 옅게 */
+
 :root[data-theme="light"] .flow {
   --fl-pane: var(--fl-surface-2);
   --fl-card: var(--fl-surface);
@@ -1446,14 +1367,14 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .flow.figure .flow__media { position: relative; padding: 28px 24px; background: var(--fl-pane); overflow: hidden; }
 .flow figcaption { text-align: left; }
 
-/* 묶음·판 색 */
+
 .flow--c-blue { --fc: var(--fl-blue); }
 .flow--c-purple { --fc: var(--fl-purple); }
 .flow--c-orange { --fc: var(--fl-orange); }
 .flow--c-teal { --fc: var(--fl-teal); }
 .flow--c-pink { --fc: var(--fl-pink); }
 
-/* ---------- 일반 그래프(절대 위치 카드 + SVG 화살표) ---------- */
+
 .flow__scroll { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: var(--fl-line-2) transparent; padding: 2px 0 6px; }
 .flow__scroll:focus-visible { outline: 2px solid var(--fl-blue); outline-offset: 2px; border-radius: 12px; }
 .flow__canvas { position: relative; margin: 0 auto; flex: none; }
@@ -1485,7 +1406,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .flow__node--note { border-style: dashed; border-color: color-mix(in srgb, var(--fl-purple) 50%, var(--fl-ink) 10%); background: color-mix(in srgb, var(--fl-purple) 10%, var(--fl-pane)); box-shadow: none; }
 .flow__node--note .flow__d { color: color-mix(in srgb, var(--fl-purple) 30%, var(--fl-ink)); }
 
-/* 상태도 시작·끝 점, 선택·갈래 */
+
 .flow__pseudo { position: absolute; z-index: 1; box-sizing: border-box; }
 .flow__pseudo--start { border-radius: 50%; background: var(--fl-dot); box-shadow: 0 0 0 4px color-mix(in srgb, var(--fl-dot) 12%, transparent); }
 .flow__pseudo--end { border-radius: 50%; border: 2px solid var(--fl-dot); }
@@ -1493,16 +1414,14 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .flow__pseudo--choice { transform: rotate(45deg) scale(0.72); border: 1.5px solid color-mix(in srgb, var(--fl-orange) 58%, var(--fl-ink)); background: var(--fl-card); border-radius: 4px; }
 .flow__pseudo--fork, .flow__pseudo--join { border-radius: 4px; background: var(--fl-dot); }
 
-/* 묶음 판 */
+
 .flow__grp { position: absolute; box-sizing: border-box; border-radius: 20px; border: 1px solid color-mix(in srgb, var(--fc) 38%, transparent); background: color-mix(in srgb, var(--fc) 7%, transparent); }
 .flow__grp .flow__grp { background: color-mix(in srgb, var(--fc) 8%, transparent); }
-/* 묶음 안 묶음의 머리 글 알약 바탕: 판 색(--fl-pane) 대신 '바깥 묶음 바탕 위' 색으로 — 바깥 묶음 바탕 위에서 어두운·회색 조각처럼 튀지 않게.
-   --gp0 = 바깥 묶음이 칠한 바탕(판 색 + 바깥 묶음 색 7%). 안쪽 묶음은 이것을 물려받아(inherit) 자기 색을 조금 더 얹는다 */
+
 .flow__grp { --gp0: color-mix(in srgb, var(--fc) 7%, var(--fl-pane)); }
 .flow__grp .flow__grp { --gp0: inherit; }
 .flow__grp .flow__grp > .flow__gt { background: color-mix(in srgb, var(--fc) 12%, var(--gp0)); }
-/* 머리 글(알약): 제목 + 흐린 작은 부제. 화살표 위에 얹는다(바탕을 판 색으로 칠해 지나가는 선이 글을 가리지 않게).
-   자리·폭은 flow.js 가 계산해 style 로 적는다(선이 지나지 않는 자리). 바탕은 묶음 색을 판 바탕 위에 겹친 불투명 색 */
+
 .flow__gt {
   position: absolute; z-index: 3; left: 12px; top: 12px;
   display: flex; align-items: flex-start; justify-content: center; gap: 8px;
@@ -1512,14 +1431,14 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 }
 .flow__gt::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 7px; margin-left: -2px; border-radius: 3px; background: var(--fc); }
 .flow__gx { display: block; }
-/* 부제(나눔표 뒤 글): 제목보다 조금 작고 흐리게 */
+
 .flow__gs { font-size: 14px; font-weight: 500; letter-spacing: 0; color: color-mix(in srgb, var(--fc-t) 55%, var(--fl-text-3)); }
-/* 들어오는 선이 머리 띠를 지나 보통 알약이 들어갈 빈자리가 없을 때(flow.js placeGroupTitle): 작은 알약(점 없음, 한 줄 또는 두 줄) */
+
 .flow__gt--sm { gap: 0; padding: 2px 8px; font-size: 14px; line-height: 18px; }
 .flow__gt--sm::before { display: none; }
 .flow__gt--sm .flow__gs { font-size: 12.5px; }
 
-/* 화살표 */
+
 .flow__edge { fill: none; stroke: var(--fl-edge); stroke-width: 1.7; stroke-linejoin: round; stroke-linecap: round; }
 .flow__edge--dotted { stroke-dasharray: 5 5; stroke-linecap: butt; }
 .flow__edge--thick { stroke: var(--fl-edge-strong); stroke-width: 3.2; }
@@ -1527,7 +1446,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .flow__mk path { fill: var(--fl-edge); }
 .flow__mk--thick path { fill: var(--fl-edge-strong); }
 
-/* 화살표 글(작은 알약) */
+
 .flow__el {
   position: absolute; z-index: 2;
   display: flex; align-items: center; justify-content: center;
@@ -1536,21 +1455,20 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   background: var(--fl-pill); color: var(--fl-pill-text);
   font-size: 14px; line-height: 20px; font-weight: 600; text-align: center; white-space: nowrap;
 }
-/* 화살표 글은 한 덩어리(flow.js 가 span.flow__elx 로 감싼다 — flex 칸 안에서 하나의 칸이 된다): 글과 감소·증가 색 span 이
-   따로 칸이 되어 사이 띄어쓰기가 사라지던 것('정확도85%'). 단계 부품 안내 글 안에서는 보통 글처럼 이어진다 */
+
 .flow__el > .flow__elx { min-width: 0; }
 
 .flow__hint { display: none; }
 
-/* 화면 낭독기 전용 목록 */
+
 .flow__sr { position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
 
-/* ---------- 흐름 배치 상자(단계·비교 부품) ---------- */
+
 .flow__node--flow { position: relative; z-index: auto; width: 100%; min-height: 68px; padding: 13px 18px; }
 .flow__node--flow > span { white-space: normal; }
 .flow__el--flow { position: relative; display: inline-flex; max-width: 100%; white-space: normal; }
 
-/* 연결 화살표(가로 기본, --v 세로) */
+
 .flow-link { position: relative; flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-width: 52px; padding: 0 8px; }
 .flow-link__arrow { position: relative; display: block; width: 44px; height: 12px; }
 .flow-link__arrow::before { content: ""; position: absolute; left: 0; right: 7px; top: 50%; margin-top: -0.85px; border-top: 1.7px solid var(--fl-edge); }
@@ -1568,7 +1486,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .flow-link--v.flow-link--thick .flow-link__arrow::before { border-left-width: 3.2px; margin-left: -1.6px; border-color: var(--fl-edge-strong); }
 .flow-link--v.flow-link--thick .flow-link__arrow::after { border-top-color: var(--fl-edge-strong); border-left-color: transparent; }
 
-/* ---------- 단계 부품(곧은 사슬) ---------- */
+
 .flow-steps { list-style: none; margin: 0; padding: 14px 0 4px; display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; row-gap: 30px; }
 .flow-steps__item { display: flex; align-items: center; }
 .flow-steps__card { position: relative; display: flex; flex-direction: column; align-self: stretch; justify-content: center; width: 216px; }
@@ -1582,8 +1500,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .flow-steps__jump { display: flex; align-items: flex-start; justify-content: center; gap: 6px; margin-top: 9px; color: color-mix(in srgb, var(--fl-purple) 45%, var(--fl-ink)); font-size: 14px; line-height: 20px; font-weight: 600; text-align: left; }
 .flow-steps__jump svg { flex: none; width: 18px; height: 18px; fill: currentColor; margin-top: 1px; }
 .flow-steps__jump--back { color: color-mix(in srgb, var(--fl-orange) 58%, var(--fl-ink)); }
-/* 줄 바꿈 연결선(단계가 많아 두 줄 이상일 때, flow.js 가 그림마다 낸 컨테이너 질의로만 보인다):
-   앞 줄 마지막 카드 밑 → 아래 → 왼쪽 → 다음 줄 첫 카드(번호 동그라미)로 내려간다 */
+
 .flow-steps__br { display: none; flex: 0 0 100%; height: 56px; position: relative; }
 .flow-steps__wrap {
   position: absolute; top: 0; bottom: 16px; left: var(--x, 108px); width: var(--w, 0px);
@@ -1599,11 +1516,10 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 }
 .flow-steps__wrap > .flow__el { position: absolute; left: 50%; top: 27px; transform: translate(-50%, -50%); white-space: nowrap; max-width: none; }
 
-/* ---------- 비교 부품(전/후 판) ---------- */
-/* 판은 나란히 둔다. 빌드 때 나란히 두는 데 필요한 폭을 재어 flow-cmp--bN(N = 600·780·940·1078, flow.js CMP_BUCKETS)을 붙이고,
-   판을 품은 칸이 그보다 좁으면 컨테이너 쿼리로 위아래로 쌓는다. 1078 을 넘으면 처음부터 flow-cmp--stack. */
+
+
 .flow.figure .flow__media { container-type: inline-size; }
-/* 나란한 판은 제 높이만 쓴다(위 끝선 맞춤): 짧은 판이 긴 판 높이로 늘어나 상자 둘이 큰 빈 판 가운데 떠 있던 것. 판 사이 화살표만 세로 가운데 */
+
 .flow-cmp { display: flex; align-items: flex-start; justify-content: center; }
 .flow-cmp > .flow-cmp__link { align-self: center; }
 .flow-cmp__panel {
@@ -1614,13 +1530,13 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 }
 .flow-cmp__title { margin: 0; padding: 0 0 16px; border-bottom: 1px solid color-mix(in srgb, var(--fc) 30%, transparent); font-size: 18px; line-height: 26px; font-weight: 600; color: var(--fl-title); text-align: left; }
 .flow-cmp__key { color: var(--fc-t); font-weight: 700; }
-/* 판 머리 부제(나눔표 뒤 글): 다음 줄에 조금 작고 흐리게 */
+
 .flow-cmp__sub { display: block; margin-top: 2px; font-size: 15.5px; line-height: 23px; font-weight: 500; color: var(--fl-text-2); }
 .flow-cmp__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: stretch; }
 .flow-cmp__list > li { display: flex; flex-direction: column; align-items: center; }
-/* 목록·사슬 판의 상자: 글 폭 상자 + 같은 최소 폭(220px, 판보다 넓으면 판 폭). 예전에는 한쪽 판 상자만 판 폭 가득(약 415px) 늘어나 좌우 모양이 달랐다 */
+
 .flow-cmp__list .flow__node--flow { width: auto; min-width: min(220px, 100%); max-width: min(340px, 100%); }
-/* 판 내용(목록·그래프)은 제목 바로 아래부터(위 끝선 맞춤) */
+
 .flow-cmp__panel > .flow-cmp__list, .flow-cmp__panel > .flow__scroll { margin-block: 0; }
 .flow-cmp__list--plain { gap: 14px; }
 .flow-cmp__panel > .flow__scroll { margin: 0 -6px; }
@@ -1628,13 +1544,13 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .flow-cmp__link .flow-link { min-width: 0; }
 .flow-cmp__link .flow-link__arrow { width: 48px; }
 .flow-cmp__link .flow__el--flow { white-space: normal; }
-/* 이은 화살표가 없는 판 사이(배치용 ~~~ 포함)는 빈칸만 */
+
 .flow-cmp__link--quiet { min-height: 16px; }
 .flow-cmp--n3 .flow-cmp__panel { padding-left: 18px; padding-right: 18px; }
 .flow-cmp--n3 .flow-cmp__link .flow-link__arrow { width: 34px; }
 .flow-cmp__rest { margin: 20px 0 0; padding: 0; list-style: none; color: var(--fl-text-2); font-size: 15px; line-height: 22px; text-align: center; }
 
-/* 위아래로 쌓기(넓은 비교 판, 또는 칸이 좁을 때) — 같은 규칙을 쿼리마다 되풀이한다 */
+
 .flow-cmp.flow-cmp--stack { flex-direction: column; align-items: stretch; }
 .flow-cmp.flow-cmp--stack .flow-cmp__panel { flex: none; width: 100%; min-width: 0; max-width: none; }
 .flow-cmp.flow-cmp--stack .flow-cmp__link { width: auto; padding: 10px 0; }
@@ -1669,18 +1585,18 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   .flow-cmp.flow-cmp--b600 .flow-cmp__link .flow-link__arrow { transform: rotate(90deg); width: 34px; }
 }
 
-/* ---------- 넓은 그래프 ---------- */
-/* 본문 판보다 조금 넓은 그래프는 큰 화면에서 판 폭에 맞게 줄인다(--fit 은 빌드 때 계산, 0.85 이상) */
+
+
 @media (min-width: 900px) {
   .flow--fit .flow__canvas { zoom: var(--fit, 1); }
 }
 .flow--over .flow__hint { display: block; margin: 8px 0 0; color: var(--fl-text-3); font-size: 13px; line-height: 18px; text-align: center; }
 
-/* ---------- 좁은 화면 ---------- */
+
 @media (max-width: 899px) {
   .flow.figure .flow__media { padding: 18px 12px; }
 }
-/* 태블릿(본문 판 약 690px)보다 넓은 그래프는 밀어 보기 안내 */
+
 @media (min-width: 601px) and (max-width: 899px) {
   .flow--wide-md .flow__hint { display: block; margin: 8px 0 0; color: var(--fl-text-3); font-size: 13px; line-height: 18px; text-align: center; }
 }
@@ -1688,7 +1604,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   .flow-cmp__panel { padding: 20px 16px 22px; }
 }
 @media (max-width: 600px) {
-  .flow__canvas { zoom: 0.94; } /* 스크립트가 없을 때의 휴대폰 배율(site.js PHONE_ZOOM·flow.js PHONE.scale 과 같다: 상자 글 15px) */
+  .flow__canvas { zoom: 0.94; } 
   .flow--wide .flow__hint { display: block; margin: 8px 0 0; color: var(--fl-text-3); font-size: 13px; line-height: 18px; text-align: center; }
   .flow-steps { flex-direction: column; flex-wrap: nowrap; align-items: stretch; row-gap: 0; }
   .flow-steps__item { flex-direction: column; align-items: stretch; }
@@ -1697,8 +1613,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   .flow-steps__item > .flow-link .flow-link__arrow { transform: rotate(90deg); width: 30px; margin: 9px 0; }
 }
 
-/* 판이 좁을 때(예: 문제해결 사례의 오른쪽 단, 약 430px)도 단계 부품을 세로로 — 화면 폭이 아니라 판 폭 기준.
-   카드 두 장(216px)과 화살표가 한 줄에 들어가지 못하는 폭(flow.js STEPS_MIN 501 미만)이면 줄 바꿈 대신 세로 사슬로 바꾼다. (통합 담당 I 추가) */
+
 @container (max-width: 500px) {
   .flow-steps { flex-direction: column; flex-wrap: nowrap; align-items: stretch; row-gap: 0; }
   .flow-steps__item { flex-direction: column; align-items: stretch; }
@@ -1707,29 +1622,18 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   .flow-steps__item > .flow-link .flow-link__arrow { transform: rotate(90deg); width: 30px; margin: 9px 0; }
 }
 
-/* ==== spider.css ==== */
-/* 스파이더(방사형) 기술 도표: build/spider.js 가 만든 <figure class="spider"> 의 모양.
-   넓은 화면: 정적 SVG(.spider__canvas). 640px 이하: 분류별 세로 나무(.spider__tree).
-   그 사이(태블릿)에서는 판 안쪽 폭이 그림 폭의 82%보다 좁아지면(글이 약 12.3px 아래로 작아지면) 나무로 바꾼다.
-   그 기준은 그림마다 달라 spider.js 가 figure 에 spider--t<폭> 꼬리표를 달고, 아래 컨테이너 질의가 받는다.
-   나무는 넓은 화면에서도 화면 낭독기용으로 남는다(눈에는 숨김, SVG 는 aria-hidden).
-
-   색: SVG 에는 색 값이 없다. 모든 칠은 아래 변수로 정하고, 변수는 사이트 테마 변수(--accent·--accent-2·--accent-3·
-   --text·--chart-surface·--surface-2)에서 color-mix 로 만든다. 다크가 기본, <html data-theme="light"> 이면 라이트 값.
-   묶음(.spider__cl, 나무의 .spider__branch)마다 style 로 --sp-c(허브 색)만 받고, 나머지 묶음 색은 거기서 섞는다.
-   괄호 안 값은 테마 변수가 아직 없을 때 쓰는 다크 기본값(설계서 값과 같다). */
 
 .spider {
-  /* 바탕·글 */
+  
   --sp-ink: var(--text, #ffffff);
   --sp-surface: var(--chart-surface, #1c1d22);
   --sp-pill: var(--surface-2, #22242b);
   --sp-text: color-mix(in srgb, var(--sp-ink) 86%, var(--sp-pill));
   --sp-accent: var(--accent, #3d6bf4);
-  /* 가운데 원은 두 테마 모두 짙은 파랑 그림 위 흰 글(표지 그림과 같은 예외) */
+  
   --sp-core-ink: #ffffff;
   --sp-shade: #000000;
-  /* 허브 색 8가지: 파랑·보라·청록·주황과 그 변주(다크에서는 밝게, 라이트에서는 짙게: 글 색 쪽으로 섞는다) */
+  
   --sp-teal: #14b8a6;
   --sp-hue-0: var(--accent, #3d6bf4);
   --sp-hue-1: var(--accent-2, #6a1cfd);
@@ -1739,7 +1643,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   --sp-hue-5: color-mix(in srgb, var(--sp-hue-1) 60%, var(--sp-ink));
   --sp-hue-6: color-mix(in srgb, var(--sp-hue-2) 60%, var(--sp-ink));
   --sp-hue-7: color-mix(in srgb, var(--sp-hue-3) 60%, var(--sp-ink));
-  /* 섞는 비율(테마마다 다름) */
+  
   --sp-icon-mix: 24%;
   --sp-title-mix: 34%;
   --sp-dot-base: var(--sp-ink);
@@ -1750,7 +1654,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   box-sizing: border-box;
   width: 100%;
   margin: 0;
-  padding: 20px 16px; /* 판 1144 = 그림 최대 1110 + 16×2 + 테두리 1×2 */
+  padding: 20px 16px; 
   border: 1px solid var(--line, rgba(255, 255, 255, 0.1));
   border-radius: 28px;
   background: var(--sp-surface);
@@ -1765,7 +1669,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   --sp-glow-o: 0.12;
   --sp-dim: 0.3;
 }
-/* 묶음 색: 허브 색(--sp-c) 하나에서 섞는다 */
+
 .spider__cl,
 .spider__branch {
   --sp-line: color-mix(in srgb, var(--sp-c) 78%, var(--sp-ink));
@@ -1777,10 +1681,10 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   --sp-pill-line: color-mix(in srgb, var(--sp-c) 40%, var(--sp-pill));
 }
 
-/* ---------- 넓은 화면: SVG ---------- */
+
 .spider__canvas {
   width: 100%;
-  max-width: var(--sp-w, 1110px); /* 그림보다 넓은 판에서는 늘리지 않고 가운데 둔다 */
+  max-width: var(--sp-w, 1110px); 
   margin: 0 auto;
 }
 .spider__svg {
@@ -1788,7 +1692,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   width: 100%;
   max-width: 100%;
   height: auto;
-  overflow: visible; /* 마우스 올림 빛이 그림 끝에서 잘리지 않게 */
+  overflow: visible; 
 }
 .spider__svg text {
   font-family: var(--font, "Inter", "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif);
@@ -1818,7 +1722,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .spider__tbox { fill: var(--sp-title-bg); stroke: var(--sp-title-line); }
 .spider__ttext { fill: var(--sp-ink); }
 
-/* ---------- 마우스 올림: 그 분류 색으로 은은하게 맥동하는 빛, 다른 분류는 흐리게 ---------- */
+
 .spider__cl { transition: opacity 0.3s ease; }
 .spider__svg:has(.spider__cl:hover) .spider__cl:not(:hover) { opacity: var(--sp-dim); }
 .spider__cl:hover :is(.spider__pill, .spider__hbox, .spider__tbox) {
@@ -1847,7 +1751,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   .spider__cl:hover :is(.spider__fan, .spider__link) { animation: none; filter: drop-shadow(0 0 3px var(--sp-c)); }
 }
 
-/* ---------- 좁은 화면 나무(넓은 화면에서는 화면 낭독기 전용) ---------- */
+
 .spider__tree {
   position: absolute;
   width: 1px;
@@ -1872,7 +1776,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .spider__root-text { color: var(--sp-ink); font-size: 17px; line-height: 24px; font-weight: 600; }
 
 .spider__branches { position: relative; margin-top: 4px !important; }
-.spider__branch::after { /* 줄기: 가운데 원 → 분류 머리. 마지막 분류에서 끝난다 */
+.spider__branch::after { 
   content: "";
   position: absolute;
   left: 16px;
@@ -1882,7 +1786,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 }
 .spider__branch:not(:last-child)::after { height: auto; bottom: 0; }
 .spider__branch { position: relative; padding: 16px 0 0 34px; }
-.spider__branch::before { /* 줄기 → 분류 머리 */
+.spider__branch::before { 
   content: "";
   position: absolute;
   left: 16px;
@@ -1938,19 +1842,19 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   line-height: 20px;
   overflow-wrap: anywhere;
   word-break: keep-all;
-  text-wrap: pretty; /* 마지막 줄에 '10만 / 건' 의 '건)' 처럼 한 낱말만 남지 않게 */
+  text-wrap: pretty; 
 }
 .spider__leaf::before {
   content: "";
   flex: none;
-  margin-top: 7px; /* 첫 줄 가운데 */
+  margin-top: 7px; 
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: var(--sp-dot);
   box-shadow: 0 0 0 1.5px var(--sp-c);
 }
-/* 나무에서도 분류 머리에 마우스를 올리면 그 색으로 빛난다(태블릿 폭) */
+
 .spider__branch:hover .spider__bicon,
 .spider__branch:hover .spider__btitle { box-shadow: 0 0 0 1px var(--sp-c), 0 0 12px color-mix(in srgb, var(--sp-c) 60%, transparent); }
 
@@ -1969,7 +1873,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   }
 }
 
-/* 판 안쪽 폭이 그림별 기준(spider--t<폭>)보다 좁으면 나무로 바꾼다 */
+
 @container spider (max-width: 559.98px) {
   .spider--t560 > .spider__canvas { display: none; }
   .spider--t560 > .spider__tree { position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; }
@@ -2019,27 +1923,21 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   .spider--t1000 > .spider__tree { position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; }
 }
 
-/* ==== cases.css ==== */
-/* 문제해결 사례 부품(cases.js): 원본 PDF 처럼 아이콘 머리·꼬리표·짧은 글머리표 + 오른쪽 진행 순서·숫자·그림.
-   모든 이름은 .pcase 로 시작해 site.css 의 옛 .case/.step/.delta/.tl/.funnel/.lesson 과 겹치지 않는다.
-   색: 문제=주황, 원인=파랑, 해결=보라, 결과=초록. 감소·증가 글자색은 --delta-down/--delta-up.
-   3차: 색은 설계서 테마 변수(--text·--line·--fill·--accent… )만 쓴다. 블록 색 글자는 테마 색을 글자색(--text)과 섞어 만든다
-   (다크는 흰색과 섞여 밝은 색, 라이트는 검정과 섞여 진한 색). --accent·--surface 가 아직 없는 동안은 site.css 의 옛 이름으로 받는다. */
 
 .pcase {
-  /* 테마 색 받기 */
+  
   --pc-blue: var(--accent, var(--primary-500));
   --pc-violet: var(--accent-2, var(--secondary-300));
   --pc-orange: var(--accent-3, var(--orange));
   --pc-green: var(--delta-down);
-  --pc-amber: color-mix(in srgb, var(--pc-orange) 78%, var(--pc-green)); /* 배운 점 상자: 주황에 초록을 조금 섞은 호박색 */
+  --pc-amber: color-mix(in srgb, var(--pc-orange) 78%, var(--pc-green)); 
   --pc-surface: var(--surface, var(--chart-surface));
-  /* 색 글자 만들기: 테마 색 몇 %를 글자색과 섞는다(다크 60%, 라이트 82%) */
+  
   --pc-tint: 60%;
   --pc-blue-t: color-mix(in srgb, var(--pc-blue) var(--pc-tint), var(--text));
   --pc-violet-t: color-mix(in srgb, var(--pc-violet) var(--pc-tint), var(--text));
   --pc-orange-t: color-mix(in srgb, var(--pc-orange) var(--pc-tint), var(--text));
-  --pc-green-t: color-mix(in srgb, var(--pc-green) calc(var(--pc-tint) - 15%), var(--text)); /* 감소 색(--delta-down)보다 옅게 */
+  --pc-green-t: color-mix(in srgb, var(--pc-green) calc(var(--pc-tint) - 15%), var(--text)); 
   --pc-amber-t: color-mix(in srgb, var(--pc-amber) var(--pc-tint), var(--text));
   --k: var(--text-3); --k-text: var(--text-2); --k-soft: var(--fill);
   --pc-line: var(--line);
@@ -2051,7 +1949,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   --pc-down: var(--delta-down);
   --pc-up: var(--delta-up);
   position: relative;
-  container: pcase / inline-size; /* 2단 → 1단 전환은 화면 폭이 아니라 이 사례 판의 폭으로 정한다(왼쪽 메뉴 자리 때문) */
+  container: pcase / inline-size; 
   max-width: var(--content, 1144px);
   margin: 0 auto;
   padding: 96px 0 24px;
@@ -2061,23 +1959,23 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .pcase + .pcase { border-top: 1px solid var(--pc-line); margin-top: 72px; }
 .pcase .pcase__vh { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
-/* ---------- 머리 ---------- */
+
 .pcase__head { margin: 0 0 36px; display: flex; flex-direction: column; gap: 16px; }
 .pcase__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .pcase__no { color: var(--pc-text-2); font-size: 16px; line-height: 22px; font-weight: 700; letter-spacing: .06em; }
 .pcase__of { color: var(--pc-text-3); font-weight: 500; letter-spacing: 0; }
 .pcase__tag { padding: 5px 14px; border-radius: 40px; border: 1px solid var(--pc-line-2); background: var(--pc-fill); color: var(--pc-text-2); font-size: 14px; line-height: 20px; font-weight: 600; }
 .pcase__title { margin: 0; color: var(--pc-text); font-size: 32px; line-height: 42px; font-weight: 700; letter-spacing: -0.01em; }
-/* 'A | B'·'A — B' 제목: 기호는 그리지 않고 B 를 다음 줄 색 부제로(제목의 약 87%) */
+
 .pcase__title-main { display: block; }
 .pcase__title-sub { display: block; margin-top: 6px; color: var(--pc-violet-t); font-size: 28px; line-height: 38px; font-weight: 600; letter-spacing: -0.005em; }
-/* 부제에 감소·증가 색 숫자가 있으면 부제는 흐린 글자색으로(색 뜻이 겹치지 않게) */
+
 .pcase__title-sub--plain { color: var(--pc-text-2); }
-/* 제목 강조('A → B'·'A: B' 의 B)는 감소·증가 색(초록·하늘)과 다른 연보라. 숫자 변화가 있는 제목은 cases.js 가 감소·증가 색으로 칠한다 */
+
 .pcase__title-em { color: var(--pc-violet-t); }
 .pcase__title .dpair__from { color: var(--pc-text-3); }
 
-/* ---------- 2단 ---------- */
+
 .pcase__grid { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 28px; align-items: start; }
 .pcase--solo .pcase__grid { grid-template-columns: minmax(0, 1fr); }
 .pcase__main, .pcase__side, .pcase__below { min-width: 0; display: flex; flex-direction: column; gap: 18px; }
@@ -2085,11 +1983,11 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .pcase--solo .pcase__blocks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .pcase__below { margin-top: 28px; gap: 22px; }
 
-/* ---------- 네 블록 ---------- */
+
 .pcase__blk--situation { --k: var(--pc-orange); --k-text: var(--pc-orange-t); }
 .pcase__blk--cause     { --k: var(--pc-blue); --k-text: var(--pc-blue-t); }
-.pcase__blk--actions   { --k: color-mix(in srgb, var(--pc-violet) 80%, var(--text)); --k-text: var(--pc-violet-t); } /* 보라 그대로는 어두운 판에서 띠·아이콘이 묻혀 조금 밝힌다 */
-.pcase__blk--result    { --k: var(--pc-green); --k-text: var(--pc-green-t); } /* 글자색은 옅은 민트: 감소 색과 구분 */
+.pcase__blk--actions   { --k: color-mix(in srgb, var(--pc-violet) 80%, var(--text)); --k-text: var(--pc-violet-t); } 
+.pcase__blk--result    { --k: var(--pc-green); --k-text: var(--pc-green-t); } 
 .pcase__blk {
   --k-soft: color-mix(in srgb, var(--k) 12%, transparent);
   position: relative; min-width: 0;
@@ -2102,7 +2000,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .pcase__blk-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .pcase__ico { flex: 0 0 auto; width: 24px; height: 24px; fill: var(--k); }
 .pcase__blk-title { margin: 0; flex: 1 1 auto; min-width: 0; color: var(--k-text); font-size: 18px; line-height: 26px; font-weight: 700; }
-/* 꼬리표: 바탕을 판 색 위에 불투명하게 섞는다 — 블록 왼쪽 진한 띠 쪽으로 와도 글 대비가 4.5 이상(예전 반투명 바탕은 다크 4.09·라이트 4.42) */
+
 .pcase__badge {
   flex: 0 0 auto; margin-left: auto; padding: 3px 12px; border-radius: 40px;
   border: 1px solid color-mix(in srgb, var(--k) 55%, transparent);
@@ -2119,12 +2017,12 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   display: grid; place-items: center; background: color-mix(in srgb, var(--k) 24%, transparent);
   color: var(--k-text); font-size: 13px; line-height: 22px; font-weight: 700; text-align: center;
 }
-/* 글머리 강조는 글자색 굵은 글씨 + 블록 색 밑줄: 블록 색 글자(초록·파랑)가 감소·증가 색으로 읽히지 않게 */
+
 .pcase__pts strong, .pcase__pts strong.hl { color: var(--pc-text); font-weight: 700; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--k) 75%, transparent); text-decoration-thickness: 2px; text-underline-offset: 4px; text-decoration-skip-ink: none; }
 .pcase .dpair__arr { color: var(--pc-text-3); font-weight: 400; }
 .pcase__pts a.inlink { color: var(--k-text); }
 
-/* ---------- 전체 설명 보기(접기): 단추처럼 큼직하게(높이 48px·글씨 16px) ---------- */
+
 .pcase__more { border-radius: 16px; border: 1px solid var(--pc-line-2); background: var(--pc-fill); }
 .pcase__more > summary {
   display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 13px 20px; cursor: pointer; list-style: none;
@@ -2144,12 +2042,12 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .pcase__more-body ol { margin: 0; padding-left: 22px; }
 .pcase__more-body li + li { margin-top: 6px; }
 
-/* ---------- 오른쪽 단 판 ---------- */
+
 .pcase__panel { min-width: 0; padding: 22px 22px 24px; border-radius: 20px; border: 1px solid var(--pc-line); background: var(--pc-surface); }
 .pcase__panel-h { margin: 0 0 16px; display: flex; align-items: center; gap: 10px; color: var(--pc-text); font-size: 17px; line-height: 24px; font-weight: 700; }
 .pcase__panel-ico { width: 22px; height: 22px; fill: var(--pc-text-3); flex: 0 0 auto; }
 
-/* 진행 순서(타임라인): 점 + 시각 + 제목 + 설명 카드. 처음=주황, 중간=파랑, 끝=초록 */
+
 .pcase__tl { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .pcase__tl li { --d: var(--pc-blue-t); position: relative; display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 12px; }
 .pcase__tl li.is-first { --d: var(--pc-orange-t); }
@@ -2162,13 +2060,13 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .pcase__tl-title { margin-top: 3px; color: var(--pc-text); font-size: 16px; line-height: 24px; font-weight: 600; }
 .pcase__tl-body { margin-top: 3px; color: var(--pc-text-3); font-size: 15px; line-height: 23px; }
 
-/* 숫자 카드: 전(흐린 회색) → 후(감소=초록 ↓, 증가=하늘 ↑) */
-/* 넓은 카드(전·후 쌍·긴 값)와 짧은 값 카드를 따로 묶는다(cases.js metricsHtml). 짧은 카드 묶음은 auto-fit 으로 남는 칸을 채운다 */
+
+
 .pcase__nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
 .pcase__nums + .pcase__nums { margin-top: 12px; }
 .pcase__nums--wide { grid-template-columns: minmax(0, 1fr); }
 .pcase__below .pcase__nums--single { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-/* 오른쪽 단(2열)에서 짧은 카드가 홀수면 마지막 카드가 반 칸에 홀로 남지 않게 한 줄 통째로 */
+
 .pcase__side .pcase__nums--single > .pcase__num:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .pcase__num { min-width: 0; padding: 16px 18px; border-radius: 14px; border: 1px solid var(--pc-line); background: var(--pc-fill); }
 .pcase__num--wide { grid-column: 1 / -1; }
@@ -2177,29 +2075,27 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .pcase__num-val .from { color: var(--pc-text-3); font-size: 16px; line-height: 24px; font-weight: 500; text-decoration: none; }
 .pcase__num-val .arrow { color: var(--pc-text-3); font-size: 16px; line-height: 24px; font-weight: 400; }
 .pcase__num-val .to { color: var(--pc-text); font-size: 21px; line-height: 29px; font-weight: 700; }
-.pcase__num-val .dv { font-weight: inherit; } /* 값·단위·↓↑ 는 한 덩어리(줄이 사이에서 바뀌지 않음) */
+.pcase__num-val .dv { font-weight: inherit; } 
 .pcase__num-val .to { text-wrap: balance; }
 .pcase__num-val .to__note { color: var(--pc-text-3); font-size: 14px; line-height: 20px; font-weight: 400; }
 .pcase .dv--down { color: var(--pc-down); }
 .pcase .dv--up { color: var(--pc-up); }
 .pcase__num-note { margin-top: 6px; color: var(--pc-text-3); font-size: 14px; line-height: 20px; }
 
-/* 그림: 다른 판(숫자·진행 순서)과 같은 테두리 판 안에 머리('구조로 보기')와 그림을 넣는다. 머리 왼쪽 끝이 다른 판 머리와 같고,
-   그림 부품의 바깥 카드(테두리·그림자·배경)는 벗겨 판이 세 겹으로 겹쳐 보이지 않게 한다.
-   overflow 는 두지 않는다(카드 그림자가 네모로 잘려 모서리에 검은 조각이 보이던 원인). 넓은 그래프는 부품 안 .flow__scroll 이 넘긴다 */
+
 .pcase__fig { min-width: 0; container-type: inline-size; container-name: pcase-fig; }
 .pcase__fig > figure, .pcase__fig .figure { margin: 0; }
 .pcase__fig .figure.card { padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; transform: none; overflow: visible; }
 .pcase__fig .figure.card::after { display: none; }
 .pcase__fig .figure .card__media { padding: 4px 0; border-radius: 12px; background: none; }
 .pcase__fig .flow.figure .flow__media { padding: 4px 0; background: none; }
-/* 사례 판 안 도표: 도표 판 색(--fl-pane)을 사례 판 색으로 — 묶음 머리 글 알약·점 테두리 바탕이 판과 같은 색이 된다(두 테마 모두) */
+
 .pcase .pcase__fig .flow { --fl-pane: var(--pc-surface); }
 .pcase__fig figcaption { padding: 12px 0 0; color: var(--pc-text-3); font-size: 14px; line-height: 21px; }
-/* 오른쪽 단이 왼쪽보다 많이 짧으면 읽는 동안 따라 내려온다(위 고정 탭 막대 아래) */
+
 .pcase__grid--sticky > .pcase__side { position: sticky; top: 112px; }
 
-/* 검토한 안(가설 목록): 번호 → 내용 → 결론 꼬리표. 채택은 파란 테두리 + 체크 */
+
 .pcase__fun { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .pcase__below .pcase__fun { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
 .pcase__fun li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 14px; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--pc-line); background: var(--pc-fill); }
@@ -2210,16 +2106,16 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .pcase__fun-step { color: var(--pc-text); font-size: 16px; line-height: 24px; font-weight: 600; }
 .pcase__fun-detail { margin-top: 3px; color: var(--pc-text-3); font-size: 15px; line-height: 23px; }
 .pcase__fun-out { display: inline-flex; flex-wrap: wrap; align-items: center; column-gap: 9px; row-gap: 2px; max-width: 100%; margin-top: 10px; padding: 3px 12px; border-radius: 16px; border: 1px solid var(--pc-line-2); color: var(--pc-text-3); font-size: 14px; line-height: 20px; font-weight: 600; }
-/* 결론 글이 길면(두 줄) 알약 대신 둥근 사각. 판정 칸은 줄을 바꾸지 않고(nowrap), 줄은 판정과 설명 사이에서만 바뀐다 */
+
 .pcase__fun-out--long { display: flex; flex-wrap: nowrap; align-items: flex-start; border-radius: 10px; padding: 6px 12px; }
 .pcase__fun-out--long .pcase__fun-sep { margin-top: 4px; }
 .pcase__fun-part { min-width: 0; }
-/* 결론 꼬리표 두 칸 사이: 기호 대신 가는 세로선 */
+
 .pcase__fun-sep { flex: 0 0 auto; width: 1px; height: 12px; background: currentColor; opacity: .45; }
 .pcase__fun-verdict { flex: 0 0 auto; color: var(--pc-text-2); font-weight: 700; white-space: nowrap; }
 .pcase__fun li.is-adopted .pcase__fun-out { border-color: color-mix(in srgb, var(--pc-blue-t) 60%, transparent); background: color-mix(in srgb, var(--pc-blue) 20%, transparent); color: color-mix(in srgb, var(--pc-blue) 30%, var(--text)); }
 
-/* ---------- 배운 점(PDF 하단 노란 상자 → 어두운 판에 맞춘 호박색) ---------- */
+
 .pcase__lesson {
   margin-top: 18px; display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 14px;
   padding: 22px 26px; border-radius: 18px;
@@ -2232,14 +2128,13 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
 .pcase__lesson strong, .pcase__lesson strong.hl { color: var(--pc-amber-t); }
 .pcase .draft-note { max-width: none; margin: 16px 0 0; }
 
-/* 아래 전체 폭 숫자 판(.is-wide): 넓은 카드(전·후 쌍·긴 값)가 있으면 모든 카드를 한 2열 격자에(cases.js pcase__nums--all).
-   한 줄에 한 장이면 '17건 → 0건' 같은 짧은 값 오른쪽 900px 가 비었다. 숫자가 하나뿐이면 한 칸 폭(1144px 전체 폭 카드 하나가 허전했다) */
+
 @container pcase (min-width: 700px) {
-  .pcase__below .pcase__nums--all, .pcase__below .pcase__nums--n1 { grid-template-columns: repeat(2, minmax(0, 1fr)); } /* 하나뿐인 카드는 2열 격자의 한 칸 폭 */
+  .pcase__below .pcase__nums--all, .pcase__below .pcase__nums--n1 { grid-template-columns: repeat(2, minmax(0, 1fr)); } 
   .pcase__below .pcase__nums--all .pcase__num--wide { grid-column: auto; }
 }
 
-/* ---------- 좁은 판: 1단으로 쌓기 (판 폭 기준) ---------- */
+
 @container pcase (max-width: 860px) {
   .pcase__grid { grid-template-columns: minmax(0, 1fr); }
   .pcase__below { margin-top: 18px; }
@@ -2265,7 +2160,7 @@ html.js-reveal .rv-down { animation: rv-down var(--rv-dur) var(--rv-ease) var(--
   .pcase__nums { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pcase__nums--wide { grid-template-columns: minmax(0, 1fr); }
 }
-/* 아주 좁은 판(휴대폰): 숫자 카드는 한 줄에 하나. 2열(약 125px)에서는 값이 낱말 가운데서 끊겼다 */
+
 @container pcase (max-width: 380px) {
   .pcase__nums, .pcase__side .pcase__nums { grid-template-columns: minmax(0, 1fr); }
   .pcase__tl li { grid-template-columns: 20px minmax(0, 1fr); gap: 10px; }
