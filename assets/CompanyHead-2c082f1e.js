@@ -1,0 +1,1 @@
+import{t as e}from"./vendor/vendor-4870d0ea.js";import{o as t,y as n}from"./index-aa465af0.js";var r=e();function i({name:e,meta:i}){return(0,r.jsxs)(`div`,{className:`company__head`,children:[(0,r.jsx)(`h3`,{children:t(n(e))}),(0,r.jsx)(`span`,{children:t(n(i))})]})}export{i as t};
