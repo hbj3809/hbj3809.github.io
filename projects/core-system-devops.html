@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#15161a">
-<script>(function(){var d=document.documentElement,t=null,m=null;try{var q=new URLSearchParams(location.search);t=q.get("theme");m=q.get("motion")}catch(e){}if(t!=="light"&&t!=="dark"){try{t=localStorage.getItem("theme")}catch(e){t=null}}if(t!=="light"&&t!=="dark")t="dark";d.setAttribute("data-theme",t);var c=document.querySelector('meta[name="theme-color"]');if(c)c.setAttribute("content",t==="light"?"#f6f7f9":"#15161a");try{var a=navigator.webdriver||/HeadlessChrome/.test(navigator.userAgent)||matchMedia("(prefers-reduced-motion: reduce)").matches;if(m==="on"||(m!=="off"&&!a&&"IntersectionObserver" in window))d.classList.add("js-reveal")}catch(e){}if(/^#(problems|case-\d+)$/.test(location.hash))d.classList.add("start-problems")})();</script>
+<script>(function(){var d=document.documentElement,t=null,m=null;try{var q=new URLSearchParams(location.search);t=q.get("theme");m=q.get("motion")}catch(e){}if(t!=="light"&&t!=="dark"){try{t=localStorage.getItem("theme")}catch(e){t=null}}if(t!=="light"&&t!=="dark")t="dark";d.setAttribute("data-theme",t);var c=document.querySelector('meta[name="theme-color"]');if(c)c.setAttribute("content",t==="light"?"#f6f7f9":"#15161a");try{var a=navigator.webdriver||/HeadlessChrome/.test(navigator.userAgent)||matchMedia("(prefers-reduced-motion: reduce)").matches;if(m==="on"||(m!=="off"&&!a&&"IntersectionObserver" in window))d.classList.add("js-reveal")}catch(e){}})();</script>
 <title>기간계 시스템 MSA 전환 및 DevOps 구축 | 황병준 포트폴리오</title>
 <meta name="description" content="물류기기 풀링(Pooling) 기업의 사내 기간계를 Miplatform 기반 모놀리스에서 Nexacro N + Spring Boot 3.4 MSA 구조로 옮긴 고도화 프로젝트입니다. 백엔드와 DevOps를 총괄했고, Nexacro N 화면에서는 피벗·그리드·처리 함수 같은 공통 모듈을 직접 만들었습니다. 솔루션별 Backend·DB 인터페이스는 상용 EAI 솔루션을 도입해 한 경로로 모았고, 용량이 부족하던 파일 서버는 Amazon S3·Java NIO 기반으로 이관했습니다. Jenkins·Docker Compose·K8s 기반 CI/CD를 세우고, 무중단 배포는 애플리케이션 성격에 따라 Blue/Green과 롤링으로 나눠 적용했습니다. 기간계는 Kafka로 일 평균 8만 건의 트랜잭션을 처리했고, EAI 도입 후 인터페이스 장애는 0건이었습니다(고객사 네트워크·방화벽 이슈 제외).">
 <link rel="icon" href="data:,">
@@ -14,10 +14,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-  <script type="module" crossorigin src="/assets/index-b7a6c004.js"></script>
+  <script type="module" crossorigin src="/assets/index-5970ef16.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-2f7eb3ce.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor/vendor-5843191b.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor/vendor-4870d0ea.js">
   <link rel="modulepreload" crossorigin href="/assets/page/project-core-system-devops-bde15af7.js">
+  <link rel="modulepreload" crossorigin href="/assets/ProjectPage-f2b27bc5.js">
+  <link rel="modulepreload" crossorigin href="/assets/paths-f3fb6106.js">
+  <link rel="modulepreload" crossorigin href="/assets/sections-ae648259.js">
+  <link rel="modulepreload" crossorigin href="/assets/style-a2af1e2f.js">
+  <link rel="modulepreload" crossorigin href="/assets/Stats-67a8d74e.js">
+  <link rel="modulepreload" crossorigin href="/assets/spider-e219e2b7.js">
   <link rel="stylesheet" crossorigin href="/assets/index-8b1d57b6.css">
 </head>
 <body>

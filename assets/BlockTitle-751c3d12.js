@@ -1,0 +1,1 @@
+import{t as e}from"./vendor/vendor-4870d0ea.js";import{o as t,u as n}from"./index-5970ef16.js";var r=e();function i({title:e,sub:i,id:a}){return(0,r.jsx)(`h2`,{className:`h2 block-title`,id:a,children:t(n(e,i))})}export{i as t};

@@ -1,0 +1,1 @@
+var e=e=>({...e}),t=t=>e({"--span":t}),n=t=>e({"--c":t}),r=t=>e({"--sp-c":`var(--sp-hue-${t})`});export{r as i,e as n,t as r,n as t};

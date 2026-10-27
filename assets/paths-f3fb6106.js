@@ -1,0 +1,1 @@
+var e=e=>`/projects/${e}`,t=e=>e?`/projects?axis=${e}`:`/projects`;export{t as n,e as t};

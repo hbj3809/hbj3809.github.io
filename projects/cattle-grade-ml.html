@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#15161a">
-<script>(function(){var d=document.documentElement,t=null,m=null;try{var q=new URLSearchParams(location.search);t=q.get("theme");m=q.get("motion")}catch(e){}if(t!=="light"&&t!=="dark"){try{t=localStorage.getItem("theme")}catch(e){t=null}}if(t!=="light"&&t!=="dark")t="dark";d.setAttribute("data-theme",t);var c=document.querySelector('meta[name="theme-color"]');if(c)c.setAttribute("content",t==="light"?"#f6f7f9":"#15161a");try{var a=navigator.webdriver||/HeadlessChrome/.test(navigator.userAgent)||matchMedia("(prefers-reduced-motion: reduce)").matches;if(m==="on"||(m!=="off"&&!a&&"IntersectionObserver" in window))d.classList.add("js-reveal")}catch(e){}if(/^#(problems|case-\d+)$/.test(location.hash))d.classList.add("start-problems")})();</script>
+<script>(function(){var d=document.documentElement,t=null,m=null;try{var q=new URLSearchParams(location.search);t=q.get("theme");m=q.get("motion")}catch(e){}if(t!=="light"&&t!=="dark"){try{t=localStorage.getItem("theme")}catch(e){t=null}}if(t!=="light"&&t!=="dark")t="dark";d.setAttribute("data-theme",t);var c=document.querySelector('meta[name="theme-color"]');if(c)c.setAttribute("content",t==="light"?"#f6f7f9":"#15161a");try{var a=navigator.webdriver||/HeadlessChrome/.test(navigator.userAgent)||matchMedia("(prefers-reduced-motion: reduce)").matches;if(m==="on"||(m!=="off"&&!a&&"IntersectionObserver" in window))d.classList.add("js-reveal")}catch(e){}})();</script>
 <title>축우·고객 등급 예측 ML 모델 개발 및 현업 적용 | 황병준 포트폴리오</title>
 <meta name="description" content="축우 관련 사업부는 매월 사육 중인 개체의 육질·육량 데이터를 보고 다음 달 등급을 수기로 예측해 보고했고, 정확도는 60~70%로 참고용에 그쳤습니다. 석사 과정에서 연구한 Random Forest, XGBoost, LightGBM을 묶은 Stacking Ensemble 모델을 이 보고 업무에 붙이자는 AI 서비스 도입 품의를 직접 작성해 확정까지 이끌었고, 등급 예측 서비스를 대시보드 형태로 제공했습니다. 현업 적용 직후 정확도가 85% 내외로 떨어진 원인은 하이퍼파라미터·모델 조정 문제였고, 2개월간 하이퍼파라미터 튜닝, 예측과 실제 판정을 비교해 모델을 계속 개선하는 강화학습, 데이터 추가 확보로 89~91%까지 올렸습니다. SHAP 변수 중요도 분석 결과는 사양 관리 지표로 현업에 넘겼고, 여신·미수금과 실제 거래처 매출·주문 데이터로 D등급 발생이 예상되는 거래처를 미리 찾는 고객 등급 예측 서비스는 현업과 계산식을 함께 정하고, 마케터·본부와 미수금·계약 관리 업무에 적용했습니다.">
 <link rel="icon" href="data:,">
@@ -14,10 +14,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-  <script type="module" crossorigin src="/assets/index-b7a6c004.js"></script>
+  <script type="module" crossorigin src="/assets/index-5970ef16.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-2f7eb3ce.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor/vendor-5843191b.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor/vendor-4870d0ea.js">
   <link rel="modulepreload" crossorigin href="/assets/page/project-cattle-grade-ml-bf8eab46.js">
+  <link rel="modulepreload" crossorigin href="/assets/ProjectPage-f2b27bc5.js">
+  <link rel="modulepreload" crossorigin href="/assets/paths-f3fb6106.js">
+  <link rel="modulepreload" crossorigin href="/assets/sections-ae648259.js">
+  <link rel="modulepreload" crossorigin href="/assets/style-a2af1e2f.js">
+  <link rel="modulepreload" crossorigin href="/assets/Stats-67a8d74e.js">
+  <link rel="modulepreload" crossorigin href="/assets/spider-e219e2b7.js">
   <link rel="stylesheet" crossorigin href="/assets/index-8b1d57b6.css">
 </head>
 <body>

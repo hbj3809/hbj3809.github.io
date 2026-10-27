@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#15161a">
-<script>(function(){var d=document.documentElement,t=null,m=null;try{var q=new URLSearchParams(location.search);t=q.get("theme");m=q.get("motion")}catch(e){}if(t!=="light"&&t!=="dark"){try{t=localStorage.getItem("theme")}catch(e){t=null}}if(t!=="light"&&t!=="dark")t="dark";d.setAttribute("data-theme",t);var c=document.querySelector('meta[name="theme-color"]');if(c)c.setAttribute("content",t==="light"?"#f6f7f9":"#15161a");try{var a=navigator.webdriver||/HeadlessChrome/.test(navigator.userAgent)||matchMedia("(prefers-reduced-motion: reduce)").matches;if(m==="on"||(m!=="off"&&!a&&"IntersectionObserver" in window))d.classList.add("js-reveal")}catch(e){}if(/^#(problems|case-\d+)$/.test(location.hash))d.classList.add("start-problems")})();</script>
+<script>(function(){var d=document.documentElement,t=null,m=null;try{var q=new URLSearchParams(location.search);t=q.get("theme");m=q.get("motion")}catch(e){}if(t!=="light"&&t!=="dark"){try{t=localStorage.getItem("theme")}catch(e){t=null}}if(t!=="light"&&t!=="dark")t="dark";d.setAttribute("data-theme",t);var c=document.querySelector('meta[name="theme-color"]');if(c)c.setAttribute("content",t==="light"?"#f6f7f9":"#15161a");try{var a=navigator.webdriver||/HeadlessChrome/.test(navigator.userAgent)||matchMedia("(prefers-reduced-motion: reduce)").matches;if(m==="on"||(m!=="off"&&!a&&"IntersectionObserver" in window))d.classList.add("js-reveal")}catch(e){}})();</script>
 <title>국내 완성차 브랜드 차량 인포테인먼트 애플리케이션 개발 | 황병준 포트폴리오</title>
 <meta name="description" content="국내 완성차 브랜드의 차량용 디스플레이 오디오 2세대 플랫폼에 들어가는 인포테인먼트 애플리케이션을 C++·Qt/QML로 개발했습니다. 기존에 만들어진 개발자 모드를 고도화했고, 이 기능은 당시 신차부터 이후 출시된 전 차종에 탑재돼 디자인 리뉴얼 뒤에도 현행 플랫폼까지 유지되고 있습니다. 인도향 기도 방향(키블라) 안내 기능은 직접 개발했습니다. 구면 삼각법 알고리즘을 구현하고 Kalman Filter로 위치 오차를 보정해, 방위각 오차를 360° 대비 1% 미만(약 3.6° 이내)으로 맞췄습니다. 북미향 전 차종의 GPS(NMEA) 데이터 수집·추적 서비스도 직접 개발하고, 미국 현지에서 3개월간 품질 확인·양산 대응을 맡았습니다.">
 <link rel="icon" href="data:,">
@@ -14,10 +14,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-  <script type="module" crossorigin src="/assets/index-b7a6c004.js"></script>
+  <script type="module" crossorigin src="/assets/index-5970ef16.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-2f7eb3ce.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor/vendor-5843191b.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor/vendor-4870d0ea.js">
   <link rel="modulepreload" crossorigin href="/assets/page/project-vehicle-infotainment-40169ef1.js">
+  <link rel="modulepreload" crossorigin href="/assets/ProjectPage-f2b27bc5.js">
+  <link rel="modulepreload" crossorigin href="/assets/paths-f3fb6106.js">
+  <link rel="modulepreload" crossorigin href="/assets/sections-ae648259.js">
+  <link rel="modulepreload" crossorigin href="/assets/style-a2af1e2f.js">
+  <link rel="modulepreload" crossorigin href="/assets/Stats-67a8d74e.js">
+  <link rel="modulepreload" crossorigin href="/assets/spider-e219e2b7.js">
   <link rel="stylesheet" crossorigin href="/assets/index-8b1d57b6.css">
 </head>
 <body>

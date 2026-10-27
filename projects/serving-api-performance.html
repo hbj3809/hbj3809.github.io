@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#15161a">
-<script>(function(){var d=document.documentElement,t=null,m=null;try{var q=new URLSearchParams(location.search);t=q.get("theme");m=q.get("motion")}catch(e){}if(t!=="light"&&t!=="dark"){try{t=localStorage.getItem("theme")}catch(e){t=null}}if(t!=="light"&&t!=="dark")t="dark";d.setAttribute("data-theme",t);var c=document.querySelector('meta[name="theme-color"]');if(c)c.setAttribute("content",t==="light"?"#f6f7f9":"#15161a");try{var a=navigator.webdriver||/HeadlessChrome/.test(navigator.userAgent)||matchMedia("(prefers-reduced-motion: reduce)").matches;if(m==="on"||(m!=="off"&&!a&&"IntersectionObserver" in window))d.classList.add("js-reveal")}catch(e){}if(/^#(problems|case-\d+)$/.test(location.hash))d.classList.add("start-problems")})();</script>
+<script>(function(){var d=document.documentElement,t=null,m=null;try{var q=new URLSearchParams(location.search);t=q.get("theme");m=q.get("motion")}catch(e){}if(t!=="light"&&t!=="dark"){try{t=localStorage.getItem("theme")}catch(e){t=null}}if(t!=="light"&&t!=="dark")t="dark";d.setAttribute("data-theme",t);var c=document.querySelector('meta[name="theme-color"]');if(c)c.setAttribute("content",t==="light"?"#f6f7f9":"#15161a");try{var a=navigator.webdriver||/HeadlessChrome/.test(navigator.userAgent)||matchMedia("(prefers-reduced-motion: reduce)").matches;if(m==="on"||(m!=="off"&&!a&&"IntersectionObserver" in window))d.classList.add("js-reveal")}catch(e){}})();</script>
 <title>pharmscope 매출 분석 API·PostgreSQL 성능 튜닝 | 황병준 포트폴리오</title>
 <meta name="description" content="pharmscope에서 제약사 고객이 국내 대형 의약품 유통사의 매출 데이터를 보는 분석 API 20여 종을 Kotlin·WebFlux·R2DBC로 설계·구현했습니다. 여러 제약사가 한 DB를 함께 쓰므로 데이터 범위(스코프) 해석을 한 곳에 모아 조회·검색·다운로드 전 경로에 강제했고, 사전집계 대신 원본 직조회·서빙 풀 세션 튜닝·응답 캐시로 서빙했습니다. 오픈 전 실사용에서 나던 30초 타임아웃은 IO 대기 계측으로 인덱스 선두 컬럼 오배치에 따른 버퍼 축출을 찾아, 앱 코드 변경 없이 콜드 조회를 11.9초에서 1.5초로 줄였습니다.">
 <link rel="icon" href="data:,">
@@ -14,10 +14,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-  <script type="module" crossorigin src="/assets/index-b7a6c004.js"></script>
+  <script type="module" crossorigin src="/assets/index-5970ef16.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-2f7eb3ce.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor/vendor-5843191b.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor/vendor-4870d0ea.js">
   <link rel="modulepreload" crossorigin href="/assets/page/project-serving-api-performance-f235cd1a.js">
+  <link rel="modulepreload" crossorigin href="/assets/ProjectPage-f2b27bc5.js">
+  <link rel="modulepreload" crossorigin href="/assets/paths-f3fb6106.js">
+  <link rel="modulepreload" crossorigin href="/assets/sections-ae648259.js">
+  <link rel="modulepreload" crossorigin href="/assets/style-a2af1e2f.js">
+  <link rel="modulepreload" crossorigin href="/assets/Stats-67a8d74e.js">
+  <link rel="modulepreload" crossorigin href="/assets/spider-e219e2b7.js">
   <link rel="stylesheet" crossorigin href="/assets/index-8b1d57b6.css">
 </head>
 <body>

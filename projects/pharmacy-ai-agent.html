@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#15161a">
-<script>(function(){var d=document.documentElement,t=null,m=null;try{var q=new URLSearchParams(location.search);t=q.get("theme");m=q.get("motion")}catch(e){}if(t!=="light"&&t!=="dark"){try{t=localStorage.getItem("theme")}catch(e){t=null}}if(t!=="light"&&t!=="dark")t="dark";d.setAttribute("data-theme",t);var c=document.querySelector('meta[name="theme-color"]');if(c)c.setAttribute("content",t==="light"?"#f6f7f9":"#15161a");try{var a=navigator.webdriver||/HeadlessChrome/.test(navigator.userAgent)||matchMedia("(prefers-reduced-motion: reduce)").matches;if(m==="on"||(m!=="off"&&!a&&"IntersectionObserver" in window))d.classList.add("js-reveal")}catch(e){}if(/^#(problems|case-\d+)$/.test(location.hash))d.classList.add("start-problems")})();</script>
+<script>(function(){var d=document.documentElement,t=null,m=null;try{var q=new URLSearchParams(location.search);t=q.get("theme");m=q.get("motion")}catch(e){}if(t!=="light"&&t!=="dark"){try{t=localStorage.getItem("theme")}catch(e){t=null}}if(t!=="light"&&t!=="dark")t="dark";d.setAttribute("data-theme",t);var c=document.querySelector('meta[name="theme-color"]');if(c)c.setAttribute("content",t==="light"?"#f6f7f9":"#15161a");try{var a=navigator.webdriver||/HeadlessChrome/.test(navigator.userAgent)||matchMedia("(prefers-reduced-motion: reduce)").matches;if(m==="on"||(m!=="off"&&!a&&"IntersectionObserver" in window))d.classList.add("js-reveal")}catch(e){}})();</script>
 <title>약국 AI Agent 서비스 (LLM 에이전트 설계·AI PoC) | 황병준 포트폴리오</title>
 <meta name="description" content="약국 업무 데이터와 확정된 계산 결과를 약사에게 설명하고, 조회·문서 검색·주문 초안 작성을 정확히 연결하는 약국 AI Agent 서비스의 기술 설계입니다. 기획 Kick-off의 AWS 관리형 구성을 회사의 기존 쿠버네티스 운영 기반에 하나씩 대응시킨 개발 추진안과, Qwen3 32B·Claude Sonnet 5를 같은 업무 프로그램에서 모델만 바꿔 비교하는 AI PoC 개발 가이드를 작성했습니다. 아직 실행 전이라 성능·정확도 결과는 없고, 이 페이지의 숫자는 모두 설계값입니다.">
 <link rel="icon" href="data:,">
@@ -14,10 +14,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-  <script type="module" crossorigin src="/assets/index-b7a6c004.js"></script>
+  <script type="module" crossorigin src="/assets/index-5970ef16.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-2f7eb3ce.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor/vendor-5843191b.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor/vendor-4870d0ea.js">
   <link rel="modulepreload" crossorigin href="/assets/page/project-pharmacy-ai-agent-8f1347d2.js">
+  <link rel="modulepreload" crossorigin href="/assets/ProjectPage-f2b27bc5.js">
+  <link rel="modulepreload" crossorigin href="/assets/paths-f3fb6106.js">
+  <link rel="modulepreload" crossorigin href="/assets/sections-ae648259.js">
+  <link rel="modulepreload" crossorigin href="/assets/style-a2af1e2f.js">
+  <link rel="modulepreload" crossorigin href="/assets/Stats-67a8d74e.js">
+  <link rel="modulepreload" crossorigin href="/assets/spider-e219e2b7.js">
   <link rel="stylesheet" crossorigin href="/assets/index-8b1d57b6.css">
 </head>
 <body>
